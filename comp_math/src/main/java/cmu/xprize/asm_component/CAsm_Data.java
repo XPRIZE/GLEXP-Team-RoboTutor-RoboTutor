@@ -33,7 +33,6 @@ public class CAsm_Data implements ILoadableObject{
     public int[]         dataset;
     public String        operation;
     public String        image;
-    public String        strategy = "";
 
 
     //************ Serialization

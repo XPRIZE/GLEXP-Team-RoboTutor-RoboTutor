@@ -32,14 +32,14 @@
         import cmu.xprize.robotutor.tutorengine.CTutor;
         import cmu.xprize.robotutor.tutorengine.CTutorEngine;
         import cmu.xprize.robotutor.tutorengine.ITutorGraph;
-        import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
+        import cmu.xprize.robotutor.tutorengine.ITutorObject;
         import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
         import cmu.xprize.comp_logging.ILogManager;
         import cmu.xprize.util.TCONST;
 
         import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
-public class TLangToggle extends ToggleButton implements ITutorObjectImpl, View.OnClickListener {
+public class TLangToggle extends ToggleButton implements ITutorObject, View.OnClickListener {
 
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
@@ -157,27 +157,6 @@ public class TLangToggle extends ToggleButton implements ITutorObjectImpl, View.
     @Override
     public void setLogManager(ILogManager logManager) {
         mSceneObject.setLogManager(logManager);
-    }
-
-
-    @Override
-    public CObjectDelegate getimpl() {
-        return mSceneObject;
-    }
-
-    @Override
-    public void zoomInOut(Float scale, Long duration) {
-        mSceneObject.zoomInOut(scale, duration);
-    }
-
-    @Override
-    public void wiggle(String direction, Float magnitude, Long duration, Integer repetition ) {
-        mSceneObject.wiggle(direction, magnitude, duration, repetition);
-    }
-
-    @Override
-    public void setAlpha(Float alpha) {
-        mSceneObject.setAlpha(alpha);
     }
 
 }

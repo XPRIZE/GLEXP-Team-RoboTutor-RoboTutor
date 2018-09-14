@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/newMathBackground">
+
+
+    <LinearLayout
+        android:id="@+id/debug_button_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+    </LinearLayout>
+
+
+    <!-- Guidelines -->
+    <android.support.constraint.Guideline
+        android:id="@+id/operator_left"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/digit_lane_1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.2"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/digit_lane_2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.3"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/digit_lane_3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.4"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/dotbag_lane_left"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/borrow_carry_lane"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/op1_lane"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.4"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/op2_lane"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.6"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/result_lane"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.8"/>
+
+
+    <!-- Operand 1 -->
+    <cmu.xprize.asm_component.CAsm_Text
+        android:id="@+id/top_hun_text"
+        android:layout_width="@dimen/text_box_width"
+        android:layout_height="@dimen/text_box_height"
+        android:text="1"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintLeft_toLeftOf="@id/digit_lane_1"
+        app:layout_constraintTop_toTopOf="@id/op1_lane"/>
+
+    <cmu.xprize.asm_component.CAsm_Text
+        android:id="@+id/top_ten_text"
+        android:layout_width="@dimen/text_box_width"
+        android:layout_height="@dimen/text_box_height"
+        android:text="0"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintLeft_toLeftOf="@id/digit_lane_2"
+        app:layout_constraintTop_toTopOf="@id/op1_lane"/>
+
+    <cmu.xprize.asm_component.CAsm_Text
+        android:id="@+id/top_one_text"
+        android:layout_width="@dimen/text_box_width"
+        android:layout_height="@dimen/text_box_height"
+        android:text="0"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintLeft_toLeftOf="@id/digit_lane_3"
+        app:layout_constraintTop_toTopOf="@id/op1_lane"/>
+
+    <!-- DotBag -->
+    <cmu.xprize.asm_component.CAsm_DotBag_New
+        android:id="@+id/top_dotbag"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/text_box_height"
+        app:layout_constraintLeft_toLeftOf="@+id/dotbag_lane_left"
+        app:layout_constraintTop_toTopOf="@+id/op1_lane">
+
+        <TableRow>
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/top_dot_1"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/top_dot_2"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/top_dot_3"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/top_dot_4"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/top_dot_5"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/top_dot_6"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/top_dot_7"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/top_dot_8"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/top_dot_9"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+        </TableRow>
+
+
+    </cmu.xprize.asm_component.CAsm_DotBag_New>
+
+    <!-- Operator -->
+    <cmu.xprize.asm_component.CAsm_Text
+        android:id="@+id/mid_op_text"
+        android:layout_width="@dimen/text_box_width"
+        android:layout_height="@dimen/text_box_height"
+        android:text="+"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintLeft_toLeftOf="@id/operator_left"
+        app:layout_constraintTop_toTopOf="@id/op2_lane"/>
+
+    <!-- Operand 2 -->
+    <cmu.xprize.asm_component.CAsm_Text
+        android:id="@+id/mid_hun_text"
+        android:layout_width="@dimen/text_box_width"
+        android:layout_height="@dimen/text_box_height"
+        android:text="8"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintLeft_toLeftOf="@id/digit_lane_1"
+        app:layout_constraintTop_toTopOf="@id/op2_lane"/>
+
+    <cmu.xprize.asm_component.CAsm_Text
+        android:id="@+id/mid_ten_text"
+        android:layout_width="@dimen/text_box_width"
+        android:layout_height="@dimen/text_box_height"
+        android:text="0"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintLeft_toLeftOf="@id/digit_lane_2"
+        app:layout_constraintTop_toTopOf="@id/op2_lane"/>
+
+    <cmu.xprize.asm_component.CAsm_Text
+        android:id="@+id/mid_one_text"
+        android:layout_width="@dimen/text_box_width"
+        android:layout_height="@dimen/text_box_height"
+        android:text="0"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintLeft_toLeftOf="@id/digit_lane_3"
+        app:layout_constraintTop_toTopOf="@id/op2_lane"/>
+
+    <!-- DotBag -->
+    <cmu.xprize.asm_component.CAsm_DotBag_New
+        android:id="@+id/mid_dotbag"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/text_box_height"
+        app:layout_constraintLeft_toLeftOf="@+id/dotbag_lane_left"
+        app:layout_constraintTop_toTopOf="@+id/op2_lane">
+
+        <TableRow>
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/mid_dot_1"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/mid_dot_2"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/mid_dot_3"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/mid_dot_4"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/mid_dot_5"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/mid_dot_6"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/mid_dot_7"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/mid_dot_8"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/mid_dot_9"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+        </TableRow>
+
+
+    </cmu.xprize.asm_component.CAsm_DotBag_New>
+
+    <!-- Operator Line -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="@dimen/operator_line_thickness"
+        android:background="@color/addSubtractDigitColor"
+        app:layout_constraintLeft_toLeftOf="@id/operator_left"
+        app:layout_constraintRight_toRightOf="@+id/dotbag_lane_left"
+        app:layout_constraintTop_toBottomOf="@+id/result_lane"/>
+
+
+
+    <!-- Result Lane -->
+    <cmu.xprize.asm_component.CAsm_Text
+        android:id="@+id/low_hun_text"
+        android:layout_width="@dimen/text_box_width"
+        android:layout_height="@dimen/text_box_height"
+        android:text="9"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintLeft_toLeftOf="@id/digit_lane_1"
+        app:layout_constraintTop_toTopOf="@id/result_lane"/>
+
+    <cmu.xprize.asm_component.CAsm_Text
+        android:id="@+id/low_ten_text"
+        android:layout_width="@dimen/text_box_width"
+        android:layout_height="@dimen/text_box_height"
+        android:text="0"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintLeft_toLeftOf="@id/digit_lane_2"
+        app:layout_constraintTop_toTopOf="@id/result_lane"/>
+
+    <cmu.xprize.asm_component.CAsm_Text
+        android:id="@+id/low_one_text"
+        android:layout_width="@dimen/text_box_width"
+        android:layout_height="@dimen/text_box_height"
+        android:text="0"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintLeft_toLeftOf="@id/digit_lane_3"
+        app:layout_constraintTop_toTopOf="@id/result_lane"/>
+
+    <!-- DotBag -->
+    <cmu.xprize.asm_component.CAsm_DotBag_New
+        android:id="@+id/low_dotbag"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/text_box_height"
+        app:layout_constraintLeft_toLeftOf="@+id/dotbag_lane_left"
+        app:layout_constraintTop_toTopOf="@+id/result_lane">
+
+        <TableRow>
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/low_dot_1"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/low_dot_2"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/low_dot_3"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/low_dot_4"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/low_dot_5"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/low_dot_6"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/low_dot_7"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/low_dot_8"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+
+            <cmu.xprize.asm_component.CAsm_Dot_New
+                android:id="@+id/low_dot_9"
+                android:layout_width="@dimen/dot_size"
+                android:layout_height="@dimen/dot_size"
+                android:src="@drawable/pentagon"/>
+        </TableRow>
+    </cmu.xprize.asm_component.CAsm_DotBag_New>
+
+</android.support.constraint.ConstraintLayout>

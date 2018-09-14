@@ -33,7 +33,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile project(path: ':util')
-    compile project(path: ':fw_component')
     compile project(':comp_logging')
-    compile project(path: ':comp_writing')
+    compile project(path: ':comp_writebox')
+    compile 'com.android.support.constraint:constraint-layout:1.1.2'
 }

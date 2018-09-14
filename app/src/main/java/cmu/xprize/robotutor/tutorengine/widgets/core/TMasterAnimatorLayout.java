@@ -65,7 +65,7 @@ public class TMasterAnimatorLayout extends ViewAnimator implements ITutorManager
         mTutorScene.init(context, attrs);
         mContext    = context;
 
-        fade_in  = AnimationUtils.loadAnimation(mContext, R.anim.fade_in);
+        fade_in  = AnimationUtils.loadAnimation(mContext, R.anim.fade_out);
         fade_out = AnimationUtils.loadAnimation(mContext, R.anim.fade_out);
 
         setInAnimation(fade_in);

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/Scontent"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -10,32 +11,124 @@
     <cmu.xprize.comp_counting2.CCountX_SurfaceView
         android:id="@+id/imageSurface"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
 
     <TextView
         android:id="@+id/stimulusText"
         android:layout_width="120sp"
         android:layout_height="120sp"
-        android:text=""
-        android:textSize="40sp"
-        android:textColor="@android:color/holo_blue_dark"
-        android:gravity="center"
         android:layout_alignParentTop="true"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
         android:background="@drawable/stimulus_back"
-        android:layout_centerHorizontal="true"/>
+        android:gravity="center"
+        android:text=""
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="40sp" />
+
 
     <TextView
         android:id="@+id/counterText"
         android:layout_width="120sp"
         android:layout_height="120sp"
-        android:text=""
-        android:textSize="40sp"
-        android:textColor="@android:color/holo_purple"
-        android:gravity="center"
         android:layout_alignParentBottom="true"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
         android:background="@drawable/counter_back"
-        android:layout_centerHorizontal="true"/>
+        android:gravity="center"
+        android:text=""
+        android:textColor="@android:color/holo_purple"
+        android:textSize="40sp"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/checkOne"
+        android:layout_width="190dp"
+        android:layout_height="202dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/checkHundred"
+        android:layout_marginEnd="60dp"
+        android:background="@drawable/check"
+        android:gravity="center"
+        android:text=""
+        android:textColor="@android:color/holo_purple"
+        android:textSize="40sp"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/checkHundred"
+        android:layout_width="190dp"
+        android:layout_height="205dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="187dp"
+        android:layout_marginStart="171dp"
+        android:background="@drawable/check"
+        android:gravity="center"
+        android:text=""
+        android:textColor="@android:color/holo_purple"
+        android:textSize="40sp"
+        android:visibility="invisible" />
+
+
+    <TextView
+        android:id="@+id/checkTen"
+        android:layout_width="179dp"
+        android:layout_height="201dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="212dp"
+        android:layout_marginEnd="446dp"
+        android:background="@drawable/check"
+        android:gravity="center"
+        android:text=""
+        android:textColor="@android:color/holo_purple"
+        android:textSize="40sp"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/result_display_1"
+        android:layout_width="150sp"
+        android:layout_height="150sp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="83dp"
+        android:layout_marginTop="254dp"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:textSize="80sp" />
+
+
+    <cmu.xprize.comp_counting2.CGlyphController_Simple
+        android:id="@+id/glyph_controller_1"
+        android:layout_width="200sp"
+        android:layout_height="200sp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="109dp"
+        android:layout_marginTop="267dp"
+        android:adjustViewBounds="true"
+        android:background="@null">
+
+
+        <!-- NOTE: aspect here is just a reminder that this object has it aspect set programmatically-->
+        <FrameLayout
+            android:id="@+id/drawn_container_1"
+            android:background="@null"
+            app:layout_aspectRatio="100%"
+            app:layout_heightPercent="100%">
+
+            <cmu.xprize.comp_counting2.CGlyphInputContainer_Simple
+                android:id="@+id/drawn_box_1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                app:strokeweight="5" />
+
+        </FrameLayout>
+
+    </cmu.xprize.comp_counting2.CGlyphController_Simple>
+
 
 </RelativeLayout>

@@ -319,7 +319,9 @@ public class scene_node implements ILoadableObject2, IScriptable2, IEventSource,
         return null;
     }
 
-    public void play() {    }
+    public void play() {   }
+
+    public void play(Long duration) { }
 
     public void stop() {    }
 

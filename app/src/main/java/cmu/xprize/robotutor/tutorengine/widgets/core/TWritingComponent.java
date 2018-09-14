@@ -625,6 +625,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         event.setTutorName(mTutor.getTutorName());
         Log.wtf("WARRIOR_MAN", mTutor.getTutorId());
         event.setTutorId(mTutor.getTutorId());
+        event.setPromotionMode(RoboTutor.getPromotionMode(event.getMatrixName()));
         event.setLevelName(level);
         event.setTaskName(task);
         event.setProblemName("write_" + mStimulus);

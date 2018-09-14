@@ -49,7 +49,7 @@ import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
-import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
+import cmu.xprize.robotutor.tutorengine.ITutorObject;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
@@ -71,7 +71,7 @@ import static cmu.xprize.comp_clickmask.CM_CONST.*;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 
-public class TBpComponent extends CBP_Component implements IBehaviorManager, ITutorObjectImpl, IDataSink, IEventSource, IPublisher, ITutorLogger {
+public class TBpComponent extends CBP_Component implements IBehaviorManager, ITutorObject, IDataSink, IEventSource, IPublisher, ITutorLogger {
 
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
@@ -739,8 +739,8 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
 
             //Publish features and values for each digit of first operand so that audios for each digit can be played separately
             if(operand1Digits[0] >= 100) {
-                publishFeature(BP_CONST.FTR_ANS_STIM_ONE_HUNDREDS);
-                publishValue(BP_CONST.ANS_VAR_STIM_ONE_HUNDREDS, operand1Digits[0]);
+                publishFeature(BP_CONST.FTR_ANS_STIM_ONE_HUNDREDS); // ND_SCAFFOLD NEXT(1) make sure to publish the right features (e.g.. don't play hundred when it's a 2digit)
+                publishValue(BP_CONST.ANS_VAR_STIM_ONE_HUNDREDS, operand1Digits[0]); // ND_SCAFFOLD √√√ mimic this
             }
             else {
                 removeFeature(BP_CONST.FTR_ANS_STIM_ONE_HUNDREDS);
@@ -860,6 +860,7 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
         event.setTutorName(mTutor.getTutorName());
         Log.wtf("WARRIOR_MAN", mTutor.getTutorId());
         event.setTutorId(mTutor.getTutorId());
+        event.setPromotionMode(RoboTutor.getPromotionMode(event.getMatrixName()));
         event.setProblemName(problemName);
         event.setProblemNumber(logQuestionIndex);
         event.setTotalProblemsCount(mTutor.getTotalQuestions());
@@ -1221,27 +1222,6 @@ public class TBpComponent extends CBP_Component implements IBehaviorManager, ITu
     @Override
     public void setLogManager(ILogManager logManager) {
         mSceneObject.setLogManager(logManager);
-    }
-
-
-    @Override
-    public CObjectDelegate getimpl() {
-        return mSceneObject;
-    }
-
-    @Override
-    public void zoomInOut(Float scale, Long duration) {
-
-    }
-
-    @Override
-    public void wiggle(String direction, Float magnitude, Long duration, Integer repetition) {
-
-    }
-
-    @Override
-    public void setAlpha(Float alpha) {
-
     }
 
 

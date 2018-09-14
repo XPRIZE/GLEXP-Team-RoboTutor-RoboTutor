@@ -819,7 +819,7 @@ public class CRecognizerPlus implements IGlyphSink {
 
     /**
      * Add a glyph to the recognition queue
-     *
+     * MATHFIX_WRITE this is where command gets queued
      */
     public void postToQueue(IGlyphSource source, CGlyph glyph) {
 

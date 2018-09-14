@@ -36,7 +36,7 @@ import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
-import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
+import cmu.xprize.robotutor.tutorengine.ITutorObject;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
@@ -46,7 +46,7 @@ import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
-public class TSmComponent extends CSm_Component implements ITutorObjectImpl, IDataSink {
+public class TSmComponent extends CSm_Component implements ITutorObject, IDataSink {
 
     private CTutor               mTutor;
     private CObjectDelegate      mSceneObject;
@@ -161,7 +161,7 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl, IDa
 
         // Special Flavor processing to exclude ASR apps - this was a constraint for BETA trials
         //
-        if(!(BuildConfig.NO_ASR_APPS && intent.equals(TCONST.STORY_INTENT))) {
+        if(!(BuildConfig.NO_ASR_APPS && (intent.equals(TCONST.STORY_INTENT) || intent.equals(TCONST.QUESTIONS_INTENT)) )) {
 
             // update the response variable  "<Sresponse>.value"
 
@@ -265,26 +265,5 @@ public class TSmComponent extends CSm_Component implements ITutorObjectImpl, IDa
     @Override
     public void setLogManager(ILogManager logManager) {
         mSceneObject.setLogManager(logManager);
-    }
-
-
-    @Override
-    public CObjectDelegate getimpl() {
-        return mSceneObject;
-    }
-
-    @Override
-    public void zoomInOut(Float scale, Long duration) {
-        mSceneObject.zoomInOut(scale, duration);
-    }
-
-    @Override
-    public void wiggle(String direction, Float magnitude, Long duration, Integer repetition ) {
-        mSceneObject.wiggle(direction, magnitude, duration, repetition);
-    }
-
-    @Override
-    public void setAlpha(Float alpha) {
-        mSceneObject.setAlpha(alpha);
     }
 }

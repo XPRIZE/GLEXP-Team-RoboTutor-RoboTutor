@@ -1,6 +1,14 @@
 package cmu.xprize.comp_logging;
 
+import android.content.SharedPreferences;
+
 import java.lang.reflect.Field;
+
+import static cmu.xprize.comp_logging.PerformanceLogItem.MATRIX_TYPE.LITERACY_MATRIX;
+import static cmu.xprize.comp_logging.PerformanceLogItem.MATRIX_TYPE.MATH_MATRIX;
+import static cmu.xprize.comp_logging.PerformanceLogItem.MATRIX_TYPE.SONGS_MATRIX;
+import static cmu.xprize.comp_logging.PerformanceLogItem.MATRIX_TYPE.STORIES_MATRIX;
+import static cmu.xprize.comp_logging.PerformanceLogItem.MATRIX_TYPE.UNKNOWN_MATRIX;
 
 /**
  * Created by kevindeland on 9/13/17.
@@ -21,11 +29,15 @@ public class PerformanceLogItem {
     private int totalProblemsCount;
 
     private String matrixName; // could be literacy or math or whatever
-    private final static String MATH_MATRIX = "math";
-    private final static String LITERACY_MATRIX = "literacy";
-    private final static String STORIES_MATRIX = "stories";
-    private final static String UNKNOWN_MATRIX = "unknown";
-    private final static String SONGS_MATRIX = "songs";
+
+    public final static class MATRIX_TYPE {
+        public final static String MATH_MATRIX = "math";
+        public final static String LITERACY_MATRIX = "literacy";
+        public final static String STORIES_MATRIX = "stories";
+        public final static String UNKNOWN_MATRIX = "unknown";
+        public final static String SONGS_MATRIX = "songs";
+    }
+
 
     private int totalSubsteps;
     private int substepNumber;
@@ -42,11 +54,14 @@ public class PerformanceLogItem {
     private String promptType;
     private String feedbackType;
 
+    private String promotionMode; // placement or promotion
+
     private final static String DEBUG_TAG = "DEBUG_PERFORMANCE_LOG";
 
+    //
     // iterative way to print fields in the desired order
     private static final String[] orderedFieldsToPrint = {"timestamp", "userId", "sessionId", "gameId", "language", "tutorName", "tutorId", "matrixName", "levelName", "taskName",
-            "problemName", "problemNumber", "substepNumber", "substepProblem", "attemptNumber", "expectedAnswer", "userResponse", "correctness", "feedbackType", "totalProblemsCount"};
+            "problemName", "problemNumber", "substepNumber", "substepProblem", "attemptNumber", "expectedAnswer", "userResponse", "correctness", "feedbackType", "totalProblemsCount", "promotionMode", "scaffolding"};
 
     public PerformanceLogItem() {
     }
@@ -64,9 +79,7 @@ public class PerformanceLogItem {
                     msg.append(field.get(this));
                     msg.append(", ");
                 }
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
+            } catch (NoSuchFieldException | IllegalAccessException e) {
                 e.printStackTrace();
             }
 
@@ -298,6 +311,18 @@ public class PerformanceLogItem {
         if(tutorId != null) {
             setMatrixName(tutorId);
         }
+    }
+
+    public String getPromotionMode() {
+        return promotionMode;
+    }
+
+    public void setPromotionMode(String promotionMode) {
+        this.promotionMode = promotionMode;
+    }
+
+    public String getMatrixName() {
+        return matrixName;
     }
 
     public String getProblemName() {

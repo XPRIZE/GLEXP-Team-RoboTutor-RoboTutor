@@ -23,7 +23,11 @@
 	"soundMap" : {
 		"default": {"type": "SOUNDMAP", "language": "LANG_AUTO", "path": "cmu/xprize/counting"},
 		"numbers": {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global/numbers"},
-		"chimes":  {"type": "SOUNDMAP", "language": "LANG_EFFECT", "path": "chimes"}
+		"chimes":  {"type": "SOUNDMAP", "language": "LANG_EFFECT", "path": "chimes"},
+		"xprize":  {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global"},
+		"xprize_numbers":{"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/literacy"},
+		"numscale":  {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/numberscale"},
+		"write": {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/writing"}
 	},
 
 	"navigatorType":"SIMPLE_NAVIGATOR"

@@ -253,7 +253,17 @@ public class CTutorEngine implements ILoadableObject2 {
      */
     public void quickLaunch(String tutorVariant, String tutorId, String tutorFile) {
 
+        for (String name: tutorVariants.keySet()){
 
+            String key =name.toString();
+            String value = tutorVariants.get(name).tutorName;
+            String feats = tutorVariants.get(name).features;
+            System.out.println(key + " tutorName: " + value + " Features: " + feats);
+
+        }
+        String value = tutorVariants.get(tutorVariant).tutorName;
+        String feats = tutorVariants.get(tutorVariant).features;
+        System.out.println(tutorVariant + " tutorName: " + value + " Features: " + feats);
         defvar_tutor  tutorDescriptor = tutorVariants.get(tutorVariant);
         defdata_tutor tutorBinding    = bindingPatterns.get(tutorDescriptor.tutorName);
 
@@ -458,7 +468,7 @@ public class CTutorEngine implements ILoadableObject2 {
     static private void  initSceneBindings(defdata_tutor bindingPattern, String sceneName, databinding[] databindings) {
 
         if(sceneName.equals("*")) {
-
+            System.out.println(bindingPattern.scene_bindings.isEmpty());
             if(bindingPattern.scene_bindings.size() == 1) {
 
                 Iterator<?> scenes = bindingPattern.scene_bindings.entrySet().iterator();
@@ -501,7 +511,8 @@ public class CTutorEngine implements ILoadableObject2 {
      * @param dataSpec
      */
     static private void initializeBindingPattern(defdata_tutor bindingPattern, String dataSpec) {
-
+        System.out.print("dataSpec: ");
+        System.out.println(dataSpec);
         defdata_tutor dataBindings = parseDataSpec(dataSpec);
 
         Iterator<?> scenes = dataBindings.scene_bindings.entrySet().iterator();

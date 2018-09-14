@@ -64,6 +64,8 @@ import static cmu.xprize.comp_session.AS_CONST.VAR_TUTOR_ID;
 import static cmu.xprize.comp_session.AS_CONST.VAR_DATASOURCE;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENT;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENTDATA;
+import static cmu.xprize.util.TCONST.MATH_PLACEMENT;
+import static cmu.xprize.util.TCONST.MATH_PLACEMENT_INDEX;
 import static cmu.xprize.util.TCONST.PLACEMENT_TAG;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_AKIRA;
@@ -71,6 +73,8 @@ import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_ASM;
 import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_BPOP;
 import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_TAP_COUNT;
 import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
+import static cmu.xprize.util.TCONST.WRITING_PLACEMENT;
+import static cmu.xprize.util.TCONST.WRITING_PLACEMENT_INDEX;
 
 public class TActivitySelector extends CActivitySelector implements IBehaviorManager, ITutorSceneImpl, IDataSink, IEventSource, IPublisher, ITutorLogger {
 
@@ -290,7 +294,6 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
                 _describeIndex++;
             } else {
-
                 applyBehavior(AS_CONST.DESCRIBE_COMPLETE);
             }
         }
@@ -530,7 +533,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         }
 
         // check SharedPreferences
-        final SharedPreferences prefs = getStudentSharedPreferences();
+        final SharedPreferences prefs = RoboTutor.getStudentSharedPreferences();
 
         if (buttonFound) {
 
@@ -730,7 +733,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         boolean useWritingPlacement = false;
 
 
-        SharedPreferences prefs = getStudentSharedPreferences();
+        SharedPreferences prefs = RoboTutor.getStudentSharedPreferences();
 
         // Init the skill pointers
         //
@@ -740,8 +743,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
                 activeTutor = writingTutorID;
                 transitionMap = writeTransitions;
-                useWritingPlacement = prefs.getBoolean("WRITING_PLACEMENT", false);
-                placementIndex = prefs.getInt("WRITING_PLACEMENT_INDEX", 0);
+                useWritingPlacement = prefs.getBoolean(WRITING_PLACEMENT, false);
+                placementIndex = prefs.getInt(WRITING_PLACEMENT_INDEX, 0);
 
                 break;
 
@@ -755,8 +758,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
                 activeTutor = mathTutorID;
                 transitionMap = mathTransitions;
-                useMathPlacement = prefs.getBoolean("MATH_PLACEMENT", false);
-                placementIndex = prefs.getInt("MATH_PLACEMENT_INDEX", 0);
+                useMathPlacement = prefs.getBoolean(MATH_PLACEMENT, false);
+                placementIndex = prefs.getInt(MATH_PLACEMENT_INDEX, 0);
                 break;
 
             case AS_CONST.SELECT_SHAPES:
@@ -912,8 +915,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                             CPlacementTest_Tutor lastPlacementTest = mathPlacement[mathPlacementIndex];
                             // update our preferences to exit PLACEMENT mode
                             SharedPreferences.Editor editor = prefs.edit();
-                            editor.putBoolean("MATH_PLACEMENT", false);
-                            editor.remove("MATH_PLACEMENT_INDEX");
+                            editor.putBoolean(MATH_PLACEMENT, false);
+                            editor.remove(MATH_PLACEMENT_INDEX);
                             editor.apply();
 
                             return lastPlacementTest.fail;
@@ -922,7 +925,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                             CPlacementTest_Tutor nextPlacementTest = mathPlacement[mathPlacementIndex];
 
                             SharedPreferences.Editor editor = prefs.edit();
-                            editor.putInt("MATH_PLACEMENT_INDEX", mathPlacementIndex);
+                            editor.putInt(MATH_PLACEMENT_INDEX, mathPlacementIndex);
                             editor.apply();
 
                             return nextPlacementTest.tutor; // go to beginning of last level
@@ -937,8 +940,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                             CPlacementTest_Tutor lastPlacementTest = writePlacement[writingPlacementIndex];
                             // update our preferences to exit PLACEMENT mode
                             SharedPreferences.Editor editor = prefs.edit();
-                            editor.putBoolean("WRITING_PLACEMENT", false);
-                            editor.remove("WRITING_PLACEMENT_INDEX");
+                            editor.putBoolean(WRITING_PLACEMENT, false);
+                            editor.remove(WRITING_PLACEMENT_INDEX);
                             editor.apply();
 
                             return lastPlacementTest.fail; // go to beginning of last level
@@ -947,7 +950,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                             CPlacementTest_Tutor nextPlacementTest = writePlacement[writingPlacementIndex];
 
                             SharedPreferences.Editor editor = prefs.edit();
-                            editor.putInt("WRITING_PLACEMENT_INDEX", writingPlacementIndex);
+                            editor.putInt(WRITING_PLACEMENT_INDEX, writingPlacementIndex);
                             editor.apply();
 
                             return nextPlacementTest.tutor;
@@ -972,15 +975,15 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                     // set prefs.usesThingy to false
                     if(useMathPlacement) {
                         lastPlacementTest = mathPlacement[placementIndex];
-                        placementKey = "MATH_PLACEMENT";
-                        placementIndexKey = "MATH_PLACEMENT_INDEX";
+                        placementKey = MATH_PLACEMENT;
+                        placementIndexKey = MATH_PLACEMENT_INDEX;
 
                     }
                     // useWritePlacement only other option
                     else {
                         lastPlacementTest = writePlacement[placementIndex];
-                        placementKey = "WRITING_PLACEMENT";
-                        placementIndexKey = "WRITING_PLACEMENT_INDEX";
+                        placementKey = WRITING_PLACEMENT;
+                        placementIndexKey = WRITING_PLACEMENT_INDEX;
 
                     }
                     SharedPreferences.Editor editor = prefs.edit();
@@ -1011,7 +1014,6 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                     return transitionData.harder;
 
                 case PREVIOUS:
-                    // XXX FIXME nextTutor = transitionData.previous;
                     // for now... do the super hacky way of iterating through the whole map until we find one who refers to "activeTutor" via "next"
                     String tempNextTutor = null;
                     for (Map.Entry<String, CAt_Data> e : transitionMap.entrySet()) {
@@ -1026,18 +1028,14 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                         tempNextTutor = activeTutor;
                     }
                     return tempNextTutor;
-                // XXX FIXME end super hacky code
 
 
                 case DOUBLE_NEXT:
-                    // XXX FIXME nextTutor = transitionData.double_next;
                     // for now... do the slightly less hacky way of doing "next" of "next"
                     String notNextTutor = transitionData.next;
 
                     CAt_Data nextTransitionData = transitionMap.get(notNextTutor);
                     return nextTransitionData.next;
-                // XXX FIXME end slightly less hacky code
-                // XXX note that these will not show up in the debugger graph
 
                 // this shouldn't happen...
                 default:
@@ -1119,7 +1117,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         // Serialize the new state
         // #Mod 329 language switch capability
         //
-        SharedPreferences prefs = getStudentSharedPreferences();
+        SharedPreferences prefs = RoboTutor.getStudentSharedPreferences();
 
         SharedPreferences.Editor editor = prefs.edit();
 
@@ -1142,22 +1140,6 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         editor.apply();
 
         return buttonid;
-    }
-
-    /**
-     * gets the stored data for each student based on STUDENT_ID.
-     * YYY if this is a student's first time logging in, use PLACEMENT
-     */
-    private SharedPreferences getStudentSharedPreferences() {
-        // each ID name is composed of the STUDENT_ID plus the language i.e. EN or SW
-        String prefsName = "";
-        if(RoboTutor.STUDENT_ID != null) {
-            prefsName += RoboTutor.STUDENT_ID + "_";
-        }
-        prefsName += mMediaManager.getLanguageFeature(mTutor);
-
-        RoboTutor.logManager.postEvent_I(TAG, "Getting SharedPreferences: " + prefsName);
-        return RoboTutor.ACTIVITY.getSharedPreferences(prefsName, Context.MODE_PRIVATE);
     }
 
 
@@ -1682,7 +1664,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         // de-serialize state
         // #Mod 329 language switch capability
         //
-        SharedPreferences prefs = getStudentSharedPreferences(); // YYY
+        SharedPreferences prefs = RoboTutor.getStudentSharedPreferences(); // YYY
 
         if(prefs.getAll().entrySet().isEmpty())
             RoboTutor.logManager.postEvent_W(TAG, "SharedPreferences is empty");
@@ -1702,22 +1684,22 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         if (firstTime == null) {
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("HAS_PLAYED", String.valueOf(true));
-            editor.putBoolean("MATH_PLACEMENT", true);
-            editor.putInt("MATH_PLACEMENT_INDEX", 0);
-            editor.putBoolean("WRITING_PLACEMENT", true);
-            editor.putInt("WRITING_PLACEMENT_INDEX", 0);
+            editor.putBoolean(MATH_PLACEMENT, true);
+            editor.putInt(MATH_PLACEMENT_INDEX, 0);
+            editor.putBoolean(WRITING_PLACEMENT, true);
+            editor.putInt(WRITING_PLACEMENT_INDEX, 0);
             editor.apply();
 
         }
-        boolean useMathPlacement = prefs.getBoolean("MATH_PLACEMENT", true);
-        boolean useWritingPlacement = prefs.getBoolean("WRITING_PLACEMENT", true);
+        boolean useMathPlacement = prefs.getBoolean(MATH_PLACEMENT, true);
+        boolean useWritingPlacement = prefs.getBoolean(WRITING_PLACEMENT, true);
 
 
         RoboTutor.logManager.postEvent_V(PLACEMENT_TAG, String.format("useMathPlacement = %s", useMathPlacement));
         RoboTutor.logManager.postEvent_V(PLACEMENT_TAG, String.format("useWritingPlacement = %s", useWritingPlacement));
 
         if(useMathPlacement) {
-            int mathPlacementIndex = prefs.getInt("MATH_PLACEMENT_INDEX", 0);
+            int mathPlacementIndex = prefs.getInt(MATH_PLACEMENT_INDEX, 0);
             CPlacementTest_Tutor mathPlacementTutor = mathPlacement[mathPlacementIndex];
             RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("mathPlacementIndex = %d", mathPlacementIndex));
             mathTutorID = mathPlacementTutor.tutor; // YYY tutor gets chosen here
@@ -1728,7 +1710,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("mathTutorID = %s", mathTutorID));
 
         if (useWritingPlacement) {
-            int writingPlacementIndex = prefs.getInt("WRITING_PLACEMENT_INDEX", 0);
+            int writingPlacementIndex = prefs.getInt(WRITING_PLACEMENT_INDEX, 0);
             CPlacementTest_Tutor writePlacementTutor = writePlacement[writingPlacementIndex];
             RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("writePlacementIndex = %d", writingPlacementIndex));
             writingTutorID = writePlacementTutor.tutor; // YYY tutor gets chosen here

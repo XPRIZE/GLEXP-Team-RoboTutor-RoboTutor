@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/story_questions"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF">
+
+    <TextView
+        android:id="@+id/SstoryTextPicMatch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
+        android:layout_centerHorizontal="true"
+        android:text=""
+        android:textColor="#000"
+        android:textSize="30sp"
+        app:layout_widthPercent="100%" />
+
+    <ImageView
+        android:id="@+id/SpageImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="30dp"
+        android:scaleType="fitCenter"
+        app:layout_widthPercent="50%" />
+
+    <LinearLayout
+        android:id="@+id/ImageGrid2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/SstoryTextPicMatch"
+        android:columnCount="2"
+        android:rowCount="1"
+        android:visibility="invisible"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <FrameLayout
+            android:id="@+id/SpageFrame2_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:background="#FFF">
+            <ImageView
+                android:layout_columnWeight="1"
+                android:id="@+id/SpageImage2_1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:src="@drawable/generic_question"
+                android:scaleType="fitCenter" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/SpageFrame2_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="#FFF">
+            <ImageView
+                android:layout_columnWeight="1"
+                android:id="@+id/SpageImage2_2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:src="@drawable/generic_question"
+                android:scaleType="fitCenter" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ImageGrid3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/SstoryTextPicMatch"
+        android:columnCount="3"
+        android:rowCount="1"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:visibility="invisible">
+        <FrameLayout
+            android:id="@+id/SpageFrame3_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:background="#FFF">
+            <ImageView
+                android:layout_columnWeight="1"
+                android:id="@+id/SpageImage3_1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:src="@drawable/generic_question"
+                android:scaleType="fitCenter" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/SpageFrame3_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="#FFF">
+            <ImageView
+                android:layout_columnWeight="1"
+                android:id="@+id/SpageImage3_2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:src="@drawable/generic_question"
+                android:scaleType="fitCenter" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/SpageFrame3_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="#FFF">
+            <ImageView
+                android:layout_columnWeight="1"
+                android:id="@+id/SpageImage3_3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:src="@drawable/generic_question"
+                android:scaleType="fitCenter" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/ImageGrid4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/SstoryTextPicMatch"
+        android:columnCount="4"
+        android:rowCount="1"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:visibility="invisible">
+        <FrameLayout
+            android:id="@+id/SpageFrame4_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:background="#FFF">
+            <ImageView
+                android:layout_columnWeight="1"
+                android:id="@+id/SpageImage4_1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:src="@drawable/generic_question"
+                android:scaleType="fitCenter" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/SpageFrame4_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="#FFF">
+            <ImageView
+                android:layout_columnWeight="1"
+                android:id="@+id/SpageImage4_2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:src="@drawable/generic_question"
+                android:scaleType="fitCenter" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/SpageFrame4_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="#FFF">
+            <ImageView
+                android:layout_columnWeight="1"
+                android:id="@+id/SpageImage4_3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:src="@drawable/generic_question"
+                android:scaleType="fitCenter" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/SpageFrame4_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="#FFF">
+            <ImageView
+                android:layout_columnWeight="1"
+                android:id="@+id/SpageImage4_4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:src="@drawable/generic_question"
+                android:scaleType="fitCenter" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/SsideViewQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="30dp"
+        android:scaleType="fitCenter"
+        app:layout_widthPercent="50%"/>
+
+    <TextView
+        android:id="@+id/SstoryText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_toRightOf="@+id/SpageImage"
+        android:textColor="#000"
+        android:textSize="30sp"
+        app:layout_widthPercent="50%" />
+
+    <FrameLayout
+        android:id="@+id/SwordFrame1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:layout_widthPercent="40%"
+        android:visibility="invisible"
+        app:layout_heightPercent="18%">
+        <TextView
+            android:id="@+id/Sword1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:text="alkdjfalksjdf"
+            android:textSize="30sp"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/SwordFrame2"
+        android:layout_below="@id/SwordFrame1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:layout_widthPercent="40%"
+        android:visibility="invisible"
+        app:layout_heightPercent="18%"
+        >
+        <TextView
+            android:id="@+id/Sword2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:text="asdjfalksfjdlj"
+            android:textSize="30sp"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/SwordFrame3"
+        android:layout_below="@id/SwordFrame2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:layout_widthPercent="40%"
+        android:visibility="invisible"
+        app:layout_heightPercent="18%"
+        >
+        <TextView
+            android:id="@+id/Sword3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:text="asdjfalksfjdlj"
+            android:textSize="30sp"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/SwordFrame4"
+        android:layout_below="@id/SwordFrame3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:layout_widthPercent="40%"
+        android:visibility="invisible"
+        app:layout_heightPercent="18%"
+        >
+        <TextView
+            android:id="@+id/Sword4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:text="asdjfalksfjdlj"
+            android:textSize="30sp"/>
+    </FrameLayout>
+
+    <ImageButton
+        android:id="@+id/Sspeak"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/SstoryText"
+        android:layout_alignEnd="@+id/SstoryText"
+        android:layout_marginBottom="50dp"
+        android:layout_marginRight="250dp"
+        android:background="#ffffff"
+        android:visibility="invisible"
+        android:src="@drawable/speak_button" />
+
+    <ImageButton
+        android:id="@+id/SpageFlip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/SpageImage"
+        android:layout_alignEnd="@+id/SstoryText"
+        android:layout_below="@+id/SstoryText"
+        android:layout_marginRight="250dp"
+        android:background="#ffffff"
+        android:visibility="invisible"
+        android:src="@drawable/page_flip_button" />
+
+    <FrameLayout
+        android:id="@+id/SfullViewQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp" />
+
+
+</android.support.percent.PercentRelativeLayout>
+

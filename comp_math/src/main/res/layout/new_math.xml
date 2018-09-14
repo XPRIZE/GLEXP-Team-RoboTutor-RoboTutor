@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This is a test"/>
+
+    <!-- 0, ANIMATOR3-->
+    <cmu.xprize.asm_component.CAsm_Alley
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </cmu.xprize.asm_component.CAsm_Alley>
+
+    <!-- 1, ANIMATOR2 -->
+    <cmu.xprize.asm_component.CAsm_Alley
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </cmu.xprize.asm_component.CAsm_Alley>
+
+    <!-- 2, ANIMATOR1 -->
+    <cmu.xprize.asm_component.CAsm_Alley
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </cmu.xprize.asm_component.CAsm_Alley>
+
+    <!-- 3, CARRY_BRW -->
+    <cmu.xprize.asm_component.CAsm_Alley
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </cmu.xprize.asm_component.CAsm_Alley>
+
+    <!-- 4, OPERAND_ROW -->
+    <cmu.xprize.asm_component.CAsm_Alley
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- TextLayout -->
+        <cmu.xprize.asm_component.CAsm_TextLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <cmu.xprize.asm_component.CAsm_TextLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <cmu.xprize.asm_component.CAsm_Text
+                    android:layout_width="@dimen/text_box_width"
+                    android:layout_height="@dimen/text_box_height" />
+
+                <cmu.xprize.asm_component.CAsm_Text
+                    android:layout_width="@dimen/text_box_width"
+                    android:layout_height="@dimen/text_box_height"/>
+
+            </cmu.xprize.asm_component.CAsm_TextLayout>
+
+            <cmu.xprize.asm_component.CAsm_TextLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <cmu.xprize.asm_component.CAsm_Text
+                    android:layout_width="@dimen/text_box_width"
+                    android:layout_height="@dimen/text_box_height" />
+
+                <cmu.xprize.asm_component.CAsm_Text
+                    android:id="@+id/top_hun_text"
+                    android:layout_width="@dimen/text_box_width"
+                    android:layout_height="@dimen/text_box_height"
+                    android:text="9"
+                    android:textSize="@dimen/text_size"/>
+
+            </cmu.xprize.asm_component.CAsm_TextLayout>
+
+            <cmu.xprize.asm_component.CAsm_TextLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <cmu.xprize.asm_component.CAsm_Text
+                    android:layout_width="@dimen/text_box_width"
+                    android:layout_height="@dimen/text_box_height" />
+
+                <cmu.xprize.asm_component.CAsm_Text
+                    android:id="@+id/top_ten_text"
+                    android:layout_width="@dimen/text_box_width"
+                    android:layout_height="@dimen/text_box_height"
+                    android:text="0"
+                    android:textSize="@dimen/text_size"/>
+
+            </cmu.xprize.asm_component.CAsm_TextLayout>
+
+            <cmu.xprize.asm_component.CAsm_TextLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <cmu.xprize.asm_component.CAsm_Text
+                    android:layout_width="@dimen/text_box_width"
+                    android:layout_height="@dimen/text_box_height" />
+
+                <cmu.xprize.asm_component.CAsm_Text
+                    android:id="@+id/top_one_text"
+                    android:layout_width="@dimen/text_box_width"
+                    android:layout_height="@dimen/text_box_height"
+                    android:text="0"
+                    android:textSize="@dimen/text_size"/>
+
+            </cmu.xprize.asm_component.CAsm_TextLayout>
+
+        </cmu.xprize.asm_component.CAsm_TextLayout>
+
+        <!-- DotBag -->
+        <cmu.xprize.asm_component.CAsm_DotBag
+            android:id="@+id/top_dotbag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TableRow
+                android:layout_marginLeft="@dimen/dotbag_margin"
+                android:layout_marginRight="@dimen/dotbag_margin">
+
+                <cmu.xprize.asm_component.CAsm_Dot
+                    android:layout_width="@dimen/text_box_height"
+                    android:layout_height="@dimen/text_box_height"
+                    android:src="@drawable/circle"/>
+
+                <cmu.xprize.asm_component.CAsm_Dot
+                    android:layout_width="@dimen/text_box_height"
+                    android:layout_height="@dimen/text_box_height"
+                    android:src="@drawable/circle"/>
+
+                <cmu.xprize.asm_component.CAsm_Dot
+                    android:layout_width="@dimen/text_box_height"
+                    android:layout_height="@dimen/text_box_height"
+                    android:src="@drawable/circle"/>
+            </TableRow>
+
+
+        </cmu.xprize.asm_component.CAsm_DotBag>
+
+    </cmu.xprize.asm_component.CAsm_Alley>
+
+    <!-- 5, OPERAND_ROW -->
+    <cmu.xprize.asm_component.CAsm_Alley
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- TextLayout -->
+        <cmu.xprize.asm_component.CAsm_TextLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <cmu.xprize.asm_component.CAsm_TextLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <cmu.xprize.asm_component.CAsm_Text
+                    android:layout_width="@dimen/text_box_width"
+                    android:layout_height="@dimen/text_box_height" />
+
+                <cmu.xprize.asm_component.CAsm_Text
+                    android:id="@+id/mid_op_text"
+                    android:layout_width="@dimen/text_box_width"
+                    android:layout_height="@dimen/text_box_height"
+                    android:text="-"
+                    android:textSize="@dimen/text_size"/>
+
+            </cmu.xprize.asm_component.CAsm_TextLayout>
+
+            <cmu.xprize.asm_component.CAsm_TextLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <cmu.xprize.asm_component.CAsm_Text
+                    android:layout_width="@dimen/text_box_width"
+                    android:layout_height="@dimen/text_box_height" />
+
+                <cmu.xprize.asm_component.CAsm_Text
+                    android:id="@+id/mid_hun_text"
+                    android:layout_width="@dimen/text_box_width"
+                    android:layout_height="@dimen/text_box_height"
+                    android:text="1"
+                    android:textSize="@dimen/text_size"/>
+
+            </cmu.xprize.asm_component.CAsm_TextLayout>
+
+            <cmu.xprize.asm_component.CAsm_TextLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <cmu.xprize.asm_component.CAsm_Text
+                    android:layout_width="@dimen/text_box_width"
+                    android:layout_height="@dimen/text_box_height" />
+
+                <cmu.xprize.asm_component.CAsm_Text
+                    android:id="@+id/mid_ten_text"
+                    android:layout_width="@dimen/text_box_width"
+                    android:layout_height="@dimen/text_box_height"
+                    android:text="0"
+                    android:textSize="@dimen/text_size"/>
+
+            </cmu.xprize.asm_component.CAsm_TextLayout>
+
+            <cmu.xprize.asm_component.CAsm_TextLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <cmu.xprize.asm_component.CAsm_Text
+                    android:layout_width="@dimen/text_box_width"
+                    android:layout_height="@dimen/text_box_height" />
+
+                <cmu.xprize.asm_component.CAsm_Text
+                    android:id="@+id/mid_one_text"
+                    android:layout_width="@dimen/text_box_width"
+                    android:layout_height="@dimen/text_box_height"
+                    android:text="0"
+                    android:textSize="@dimen/text_size"/>
+
+            </cmu.xprize.asm_component.CAsm_TextLayout>
+
+        </cmu.xprize.asm_component.CAsm_TextLayout>
+
+
+    </cmu.xprize.asm_component.CAsm_Alley>
+
+    <!-- 6, RESULT_ROW -->
+    <cmu.xprize.asm_component.CAsm_Alley
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </cmu.xprize.asm_component.CAsm_Alley>
+
+
+
+
+
+</LinearLayout>

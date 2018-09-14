@@ -48,7 +48,7 @@ public class CMediaController implements IMediaController{
 
 
     static public CMediaManager getManagerInstance(String parentTutor) {
-
+        Log.d("STOPAUDIO", "getManagerInstance: parentTutor "+parentTutor);
         // GRAY_SCREEN_BUG managerMap is empty, has no entry for "activity_selector"
         CMediaManager manager = managerMap.get(parentTutor);
 

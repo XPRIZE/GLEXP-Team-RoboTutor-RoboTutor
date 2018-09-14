@@ -10,7 +10,10 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.util.Log;
+import java.util.Arrays;
+import java.util.List;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -22,6 +25,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.ltkplus.CGlyphSet;
+import cmu.xprize.ltkplus.IGlyphSink;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
@@ -44,6 +49,9 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
     private CCountX_SurfaceView surfaceView;
     private TextView counterText;
     private TextView stimulusText;
+    protected TextView checkOne;
+    protected TextView checkTen;
+    protected TextView checkHundred;
 
     // DataSource Variables
     protected int _dataIndex = 0;
@@ -54,10 +62,28 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
     protected int countStart;
     protected int countTarget;
     protected int currentCount;
-    protected int delta;
+    protected int currentValue;
     protected int tenPower;
     protected int drawIndex;
-    protected boolean tenInited=false;
+    protected String mode = "";
+    protected int difficulty = 0;
+    protected boolean twoAddition;
+    protected float bedge;
+    protected boolean tenInited;
+    protected int allTaps;
+
+
+    protected int[] write_numbers;
+    protected int[] targetNumbers;
+    protected boolean[] writeNumbersTappbale;
+    protected boolean canWrite;
+
+
+
+
+    protected IGlyphSink _recognizer;
+    protected CGlyphSet _glyphSet;
+
 
     // json loadable
     public String bootFeatures;
@@ -81,7 +107,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
     private boolean isRunning = false;
 
 
-    static final String TAG = "CCount_Component";
+    static final String TAG = "CCountX_Component";
 
     // REMOVE private CCount_DotBag dotBag;
 
@@ -112,6 +138,9 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         surfaceView = (CCountX_SurfaceView) findViewById(R.id.imageSurface);
         surfaceView.setComponent(this);
         counterText = (TextView) findViewById(R.id.counterText);
+        checkOne = (TextView) findViewById(R.id.checkOne);
+        checkTen = (TextView) findViewById(R.id.checkTen);
+        checkHundred = (TextView) findViewById(R.id.checkHundred);
         stimulusText = (TextView) findViewById(R.id.stimulusText);
 
         bManager = LocalBroadcastManager.getInstance(getContext());
@@ -161,7 +190,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
                 stimulusText.setText("");
             }
         } catch (Exception e) {
-            CErrorManager.logEvent(TAG, "Data Exhuasted: call past end of data", e, false);
+            CErrorManager.logEvent(TAG, "Data Exhuasted: call past end of data", e, true);
         }
 
     }
@@ -178,7 +207,11 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
 
         resetView();
-        surfaceView.initTenFrame();
+        if(mode != "placevalue"){
+            surfaceView.initTenFrame();}
+        else{
+            surfaceView.initTenFramePlaceValue();
+        }
         //surfaceView.resetCounter(); // functionality already called above
 
         // reset vieresetView();
@@ -198,15 +231,64 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         task = data.task;
         layout = data.layout; // NOV_1 make this consistent w/ Anthony
         countStart = data.dataset[0];
-
-        if (data.tenPower.equals("one")){
-            tenPower = 1;
-        } else if (data.tenPower.equals("ten")){
-            tenPower = 10;
-        } else {
+        hideRecognizer();
+        tenInited = false;
+        if (data.tenPower.length==1){
+            counterText.setVisibility(View.VISIBLE);
+            mode = "countingx";
+            difficulty=data.difficulty;
+            if (data.tenPower[0].equals("one")){
+                tenPower = 1;
+            } else if (data.tenPower[0].equals("ten")){
+                tenPower = 10;
+            } else {
                 tenPower = 100;
+            }
+            countTarget = data.dataset[1];
+
+
+        } else {
+            counterText.setVisibility(View.INVISIBLE);
+            canWrite = false;
+            mode = "placevalue";
+            countTarget = data.dataset[1];
+            tenPower = 1;
+            difficulty = data.difficulty;
+            allTaps = 0;
+
+            int one = countTarget%10;
+            int ten = countTarget%100-one;
+            int hundred  = countTarget - ten-one;
+            if (hundred == 0 && one!=0 && ten!=0){
+                write_numbers = new int[]{0,-1,-1};
+                writeNumbersTappbale =new boolean[]{false,true,true};
+                twoAddition = true;
+            } else if(hundred!=0 && ten ==0 && one !=0 && difficulty<2) {
+                write_numbers =new int[]{-1,-1,-1};
+                writeNumbersTappbale =new boolean[]{true,true,true};
+                twoAddition = true;
+            } else if(hundred!=0 && ten !=0 && one ==0 && difficulty<2) {
+                write_numbers =new int[]{-1,-1,-1};
+                writeNumbersTappbale =new boolean[]{true,true,true};
+                twoAddition = true;
+            } else {
+                write_numbers =new int[]{-1,-1,-1};
+                writeNumbersTappbale =new boolean[]{true,true,true};
+                twoAddition = false;
+            }
+            targetNumbers = new int[]{(countTarget-countTarget%100)/100,(countTarget%100-countTarget%10)/10,countTarget%10};
+
+            for(int i=0;i<targetNumbers.length;i++){
+                if(targetNumbers[i] == 0){
+                    surfaceView.reachTarget[i] = true;
+                }
+            }
+
+
+
         }
-        countTarget = data.dataset[1]*tenPower;
+        trackAndLogPerformance("START","START","tap");
+
 
         Log.d(TCONST.COUNTING_DEBUG_LOG, "target=" + countTarget + ";index=" + _dataIndex);
     }
@@ -217,11 +299,18 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
     protected void resetView() {
 
         // reset the TextView
-        String initialCount = String.valueOf(countStart);
-        counterText.setText(initialCount);
+
+        if (mode=="placevalue"){
+            surfaceView.clearObjectsToNumber(countStart);
+        } else {
+            String initialCount = String.valueOf(countStart);
+            counterText.setText("0");
+            surfaceView.clearObjectsToNumber(countStart);
+        }
+
 
         // reset the surfaceView
-        surfaceView.clearObjectsToNumber(countStart);
+
     }
 
     public void updateCount(int count) {
@@ -232,6 +321,52 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
         if(currentCount == countTarget) {
             applyBehavior(COUNTX_CONST.DONE_COUNTING_TO_N);
+        }
+    }
+
+    public void updateCountPlaceValue(int hundred, int ten, int one,int currentV){
+//        String initialOne = String.valueOf(one);
+//        counterText.setText(initialOne);
+//
+//        String initialTen = String.valueOf(ten*10);
+//        counterTextTen.setText(initialTen);
+//
+//        String initialHundred = String.valueOf(hundred*100);
+//        counterTextHundred.setText(initialHundred);
+//
+//        String sum = String.valueOf(hundred*100+ten*10+one);
+//        counterTextSum.setText(sum);
+
+        if(one == countTarget%10) {
+            surfaceView.reachTarget[2] = true;
+        }
+
+        if(ten*10 == countTarget%100-countTarget%10){
+            surfaceView.reachTarget[1] = true;
+
+        }
+
+        if(hundred*100 == countTarget-countTarget%100){
+            surfaceView.reachTarget[0] = true;
+
+        }
+        currentValue = currentV;
+        if(surfaceView.reachTarget[0] && surfaceView.reachTarget[1] && surfaceView.reachTarget[2]) {
+            applyBehavior(COUNTX_CONST.DONE_COUNTING_TO_N);
+        }
+    }
+
+    public void setCheck(boolean hundred,boolean ten,boolean one){
+        if (hundred){
+            checkHundred.setVisibility(View.VISIBLE);
+        }
+
+        if(ten){
+            checkTen.setVisibility(View.VISIBLE);
+        }
+
+        if(one){
+            checkOne.setVisibility(View.VISIBLE);
         }
     }
 
@@ -250,6 +385,128 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
 
         bManager.sendBroadcast(msg);
+    }
+
+    public void playHundredIns(){
+        if(mode == "placevalue"){
+            if(!surfaceView.tapped){
+                postEvent(COUNTX_CONST.PLACEVALUE_INS_H);
+
+                new java.util.Timer().schedule(
+                        new java.util.TimerTask() {
+                            @Override
+                            public void run() {
+                                if(!surfaceView.tapped){
+                                    postEvent(COUNTX_CONST.PLACEVALUE_INS_T);
+                                }
+                            }
+                        },
+                        4000
+                );
+
+                new java.util.Timer().schedule(
+                        new java.util.TimerTask() {
+                            @Override
+                            public void run() {
+                                if(!surfaceView.tapped){
+                                    postEvent(COUNTX_CONST.PLACEVALUE_INS_O);
+                                }
+                            }
+                        },
+                        8000
+                );
+            }
+
+
+
+
+        }
+
+    }
+
+//    public void playTenIns(){
+//        if(mode == "placevalue" && !surfaceView.tapped){
+//            postEvent(COUNTX_CONST.PLACEVALUE_INS_T);
+//        }
+//
+//    }
+//
+//    public void playOneIns(){
+//        if(mode == "placevalue" && !surfaceView.tapped){
+//            postEvent(COUNTX_CONST.PLACEVALUE_INS_O);
+//        }
+//
+//    }
+
+
+    public void pointAtHundred(){
+        if(!surfaceView.tapped){
+            int[] sides = surfaceView.sides;
+            float[] r = surfaceView.getHundred(sides[0],sides[1],sides[2]);
+            float left = r[0];
+            float right = r[1];
+
+
+            PointF targetPoint = new PointF((left+right)/2,surfaceView.getHeight()/2);
+            Intent msg = new Intent(TCONST.POINTAT);
+            msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
+
+            bManager.sendBroadcast(msg);
+        }
+
+
+
+    }
+
+    public void pointAtWrittingBox(){
+            int[] sides = surfaceView.sides;
+            float[] r = surfaceView.getOne(sides[0],sides[1],sides[2]);
+            float left = r[0];
+            float right = r[1];
+
+
+            PointF targetPoint = new PointF((left+right)/2,surfaceView.getHeight()/2);
+            Intent msg = new Intent(TCONST.POINTAT);
+            msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
+
+            bManager.sendBroadcast(msg);
+
+
+
+    }
+
+    public void pointAtTen(){
+        if(!surfaceView.tapped){
+            int[] sides = surfaceView.sides;
+            float[] r = surfaceView.getTen(sides[0],sides[1],sides[2]);
+            float left = r[0];
+            float right = r[1];
+
+
+            PointF targetPoint = new PointF((left+right)/2,surfaceView.getHeight()/2);
+            Intent msg = new Intent(TCONST.POINTAT);
+            msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
+
+            bManager.sendBroadcast(msg);
+        }
+
+    }
+
+    public void pointAtOne(){
+        if(!surfaceView.tapped){
+            int[] sides = surfaceView.sides;
+            float[] r = surfaceView.getOne(sides[0],sides[1],sides[2]);
+            float left = r[0];
+            float right = r[1];
+
+
+            PointF targetPoint = new PointF((left+right)/2,surfaceView.getHeight()/2);
+            Intent msg = new Intent(TCONST.POINTAT);
+            msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
+
+            bManager.sendBroadcast(msg);
+        }
+
     }
 
     /**
@@ -283,6 +540,31 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
     }
 
+    public void playCount(int count){
+
+    }
+
+    public void donePlaying(){
+
+
+    }
+
+    public void playAudio(String filename){}
+
+    public void playTwoAddition(){}
+
+    public void playThreeAddition(){}
+
+    public void initRecognizer(int writePosition){
+    }
+
+
+    public void hideRecognizer(){
+
+    }
+
+    public void changeWritePosition(int writePosition){}
+
     /**
      * Overridden by child class.
      */
@@ -290,13 +572,198 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
     }
 
-    public void demonstrateTenFrame() {
+    public void playFinalCount(){}
 
-        surfaceView.showTenFrame();
-        isRunning = true;
-        mainHandler.post(animationRunnable);
+    public void setBedge(float length){
+        if(bedge == 0){
+            bedge = length;
+        }
+    }
+
+    public void demonstrateTenFrame() {
+        trackAndLogPerformance("END","END","tap");
+
+
+        if (mode == "placevalue"){
+            checkHundred.setVisibility(View.INVISIBLE);
+            checkTen.setVisibility(View.INVISIBLE);
+            checkOne.setVisibility(View.INVISIBLE);
+            trackAndLogPerformance("STARTWRITING",String.valueOf(difficulty),"tap");
+
+            if (difficulty == 0) {
+                String[] displayOptions = {"hundred","ten","one"};
+                if(twoAddition){
+                    if(targetNumbers[0]==0){
+                        surfaceView.displayAddition("ten");
+                        surfaceView.displayAddition("one");
+                        surfaceView.displayAddition("result");
+                        playTwoAddition();
+
+                    } else if (targetNumbers[1]==0){
+                        surfaceView.displayAddition("hundred");
+                        surfaceView.displayAddition("one");
+                        surfaceView.displayAddition("result");
+                        playTwoAddition();
+                    } else {
+                        surfaceView.displayAddition("hundred");
+                        surfaceView.displayAddition("ten");
+                        surfaceView.displayAddition("result");
+                        playTwoAddition();
+                    }
+                } else {
+                    surfaceView.displayAddition("hundred");
+                    surfaceView.displayAddition("ten");
+                    surfaceView.displayAddition("one");
+                    playTwoAddition();
+                }
+
+            } else if (difficulty == 1){
+                if (twoAddition){
+                    if(targetNumbers[0]==0){
+
+                        surfaceView.displayAddition("ten");
+                        surfaceView.displayAddition("one");
+                    } else if (targetNumbers[1] == 0){
+                        surfaceView.displayAddition("hundred");
+                        surfaceView.displayAddition("one");
+                    } else {
+                        surfaceView.displayAddition("hundred");
+                        surfaceView.displayAddition("ten");
+                    }
+
+                    playTwoAddition();
+                } else{
+                    surfaceView.displayAddition("hundred");
+                    surfaceView.displayAddition("ten");
+                    surfaceView.displayAddition("one");
+                    playThreeAddition();
+
+                }
+
+
+                initRecognizer(0);
+                if (twoAddition && targetNumbers[0]==0){
+                    changeWritePosition(1);
+                    surfaceView.pickedBox = 1;
+                } else {
+                    changeWritePosition(0);
+                    surfaceView.pickedBox = 0;
+                }
+                //draw the writting box for students to write result.
+                surfaceView.displayWrittingBox("result");
+
+
+
+            } else {
+                surfaceView.displayAddition("final");
+                surfaceView.displayWrittingBox("addition");
+                playCount(countTarget);
+                initRecognizer(0);
+                if (twoAddition){
+                    changeWritePosition(1);
+                    surfaceView.pickedBox = 1;
+                } else {
+                    changeWritePosition(0);
+                    surfaceView.pickedBox = 0;
+                }
+                if(countTarget<=100){
+                    new java.util.Timer().schedule(
+                            new java.util.TimerTask() {
+                                @Override
+                                public void run() {
+                                    displayWrittingIns();
+                                }
+                            },
+                            2500
+                    );
+                } else {
+                    new java.util.Timer().schedule(
+                            new java.util.TimerTask() {
+                                @Override
+                                public void run() {
+                                    displayWrittingIns();
+                                }
+                            },
+                            3400
+                    );
+                }
+
+
+
+
+
+
+
+
+
+
+            }
+
+        } else {
+            surfaceView.showTenFrame();
+            isRunning = true;
+            mainHandler.post(animationRunnable);
+        }
         //surfaceView.moveItemsToTenFrame();
     }
+
+
+
+    public void updateWriteNumber(int writePosition, int number){
+        surfaceView.updateWriteNumber(writePosition, number);
+        if( Arrays.equals(write_numbers, targetNumbers)){
+            hideRecognizer();
+            new java.util.Timer().schedule(
+                    new java.util.TimerTask() {
+                        @Override
+                        public void run() {
+                            if(targetNumbers[0]==0 || (targetNumbers[1]==0 && difficulty<2) || (targetNumbers[2] == 0 && difficulty<2)){
+                                playTwoAddition();
+
+                            } else {
+                                playThreeAddition();
+                            }
+                        }},
+                    2500
+            );
+        }
+
+    }
+
+    public void higlightFirst(){
+        surfaceView.updateHighlight(0);
+    }
+
+    public void highlightSecond(){
+        surfaceView.updateHighlight(1);
+
+    }
+    public void highlightThird(){
+        surfaceView.updateHighlight(2);
+
+    }
+
+    public void highlightForth(){
+        surfaceView.updateHighlight(3);
+
+    }
+
+    public void clearHighlight(){
+        surfaceView.updateHighlight(-1);
+    }
+
+    public void displayWrittingIns(){
+
+    }
+
+    public void enableWriting(){
+        canWrite = true;
+
+    }
+
+    protected void trackAndLogPerformance(String expected,String actual,String movement) {}
+
+
 
     /**
      * prevent the student from tapping
@@ -407,6 +874,33 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
                 queueMap.remove(this);
 
                 switch(_command) {
+                    case COUNTX_CONST.WRITTING_INS:
+                        applyBehavior(_command);
+                        break;
+                    case COUNTX_CONST.PLACEVALUE_INS_H:
+                        applyBehavior(_command);
+                        break;
+                    case COUNTX_CONST.PLACEVALUE_INS_T:
+                        applyBehavior(_command);
+                        break;
+                    case COUNTX_CONST.PLACEVALUE_INS_O:
+                        applyBehavior(_command);
+                        break;
+                    case COUNTX_CONST.PLAY_COUNT:
+                        applyBehavior(_command);
+                        break;
+                    case COUNTX_CONST.PLAY_THREE_ADDITION:
+                        applyBehavior(_command);
+                        break;
+                    case COUNTX_CONST.PLAY_TWO_ADDITION:
+                        applyBehavior(_command);
+                        break;
+                    case COUNTX_CONST.PLAY_AUDIO:
+                        applyBehavior(_command);
+                        break;
+                    case COUNTX_CONST.PLAY_CHIME_PLUS:
+                        applyBehavior(_command);
+                        break;
                     case COUNTX_CONST.PLAY_CHIME:
                         applyBehavior(_command);
                         break;

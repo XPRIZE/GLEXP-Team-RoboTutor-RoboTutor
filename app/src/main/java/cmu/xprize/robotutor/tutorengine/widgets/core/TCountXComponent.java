@@ -3,9 +3,15 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,6 +24,7 @@ import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.comp_logging.ITutorLogger;
 import cmu.xprize.comp_logging.PerformanceLogItem;
+import cmu.xprize.ltkplus.GCONST;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
@@ -25,7 +32,7 @@ import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
-import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
+import cmu.xprize.robotutor.tutorengine.ITutorObject;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
@@ -38,14 +45,27 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
+
+import cmu.xprize.robotutor.R;
+import cmu.xprize.comp_counting2.CGlyphController_Simple;
+import cmu.xprize.comp_counting2.CGlyphInputContainer_Simple;
+import cmu.xprize.comp_counting2.IGlyphController_Simple;
+import cmu.xprize.comp_counting2.IWritingComponent_Simple;
+import cmu.xprize.ltkplus.CRecResult;
+import cmu.xprize.ltkplus.CRecognizerPlus;
+import cmu.xprize.ltkplus.GCONST;
+import cmu.xprize.ltkplus.IGlyphSink;
+import cmu.xprize.util.TCONST;
+
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
 /**
  * Created by kevindeland on 10/20/17.
  */
 
-public class TCountXComponent extends CCountX_Component implements ITutorObjectImpl, IDataSink, IPublisher, ITutorLogger, IBehaviorManager, IEventSource {
+public class TCountXComponent extends CCountX_Component implements ITutorObject, IDataSink, IPublisher, ITutorLogger, IBehaviorManager, IEventSource {
 
+    private Context mContext;
     private CTutor          mTutor;
     private CObjectDelegate mSceneObject;
     private CMediaManager mMediaManager;
@@ -56,6 +76,19 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
     private HashMap<String,String>  _StringVar  = new HashMap<>();
     private HashMap<String,Integer> _IntegerVar = new HashMap<>();
     private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
+
+    OnCharacterRecognizedListener _recognizedListener;
+
+
+    CGlyphController_Simple _controller_1;
+    CGlyphInputContainer_Simple _inputContainer_1;
+
+
+    // Views to help you
+    TextView _resultDisplay_1;
+    TextView _resultDisplay_2;
+    Spinner _boostSpinner;
+    String[] BOOST_VALS = {GCONST.NO_BOOST, GCONST.BOOST_ALPHA, GCONST.BOOST_DIGIT, GCONST.FORCE_DIGIT};
 
     static final String TAG = "TCountComponent";
 
@@ -73,24 +106,102 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
 
     //**********************************************************
     //**********************************************************
-    //*****************  ITutorObjectImpl Implementation
+    //*****************  ITutorObject Implementation
 
     @Override
     public void init(Context context, AttributeSet attrs) {
         super.init(context, attrs);
 
+        mContext = context;
         mSceneObject = new CObjectDelegate(this);
         mSceneObject.init(context, attrs);
     }
 
     @Override
     public void onCreate() {
-        trackAndLogPerformance("START");
+        _recognizer = CRecognizerPlus.getInstance();
+        _glyphSet   = _recognizer.getGlyphPrototypes(); //new GlyphSet(TCONST.ALPHABET);
+
+        _recognizer.setClassBoost(GCONST.FORCE_DIGIT); // reset boost which may have been set from Asm
+        _controller_1 = findViewById(R.id.glyph_controller_1);
+        _inputContainer_1 = findViewById(R.id.drawn_box_1);
+        _resultDisplay_1 = findViewById(R.id.result_display_1);
+
+        _inputContainer_1.setVisibility(View.INVISIBLE);
+        _resultDisplay_1.setVisibility(View.INVISIBLE);
+
+        _controller_1.setInputContainer(_inputContainer_1);
+        _controller_1.setIsLast(true);
+        _controller_1.showBaseLine(false);
+        _recognizedListener = new OnCharacterRecognizedListener(_controller_1, _resultDisplay_1,0);
+        _controller_1.setWritingController(_recognizedListener);
+
+
     }
 
     @Override
+    public void initRecognizer(int writePosition){
+        _inputContainer_1.setVisibility(View.VISIBLE);
+
+    }
+
+
+    public void hideRecognizer(){
+        _inputContainer_1.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void changeWritePosition(int writePosition){
+        _recognizedListener = new OnCharacterRecognizedListener(_controller_1, _resultDisplay_1,writePosition);
+        _controller_1.setWritingController(_recognizedListener);
+    }
+
+
+    private class OnCharacterRecognizedListener implements IWritingComponent_Simple {
+
+        CGlyphController_Simple _controller;
+        TextView _resultDisplay;
+        int _writePosition;
+
+        OnCharacterRecognizedListener(CGlyphController_Simple controller, TextView display,int writePosition) {
+
+            this._controller = controller;
+            this._resultDisplay = display;
+            this._writePosition = writePosition;
+        }
+
+        /**
+         * This is called when the recognizer is finished
+         * @param child
+         * @param _ltkPlusCandidates
+         * @return
+         */
+        @Override
+        public boolean updateStatus(IGlyphController_Simple child, CRecResult[] _ltkPlusCandidates) {
+
+            CRecResult candidate = _ltkPlusCandidates[0];
+
+            Log.i(TAG, "the answer is... " + candidate.getRecChar() + "!!!");
+
+            _resultDisplay.setText(candidate.getRecChar());
+
+
+            updateWriteNumber(_writePosition,Integer.parseInt(candidate.getRecChar()));
+
+
+            _controller.eraseGlyph();
+
+            return false;
+        }
+    }
+
+
+
+
+    @Override
     public void onDestroy() {
-        trackAndLogPerformance("END");
+        trackAndLogPerformance("ENDPROBLEM","ENDPROBLEM","ENDPROBLEM");
+
     }
 
     @Override
@@ -131,27 +242,6 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
 
     }
 
-    @Override
-    public CObjectDelegate getimpl() {
-        return null;
-    }
-
-    @Override
-    public void zoomInOut(Float scale, Long duration) {
-
-    }
-
-    @Override
-    public void wiggle(String direction, Float magnitude, Long duration, Integer repetition) {
-
-    }
-
-    @Override
-    public void setAlpha(Float alpha) {
-
-    }
-
-
     private void reset() {
         // TODO retract Features
 
@@ -167,7 +257,8 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
         }
     }
 
-    private void trackAndLogPerformance(String stage) {
+    @Override
+    protected void trackAndLogPerformance(String expected,String actual,String movement) {
 
         String tutorName = mTutor.getTutorName();
         PerformanceLogItem event = new PerformanceLogItem();
@@ -179,18 +270,25 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
         event.setTutorName(tutorName);
         Log.wtf("WARRIOR_MAN", mTutor.getTutorId());
         event.setTutorId(mTutor.getTutorId());
+        event.setPromotionMode(RoboTutor.getPromotionMode(event.getMatrixName()));
         event.setLevelName(level);
         event.setTaskName(task);
-        event.setProblemName("countingx");
+        if (mode == "placevalue"){
+            event.setProblemName("placevalue");
+        } else {
+            event.setProblemName("countingx");
+        }
+
         if(dataSource != null) {
             event.setTotalProblemsCount(dataSource.length);
         }
         event.setProblemNumber(_dataIndex);
         event.setSubstepNumber(-1);
         event.setAttemptNumber(-1);
-        event.setExpectedAnswer(stage);
-        event.setUserResponse("");
+        event.setExpectedAnswer(expected);
+        event.setUserResponse(actual);
         event.setCorrectness(TCONST.LOG_CORRECT);
+        event.setScaffolding(movement);
 
         event.setTimestamp(System.currentTimeMillis());
 
@@ -283,16 +381,21 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
 
         // select which chime to play, via protected integer
         int scaledCount;
-        switch(tenPower) {
-            case 10:
-                scaledCount = currentCount / 10;
-                break;
-            case 100:
-                scaledCount = currentCount / 100;
-                break;
-            default:
-                scaledCount = currentCount;
+        if(mode != "placevalue"){
+            switch(tenPower) {
+                case 10:
+                    scaledCount = currentCount / 10;
+                    break;
+                case 100:
+                    scaledCount = currentCount / 100;
+                    break;
+                default:
+                    scaledCount = currentCount;
+            }
+        } else {
+            scaledCount = allTaps;
         }
+
         int chimeIndex = scaledCount == 0 ? 0 : (scaledCount - 1) % 10;
         String currentChime = COUNTX_CONST.CHIMES[1][chimeIndex];
         String octaveChime = COUNTX_CONST.CHIMES[2][chimeIndex];
@@ -300,19 +403,130 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
         Log.d("PlayChime", currentChime);
         scope.addUpdateVar("CountChime", new TString(currentChime));
         scope.addUpdateVar("OctaveChime", new TString(octaveChime));
-        scope.addUpdateVar("CurrentCount", new TString(String.valueOf(currentCount)));
+        if (mode == "placevalue"){
+            scope.addUpdateVar("CurrentCount", new TString(String.valueOf(currentValue)));
+        } else {
+            scope.addUpdateVar("CurrentCount", new TString(String.valueOf(currentCount)));
+        }
 
-        postEvent(COUNTX_CONST.PLAY_CHIME);
+
+
+        postEvent(COUNTX_CONST.PLAY_COUNT);
     }
+
+    @Override
+    public void playCount(int count){
+        TScope scope = mTutor.getScope();
+//        scope.addUpdateVar("CurrentCount", new TString(String.valueOf(count)));
+//        postEvent(COUNTX_CONST.PLAY_CHIME);
+        if (count<=100||count%100==0){
+            scope.addUpdateVar("CurrentCount", new TString(String.valueOf(count)));
+            postEvent(COUNTX_CONST.PLAY_CHIME);
+        } else {
+            scope.addUpdateVar("CurrentCountt", new TString(String.valueOf((int)(count-count%100))));
+            scope.addUpdateVar("CurrentCount",new TString(String.valueOf((int)(count%100))));
+            postEvent(COUNTX_CONST.PLAY_CHIME_PLUS);
+        }
+
+    }
+
+    @Override
+    public void donePlaying(){
+        applyBehavior(COUNTX_CONST.DONE_MOVING_TO_TEN_FRAME);
+    }
+
+
+    @Override
+    public void playTwoAddition(){
+        TScope scope = mTutor.getScope();
+        if(targetNumbers[0] == 0){
+            scope.addUpdateVar("first", new TString(String.valueOf((int)(targetNumbers[1]*10))));
+            scope.addUpdateVar("second",new TString(String.valueOf((int)(targetNumbers[2]))));
+        } else if (targetNumbers[1] == 0){
+            scope.addUpdateVar("first", new TString(String.valueOf((int)(targetNumbers[0]*100))));
+            scope.addUpdateVar("second",new TString(String.valueOf((int)(targetNumbers[2]))));
+        } else{
+            scope.addUpdateVar("first", new TString(String.valueOf((int)(targetNumbers[0]*100))));
+            scope.addUpdateVar("second",new TString(String.valueOf((int)(targetNumbers[1]*10))));
+        }
+        postEvent(COUNTX_CONST.PLAY_TWO_ADDITION);
+        postEvent(COUNTX_CONST.DONE_MOVING_TO_TEN_FRAME,8000);
+
+    }
+
+    @Override
+    public void playThreeAddition(){
+        TScope scope = mTutor.getScope();
+        scope.addUpdateVar("first", new TString(String.valueOf((int)(targetNumbers[0]*100))));
+        scope.addUpdateVar("second", new TString(String.valueOf((int)(targetNumbers[1]*10))));
+        scope.addUpdateVar("third",new TString(String.valueOf((int)(targetNumbers[2]))));
+        scope.addUpdateVar("result",new TString(String.valueOf((int)(countTarget))));
+        postEvent(COUNTX_CONST.PLAY_THREE_ADDITION);
+
+
+    }
+
+    @Override
+    public void playAudio(String filename){
+        TScope scope = mTutor.getScope();
+        scope.addUpdateVar("AudioName", new TString(filename));
+        postEvent(COUNTX_CONST.PLAY_AUDIO);
+    }
+
 
     @Override
     public void postFinalCount() {
 
         TScope scope = mTutor.getScope();
 
-        scope.addUpdateVar("FinalCount", new TString(String.valueOf(currentCount)));
+        scope.addUpdateVar("FinalCount", new TString(String.valueOf(countTarget)));
 
     }
+
+    @Override
+    public void playFinalCount(){
+        if(difficulty!=1 || Arrays.equals(write_numbers, targetNumbers)){
+            int count = countTarget;
+            TScope scope = mTutor.getScope();
+//        scope.addUpdateVar("CurrentCount", new TString(String.valueOf(count)));
+//        postEvent(COUNTX_CONST.PLAY_CHIME);
+            if (count<=100||count%100==0){
+                scope.addUpdateVar("CurrentCount", new TString(String.valueOf(count)));
+                postEvent(COUNTX_CONST.PLAY_CHIME);
+            } else {
+                scope.addUpdateVar("CurrentCountt", new TString(String.valueOf((int)(count-count%100))));
+                scope.addUpdateVar("CurrentCount",new TString(String.valueOf((int)(count%100))));
+                postEvent(COUNTX_CONST.PLAY_CHIME_PLUS);
+            }
+
+            new java.util.Timer().schedule(
+                    new java.util.TimerTask() {
+                        @Override
+                        public void run() {
+                            applyBehavior(COUNTX_CONST.DONE_MOVING_TO_TEN_FRAME);
+
+                        }
+                    },
+                    2500
+            );
+
+        }
+
+
+
+
+    }
+
+
+    @Override
+    public void displayWrittingIns(){
+        postEvent(COUNTX_CONST.WRITTING_INS);
+    }
+
+
+
+
+
 
 
 
@@ -512,6 +726,7 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
             }
         } else {
             stickyMap.put(event, behavior);
+            int i=0;
         }
     }
 
@@ -611,6 +826,9 @@ public class TCountXComponent extends CCountX_Component implements ITutorObjectI
     public String getEventSourceType() {
         return "Counting_Component";
     }
+
+
+
 
 
     // IBehaviorManager Interface END
