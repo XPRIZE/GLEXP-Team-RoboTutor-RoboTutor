@@ -709,26 +709,67 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 //when incorrect attempt has been made on this word before
                 else if(attempts > 0){
 
-                    boolean currentWordStatus = mActiveWord.updateInputWordCorrectStatus(currentWordIndex);
-                    //when the replacement is valid, do nothing.
-                    //when the written word is correct after a correction
-                    if(currentWordStatus){
-                        applyBehavior(WR_CONST.ON_CORRECT); //should set the active word to the next, inhibit it and color this word blue.
-                    }
+                    //check if allowed to write here
+                    boolean canReplace = checkReplace(mEditSequence, mActiveIndex);
 
-                    //if the word is still not correct and the current attempt is wrong.
-                    else if(!_isValid){
+                    //if replacement is allowed at this index
+                    if(canReplace) {
+                        boolean responseEqualsTargetReplacement = mResponse.equals(getReplacementTargetString(mEditSequence, mActiveIndex));
+                        //if the replacement edit is valid
+                        if(responseEqualsTargetReplacement){
 
-                        // increase attempts and update the released feature
-                        attempts = updateAttemptFeature();
-                        if(attempts > 4){
-                            applyBehavior(WR_CONST.MERCY_RULE);
-                            currentWordIndex++;
+                            updateSentenceEditSequence();
+                            mListWordsInput = getUpdatedListWordsInput(mListWordsInput, mAlignedSourceSentence,mAlignedTargetSentence);
+
+                            // if this correct response makes the sentence correct,
+                            boolean writtenSentenceIsCorrect = mWrittenSentence.equals(mAnswer);
+                            if (writtenSentenceIsCorrect) {
+                                applyBehavior(WR_CONST.DATA_ITEM_COMPLETE);
+                            }
+
+                            // if the response is correct, but there are more corrections to be made in sentence, check if the word is correct, turn blue depending on what the attempt level of that sentence is. blue depending on what the attempt level of that sentence is. blue depending on what the attempt level of that sentence is.
+                            else{
+                                //check if the word written is correct and release ON_CORRECT. How to check that a word is written correctly? strings should match bw
+                                //not sure yet, but let's try to set the condition as the matching of strings in the mListWordsInput and mListWordsAnswer
+                                String writtenActiveWord = mActiveWord.getWrittenWordString();
+                                String writtenAnswerWord = mListWordsAnswer.get(currentWordIndex).getWordAnswer();
+                                boolean writtenWordIsCorrect = writtenActiveWord.equals(writtenAnswerWord);
+                                if(writtenWordIsCorrect){
+                                    applyBehavior(WR_CONST.ON_CORRECT);
+                                }
+                            }
                         }
+                        // else (if incorrect letter drawn, but correct place chosen for replacement), revert the glyph to what it was, then increase attempt and release on error behavior.
                         else{
+                            //revert the glyph to old one.
+                            gController.setPreviousGlyph();// put in animator graph
+                            updateAttemptFeature();
                             applyBehavior(WR_CONST.ON_ERROR);
+                            // in the animator graph -> turn the word blue or red.
+                            //set the word as red or blue depending on status.
                         }
                     }
+
+                    //when the glyph drawn is at the wrong place, increase the attempt and replace the old glyph that was there.
+                    else{
+                        gController.setPreviousGlyph();
+                        //lets increase the attempt for this word, this will also release the corresponding feature which can then be used in the animator graph to call the functions that we want.
+                        updateAttemptFeature();
+                        applyBehavior(WR_CONST.ON_ERROR);
+                    }
+
+//                        //if the word is still not correct and the current attempt is wrong.
+//                        else  {
+//
+//                            // increase attempts and update the released feature
+//                            attempts = updateAttemptFeature();
+//                            if (attempts > 4) {
+//                                applyBehavior(WR_CONST.MERCY_RULE);
+//                                currentWordIndex++;
+//                            } else {
+//                                applyBehavior(WR_CONST.ON_ERROR);
+//                            }
+//                        }
                 }
             }
 
@@ -2312,6 +2353,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             return wordIsCorrect;
         }
 
+        //checks if the input word is the same as the answer argument is the index of the current word
         public boolean updateInputWordCorrectStatus(int index){
 
             //indices should be same and letters should be same
