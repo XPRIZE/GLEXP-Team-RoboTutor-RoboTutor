@@ -670,9 +670,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     //if punctuation is written or the previous space is left empty
                     CGlyphController previousController = (CGlyphController) mGlyphList.getChildAt(mActiveIndex - 1);
                     boolean isPunctuationDrawn = punctuationSymbols.contains(mResponse);
-                    boolean nextWordStarted = previousController.getRecognisedChar().equals("") && !mActiveWord.isIndexInWord(mActiveIndex);
+                    boolean nextWordStarted = previousController.getRecognisedChar().equals("");
                     boolean isLastLetter = (mActiveIndex == mGlyphList.getChildCount() - 1);
+
                     if (nextWordStarted || isPunctuationDrawn || isLastLetter) {
+                        //checks all the words in succession, stops at the first incorrect one, sets it to the active word.
                         evaluateSentenceWordLevel();
                         }
 
@@ -688,10 +690,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 else if(attempts > 0){
 
                     boolean currentWordStatus = mActiveWord.getInputWordCorrectStatus(currentWordIndex);
-
+                    //when the replacement is valid, do nothing.
                     //when the written word is correct after a correction
                     if(currentWordStatus){
-                        applyBehavior(WR_CONST.ON_CORRECT);
+                        applyBehavior(WR_CONST.ON_CORRECT); //should set the active word to the next, inhibit it and color this word blue.
                     }
 
                     //if the word is still not correct and the current attempt is wrong.
@@ -943,10 +945,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 //if the word is incorrect, update its color to red and increase attempt, set current word as this, inhibit others.
                 else{
-                    inputWord.updateWordResponse();
-                    inputWord.incAttempt();
                     currentWordIndex = i;
                     mActiveWord = inputWord;
+                    //increment the word's attempt level and release corresponding feature.
+                    mActiveWord.activateEditMode(); //put in animator graph
+                    updateAttemptFeature();
                     break;
                 }
             }
@@ -2491,6 +2494,17 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     mHighlightErrorBoxView.setVisibility(View.GONE);
                 }
             }, 2000);
+        }
+
+        public void activateEditMode(){
+            //make the buttons visible
+            for (int i = 0; i < listIndicesAnswer.size(); i++) {
+                CGlyphController controller = (CGlyphController) mGlyphList.getChildAt(i);
+                controller.showDeleteSpaceButton(true);
+                controller.showInsLftButton(true);
+                controller.showInsRgtButton(true);
+            }
+
         }
     }
     //Word class ends
