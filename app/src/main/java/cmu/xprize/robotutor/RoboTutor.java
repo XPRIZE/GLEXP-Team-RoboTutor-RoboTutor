@@ -105,6 +105,15 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     private static final String LOG_SEQUENCE_ID = "LOG_SEQUENCE_ID";
 
+    //amogh missing letter
+//    private static final String debugTutorFile = "[file]write.missingLtr_0.1.2.fin.s.json";
+    //amogh dictation
+//    private static final String debugTutorFile = "[file]write.wrd.dic_lc.begin.ha.18.json";
+
+//    private static final String debugTutorVariant = "write.ltr.uc.trc";
+//    private static final String debugTutorId = "write.wrd:story_1_1";
+//    private static final String debugTutorFile = "[file]write.ltr.uc.trc_vow.asc.A..Z.1.json";
+
 
     private CTutorEngine        tutorEngine;
     private CMediaController    mMediaController;

@@ -38,6 +38,7 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.LinearLayout;
 
 import cmu.xprize.ltkplus.CRecognizerPlus;
 import cmu.xprize.ltkplus.GCONST;
@@ -69,6 +70,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     private CLinkedScrollView     mScrollView;
     private Boolean               _touchStarted = false;
     private int[]                 _screenCoord = new int[2];
+    private LinearLayout _responseView;
 
     private Paint                 mPaint;
     private Paint                 mPaintBG;
@@ -79,24 +81,29 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
     private float                 mX, mY;
 
-    private CGlyph                _userGlyph    = null;
-    private CGlyph                _protoGlyph   = null;
-    private CGlyph                _drawGlyph    = null;
-    private CGlyph                _animGlyph    = null;
-    private boolean               _isDrawing    = false;
-    private boolean               _restartGlyph = true;
+    private CGlyph                _userGlyph         = null;
+    private CGlyph                _protoGlyph        = null;
+    private CGlyph                _drawGlyph         = null;
+    private CGlyph                _animGlyph         = null;
+    private CGlyph                _stimuliGlyph      = null;   //glyph to load stimulus in sentence correction activities // amogh added
+    private CGlyph                _previousUserGlyph = null;   //to store the previousUserGlyph when the glyph is erased.
+    private boolean               _isDrawing         = false;
+    private boolean               _restartGlyph      = true;
 
     private boolean               _showSampleChar = false;
     private boolean               _showUserGlyph  = true;
     private boolean               _showProtoGlyph = false;
+    private boolean               _showStimuliGlyph = false;
 
     static private Bitmap         _bitmap;
     private boolean               _bitmapDirty       = false;
     private String                _ltkPlusResult;
 
-    private String                _sampleExpected     = "";     // The expected character
-    private float                 _sampleHorzAdjusted = 0;
-    private float                 _sampleVertAdjusted = 0;
+    private String                _sampleExpected                   = "";     // The expected character
+    private String                _recognisedChar                   = "";
+    private String                _previousRecognisedChar           = "";
+    private float                 _sampleHorzAdjusted               = 0;
+    private float                 _sampleVertAdjusted               = 0;
 
     private Rect                  _viewBnds          = new Rect();  // The view draw bounds
     private float                 _dotSize;
@@ -146,7 +153,6 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     private boolean               _drawBase  = true;
     private boolean               _isLast    = false;
     private boolean               _correct   = false;
-
 
 
     private static final String   TAG = "CGlyphInputContainer";
@@ -262,6 +268,10 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
         // We use callbacks on the parent control
         mWritingComponent = writingController;
+    }
+
+    public void setResponseView(LinearLayout responseView){
+        _responseView = responseView;
     }
 
 
@@ -445,7 +455,11 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
         _counter.start();
 
+
+
         touchPt = new PointF(x, y);
+
+        mWritingComponent.applyBehavior(WR_CONST.ON_STOP_WRITING); //amogh added for hesitation.
 
         // Only add a new point to the glyph if it is outside the jitter tolerance
         if(testPointTolerance(x,y)) {
@@ -478,28 +492,33 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             case MotionEvent.ACTION_DOWN:
 
                 mWritingComponent.applyBehavior(WR_CONST.WRITE_BEHAVIOR);
+                if(mHasGlyph){ //so that when erasing, extra dot for when erasing should not get saved in drawglyph
+                    break;
+                }
+//                if(mScrollView != null) //amogh commented, so that the existing glyph can be erased
+                    mScrollView.setEnableScrolling(false); //amogh edited so that existing glyph can can be erased by drawing over it.
 
-                if(mScrollView != null)
-                    mScrollView.setEnableScrolling(mHasGlyph);
+
 
                 _prevTime = _time = System.nanoTime();
-
-                if(!mHasGlyph) {
-
-                    startTouch(x, y);
-                }
-                else if(_DEVMODE) {
-
-                    if(_showUserGlyph)
-                        _drawGlyph = _userGlyph;
-                    else
-                        _drawGlyph = _protoGlyph;
-
-                    if(_drawGlyph != null) {
-
-                        _recognizer.postToQueue(CGlyphInputContainer.this, _drawGlyph);
-                    }
-                }
+                startTouch(x, y);
+//
+//                if(!mHasGlyph) {
+//
+//                    startTouch(x, y);
+//                }
+//                else if(_DEVMODE) {
+//
+//                    if(_showUserGlyph)
+//                        _drawGlyph = _userGlyph;
+//                    else
+//                        _drawGlyph = _protoGlyph;
+//
+//                    if(_drawGlyph != null) {
+//
+//                        _recognizer.postToQueue(CGlyphInputContainer.this, _drawGlyph);
+//                    }
+//                }
                 break;
 
             case MotionEvent.ACTION_MOVE:
@@ -509,9 +528,22 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                 //#Mod305 Mar 9 2017 -
                 // Ensure glyph valid or this may cause issues - fixes #305
                 //
+
+                //amogh added to erase the glyph
                 if(_drawGlyph != null) {
+                    if (mHasGlyph){
+                        _previousUserGlyph = _userGlyph;  //saving the current glyph before erasing.
+                        _previousRecognisedChar = _recognisedChar; //saving the current recognised character before removing it.
+                        erase();
+                        _recognisedChar = "";
+                        CStimulusController resp = (CStimulusController)_responseView.getChildAt(this.getGlyphIndex());
+                        resp.setStimulusChar("",false);
+                        break;
+                    }
                     moveTouch(x, y);
                 }
+                //amogh added ends
+
                 break;
 
             case MotionEvent.ACTION_UP:
@@ -822,18 +854,24 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             mPaint.setColor(_glyphColor);
             mPaint.setStyle(Paint.Style.STROKE);
             mPaint.setStrokeWidth(_stroke_weight);
-
-            // Redraw the current glyph path
-            //
+//
+//            // Redraw the current glyph path
+//            //
             if(_showUserGlyph && _userGlyph != null) {
                 _userGlyph.drawGylyph(canvas,  mPaint, _viewBnds);
             }
-
+//
             // Redraw the current prototype glyph path
             //
             if(_showProtoGlyph && _protoGlyph != null) {
                 _protoGlyph.drawGylyph(canvas,  mPaint, _viewBnds);
             }
+
+            //amogh added
+            if(_showStimuliGlyph && _stimuliGlyph != null) {
+                _stimuliGlyph.drawGylyph(canvas,  mPaint, _viewBnds);
+            }
+            //amogh added ends
 
             if(_isDrawing) {
                 _drawGlyph.drawGylyph(canvas,  mPaint, _viewBnds);
@@ -1050,13 +1088,23 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             boolean isDirty = (_protoGlyph != null)? _protoGlyph.getDirty():false;
             mGlyphController.setProtoTypeDirty(_showProtoGlyph ?  isDirty: false);
         }
-
+//        if (mHasGlyph==false){
+//            mHasGlyph = true;
+//        }
         rebuildGlyph();
         invalidate();
 
         return _showProtoGlyph;
     }
-
+    //amogh added
+    public boolean toggleStimuliGlyph(){
+        _showStimuliGlyph = !_showStimuliGlyph;
+        if(_showStimuliGlyph){
+            mHasGlyph = true; // so that when overwriting, erasing the glyph is easy.
+        }
+        return _showStimuliGlyph;
+    }
+    //amogh added finished
     private void rebuildGlyph() {
 
         Rect protoBnds = null;
@@ -1202,12 +1250,37 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         inhibitInput(false);
     }
 
+    public int getGlyphIndex(){
+        int index = mGlyphController.getGlyphIndex();
+        return index;
+    }
+
     public boolean getGlyphStarted() {
         return _touchStarted;
     }
 
+    //amogh added function to revert and set the previous glyph in place of _userglyph
+    public boolean setPreviousGlyph() {
+        if(_previousUserGlyph != null) {
+            _userGlyph      =   _previousUserGlyph;
+            _recognisedChar =   _previousRecognisedChar;
+            _recognisedChar =   "";
+            CStimulusController resp = (CStimulusController)_responseView.getChildAt(this.getGlyphIndex());
+            resp.setStimulusChar(_previousRecognisedChar,false);
+            invalidate();            _recognisedChar = _previousRecognisedChar;
 
-    private void clear() {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    private void    clear() {
+
+        if (_showStimuliGlyph == true){
+            _showStimuliGlyph = false;
+        }
 
         // Create a path object to hold the vector stream
 
@@ -1259,7 +1332,6 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         _correct = correct;
 
         if(correct) {
-
             _glyphColor = TCONST.colorMap.get(TCONST.COLORRIGHT);
         }
         else {
@@ -1268,6 +1340,22 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
         invalidate();
     }
+
+    public void displayCorrectStatus() {
+
+        Boolean correct = _correct;
+
+        if(correct) {
+            _glyphColor = TCONST.colorMap.get(TCONST.COLORRIGHT);
+        }
+        else {
+            _glyphColor = TCONST.colorMap.get(TCONST.COLORWRONG);
+        }
+
+        invalidate();
+    }
+
+
 
     /**
      * used for mercy rule
@@ -1282,7 +1370,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     public void setIsStimulus() {
 
         mIsStimulus = true;
-        this.setOnTouchListener(null);
+//        this.setOnTouchListener(null);
     }
 
     public boolean checkIsStimulus() {
@@ -1295,6 +1383,14 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         _sampleExpected = protoChar;
     }
 
+    public void setRecognisedChar(String recChar){
+        _recognisedChar = recChar;
+    }
+
+    public String getRecognisedChar(){
+        return _recognisedChar;
+    }
+
     public boolean checkAnswer(String resp, boolean isAnswerCaseSensitive) {
 
         if(!isAnswerCaseSensitive) {
@@ -1304,6 +1400,14 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         return _sampleExpected.equals(resp);
     }
 
+    //amogh added
+    public void setStimuliGlyph(CGlyph stimuliGlyph){
+        if(stimuliGlyph != null) {
+            _stimuliGlyph = stimuliGlyph;
+            _stimuliGlyph.setDotSize(_dotSize);
+        }
+    }
+    //amogh added ends
 
     public void setProtoGlyph(CGlyph protoGlyph) {
 
@@ -1337,12 +1441,12 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
         if(_inhibit) {
 
-            Log.v(GRAPH_MSG, "CGlyphInputContainer.ihibitInput: mute " + _sampleExpected);
+            Log.v(GRAPH_MSG, "CGlyphInputContainer.in--hibitInput: mute " + _sampleExpected);
 
             if(_counter != null)
                 _counter.cancel();
 
-            this.setOnTouchListener(null);
+            this.setOnTouchListener(null); //set this to null if input is to be inhibit.
 
             // If user is in the process of writing in this field then clear it.
             //
@@ -1500,7 +1604,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
         // Stop listening to glyph draw events - when there is a glyph
         //
-        inhibitInput(true);
+//        inhibitInput(true); //amogh commented to not inhibit the input everytime that there is a glyph in the container.
 
         // Reconstitute the path in the correct orientation after LTK+ post-processing
         //

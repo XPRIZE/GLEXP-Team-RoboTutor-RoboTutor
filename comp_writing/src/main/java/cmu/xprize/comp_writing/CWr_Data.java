@@ -12,6 +12,7 @@ import cmu.xprize.util.JSON_Helper;
 public class CWr_Data implements ILoadableObject{
 
     //json loadable
+    public boolean  isStory = false;
     public String           stimulus        = "";
     public String[]         audioStimulus   = null;
     public String           answer          = "";

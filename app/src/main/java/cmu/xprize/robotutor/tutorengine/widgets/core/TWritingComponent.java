@@ -20,13 +20,18 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.PointF;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import org.json.JSONObject;
 
@@ -47,6 +52,7 @@ import cmu.xprize.ltkplus.GCONST;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
+import cmu.xprize.robotutor.tutorengine.CMediaPackage;
 import cmu.xprize.robotutor.tutorengine.CSceneDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
@@ -71,6 +77,8 @@ import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
 import static cmu.xprize.util.TCONST.EMPTY;
+import static cmu.xprize.util.TCONST.LANG_AUTO;
+import static cmu.xprize.util.TCONST.MEDIA_STORY;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 
@@ -90,12 +98,16 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
     private int                     _wrong   = 0;
     private int                     _correct = 0;
-
     private ArrayList<CDataSourceImg> _dataStack  = new ArrayList<>();
 
     private HashMap<String,String>  _StringVar  = new HashMap<>();
     private HashMap<String,Integer> _IntegerVar = new HashMap<>();
     private HashMap<String,Boolean> _FeatureMap = new HashMap<>();
+
+    protected String                DATASOURCEPATH;
+    protected String                STORYSOURCEPATH;
+    protected String                AUDIOSOURCEPATH;
+    protected String                SHAREDPATH;
 
     private static final String  TAG = "TWritingComponent";
 
@@ -135,16 +147,119 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         mRecognizedScroll = (CLinkedScrollView) findViewById(R.id.Sstimulus);
         mRecogList        = (LinearLayout) findViewById(R.id.SstimulusList);
 
+        mResponseViewScroll = (CLinkedScrollView) findViewById(R.id.Sresponseview);
+        mResponseViewList = (LinearLayout) findViewById(R.id.SresponseviewList);
+        mResponseScrollLayout = (RelativeLayout)  findViewById(R.id.Sresponsescrolllayout);
         mDrawnScroll = (CLinkedScrollView) findViewById(R.id.SfingerWriter);
         mGlyphList   = (LinearLayout) findViewById(R.id.Sdrawn_glyphs);
         mGlyphList.setClipChildren(false);
 
         mReplayButton = (ImageButton) findViewById(R.id.Sreplay);
+        //amogh added for scrolling fingerwriter
+        mScrollRightButton = (ImageButton) findViewById(R.id.buttonright);
+        mScrollLeftButton = (ImageButton) findViewById(R.id.buttonleft);
+        mScrollLeftButton.setVisibility(View.INVISIBLE);
+
+        mScrollRightButton.setOnTouchListener(new View.OnTouchListener() {
+
+            private Handler mHandler;
+            private long mInitialDelay = 5;
+            private long mRepeatDelay = 5;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        if (mHandler != null)
+                            return true;
+                        mHandler = new Handler();
+                        mHandler.postDelayed(mAction, mInitialDelay);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (mHandler == null)
+                            return true;
+                        mHandler.removeCallbacks(mAction);
+                        mHandler = null;
+                        break;
+                }
+                return false;
+            }
+
+            Runnable mAction = new Runnable() {
+                @Override
+                public void run() {
+                    mDrawnScroll.scrollTo((int) mDrawnScroll.getScrollX() + 10, (int) mDrawnScroll.getScrollY());
+                    mHandler.postDelayed(mAction, mRepeatDelay);
+                }
+            };
+        });
+
+        mScrollLeftButton.setOnTouchListener(new View.OnTouchListener() {
+
+            private Handler mHandler;
+            private long mInitialDelay = 5;
+            private long mRepeatDelay = 5;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        if (mHandler != null)
+                            return true;
+                        mHandler = new Handler();
+                        mHandler.postDelayed(mAction, mInitialDelay);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (mHandler == null)
+                            return true;
+                        mHandler.removeCallbacks(mAction);
+                        mHandler = null;
+                        break;
+                }
+                return false;
+            }
+
+            Runnable mAction = new Runnable() {
+                @Override
+                public void run() {
+                    mDrawnScroll.scrollTo((int) mDrawnScroll.getScrollX() - 10, (int) mDrawnScroll.getScrollY());
+                    mHandler.postDelayed(mAction, mRepeatDelay);
+                }
+            };
+        });
+
+        mDrawnScroll.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+                int scrollX = mDrawnScroll.getScrollX(); // For HorizontalScrollView
+//                int maxScrollX = mDrawnScroll.getChildAt(0).getWidth();
+                int maxScrollX = 5000;
+                int a = mDrawnScroll.getWidth();
+                if (scrollX > 0){
+                    mScrollLeftButton.setVisibility(View.VISIBLE);
+                }
+                else{
+                    mScrollLeftButton.setVisibility(View.INVISIBLE);
+                }
+                if (scrollX < maxScrollX){
+                    mScrollRightButton.setVisibility(View.VISIBLE);
+                }
+                else{
+                    mScrollRightButton.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
+        if (activityFeature.contains("FTR_SEN")){
+            mScrollRightButton.setVisibility(View.VISIBLE);
+            mScrollRightButton.setVisibility(View.VISIBLE);
+        }
+        //amogh added ends
 
 // TODO: DEBUG only
 //        mRecogList.setOnTouchListener(new RecogTouchListener());
 //        mGlyphList.setOnTouchListener(new drawnTouchListener());
-
+        mResponseViewScroll.setLinkedScroll(mDrawnScroll);
         mRecognizedScroll.setLinkedScroll(mDrawnScroll);
         mDrawnScroll.setLinkedScroll(mRecognizedScroll);
 
@@ -281,7 +396,6 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
         bManager.sendBroadcast(msg);
     }
-
 
 
     //************************************************************************
@@ -720,7 +834,10 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
                 //
                 setDataSource(dataSource);
 
-            } else if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
+            } else if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE) ||
+                    dataNameDescriptor.startsWith(TCONST.ENCODED_FOLDER)) {
+
+                // XYZ add a sound package... mimic behavior from XYZ-1
 
                 String dataFile = dataNameDescriptor.substring(TCONST.SOURCEFILE.length());
 
@@ -736,6 +853,24 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
                 // Load the datasource in the component module - i.e. the superclass
                 //
                 loadJSON(new JSONObject(jsonData), mTutor.getScope() );
+
+                // XYZ extra function to add a story sound package
+                if(dataNameDescriptor.startsWith(TCONST.ENCODED_FOLDER)) {
+
+                    String storyFolder = dataNameDescriptor.substring(TCONST.ENCODED_FOLDER.length()).toLowerCase();
+
+                    String[] levelval   = storyFolder.split("_");
+                    // "0..10.SD", "OFF1", "DES.34"
+                    // "3", "2"
+
+                    String levelFolder = levelval[0];
+
+                    AUDIOSOURCEPATH = TCONST.STORY_PATH + levelFolder + "/" + storyFolder;
+                    mMediaManager.addSoundPackage(mTutor, MEDIA_STORY, new CMediaPackage(LANG_AUTO, AUDIOSOURCEPATH));
+
+
+                }
+
 
                 // Pass the loaded json dataSource array
                 //
@@ -853,6 +988,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 
         // update the Scope response variable  "SWordCopy.audiostim"
         //
+        // XYZ if this is a story, we have to look up the audio file from the story
         if (mAudioStimulus.length == 1) {
 
             publishValue(WR_CONST.AUDIO_STIM_1, mAudioStimulus[0].toLowerCase());

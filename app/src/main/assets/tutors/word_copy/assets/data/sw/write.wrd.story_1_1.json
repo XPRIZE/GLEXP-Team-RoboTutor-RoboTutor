@@ -1,0 +1,17 @@
+{
+	"bootFeatures":"",
+	"random": false,
+	"singleStimulus": false,
+	"dataSource": [
+		{ "isStory": true, "stimulus": "here are a b c", "audioStimulus": [ "kwere", "", "" ], "answer": "Here are a, b, c" },
+		{ "isStory": true, "stimulus": "yaani", "audioStimulus": [ "yaani", "", "" ], "answer": "yaani" },
+		{ "stimulus": "tumia", "audioStimulus": [ "tumia", "", "" ], "answer": "tumia" },
+		{ "stimulus": "alioa", "audioStimulus": [ "alioa", "", "" ], "answer": "alioa" },
+		{ "stimulus": "wingi", "audioStimulus": [ "wingi", "", "" ], "answer": "wingi" },
+		{ "stimulus": "mrefu", "audioStimulus": [ "mrefu", "", "" ], "answer": "mrefu" },
+		{ "stimulus": "kwako", "audioStimulus": [ "kwako", "", "" ], "answer": "kwako" },
+		{ "stimulus": "jasho", "audioStimulus": [ "jasho", "", "" ], "answer": "jasho" },
+		{ "stimulus": "bidii", "audioStimulus": [ "bidii", "", "" ], "answer": "bidii" },
+		{ "stimulus": "kindi", "audioStimulus": [ "kindi", "", "" ], "answer": "kindi" }
+	]
+}

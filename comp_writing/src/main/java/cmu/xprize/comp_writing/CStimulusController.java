@@ -224,6 +224,30 @@ public class CStimulusController extends RelativeLayout implements IEventListene
             mUnderlineDrawable.setStroke(TCONST.STROKE_STIM_UNDERLINE, charColor);
         }
         else {
+//            charColor = TCONST.colorMap.get(TCONST.COLORRIGHT);
+            charColor = new Integer(0xff0000ff);
+            mUnderline.setVisibility(View.INVISIBLE);
+        }
+
+        mRecogChar.setTextColor(charColor);
+        _Paint.setColor(borderColor);
+
+        invalidate();
+    }
+
+    //amogh added
+    //this is for changing the color of the response
+    public void updateResponseState(boolean match) {
+
+        int charColor;
+        int borderColor = TCONST.colorMap.get(TCONST.COLORNONE);
+
+        if(!match) {
+            charColor = TCONST.colorMap.get(TCONST.COLORWRONG);
+            mUnderline.setVisibility(View.VISIBLE);
+            mUnderlineDrawable.setStroke(TCONST.STROKE_STIM_UNDERLINE, charColor);
+        }
+        else {
             charColor = TCONST.colorMap.get(TCONST.COLORRIGHT);
             mUnderline.setVisibility(View.INVISIBLE);
         }
@@ -233,6 +257,8 @@ public class CStimulusController extends RelativeLayout implements IEventListene
 
         invalidate();
     }
+    //amogh added ends
+
 
 
     public boolean testStimulus(String resp) {

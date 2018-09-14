@@ -536,6 +536,8 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 // ZZZ detect story [encfolder]
                 // "story.parrot::0..10.SD_OFF1_DES.34" --> "[encfolder]0..10.SD_OFF1_DES.34"
                 // "story.hear::3_2" --> "[encfolder]3_2"
+
+                // XYZ-1: mimic this behavior
                 String storyFolder = dataNameDescriptor.substring(TCONST.ENCODED_FOLDER.length()).toLowerCase();
                 // "0..10.SD_OFF1_DES.34"
                 // "3_2"
@@ -548,6 +550,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 // "0..10.SD"
                 // "3"
 
+
                 DATASOURCEPATH  = TCONST.ROBOTUTOR_ASSETS + "/" +  TCONST.STORY_ASSETS + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
                 // "robotutor_assets/assets/story/sw/"
                 STORYSOURCEPATH = DATASOURCEPATH + levelFolder + "/" + storyFolder + "/";
@@ -557,7 +560,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 // Create the story specific sound package and push it into the soundMap in the MediaManager
                 //
                 AUDIOSOURCEPATH = TCONST.STORY_PATH + levelFolder + "/" + storyFolder ;
-                // "cmu/xprize/story_reading/<level>/<level_story>"
+                // "cmu/xprize/story_reading/<level>/<level_story>" // XYZ folder path should look like this
 
                 configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
                 mMediaManager.addSoundPackage(mTutor, MEDIA_STORY, new CMediaPackage(LANG_AUTO, AUDIOSOURCEPATH));

@@ -419,7 +419,10 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
         // AMOGH add data sources
         String[][] sentenceWriteTutors = {
-                {"write.sen.corr", "write.sen::corr.1", "[file]write.sen.corr.1.json"}
+                {"write.sen.copy.wrd", "write.sen.copy.wrd::1", "[file]write.sen.copy.wrd.1.json"},
+                {"write.sen.copy.wrd", "write.sen.copy.wrd::2", "[file]write.sen.copy.wrd.2.json"},
+                {"write.sen.copy.wrd", "write.sen.copy.wrd::3", "[file]write.sen.copy.wrd.3.json"},
+                {"write.sen.copy.wrd", "write.sen.copy.wrd::4", "[file]write.sen.copy.wrd.4.json"}
         };
         createCustomMenu(SSentenceWritingMenu, sentenceWriteTutors);
 

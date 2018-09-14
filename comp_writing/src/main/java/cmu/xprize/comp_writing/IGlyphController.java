@@ -8,7 +8,8 @@ public interface IGlyphController {
 
     public void setProtoTypeDirty(boolean isDirty);
 
-    public void updateCorrectStatus(boolean correct);
+    public void updateAndDisplayCorrectStatus(boolean correct);
+    public void updateCorrectStatus(boolean correct); //amogh added
     public boolean firePendingRecognition();
     public void inhibitInput(boolean newState);
 
@@ -16,6 +17,9 @@ public interface IGlyphController {
 
     public void setLinkedScroll(CLinkedScrollView linkedScroll);
     public void setItemGlyph(int index, int glyph);
+    public void setWordIndex(int i); //amogh added
+    public int getWordIndex(); //amogh added
+    public int getGlyphIndex();
 
     public void setExpectedChar(String sample);
     public String getExpectedChar();

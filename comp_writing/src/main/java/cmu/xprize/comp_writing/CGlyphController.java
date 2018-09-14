@@ -33,8 +33,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -80,6 +82,8 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     protected final Handler         mainHandler = new Handler(Looper.getMainLooper());
     protected HashMap               queueMap    = new HashMap();
     protected boolean               _qDisabled  = false;
+
+    private int wordIndex = 0;
 
     private LocalBroadcastManager   bManager;
 
@@ -191,6 +195,11 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     }
 
 
+    public int getGlyphIndex(){
+        int index = ((LinearLayout)this.getParent()).indexOfChild(this);
+        return index;
+    }
+
     public class insLSpaceClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -214,7 +223,7 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         @Override
         public void onClick(View v) {
             Log.v(QGRAPH_MSG, "event.click: " + " CGlyphController:deleteItem");
-
+//            mDeleteSpaceBut.set
             mWritingComponent.deleteItem(mThis);
         }
     }
@@ -316,6 +325,16 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         mGlyphInput.setProtoGlyph(protoGlyph);
     }
 
+    //amogh added
+    public boolean setPreviousGlyph(){ return mGlyphInput.setPreviousGlyph();}
+
+    public void setStimuliGlyph(CGlyph stimuliGlyph) {
+        mGlyphInput.setStimuliGlyph(stimuliGlyph);
+    }
+    public void setWordIndex(int i){wordIndex = i;}
+    public int getWordIndex(){return wordIndex;}
+    //amogh added ends
+
     public int getAttempt() {
         return _attempt;
     }
@@ -323,6 +342,14 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     public int incAttempt() {
         _attempt++;
         return _attempt;
+    }
+
+    public void setRecognisedChar(String recChar){
+        mGlyphInput.setRecognisedChar(recChar);
+    }
+
+    public String getRecognisedChar(){
+        return mGlyphInput.getRecognisedChar();
     }
 
     public class glyphSaveListener implements View.OnClickListener {
@@ -349,6 +376,16 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         // Ensure it's off - then make a decision on visibility based on state
         //
         mEraseGlyphBut.setVisibility(show? VISIBLE:INVISIBLE);
+    }
+
+    public void showInsLftButton(boolean show){
+        mInsLftSpaceBut.setVisibility(show? VISIBLE:INVISIBLE);
+    }
+    public void showInsRgtButton(boolean show){
+        mInsRgtSpaceBut.setVisibility(show? VISIBLE:INVISIBLE);
+    }
+    public void showDeleteSpaceButton(boolean show){
+        mDeleteSpaceBut.setVisibility(show? VISIBLE:INVISIBLE);
     }
 
     @Override
@@ -392,6 +429,9 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         mGlyphReplay.setWritingController(writingController);
     }
 
+    public void setResponseView(LinearLayout responseView){
+        mGlyphInput.setResponseView(responseView);
+    }
 
     public boolean toggleSampleChar() {
         return mGlyphInput.toggleSampleChar();
@@ -401,6 +441,9 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     }
     public boolean toggleDebugBounds() {
         return mGlyphInput.toggleDebugBounds();
+    }
+    public boolean toggleStimuliGlyph() {
+        return mGlyphInput.toggleStimuliGlyph();
     }
     public void selectFont(String fontID) {
         mGlyphInput.selectFont(fontID);
@@ -435,9 +478,17 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         mGlyphInput.inhibitInput(inhibit);
     }
 
-    public void updateCorrectStatus(boolean correct) {
+    public void updateAndDisplayCorrectStatus(boolean correct) {
         mGlyphInput.updateAndDisplayCorrectStatus(correct);
     }
+
+    public void updateCorrectStatus(boolean correct){
+        mGlyphInput.updateCorrectStatus(correct);
+    }
+
+    public void displayCorrectStatus() {
+        mGlyphInput.displayCorrectStatus();
+    } //amogh added
 
     public boolean getGlyphStarted() {
         return mGlyphInput.getGlyphStarted();

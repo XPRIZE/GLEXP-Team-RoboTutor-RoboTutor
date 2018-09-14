@@ -33,8 +33,17 @@ public class WR_CONST {
     public static final String FTR_ATTEMPT_3            = "FTR_ATTEMPT_3";
     public static final String FTR_ATTEMPT_4            = "FTR_ATTEMPT_4";
 
+    //amogh added
+    public static final String FTR_HESITATION_1            = "FTR_HESITATION_1";
+    public static final String FTR_HESITATION_2            = "FTR_HESITATION_2";
+    public static final String FTR_HESITATION_3            = "FTR_HESITATION_3";
+    public static final String FTR_HESITATION_4            = "FTR_HESITATION_4";
+    //amogh add finish
+
+
     public static final String ACTION_COMPLETE          = "ACTION_COMPLETE";
     public static final String RIPPLE_REPLAY            = "RIPPLE_REPLAY";
+    public static final String RIPPLE_REPLAY_WORD       = "RIPPLE_REPLAY_WORD";
     public static final String RIPPLE_HIGHLIGHT         = "RIPPLE_HIGHLIGHT";
     public static final String STIMULUS_HIGHLIGHT       = "STIMULUS_HIGHLIGHT";
     public static final String GLYPH_HIGHLIGHT          = "GLYPH_HIGHLIGHT";
@@ -42,6 +51,7 @@ public class WR_CONST {
     public static final String FIELD_REPLAY_COMPLETE    = "FIELD_REPLAY_COMPLETE";
     public static final String REPLAY_COMPLETE          = "REPLAY_COMPLETE";
     public static final String ON_START_WRITING         = "ON_START_WRITING";
+    public static final String ON_STOP_WRITING          = "ON_STOP_WRITING";
 
     public static final String REPLAY_USERGLYPH         = "REPLAY_USERGLYPH";
     public static final String REPLAY_PROTOGLYPH        = "REPLAY_PROTOGLYPH";
@@ -59,9 +69,14 @@ public class WR_CONST {
     public static final String ANIMATE_PROTOGLYPH       = "ANIMATE_PROTOGLYPH";
     public static final String HIDE_SAMPLE              = "HIDE_SAMPLE";
     public static final String HIDE_GLYPHS              = "HIDE_GLYPHS";
+    public static final String HIDE_CURRENT_WORD_GLYPHS = "HIDE_CURRENT_WORD_GLYPHS";
     public static final String HIDE_SAMPLES             = "HIDE_SAMPLES";
     public static final String INHIBIT_OTHERS           = "INHIBIT_OTHERS";
     public static final String CLEAR_ATTEMPT            = "CLEAR_ATTEMPT";
+    public static final String CLEAR_HESITATION         = "CLEAR_HESITATION"; //amogh added
+    public static final String RESET_HESITATION         = "RESET_HESITATION"; //amogh added
+    public static final String INC_HESITATION           = "INC_HESITATION"; //amogh added
+
 
     public static final String CANDIDATE_VAR            = ".candidate";
     public static final String EXPECTED_VAR             = ".expected";
@@ -86,6 +101,9 @@ public class WR_CONST {
     public static final String AUDIO_ANS_CONCAT_TENS     = ".audioAnsConcatTens";
     public static final String AUDIO_ANS_CONCAT_ONES     = ".audioAnsConcatOnes";
 
+    public static final String AUDIO_LETTER     = ".audioLetter";
+    public static final String AUDIO_PUNCTUATION     = ".audioPunctuation";
+
     public static final String FTR_INPUT_STALLED        = "FTR_INPUT_STALLED";
     public static final String FTR_HAD_ERRORS           = "FTR_HAD_ERRORS";
 
@@ -95,5 +113,20 @@ public class WR_CONST {
     public static final String ON_REPLAY_COMMAND        = "ON_REPLAY_COMMAND";
     public static final String WRITE_BEHAVIOR           = "WRITE_BEHAVIOR";
     public static final String CANCEL_POINTAT           = "CANCEL_POINTAT";
+
+    //amogh added audio features
+    public static final String FTR_AUDIO_CAP = "FTR_AUDIO_CAP";
+    public static final String FTR_AUDIO_PUNC = "FTR_AUDIO_PUNC";
+    public static final String FTR_AUDIO_LTR = "FTR_AUDIO_LTR";
+    public static final String FTR_AUDIO_SPACE = "FTR_AUDIO_SPACE";
+    public static final String FTR_INSERT = "FTR_INSERT";
+    public static final String FTR_DELETE = "FTR_DELETE";
+    public static final String FTR_REPLACE = "FTR_REPLACE";
+//    public static final String FTR_INSERT = "FTR_INSERT";
+//    public static final String FTR_INSERT = "";
+//    public static final String FTR_INSERT = "";
+//    public static final String FTR_INSERT = "";
+//    public static final String FTR_INSERT = "";
+
 }
 
