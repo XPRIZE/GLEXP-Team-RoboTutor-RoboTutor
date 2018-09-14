@@ -290,6 +290,7 @@ public class TCONST {
     public static final String DEFAULT_STUDENT_ID = "DEBUG";
     public static final String STUDENT_ID_VAR = "studentId";
     public static final String SESSION_ID_VAR = "sessionId";
+    public static final String LAST_TUTOR = "LAST_TUTOR_PLAYED"; // NEW_MENU (7) this is needed to repeat
 
 
     static public HashMap<String, Integer> colorMap = new HashMap<String,Integer>();

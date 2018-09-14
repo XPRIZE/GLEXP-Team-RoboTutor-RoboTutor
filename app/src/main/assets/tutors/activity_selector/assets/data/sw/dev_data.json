@@ -30,6 +30,14 @@
         },
         {
           "datatype": "IMAGEBUTTON",
+          "resource": "button_repeat_select",
+          "componentID": "Sbutton5",
+          "behavior": "SELECT_REPEAT", // NEW_MENU (7) what?
+          "prompt": "lets do it again",
+          "help": "tap here to do the same thing again"
+        },
+        {
+          "datatype": "IMAGEBUTTON",
           "resource": "button_exit_select",
           "componentID": "Sbutton6",
           "behavior": "SELECT_EXIT",
@@ -79,7 +87,7 @@
           "datatype": "IMAGEBUTTON",
           "resource": "button_repeat_select",
           "componentID": "Sbutton5",
-          "behavior": "SELECT_REPEAT",
+          "behavior": "SELECT_REPEAT", // NEW_MENU (7) what?
           "prompt": "lets do it again",
           "help": "tap here to do the same thing again"
         },

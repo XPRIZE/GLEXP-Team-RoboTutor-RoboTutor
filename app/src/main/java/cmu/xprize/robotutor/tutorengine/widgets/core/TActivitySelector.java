@@ -60,10 +60,12 @@ import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
 import static cmu.xprize.comp_session.AS_CONST.LAUNCH_EVENT;
+import static cmu.xprize.comp_session.AS_CONST.SELECT_STORIES;
 import static cmu.xprize.comp_session.AS_CONST.VAR_TUTOR_ID;
 import static cmu.xprize.comp_session.AS_CONST.VAR_DATASOURCE;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENT;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENTDATA;
+import static cmu.xprize.util.TCONST.LAST_TUTOR;
 import static cmu.xprize.util.TCONST.PLACEMENT_TAG;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_AKIRA;
@@ -83,6 +85,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     // NEW_MENU (4) how to *not* go to rating menu
     // NEW_MENU (5) make button look tappable
     // NEW_MENU (6) variability (e.g. next tutor, etc)
+    // NEW_MENU (7)
 
     private static boolean          DEBUG_LANCHER = false;
     public  static String           DEBUG_TUTORID = "";
@@ -99,7 +102,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
     private String      activeSkill = AS_CONST.SELECT_NONE;
     private String      activeTutor = "";
-    private String      nextTutor   = "";
+    private String      lastTutor   = "";
     private String      rootTutor;
     private boolean     askButtonsEnabled = false;
 
@@ -410,10 +413,17 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
      * @param roboDebugger
      */
     private void performButtonBehavior(String buttonid, boolean roboDebugger) {
+        // NEW_MENU (7) buttonid = "SELECT_REPEAT"
         // If we are in debug mode then there is a third selection phase where we are presented
         // the transition table for the active skill - The author can select a new target tutor
         // from any of the transition entries.
         //
+
+        if (buttonid.equals("SELECT_REPEAT")) {
+            Log.wtf("REPEAT_STUFF", "repeat stuff, repeat stuff");
+        }
+
+
         if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DEBUG_SELECT)) {
             buttonid = processDebugSelectMode(buttonid, roboDebugger);
         }
@@ -433,74 +443,98 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
         //}
 
+        boolean repeatLast = false;
+        // NEW_MENU (4)... repeat last one played!!!
+        if (RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_TUTOR_SELECT) &&
+                buttonid.equals(AS_CONST.SELECT_REPEAT)) {
+            Log.wtf("REPEAT_STUFF", "launching last played tutor... " + activeTutor);
+            Log.wtf("REPEAT_STUFF", "launching last played skill... " + activeSkill);
+            buttonid = activeSkill; // NEW_MENU (7) what about first time?
+            // ytf is this different... sometimes STORIES_SELECTED...
+            repeatLast = true;
+
+        }
+
         // If on the Tutor Select (home) screen, or we have triggered a launch from the debug screen,
         // RoboTutor will go into an activity.
         if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_TUTOR_SELECT) ||
            RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DEBUG_LAUNCH)) {
-            processTutorSelectMode(buttonid, roboDebugger);
+
+            if (roboDebugger) {
+                launchFromDebugMenu(buttonid);
+            } else {
+                processTutorSelectMode(buttonid, repeatLast);
+            }
 
         }
+    }
+
+    /**
+     * Launches from special custom menu???
+     * @param buttonid
+     */
+    private void launchFromDebugMenu(String buttonid) {
+        String intent;
+        String file;
+
+        intent = buttonid;
+
+        // specify the file name we're debugging with
+        switch (buttonid) {
+            case TCONST.TAG_DEBUG_TAP_COUNT:
+                file = ROBO_DEBUG_FILE_TAP_COUNT;
+                break;
+
+            case TCONST.TAG_DEBUG_AKIRA:
+                file = ROBO_DEBUG_FILE_AKIRA;
+                break;
+
+            case TCONST.TAG_DEBUG_ASM:
+                file = ROBO_DEBUG_FILE_ASM;
+                break;
+
+            default:
+                file = ROBO_DEBUG_FILE_BPOP;
+        }
+
+        doLaunch(intent, TCONST.TUTOR_NATIVE, TCONST.DEBUG_FILE_PREFIX + file, "DEBUGGER");
     }
 
     /**
      * Method for processing button press on the TUTOR_SELECT (home) screen
      * @param buttonid
      */
-    private void processTutorSelectMode(String buttonid, boolean roboDebugger) {
+    private void processTutorSelectMode(String buttonid, boolean repeatLast) {
 
-        if (roboDebugger) {
+        // check SharedPreferences
+        final SharedPreferences prefs = getStudentSharedPreferences();
 
-            String intent;
-            String file;
+        Log.wtf("REPEAT_STUFF", "buttonid = " + buttonid);
 
-            intent = buttonid;
-
-            // specify the file name we're debugging with
-            switch (buttonid) {
-                case TCONST.TAG_DEBUG_TAP_COUNT:
-                    file = ROBO_DEBUG_FILE_TAP_COUNT;
-                    break;
-
-                case TCONST.TAG_DEBUG_AKIRA:
-                    file = ROBO_DEBUG_FILE_AKIRA;
-                    break;
-
-                case TCONST.TAG_DEBUG_ASM:
-                    file = ROBO_DEBUG_FILE_ASM;
-                    break;
-
-                default:
-                    file = ROBO_DEBUG_FILE_BPOP;
-            }
-
-            doLaunch(intent, TCONST.TUTOR_NATIVE, TCONST.DEBUG_FILE_PREFIX + file, "DEBUGGER");
-            return;
-
-        }
 
         boolean     buttonFound = false;
 
-        // If user selects "Let robotutor decide" then use student model to decide skill to work next
-        // At the moment default to Stories
-        //
-        if (buttonid.toUpperCase().equals(AS_CONST.SELECT_ROBOTUTOR)) {
-
-            int next = (new Random()).nextInt(3);
-            switch(next) {
-                case 0:
-                    buttonid = AS_CONST.SELECT_WRITING;
-                    break;
-
-                case 1:
-                    buttonid = AS_CONST.SELECT_STORIES;
-                    break;
-
-                case 2:
-                    buttonid = AS_CONST.SELECT_MATH;
-                    break;
-            }
-
-        }
+        // DEPRECATED // If user selects "Let robotutor decide" then use student model to decide skill to work next
+        // DEPRECATED // At the moment default to Stories
+        // DEPRECATED
+//        if (buttonid.toUpperCase().equals(AS_CONST.SELECT_ROBOTUTOR)) {
+//
+//            int next = (new Random()).nextInt(3);
+//            switch(next) {
+//                case 0:
+//                    buttonid = AS_CONST.SELECT_WRITING;
+//                    break;
+//
+//                case 1:
+//                    buttonid = AS_CONST.SELECT_STORIES;
+//                    break;
+//
+//                case 2:
+//                    buttonid = AS_CONST.SELECT_MATH;
+//                    break;
+//            }
+//
+//        }
 
         // 2. finish RoboTutor or the ActivitySelector, if necessary
         if(buttonid.toUpperCase().equals(AS_CONST.SELECT_EXIT)) {
@@ -510,7 +544,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         }
 
         // First check if it is a skill selection button =
-        //
+        // NEW_MENU (7) if it's a repeat... don't change activeTutor...
         switch (buttonid.toUpperCase()) {
 
             case AS_CONST.SELECT_WRITING:
@@ -550,7 +584,13 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                 buttonFound   = true;
 
                 break;
+        }
 
+        if (repeatLast) {
+            String lastTutor = prefs.getString(LAST_TUTOR, null);
+            if (lastTutor != null) { // for when it's the first time...s
+                activeTutor = lastTutor;
+            }
         }
 
         if (buttonFound) {
@@ -558,10 +598,9 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
             publishValue(TCONST.SKILL_SELECTED, activeSkill);
             publishValue(TCONST.TUTOR_SELECTED, activeTutor);
             publishValue(TCONST.SELECTOR_MODE, RoboTutor.SELECTOR_MODE); // REMOVE_SA (x) publish
-        }
 
-        // check SharedPreferences
-        final SharedPreferences prefs = getStudentSharedPreferences();
+            Log.wtf("REPEAT_STUFF", "will launch tutor: " + activeTutor);
+        }
 
         if (buttonFound) {
 
@@ -683,7 +722,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                 // Serialize the new state
                 // #Mod 329 language switch capability
                 //
-                editor.putString(TCONST.SKILL_SELECTED, activeSkill);
+                editor.putString(TCONST.SKILL_SELECTED, activeSkill); // √√√ √√√
+                Log.wtf("REPEAT_STUFF", "(processTutorSelectMode) setting SKILL_SELECTED... " + activeSkill);
                 editor.apply();
 
             } else
@@ -807,7 +847,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         }
 
 
-        nextTutor = selectNextTutor(buttonid, useWritingPlacement, useMathPlacement, prefs);
+        String nextTutor = selectNextTutor(buttonid, useWritingPlacement, useMathPlacement, prefs);
         RoboTutor.logManager.postEvent_I(TCONST.PLACEMENT_TAG, "nextTutor = " + nextTutor);
 
 
@@ -865,7 +905,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         //
         SharedPreferences.Editor editor = prefs.edit();
 
-        editor.putString(TCONST.SKILL_SELECTED, AS_CONST.SELECT_NONE);
+        //editor.putString(TCONST.SKILL_SELECTED, AS_CONST.SELECT_NONE); // √√√ √√√
+        //Log.wtf("REPEAT_STUFF", "(difficultySelectMode) setting SKILL_SELECTED... " + AS_CONST.SELECT_NONE);
 
         // only one will have been changed but update all
         //
@@ -873,6 +914,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         editor.putString(TCONST.SKILL_STORIES, storiesTutorID);
         editor.putString(TCONST.SKILL_MATH, mathTutorID);
         editor.putString(TCONST.SKILL_SHAPES, shapesTutorID);
+        editor.putString(TCONST.LAST_TUTOR, activeTutor);
 
         editor.apply();
 
@@ -1176,7 +1218,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
         SharedPreferences.Editor editor = prefs.edit();
 
-        editor.putString(TCONST.SKILL_SELECTED, AS_CONST.SELECT_NONE);
+        // Log.wtf("REPEAT_STUFF", "(processDebugSelectMode) setting SKILL_SELECTED... " + AS_CONST.SELECT_NONE);
+        // editor.putString(TCONST.SKILL_SELECTED, AS_CONST.SELECT_NONE); // √√√ √√√
 
         // only one will have been changed but update all
         //
@@ -1747,7 +1790,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         }
 
 
-        activeSkill = prefs.getString(TCONST.SKILL_SELECTED, TCONST.SKILL_STORIES);
+        activeSkill = prefs.getString(TCONST.SKILL_SELECTED, SELECT_STORIES); // √√√ √√√
+        Log.wtf("REPEAT_STUFF", "getting activeSkill (loadJSON)... " + activeSkill);
 
         validateRootVectors();
 

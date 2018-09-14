@@ -231,7 +231,7 @@
             {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_MAKE_HARDER:String|BUTTON_BEHAVIOR:String" ,"features":""},
             {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_MAKE_EASIER:String|BUTTON_BEHAVIOR:String" ,"features":""},
             {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_AUTO_DIFFICULTY:String|BUTTON_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_REPEAT:String|BUTTON_BEHAVIOR:String" ,"features":""},
+            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_REPEAT:String|BUTTON_BEHAVIOR:String" ,"features":""}, // NEW_MENU (7) what?
 
             {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_EXIT:String|EXIT_BUTTON_BEHAVIOR:String" ,"features":""},
 

@@ -265,7 +265,7 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
                         describeNext();
                         break;
 
-                    case AS_CONST.BUTTON_EVENT:
+                    case AS_CONST.BUTTON_EVENT: // NEW_MENU (7) BUTTON_BEHAVIOR
 
                         doButtonBehavior(_target);
                         break;

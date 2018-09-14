@@ -55,7 +55,7 @@
         />
 
     <ImageButton
-        android:id="@+id/Sbutton4"
+        android:id="@+id/Sbutton5"
         android:scaleType="fitCenter"
         android:layout_below="@+id/Sbutton2"
         android:layout_toRightOf="@+id/SbuttonEmpty"
@@ -64,8 +64,9 @@
         app:layout_heightPercent="50%"
         app:layout_widthPercent="33%"
         android:background="@null"
-        android:src="@drawable/button_repeat_select"
+        android:src="@null"
         />
+    <!-- NEW_MENU (7) this should be added programatically -->
 
     <ImageButton
         android:id="@+id/Sbutton6"

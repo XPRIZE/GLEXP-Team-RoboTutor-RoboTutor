@@ -210,8 +210,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         Log.v(TAG, "External_Download:" + DOWNLOAD_PATH);
 
-        audioLogThread = new CAudioLogThread(readyLogPath, logFilename);
-        audioLogThread.start();
+        //audioLogThread = new CAudioLogThread(readyLogPath, logFilename);
+        //audioLogThread.start();
 
         // Get the primary container for tutors
         //

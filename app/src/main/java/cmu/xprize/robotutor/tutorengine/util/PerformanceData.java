@@ -92,7 +92,7 @@ public class PerformanceData {
         switch(buttonName) {
 
             case AS_CONST.SELECT_REPEAT:
-                selfAssessment = StudentSelfAssessment.PLAY_AGAIN;
+                selfAssessment = StudentSelfAssessment.PLAY_AGAIN; // NEW_MENU (7) whaaa???
                 break;
 
             case AS_CONST.SELECT_CONTINUE:
