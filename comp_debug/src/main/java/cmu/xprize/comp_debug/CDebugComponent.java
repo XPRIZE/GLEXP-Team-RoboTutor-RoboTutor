@@ -435,7 +435,15 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
         String[][] spellingTutors = {};
         createCustomMenu(SSpellingMenu, spellingTutors);
 
-        String[][] picMatchTutors = {};
+        String[][] picMatchTutors = {
+                {"picmatch", "picmatch:animals_1", "[file]picmatch_animals_1.json"},
+                {"picmatch", "picmatch:animals_2", "[file]picmatch_animals_2.json"},
+                {"picmatch", "picmatch:food_1", "[file]picmatch_food_1.json"},
+                {"picmatch", "picmatch:food_2", "[file]picmatch_food_2.json"},
+                {"picmatch", "picmatch:objects_1", "[file]picmatch_objects_1.json"},
+                {"picmatch", "picmatch:objects_2", "[file]picmatch_objects_2.json"},
+                {"picmatch", "picmatch:objects_3", "[file]picmatch_objects_3.json"}
+        };
         createCustomMenu(SPictureMatchMenu, picMatchTutors);
 
         String[][] bigMathTutors = {};

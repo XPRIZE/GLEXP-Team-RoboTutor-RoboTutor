@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.constraint.ConstraintLayout
+   xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+   android:id="@+id/Scontent"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   android:clipChildren="false"
+    android:background="@android:color/white"
+   >
+
+  <TextView
+      android:id="@+id/prompt"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="HELLO"
+      android:textSize="@dimen/picmatchPromptText"
+      android:textColor="@android:color/black"
+      android:background="@android:color/white"
+      android:gravity="center"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent"/>
+
+  <TextView
+      android:id="@+id/option_1"
+      android:layout_width="200sp"
+      android:layout_height="200sp"
+      android:textSize="@dimen/picmatchPromptText"
+      android:background="@android:color/holo_blue_light"
+      android:gravity="center"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintBottom_toTopOf="@+id/option_2"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toLeftOf="@+id/option_3"
+    />
+
+  <TextView
+      android:id="@+id/option_2"
+      android:layout_width="200sp"
+      android:layout_height="200sp"
+      android:textSize="@dimen/picmatchPromptText"
+      android:background="@android:color/holo_orange_light"
+      android:gravity="center"
+      app:layout_constraintTop_toBottomOf="@id/option_1"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toLeftOf="@+id/option_4"
+      />
+
+  <TextView
+      android:id="@+id/option_3"
+      android:layout_width="200sp"
+      android:layout_height="200sp"
+      android:textSize="@dimen/picmatchPromptText"
+      android:background="@android:color/holo_red_light"
+      android:gravity="center"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintBottom_toTopOf="@id/option_4"
+      app:layout_constraintLeft_toRightOf="@id/option_1"
+      app:layout_constraintRight_toRightOf="parent"
+      />
+
+  <TextView
+      android:id="@+id/option_4"
+      android:layout_width="200sp"
+      android:layout_height="200sp"
+      android:textSize="@dimen/picmatchPromptText"
+      android:background="@android:color/holo_green_light"
+      android:gravity="center"
+      app:layout_constraintTop_toBottomOf="@id/option_3"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintLeft_toRightOf="@id/option_2"
+      app:layout_constraintRight_toRightOf="parent"
+      />
+  
+</android.support.constraint.ConstraintLayout>
