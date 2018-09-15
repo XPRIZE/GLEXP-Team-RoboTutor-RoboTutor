@@ -122,7 +122,9 @@
           "COMMENT": "????",
           "tracks": [
               
-            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SPictureMatch", "method": "logState", "parms": "type#node,value#PLAYINTRO:String", "features":""}
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SPictureMatch", "method": "logState", "parms": "type#node,value#PLAYINTRO:String", "features":""},
+
+            {"name":"PLAY", "type": "AUDIO", "command": "PLAY", "soundsource": "Choose the matching picture.mp3", "soundpackage":"picmatch","mode":"flow", "features": ""}
 
 
             ]

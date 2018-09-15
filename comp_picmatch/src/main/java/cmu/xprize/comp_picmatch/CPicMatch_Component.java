@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
+
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
@@ -150,9 +152,18 @@ public class CPicMatch_Component extends RelativeLayout implements ILoadableObje
         promptView.setText(prompt);
 
         for (int i = 0; i < optionViews.length; i++) {
-            ImageLoader.with(this.context)
+
+            try {
+                ImageLoader.makeBitmapLoader()
+                        .loadBitmap(images[i])
+                        .into(optionViews[i]);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            /*ImageLoader.with(this.context)
                     .loadDrawable(images[i])
                     .into(optionViews[i]);
+                    */
 
             optionViews[i].setOnClickListener(new StudentChoiceListener(i));
         }
