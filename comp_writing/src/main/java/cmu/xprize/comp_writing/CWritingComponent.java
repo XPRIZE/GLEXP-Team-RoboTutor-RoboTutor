@@ -333,6 +333,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     // amogh added highlight box.
     //this is to show the highlight box at different levels for a given word (whole word / first edit) based on the level
+//animator graph functions
+
+    public void deactivateEditModeInActiveWord(){
+        mActiveWord.deactivateEditMode();
+    }
 
     //to be called by the animator graph
     public void showHighlightBox(Integer level, Word w){
@@ -440,7 +445,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             mResponseViewList.removeViewAt(index);
             updateSentenceEditSequence();
             mListWordsInput = getUpdatedListWordsInput(mListWordsInput, mAlignedSourceSentence,mAlignedTargetSentence);
-            mActiveWord = mListWordsAnswer.get(currentWordIndex)
+            mActiveWord = mListWordsAnswer.get(currentWordIndex);
             //if the word is complete, release the ON_CORRECT feature.
             String writtenActiveWord = mActiveWord.getWrittenWordString();
             String writtenAnswerWord = mActiveWord.getWordAnswer();
@@ -697,7 +702,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     boolean isLastLetter = (mActiveIndex == mGlyphList.getChildCount() - 1);
 
                     if (nextWordStarted || isPunctuationDrawn || isLastLetter) {
-                        //checks all the words in succession, stops at the first incorrect one, sets it to the active word.
+                        //checks all the words in succession, stops at the first incorrect one, sets it to the active word, applies ON_CORRECT and ON_ERROR behaviors on the way
                         evaluateSentenceWordLevel();
                         }
 
@@ -730,16 +735,17 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                                 applyBehavior(WR_CONST.DATA_ITEM_COMPLETE);
                             }
 
-                            // if the response is correct, but there are more corrections to be made in sentence, check if the word is correct, turn blue depending on what the attempt level of that sentence is. blue depending on what the attempt level of that sentence is. blue depending on what the attempt level of that sentence is.
+                            // if the response is correct(item not yet over), check if the word is correct,apply ON_CORRECT
                             else{
-                                //check if the word written is correct and release ON_CORRECT. How to check that a word is written correctly? strings should match bw
-                                //not sure yet, but let's try to set the condition as the matching of strings in the mListWordsInput and mListWordsAnswer
-                                String writtenActiveWord = mActiveWord.getWrittenWordString();
-                                String writtenAnswerWord = mListWordsAnswer.get(currentWordIndex).getWordAnswer();
-                                boolean writtenWordIsCorrect = writtenActiveWord.equals(writtenAnswerWord);
-                                if(writtenWordIsCorrect){
+                                //since the replacement is correct, still apply the oncorrect; its just that according to the attempt feature apt fn will be called.
+
+//                                //check if the word written is correct and release ON_CORRECT. How to check that a word is written correctly?
+//                                String writtenActiveWord = mActiveWord.getWrittenWordString();
+//                                String writtenAnswerWord = mListWordsAnswer.get(currentWordIndex).getWordAnswer();
+//                                boolean writtenWordIsCorrect = writtenActiveWord.equals(writtenAnswerWord);
+//                                if(writtenWordIsCorrect){
                                     applyBehavior(WR_CONST.ON_CORRECT);
-                                }
+//                                }
                             }
                         }
                         // else (if incorrect letter drawn, but correct place chosen for replacement), revert the glyph to what it was, then increase attempt and release on error behavior.
@@ -994,52 +1000,62 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         mWrittenSentence = getWrittenSentence();
         //update mEditSequence, mAlignedTarget, mTargetSource with the required changes and aligned source and target string builders
         updateSentenceEditSequence();
-        //initialising
         mListWordsInput = getListWordsInputFromAlignedSentences(mAlignedSourceSentence,mAlignedTargetSentence);
 
-        // evaluated on end sentence punctuation, when the written sentence is correct: apply ON_CORRECT behavior
+        // when the written sentence is correct, apply DATA_COMPLETE_ITEM behavior
         boolean writtenSentenceIsCorrect = mWrittenSentence.equals(mAnswer);
         if (writtenSentenceIsCorrect) {
             applyBehavior(WR_CONST.DATA_ITEM_COMPLETE);
         }
 
+        //sentence not finished.
         else{
-            //when data_item not completed.
-            //see the index of all the words correct in succession, if correct, turn blue and inhibit input, if wrong, set as mActiveWord, currentWord Index, increase attempt level and disable going to future words.
-            for(int i = 0; i < mListWordsInput.size(); i++){
-                Word inputWord = mListWordsInput.get(i);
-                boolean wordIsCorrect;
+            //starting from the currentWordIndex (since obviously the earlier ones have been evaluated), evaluate words in succession, if correct, turn blue and inhibit input, if wrong, set as mActiveWord, currentWord Index, increase attempt level and disable going to future words.
+            for(int i = currentWordIndex; i < mListWordsInput.size(); i++){
 
-                // so we don't evaluate the correct status everytime, check if the word has been set to correct before.
-                if(inputWord.getWordCorrectStatus()){
-                    wordIsCorrect = true;
-                }
-                else{
-                    wordIsCorrect = inputWord.updateInputWordCorrectStatus(i);
-                }
+                Word inputWord = mListWordsInput.get(i);
+
+                //need to update the current word index as we are moving forward, this is necessary to make sure that ON_CORRECT behavior works on this word
+                currentWordIndex = i;
+                mActiveWord = inputWord;
+
+                boolean wordIsCorrect;
+//                // so we don't evaluate the correct status everytime, check if the word has been set to correct before.
+//                if(inputWord.getWordCorrectStatus()){
+//                    wordIsCorrect = true;
+//                }
+//                else{
+                    wordIsCorrect = mActiveWord.updateInputWordCorrectStatus(i); //checks indices and strings inside
+//                }
 
                 //if the word is correct update its color
                 if (wordIsCorrect){
                     //turn blue
                     //release the oncorrect behavior
+                    clearAttemptFeatures(); //(so that oncorrect call on the word level occurs, instead of evaluating the word again)
                     applyBehavior(WR_CONST.ON_CORRECT);
-                    inputWord.updateWordResponse();
+//                    inputWord.updateWordResponse(); //goes in the animator graph
                 }
 
                 //if the word is incorrect, update its color to red and increase attempt, set current word as this, inhibit others.
                 else{
-                    currentWordIndex = i;
-                    mActiveWord = inputWord;
-                    //if this word has already been attempted(> 1 letter written), increment the word's attempt level and release corresponding feature.
+
+                    //if this word has already been attempted(> 1 letter written), increment the word's attempt level and release corresponding feature
                     if(mActiveWord.getWrittenWordString().length() > 1){
                         mActiveWord.activateEditMode(); //put in animator graph
                         updateAttemptFeature();
+                        applyBehavior(WR_CONST.ON_ERROR);
                     }
 
+                    //otherwise it just means that the previous words were correct and you are beginning to write  this word, mActiveWord is set to this word, but no features are to bbe released
+                    else{
+
+                    }
+
+                    // break so that it stops at the first incorrect word that is there.
                     break;
                 }
             }
-
         }
 
     }
@@ -2595,7 +2611,16 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 controller.showInsLftButton(true);
                 controller.showInsRgtButton(true);
             }
+        }
 
+        public void deactivateEditMode(){
+            //make the buttons visible
+            for (int i : listIndicesAnswer) {
+                CGlyphController controller = (CGlyphController) mGlyphList.getChildAt(i);
+                controller.showDeleteSpaceButton(false);
+                controller.showInsLftButton(false);
+                controller.showInsRgtButton(false);
+            }
         }
     }
     //Word class ends
