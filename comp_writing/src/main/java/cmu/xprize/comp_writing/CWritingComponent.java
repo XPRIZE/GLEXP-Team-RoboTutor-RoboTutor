@@ -752,8 +752,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                         else{
                             //revert the glyph to old one.
                             gController.setPreviousGlyph();// put in animator graph
-                            updateAttemptFeature();
-                            applyBehavior(WR_CONST.ON_ERROR);
+                            int attempt = updateAttemptFeature();
+                            if (attempt > 4) {
+                                applyBehavior(WR_CONST.MERCY_RULE); // goto node "MERCY_RULE_BEHAVIOR"
+                            } else {
+                                applyBehavior(WR_CONST.ON_ERROR); // goto node "GENERAL_ERROR_BEHAVIOR"
+                            }
                             // in the animator graph -> turn the word blue or red.
                             //set the word as red or blue depending on status.
                         }
@@ -763,8 +767,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     else{
                         gController.setPreviousGlyph();
                         //lets increase the attempt for this word, this will also release the corresponding feature which can then be used in the animator graph to call the functions that we want.
-                        updateAttemptFeature();
-                        applyBehavior(WR_CONST.ON_ERROR);
+                        int attempt = updateAttemptFeature();
+                        if (attempt > 4) {
+                            applyBehavior(WR_CONST.MERCY_RULE); // goto node "MERCY_RULE_BEHAVIOR"
+                        } else {
+                            applyBehavior(WR_CONST.ON_ERROR); // goto node "GENERAL_ERROR_BEHAVIOR"
+                        }
                     }
 
 //                        //if the word is still not correct and the current attempt is wrong.
