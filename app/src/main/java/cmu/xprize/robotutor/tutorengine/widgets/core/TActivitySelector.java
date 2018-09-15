@@ -729,8 +729,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
      */
     private String processDifficultyAssessMode(String buttonid) {
 
-        boolean useMathPlacement = false;
-        boolean useWritingPlacement = false;
+        boolean useMathPlacement = false;    // TOGGLE_PLACEMENT this should possibly stay false
+        boolean useWritingPlacement = false; // TOGGLE_PLACEMENT this should possibly stay false
 
 
         SharedPreferences prefs = RoboTutor.getStudentSharedPreferences();
@@ -770,6 +770,11 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
         }
 
+        // TOGGLE_PLACEMENT
+        if (RoboTutor.TURN_OFF_PLACEMENT_FOR_QA) {
+            useMathPlacement = false;
+            useWritingPlacement = false;
+        }
 
         nextTutor = selectNextTutor(buttonid, useWritingPlacement, useMathPlacement, prefs);
         RoboTutor.logManager.postEvent_I(TCONST.PLACEMENT_TAG, "nextTutor = " + nextTutor);
@@ -1048,6 +1053,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
     private String getChildScope() {
         String childScope = null;
+        // BUG_605 why is this null???
         if(activeTutor.startsWith("bpop")) {
             childScope = "bubble_pop";
 

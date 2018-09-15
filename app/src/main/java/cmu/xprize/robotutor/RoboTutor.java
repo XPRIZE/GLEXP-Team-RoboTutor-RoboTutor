@@ -109,6 +109,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     //private static final String debugTutorFile = "[file]numdiscr_sample.json";
     // private static final String debugTutorFile = "[file]math_0..800.ADD-100-V-S.incr.13.json";
 
+    public static final boolean TURN_OFF_PLACEMENT_FOR_QA = true;
     //private static final String debugTutorFile = "[file]math_10..80.SUB-2D-V-S.rand.12.json";
 
     private static final String LOG_SEQUENCE_ID = "LOG_SEQUENCE_ID";
