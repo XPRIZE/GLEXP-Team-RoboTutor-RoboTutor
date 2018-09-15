@@ -38,7 +38,7 @@
     },
     "bigmath": {
       "type": "TUTORVAR_MAP",
-      "tutorName": "bigmath",
+      "tutorName": "bigmath", // BUG_605 get bigmath to reference "math" files
       "features": ""
     },
     "countingx": {
