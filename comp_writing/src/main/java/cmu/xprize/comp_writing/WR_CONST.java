@@ -38,6 +38,8 @@ public class WR_CONST {
     public static final String FTR_HESITATION_2            = "FTR_HESITATION_2";
     public static final String FTR_HESITATION_3            = "FTR_HESITATION_3";
     public static final String FTR_HESITATION_4            = "FTR_HESITATION_4";
+
+    public static final String FTR_WORD_CORRECT            = "FTR_WORD_CORRECT";
     //amogh add finish
 
 

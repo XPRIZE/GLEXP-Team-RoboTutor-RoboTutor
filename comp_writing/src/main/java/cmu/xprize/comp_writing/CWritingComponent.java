@@ -744,6 +744,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //                                String writtenAnswerWord = mListWordsAnswer.get(currentWordIndex).getWordAnswer();
 //                                boolean writtenWordIsCorrect = writtenActiveWord.equals(writtenAnswerWord);
 //                                if(writtenWordIsCorrect){
+                                    publishFeature(WR_CONST.FTR_WORD_CORRECT);
                                     applyBehavior(WR_CONST.ON_CORRECT);
 //                                }
                             }
@@ -1040,7 +1041,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 if (wordIsCorrect){
                     //turn blue
                     //release the oncorrect behavior
-                    clearAttemptFeatures(); //(so that oncorrect call on the word level occurs, instead of evaluating the word again)
+                    publishFeature(WR_CONST.FTR_WORD_CORRECT);
                     applyBehavior(WR_CONST.ON_CORRECT);
 //                    inputWord.updateWordResponse(); //goes in the animator graph
                 }
@@ -2109,7 +2110,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         int wordCount = 0;
         int letterIndex = 0;
         ArrayList<Integer> wordIndices = new ArrayList<>();
-        ArrayList<Boolean> correctIndices = new ArrayList<> ();
+        ArrayList<Boolean> correctIndices = new ArrayList<> ();  //an important fact is that this means that the letters are the same in the aligned version ie the position might still be wrong for the words even though the letters match.
         String word = "";
 
         //iterate over all the characters of the source.
@@ -2382,7 +2383,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             return wordIsCorrect;
         }
 
-        //checks if the input word is the same as the answer argument is the index of the current word
+        //checks if the input word is the same as the answer - argument is the index of the current word
         public boolean updateInputWordCorrectStatus(int index){
 
             //indices should be same and letters should be same
