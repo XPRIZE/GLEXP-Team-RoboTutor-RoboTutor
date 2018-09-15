@@ -866,7 +866,7 @@ public class TCONST {
 
     // Debugger Thumb key words
     public enum Thumb {
-        AKIRA, BPOP_NUM, GL, MN, BPOP_LTR, CX_1, CX_10, CX_100, MATH, NUMSCALE, STORY_1, STORY_2, STORY_3, STORY_4, STORY_5, SONG, STORY_NONSTORY, WRITE
+        AKIRA, BPOP_NUM, GL, MN, BPOP_LTR, CX_1, CX_10, CX_100, MATH, NUMSCALE, STORY_1, STORY_2, STORY_3, STORY_4, STORY_5, SONG, STORY_NONSTORY, WRITE, NOTHING
     }
 
     // debug vals

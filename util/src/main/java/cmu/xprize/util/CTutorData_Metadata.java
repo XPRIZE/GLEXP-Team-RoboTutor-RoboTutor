@@ -26,7 +26,7 @@ public class CTutorData_Metadata {
         // tutortype is first token... e.g. "story.hear" --> "story"
         String[] tutorDesc = tutor.tutor_desc.split("\\.");
         if (tutorDesc.length == 0) {
-            return null;
+            return TCONST.Thumb.NOTHING;
         }
         Log.d("CHUNT", "tutorDesc = " + tutorDesc + ", " + tutorDesc.length);
 
@@ -123,7 +123,7 @@ public class CTutorData_Metadata {
 
 
             default:
-                return null;
+                return TCONST.Thumb.NOTHING;
 
         }
 

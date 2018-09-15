@@ -17,6 +17,7 @@ import static cmu.xprize.comp_debug.CD_CONST.STATE_HARDER;
 import static cmu.xprize.comp_debug.CD_CONST.STATE_NEXT;
 import static cmu.xprize.comp_debug.CD_CONST.STATE_NORMAL;
 import static cmu.xprize.comp_debug.CD_CONST.STATE_NULL;
+import static cmu.xprize.util.TCONST.Thumb.NOTHING;
 
 public class CDebugButton extends ImageButton {
 
@@ -103,6 +104,9 @@ public class CDebugButton extends ImageButton {
                 String tutorType = tutorDesc[0];
                 Log.d("BOJACK", "tutorType = " + tutorType);
 
+                if (thumbnail == null) {
+                    thumbnail = NOTHING;
+                }
                 switch (thumbnail) {
                     case AKIRA:
                         tutor_CONST = CD_CONST.TUTOR_AKIRA;
@@ -176,6 +180,7 @@ public class CDebugButton extends ImageButton {
                         tutor_CONST = CD_CONST.TUTOR_WRITE;
                         break;
 
+                    case NOTHING:
                     default:
                         tutor_CONST = CD_CONST.SKILLS_NORMAL;
                         break;

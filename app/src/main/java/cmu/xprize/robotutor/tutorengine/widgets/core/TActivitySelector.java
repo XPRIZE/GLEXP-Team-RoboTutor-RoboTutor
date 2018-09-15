@@ -1187,6 +1187,8 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
             Map.Entry entry = (Map.Entry) tObjects.next();
 
+            String QA_MATRIX_TAG = "QA_MATRIX";
+            Log.wtf(QA_MATRIX_TAG, "key=" + entry.getKey().toString());
             String key   = entry.getKey().toString();
             String value = "#" + entry.getValue().toString();
 

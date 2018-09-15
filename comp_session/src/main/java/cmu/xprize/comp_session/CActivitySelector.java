@@ -284,7 +284,7 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
 
             }
             catch(Exception e) {
-                CErrorManager.logEvent(TAG, "Run Error:", e, false);
+                CErrorManager.logEvent(TAG, "Run Error:", e, true);
             }
         }
     }
