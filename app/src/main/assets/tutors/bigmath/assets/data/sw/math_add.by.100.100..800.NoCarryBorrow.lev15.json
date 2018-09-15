@@ -1,0 +1,17 @@
+{
+ "bootFeatures": "FTR_DEMO_ADD",
+
+"dataSource": [
+
+{"type":"CBigMath_Data", "level":"demo", "task":" Count up by 100","dataset": [700,100,800],"operation": "+"},
+{"type":"CBigMath_Data", "level":"demo", "task":" Count up by 100","dataset": [300,100,400],"operation": "+"},
+{"type":"CBigMath_Data", "level":"demo", "task":" Count up by 100","dataset": [500,100,600],"operation": "+"},
+{"type":"CBigMath_Data", "level":"demo", "task":" Count up by 100","dataset": [400,100,500],"operation": "+"},
+{"type":"CBigMath_Data", "level":"demo", "task":" Count up by 100","dataset": [100,100,200],"operation": "+"},
+{"type":"CBigMath_Data", "level":"demo", "task":" Count up by 100","dataset": [600,100,700],"operation": "+"},
+{"type":"CBigMath_Data", "level":"demo", "task":" Count up by 100","dataset": [200,100,300],"operation": "+"},
+{"type":"CBigMath_Data", "level":"demo", "task":" Count up by 100","dataset": [800,100,900],"operation": "+"}
+
+   ]
+
+}
