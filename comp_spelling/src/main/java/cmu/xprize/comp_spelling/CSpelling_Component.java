@@ -51,6 +51,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     protected int _currentWordIndex ;
     protected List<String> _selectableLetters;
     protected List<String> _selectedLetters;
+    protected String _fullword;
 
     TextView message;
     protected LinearLayout mLetterHolder;
@@ -65,6 +66,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     public CSpelling_Data[] dataSource;
     protected List<CSpelling_Data> _data;
 
+    protected int _attemptCount;
 
     // View Things
     protected Context mContext;
@@ -137,6 +139,10 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     //
     public boolean applyBehavior(String event){ return false;}
 
+    protected void trackAndLogPerformance(boolean isCorrect, String selectedSyllable) {
+
+    }
+
     //endregion
 
     // Must override in TClass
@@ -173,7 +179,9 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         publishValue(SP_CONST.SYLLABLE_STIM, letter);
 
         Log.d("ddd", "features: " + _FeatureMap.toString());
-        if (letter.equalsIgnoreCase(current)) {
+        boolean isCorrect = letter.equalsIgnoreCase(current);
+        trackAndLogPerformance(isCorrect, letter);
+        if (isCorrect) {
             Log.d("ddd", "correct: " + letter);
 
             // Update _selectedLetter.
@@ -192,6 +200,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
             applyBehavior("NEXT_NODE");
             Log.d("ddd", "features: " + _FeatureMap.toString());
 //            applyBehaviorNode("NEXTNODE");
+            _attemptCount = 1;
         } else {
             Log.d("ddd", "incorrect: " + letter);
             lt.indicateError();
@@ -199,7 +208,9 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
             publishFeature(SP_CONST.FTR_INCORRECT);
             applyBehavior("NEXT_NODE");
             Log.d("ddd", "features: " + _FeatureMap.toString());
+            _attemptCount++;
         }
+
     }
 
     public void revertColor() {
@@ -341,10 +352,18 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
      */
     protected void loadDataSet(CSpelling_Data data) {
         Log.d("ddd", "loading dataset" + data.word);
+        _attemptCount = 1;
         level = data.level;
         task = data.task;
         layout = data.layout;
         _word = new ArrayList<>(Arrays.asList(data.word));
+
+        // Find a better way than this.
+        StringBuilder sb = new StringBuilder();
+        for (String c : _word) {
+            sb.append(c);
+        }
+        _fullword = sb.toString();
 
         _currentWordIndex = 0;
         retractFeature(SP_CONST.FTR_EOP);
@@ -440,4 +459,5 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     public ConstraintLayout getContainer() {
         return Scontent;
     }
+
 }

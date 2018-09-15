@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import cmu.xprize.comp_logging.PerformanceLogItem;
 import cmu.xprize.comp_spelling.CSpelling_Component;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_logging.ILogManager;
@@ -21,6 +22,7 @@ import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
+import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObjectImpl;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
@@ -540,6 +542,39 @@ public class TSpellingComponent extends CSpelling_Component implements ITutorObj
     @Override
     public String getEventSourceType() {
         return "TSpellingComponent";
+    }
+
+    protected void trackAndLogPerformance(boolean isCorrect, String selectedSyllable) {
+
+        // this is actually handled via the animator_graph
+        if(isCorrect) {
+            mTutor.countCorrect();
+        } else {
+            mTutor.countIncorrect();
+        }
+
+        PerformanceLogItem event = new PerformanceLogItem();
+
+        event.setUserId(RoboTutor.STUDENT_ID);
+        event.setSessionId(RoboTutor.SESSION_ID);
+        event.setGameId(mTutor.getUuid().toString()); // a new tutor is generated for each game, so this will be unique
+        event.setLanguage(CTutorEngine.language);
+        event.setTutorName(mTutor.getTutorName());
+        event.setTutorId(mTutor.getTutorId());
+        event.setLevelName(level);
+        event.setTaskName(task);
+        event.setProblemName("write_" + _fullword);
+        event.setTotalProblemsCount(_data.size());
+        event.setProblemNumber(_dataIndex);
+        event.setSubstepNumber(_currentWordIndex + 1);
+        event.setAttemptNumber(_attemptCount);
+        event.setExpectedAnswer(_word.get(_currentWordIndex));
+        event.setUserResponse(selectedSyllable);
+        event.setCorrectness(isCorrect ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
+
+        event.setTimestamp(System.currentTimeMillis());
+
+        RoboTutor.perfLogManager.postPerformanceLog(event);
     }
 
 

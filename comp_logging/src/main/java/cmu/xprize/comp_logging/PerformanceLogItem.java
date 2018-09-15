@@ -95,6 +95,8 @@ public class PerformanceLogItem {
             setMatrixWrite(tutorId);
         } else if (isStoryTutor(tutorId)) {
             setMatrixStory(tutorId);
+        } else if (isSpellingTutor(tutorId)) {
+            matrixName = LITERACY_MATRIX;
         } else {
             matrixName = UNKNOWN_MATRIX;
         }
@@ -230,6 +232,10 @@ public class PerformanceLogItem {
 
     private boolean isBpopTutor(String tutorName) {
         return tutorName.startsWith("bpop");
+    }
+
+    private boolean isSpellingTutor(String tutorName) {
+        return tutorName.startsWith("spelling");
     }
 
     private boolean isAkiraTutor(String tutorName) {
