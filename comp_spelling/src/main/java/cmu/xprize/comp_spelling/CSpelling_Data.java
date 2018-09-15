@@ -22,7 +22,6 @@ public class CSpelling_Data implements ILoadableObject{
     public String[] word;
     public String sound;
 
-
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
         JSON_Helper.parseSelf(jsonObj, this, CClassMap.classMap, scope);

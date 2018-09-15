@@ -566,9 +566,9 @@ public class TSpellingComponent extends CSpelling_Component implements ITutorObj
         event.setProblemName("write_" + _fullword);
         event.setTotalProblemsCount(_data.size());
         event.setProblemNumber(_dataIndex);
-        event.setSubstepNumber(_currentWordIndex + 1);
+        event.setSubstepNumber(_currentLetterIndex + 1);
         event.setAttemptNumber(_attemptCount);
-        event.setExpectedAnswer(_word.get(_currentWordIndex));
+        event.setExpectedAnswer(_word.get(_currentLetterIndex));
         event.setUserResponse(selectedSyllable);
         event.setCorrectness(isCorrect ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
 

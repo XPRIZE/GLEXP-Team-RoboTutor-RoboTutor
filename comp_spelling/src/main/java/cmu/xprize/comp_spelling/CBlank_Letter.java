@@ -17,21 +17,23 @@ import android.widget.TextView;
 
 @SuppressLint("AppCompatCustomView")
 public class CBlank_Letter extends ImageView {
-    private String _letter;
-    private int _index;
-    private CSpelling_Component _parent;
 
     public CBlank_Letter(Context context) {
         super(context);
         init(context, null);
 
         this.setBackgroundResource(R.drawable.underline);
-        this.setPadding(15,15,15,15);
+        this.setPadding(
+            SP_CONST.LETTER_TILE_PADDING,
+            SP_CONST.LETTER_TILE_PADDING,
+            SP_CONST.LETTER_TILE_PADDING,
+            SP_CONST.LETTER_TILE_PADDING
+        );
 
         LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         llp.setMargins(50, 0, 0, 0);
-        llp.width = 200;
-        llp.height = 200;
+        llp.width = SP_CONST.LETTER_TILE_SIZE;
+        llp.height = SP_CONST.LETTER_TILE_SIZE;
         this.setLayoutParams(llp);
     }
 
@@ -44,6 +46,5 @@ public class CBlank_Letter extends ImageView {
         init(context, attrs);
     }
 
-    protected void init(Context context, AttributeSet attrs) {
-    }
+    protected void init(Context context, AttributeSet attrs) { }
 }
