@@ -534,7 +534,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 mListWordsInput = getUpdatedListWordsInput(mListWordsInput, mAlignedSourceSentence,mAlignedTargetSentence);
 
                 //since the mListWordsInput is now updated, the parameters for mActiveWord have also changed.
-                mActiveWord = mListWordsAnswer.get(currentWordIndex);
+                mActiveWord = mListWordsInput.get(currentWordIndex);
 
                 //if the word is complete, release the ON_CORRECT feature.
                 String writtenActiveWord = mActiveWord.getWrittenWordString();
@@ -542,6 +542,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 boolean writtenWordIsCorrect = writtenActiveWord.equals(writtenAnswerWord);
                 if(writtenWordIsCorrect){
                     applyBehavior(WR_CONST.ON_CORRECT); //should increment the current word index and the mActiveWord also thus changes.
+                    temporaryOnCorrect();
                 }
             }
 
@@ -2134,7 +2135,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         int wordCount = 0;
         int letterIndex = 0;
         ArrayList<Integer> wordIndices = new ArrayList<>();
-        ArrayList<Boolean> correctIndices = new ArrayList<> ();  //an important fact is that this means that the letters are the same in the aligned version ie the position might still be wrong for the words even though the letters match.
+        ArrayList<Boolean> correctIndices = new ArrayList<> ();  //an important fact -> this means that the letters are the same in the aligned version ie the position might still be wrong for the words even though the letters match.
         String word = "";
 
         //iterate over all the characters of the source.
@@ -2246,6 +2247,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     //After some changes have been made, the word indices and the text would have been updated, but the attempts should remain the same.
     public ArrayList<Word> getUpdatedListWordsInput(ArrayList<Word> oldListWords, StringBuilder alignedSource, StringBuilder alignedTarget){
         ArrayList<Word> newListWords = getListWordsInputFromAlignedSentences(alignedSource,alignedTarget);
+        //setting the
         for(int i = 0; i < oldListWords.size(); i++){
             newListWords.get(i).setAttempt(oldListWords.get(i).getAttempt());
         }

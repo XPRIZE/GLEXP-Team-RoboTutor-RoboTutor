@@ -370,7 +370,7 @@
 
             // functions to be called for sentence writing
             // 1. word level feedback (the three things below and clearing the attempt index)
-            
+
 //            {"name": "deactivate edit mode for the word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "deactivateEditModeInActiveWord", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD&FTR_WORD_CORRECT"},
 //            {"name": "inhibit input for the word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitWordInput", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD&FTR_WORD_CORRECT"},
 //            {"name": "update the response colors for each letter in word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "updateLettersWordResponse", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD"},
