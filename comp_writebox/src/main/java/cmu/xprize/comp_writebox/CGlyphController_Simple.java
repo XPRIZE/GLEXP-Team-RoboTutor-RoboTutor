@@ -134,6 +134,9 @@ public class CGlyphController_Simple extends PercentRelativeLayout implements Vi
 
 
 
+    public void setInputContainer(CGlyphInputContainer_Simple inputContainer) {
+        this.mGlyphInput = inputContainer;
+    }
 
 
     public void setWritingController(IWritingComponent_Simple writingController) {

@@ -35,6 +35,8 @@ import cmu.xprize.asm_component.ui.CAsm_LayoutManagerInterface;
 import cmu.xprize.asm_component.ui.CAsm_LayoutManager_NewMath;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_writebox.ICharRecListener_Simple;
+import cmu.xprize.ltkplus.CRecognizerPlus;
+import cmu.xprize.ltkplus.GCONST;
 import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.ILoadableObject;

@@ -22,6 +22,7 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -218,7 +219,6 @@ public class scene_node implements ILoadableObject2, IScriptable2, IEventSource,
 
     public scene_node nextNode() {
 
-        Log.d(TCONST.COUNTING_DEBUG_LOG, this.name);
 
         scene_node node = null;		// When we run out of tracks we just want to stop
 
@@ -233,8 +233,6 @@ public class scene_node implements ILoadableObject2, IScriptable2, IEventSource,
                 RoboTutor.logManager.postEvent_V(TAG, "target:node.edge,action:taken,name:" + edge.edge );
 
                 node = edge.followEdge();
-
-                Log.d(TCONST.COUNTING_DEBUG_LOG, node.name);
 
 
                 if(node != null)

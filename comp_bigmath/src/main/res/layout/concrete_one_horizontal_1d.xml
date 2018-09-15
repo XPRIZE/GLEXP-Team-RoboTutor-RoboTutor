@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <cmu.xprize.comp_bigmath.MovableImageView
+        android:id="@+id/one_1"
+        android:src="@drawable/blue_1"
+        android:layout_width="@dimen/add_subtract_1_size_1d"
+        android:layout_height="@dimen/add_subtract_1_size_1d"
+        android:layout_marginTop="0dp"
+        android:layout_marginStart="0dp" />
+
+    <cmu.xprize.comp_bigmath.MovableImageView
+        android:id="@+id/one_2"
+        android:src="@drawable/blue_1"
+        android:layout_width="@dimen/add_subtract_1_size_1d"
+        android:layout_height="@dimen/add_subtract_1_size_1d"
+        android:layout_marginTop="0dp"
+        android:layout_marginStart="@dimen/baseten_onespacer_1d"/>
+
+    <cmu.xprize.comp_bigmath.MovableImageView
+        android:id="@+id/one_3"
+        android:src="@drawable/blue_1"
+        android:layout_width="@dimen/add_subtract_1_size_1d"
+        android:layout_height="@dimen/add_subtract_1_size_1d"
+        android:layout_marginTop="0dp"
+        android:layout_marginStart="@dimen/baseten_onespacer_1d"/>
+
+    <cmu.xprize.comp_bigmath.MovableImageView
+        android:id="@+id/one_4"
+        android:src="@drawable/blue_1"
+        android:layout_width="@dimen/add_subtract_1_size_1d"
+        android:layout_height="@dimen/add_subtract_1_size_1d"
+        android:layout_marginTop="0dp"
+        android:layout_marginStart="@dimen/baseten_onespacer_1d"/>
+
+    <cmu.xprize.comp_bigmath.MovableImageView
+        android:id="@+id/one_5"
+        android:src="@drawable/blue_1"
+        android:layout_width="@dimen/add_subtract_1_size_1d"
+        android:layout_height="@dimen/add_subtract_1_size_1d"
+        android:layout_marginTop="0dp"
+        android:layout_marginStart="@dimen/baseten_onespacer_1d"/>
+
+    <cmu.xprize.comp_bigmath.MovableImageView
+        android:id="@+id/one_6"
+        android:src="@drawable/blue_1"
+        android:layout_width="@dimen/add_subtract_1_size_1d"
+        android:layout_height="@dimen/add_subtract_1_size_1d"
+        android:layout_marginTop="0dp"
+        android:layout_marginStart="@dimen/baseten_onespacer_1d"/>
+
+    <cmu.xprize.comp_bigmath.MovableImageView
+        android:id="@+id/one_7"
+        android:src="@drawable/blue_1"
+        android:layout_width="@dimen/add_subtract_1_size_1d"
+        android:layout_height="@dimen/add_subtract_1_size_1d"
+        android:layout_marginTop="0dp"
+        android:layout_marginStart="@dimen/baseten_onespacer_1d"/>
+
+    <cmu.xprize.comp_bigmath.MovableImageView
+        android:id="@+id/one_8"
+        android:src="@drawable/blue_1"
+        android:layout_width="@dimen/add_subtract_1_size_1d"
+        android:layout_height="@dimen/add_subtract_1_size_1d"
+        android:layout_marginTop="0dp"
+        android:layout_marginStart="@dimen/baseten_onespacer_1d"/>
+
+    <cmu.xprize.comp_bigmath.MovableImageView
+        android:id="@+id/one_9"
+        android:src="@drawable/blue_1"
+        android:layout_width="@dimen/add_subtract_1_size_1d"
+        android:layout_height="@dimen/add_subtract_1_size_1d"
+        android:layout_marginTop="0dp"
+        android:layout_marginStart="@dimen/baseten_onespacer_1d"/>
+
+    <cmu.xprize.comp_bigmath.MovableImageView
+        android:id="@+id/one_10"
+        android:src="@drawable/blue_1"
+        android:layout_width="@dimen/add_subtract_1_size_1d"
+        android:layout_height="@dimen/add_subtract_1_size_1d"
+        android:layout_marginTop="0dp"
+        android:layout_marginStart="@dimen/baseten_onespacer_1d"/>
+
+</LinearLayout>

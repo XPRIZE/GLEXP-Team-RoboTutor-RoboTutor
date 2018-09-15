@@ -36,6 +36,11 @@
       "tutorName": "numdiscr",
       "features": ""
     },
+    "bigmath": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "bigmath",
+      "features": ""
+    },
     "countingx": {
       "type": "TUTORVAR_MAP",
       "tutorName": "countingx",
@@ -324,6 +329,22 @@
         }
       }
     },
+
+    "bigmath": {
+      "type": "TUTORDATA_MAP",
+      "scene_bindings": {
+        "bigmath": {
+          "type": "SCENEDATA_MAP",
+          "databindings": [
+            {
+              "name": "SBigMath",
+              "datasource": ""
+            }
+          ]
+        }
+      }
+    },
+
     "countingx": {
       "type": "TUTORDATA_MAP",
       "scene_bindings": {

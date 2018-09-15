@@ -140,5 +140,7 @@ dependencies {
     compile project(path: ':comp_numberscale')
     compile project(path: ':comp_nd')
     compile project(path: ':comp_picmatch')
+    compile project(path: ':comp_bigmath')
+
 }
 

@@ -1,0 +1,1088 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (C) 2017 The Android Open Source Project
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+       http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="contentDescription"
+    android:id="@+id/baseten_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false">
+
+
+
+    <!-- Guidelines -->
+    <android.support.constraint.Guideline
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/guideline_vertical_0"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.0"
+        />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_vertical_1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.26" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_bottom_of_top"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_0"
+        app:layout_constraintRight_toRightOf="@+id/guideline_vertical_4"
+        android:background="@android:color/darker_gray"
+        android:visibility="gone"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/guideline_vertical_2"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.70"
+        />
+
+    <android.support.constraint.Guideline
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/guideline_vertical_3"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9"
+        />
+
+    <android.support.constraint.Guideline
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/guideline_vertical_4"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="1.0"
+        />
+
+
+    <android.support.constraint.Guideline
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/guideline_top_of_carry"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05"
+        />
+
+    <android.support.constraint.Guideline
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/guideline_bottom_of_carry"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.16"
+        />
+
+    <android.support.constraint.Guideline
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/guideline_top_of_top"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.21"
+        />
+
+    <android.support.constraint.Guideline
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/guideline_bottom_of_top"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.37"
+        />
+
+    <android.support.constraint.Guideline
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/guideline_top_of_mid"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.42"
+        />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_bottom_of_mid"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.58" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_top_of_bottom"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.63" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/guideline_bottom_of_bottom"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.92"
+        />
+
+    <android.support.constraint.Guideline
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/guideline_horizontal_4"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="1.0"
+        />
+
+
+    <!-- Symbol carry -->
+    <LinearLayout
+        android:id="@+id/symbol_carry_num"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintRight_toRightOf="@+id/guideline_vertical_1"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_top_of_top"
+        android:visibility="invisible">
+
+        <cmu.xprize.comp_bigmath.DigitView
+            android:id="@+id/symbol_carry_hun"
+            android:layout_width="@dimen/add_subtract_digit_width"
+            android:layout_height="fill_parent"
+            android:text="@string/carry_digit_placeholder"
+            android:textColor="@color/addSubtractDigitCarryColor"
+            android:textSize="@dimen/add_subtract_digit_size_carry"
+            android:background="@drawable/soft_box"
+            android:gravity="center"
+            />
+
+        <cmu.xprize.comp_bigmath.DigitView
+            android:id="@+id/symbol_carry_ten"
+            android:layout_width="@dimen/add_subtract_digit_width"
+            android:layout_height="fill_parent"
+            android:text="@string/carry_digit_placeholder"
+            android:textColor="@color/addSubtractDigitCarryColor"
+            android:textSize="@dimen/add_subtract_digit_size_carry"
+            android:background="@drawable/soft_box"
+            android:gravity="center"
+        />
+
+
+        <!-- this is just a spacer -->
+        <TextView
+            android:id="@+id/symbol_carry_one"
+            android:layout_width="@dimen/add_subtract_digit_width"
+            android:layout_height="fill_parent"
+            android:text=""
+            android:textColor="@color/addSubtractDigitCarryColor"
+            android:textSize="@dimen/add_subtract_digit_size_carry"
+            android:gravity="center"
+            android:visibility="visible"
+            />
+    </LinearLayout>
+
+    <!-- Symbol borrow  -->
+    <!-- these are the borrow digits we're manipulating -->
+    <LinearLayout
+        android:id="@+id/symbol_borrow_num"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintRight_toRightOf="@+id/guideline_vertical_1"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_top_of_top">
+
+        <cmu.xprize.comp_bigmath.DigitView
+            android:id="@+id/symbol_borrow_hun"
+            android:layout_width="@dimen/add_subtract_digit_width"
+            android:layout_height="fill_parent"
+            android:text="@string/carry_digit_placeholder"
+            android:textColor="@color/addSubtractDigitCarryColor"
+            android:textSize="@dimen/add_subtract_digit_size_borrow"
+            android:background="@drawable/soft_box"
+            android:gravity="center"
+            />
+
+        <cmu.xprize.comp_bigmath.DigitView
+            android:id="@+id/symbol_borrow_ten"
+            android:layout_width="@dimen/add_subtract_digit_width"
+            android:layout_height="fill_parent"
+            android:text="@string/carry_digit_placeholder"
+            android:textColor="@color/addSubtractDigitCarryColor"
+            android:textSize="@dimen/add_subtract_digit_size_borrow"
+            android:background="@drawable/soft_box"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/symbol_borrow_one"
+            android:layout_width="@dimen/add_subtract_digit_width"
+            android:layout_height="fill_parent"
+            android:text="10"
+            android:textColor="@color/addSubtractDigitCarryColor"
+            android:textSize="@dimen/add_subtract_digit_size_borrow"
+            android:background="@drawable/soft_box"
+            android:gravity="center"
+            android:visibility="visible"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/symbol_borrow_num2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintRight_toRightOf="@+id/guideline_vertical_1"
+        app:layout_constraintBottom_toTopOf="@+id/symbol_borrow_num">
+
+        <cmu.xprize.comp_bigmath.DigitView
+            android:id="@+id/symbol_borrow_ten_row2"
+            android:layout_width="@dimen/add_subtract_digit_width"
+            android:layout_height="fill_parent"
+            android:text="10"
+            android:textColor="@color/addSubtractDigitCarryColor"
+            android:textSize="@dimen/add_subtract_digit_size_borrow"
+            android:background="@drawable/soft_box"
+            android:gravity="center"
+            />
+
+
+        <!-- this is just a spacer -->
+        <TextView
+            android:id="@+id/symbol_borrow_one_row2"
+            android:layout_width="@dimen/add_subtract_digit_width"
+            android:layout_height="fill_parent"
+            android:text="10"
+            android:textColor="@color/addSubtractDigitCarryColor"
+            android:textSize="@dimen/add_subtract_digit_size_borrow"
+            android:gravity="center"
+            android:visibility="invisible"
+            />
+    </LinearLayout>
+
+
+    <!-- Carry WriteBoxes  -->
+    <LinearLayout
+        android:id="@+id/carry_writebox_row"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintRight_toRightOf="@+id/guideline_vertical_1"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_top_of_top">
+
+        <!-- <com.example.android.constraintlayoutexamples.write.CGlyphController_Simple
+            android:id="@+id/glyph_controller_hun_carry"
+            android:layout_width="@dimen/add_subtract_digit_width"
+
+            android:layout_height="100sp"
+            android:adjustViewBounds="true"
+            android:background="@null"
+            android:layout_margin="0dp"
+            android:visibility="invisible">
+
+
+            <FrameLayout
+                android:id="@+id/drawn_container_hun_carry"
+                app:layout_heightPercent="100%"
+                app:layout_aspectRatio = "100%"
+                android:background="@null"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+
+                <com.example.android.constraintlayoutexamples.write.CGlyphInputContainer_Simple
+                    android:id="@+id/drawn_box_hun_carry"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    app:strokeweight = "5"
+                    android:background="@null" />
+
+            </FrameLayout>
+
+        </com.example.android.constraintlayoutexamples.write.CGlyphController_Simple> -->
+
+        <!-- <com.example.android.constraintlayoutexamples.write.CGlyphController_Simple
+            android:id="@+id/glyph_controller_ten_carry"
+            android:layout_width="@dimen/add_subtract_digit_width"
+
+            android:layout_height="100sp"
+            android:adjustViewBounds="true"
+            android:background="@null"
+            android:layout_margin="0dp"
+            android:visibility="invisible">
+
+
+            <FrameLayout
+                android:id="@+id/drawn_container_ten_carry"
+                app:layout_heightPercent="100%"
+                app:layout_aspectRatio = "100%"
+                android:background="@null"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+
+                <com.example.android.constraintlayoutexamples.write.CGlyphInputContainer_Simple
+                    android:id="@+id/drawn_box_ten_carry"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    app:strokeweight = "5"
+                    android:background="@null" />
+
+            </FrameLayout>
+
+        </com.example.android.constraintlayoutexamples.write.CGlyphController_Simple> -->
+
+        <!-- this is just a spacer -->
+        <TextView
+            android:layout_width="@dimen/add_subtract_digit_width"
+            android:layout_height="100sp"
+            android:background="@null"
+            android:layout_margin="0dp"
+            />
+
+    </LinearLayout>
+
+    <!-- boxes to hold carry and borrow objects -->
+    <View
+        android:id="@+id/carry_hun_box"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_1"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_bottom_of_carry"
+        app:layout_constraintTop_toTopOf="@+id/guideline_top_of_carry"
+        />
+
+    <ImageView
+        android:id="@+id/carry_borrow_ten_box"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_2"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_bottom_of_carry"
+        app:layout_constraintTop_toTopOf="@+id/guideline_top_of_carry"
+        />
+
+    <View
+        android:id="@+id/borrow_one_box"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_3"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_bottom_of_carry"
+        app:layout_constraintTop_toTopOf="@+id/guideline_top_of_carry"
+        />
+
+    <!-- Top Row, First operand -->
+    <!-- an all-encompassing box -->
+    <View
+        android:id="@+id/all_opA_box"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_1"
+        app:layout_constraintRight_toRightOf="@+id/guideline_vertical_4"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_top_of_top"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_bottom_of_top"
+        android:background="@drawable/rectangle"/>
+    <ImageView
+        android:id="@+id/hun_opA_box"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_1"
+        app:layout_constraintRight_toRightOf="@+id/guideline_vertical_2"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_top_of_top"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_bottom_of_top"
+        android:src="@drawable/inner_rectangle"
+        android:visibility="visible"
+        android:tag="opA"/>
+
+    <ImageView
+        android:id="@+id/ten_opA_box"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_2"
+        app:layout_constraintRight_toRightOf="@+id/guideline_vertical_3"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_top_of_top"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_bottom_of_top"
+        android:src="@drawable/inner_rectangle"
+        android:visibility="visible"
+        android:tag="opA"/>
+
+    <ImageView
+        android:id="@+id/one_opA_box"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_3"
+        app:layout_constraintRight_toRightOf="@+id/guideline_vertical_4"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_top_of_top"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_bottom_of_top"
+        android:src="@drawable/inner_rectangle"
+        android:visibility="visible"
+        android:tag="opA"/>
+
+    <!-- Symbol opA -->
+    <LinearLayout
+        android:id="@+id/symbol_opA_num"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintRight_toRightOf="@+id/guideline_vertical_1"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_bottom_of_top">
+
+        <TextView
+            android:id="@+id/symbol_opA_hun"
+            android:layout_width="@dimen/add_subtract_digit_width"
+            android:layout_height="fill_parent"
+            android:text="@string/digit_placeholder"
+            android:textColor="@color/addSubtractDigitColor"
+            android:textSize="@dimen/add_subtract_digit_size"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/symbol_opA_ten"
+            android:layout_width="@dimen/add_subtract_digit_width"
+            android:layout_height="fill_parent"
+            android:text="@string/digit_placeholder"
+            android:textColor="@color/addSubtractDigitColor"
+            android:textSize="@dimen/add_subtract_digit_size"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/symbol_opA_one"
+            android:layout_width="@dimen/add_subtract_digit_width"
+            android:layout_height="fill_parent"
+            android:text="@string/digit_placeholder"
+            android:textColor="@color/addSubtractDigitColor"
+            android:textSize="@dimen/add_subtract_digit_size"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+    <!-- Second Row, second operand -->
+    <!-- an all-encompassing box -->
+    <View
+        android:id="@+id/all_opB_box"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_1"
+        app:layout_constraintRight_toRightOf="@+id/guideline_vertical_4"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_top_of_mid"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_bottom_of_mid"
+        android:background="@drawable/rectangle"/>
+
+    <ImageView
+        android:id="@+id/hun_opB_box"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_1"
+        app:layout_constraintRight_toRightOf="@+id/guideline_vertical_2"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_top_of_mid"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_bottom_of_mid"
+        android:src="@drawable/inner_rectangle"
+        android:visibility="visible"
+        android:tag="opB"/>
+
+    <ImageView
+        android:id="@+id/ten_opB_box"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_2"
+        app:layout_constraintRight_toRightOf="@+id/guideline_vertical_3"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_top_of_mid"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_bottom_of_mid"
+        android:src="@drawable/inner_rectangle"
+        android:visibility="visible"
+        android:tag="opB"/>
+
+    <ImageView
+        android:id="@+id/one_opB_box"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_3"
+        app:layout_constraintRight_toRightOf="@+id/guideline_vertical_4"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_top_of_mid"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_bottom_of_mid"
+        android:src="@drawable/inner_rectangle"
+        android:visibility="visible"
+        android:tag="opB"/>
+
+    <!-- Symbol op B -->
+    <LinearLayout
+        android:id="@+id/symbol_opB_num"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintRight_toRightOf="@+id/guideline_vertical_1"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_bottom_of_mid">
+
+        <TextView
+            android:id="@+id/symbol_opB_op"
+            android:layout_width="@dimen/add_subtract_digit_width"
+            android:layout_height="fill_parent"
+            android:text="@string/operator_placeholder"
+            android:textColor="@color/addSubtractDigitColor"
+            android:textSize="@dimen/add_subtract_digit_size"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/symbol_opB_hun"
+            android:layout_width="@dimen/add_subtract_digit_width"
+            android:layout_height="fill_parent"
+            android:text="@string/digit_placeholder"
+            android:textColor="@color/addSubtractDigitColor"
+            android:textSize="@dimen/add_subtract_digit_size"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/symbol_opB_ten"
+            android:layout_width="@dimen/add_subtract_digit_width"
+            android:layout_height="fill_parent"
+            android:text="@string/digit_placeholder"
+            android:textColor="@color/addSubtractDigitColor"
+            android:textSize="@dimen/add_subtract_digit_size"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/symbol_opB_one"
+            android:layout_width="@dimen/add_subtract_digit_width"
+            android:layout_height="fill_parent"
+            android:text="@string/digit_placeholder"
+            android:textColor="@color/addSubtractDigitColor"
+            android:textSize="@dimen/add_subtract_digit_size"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+
+    <!-- Symbol Result -->
+    <LinearLayout
+        android:id="@+id/symbol_result_num"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintRight_toRightOf="@+id/guideline_vertical_1"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_top_of_bottom">
+
+
+        <cmu.xprize.comp_bigmath.DigitView
+            android:id="@+id/symbol_result_hun"
+            android:layout_width="@dimen/add_subtract_digit_width"
+            android:layout_height="fill_parent"
+            android:text="@string/digit_placeholder"
+            android:textColor="@color/addSubtractDigitColor"
+            android:textSize="@dimen/add_subtract_digit_size"
+            android:background="@drawable/soft_box"
+            android:gravity="center"
+            />
+
+        <cmu.xprize.comp_bigmath.DigitView
+            android:id="@+id/symbol_result_ten"
+            android:layout_width="@dimen/add_subtract_digit_width"
+            android:layout_height="fill_parent"
+            android:text="@string/digit_placeholder"
+            android:textColor="@color/addSubtractDigitColor"
+            android:textSize="@dimen/add_subtract_digit_size"
+            android:background="@drawable/soft_box"
+            android:gravity="center"
+            />
+
+        <cmu.xprize.comp_bigmath.DigitView
+            android:id="@+id/symbol_result_one"
+            android:layout_width="@dimen/add_subtract_digit_width"
+            android:layout_height="fill_parent"
+            android:text="@string/digit_placeholder"
+            android:textColor="@color/addSubtractDigitColor"
+            android:textSize="@dimen/add_subtract_digit_size"
+            android:background="@drawable/soft_box"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/writebox_row"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintRight_toRightOf="@+id/guideline_vertical_1"
+        app:layout_constraintTop_toTopOf="@+id/guideline_top_of_bottom">
+
+        <!-- <com.example.android.constraintlayoutexamples.write.CGlyphController_Simple
+            android:id="@+id/glyph_controller_hun"
+            android:layout_width="@dimen/add_subtract_digit_width"
+
+            android:layout_height="100sp"
+            android:adjustViewBounds="true"
+            android:background="@null"
+            android:layout_margin="0dp"
+            android:backgroundTint="@color/ndBackground">
+
+
+            <FrameLayout
+                android:id="@+id/drawn_container_hun"
+                app:layout_heightPercent="100%"
+                app:layout_aspectRatio = "100%"
+                android:background="@null"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+
+                <com.example.android.constraintlayoutexamples.write.CGlyphInputContainer_Simple
+                    android:id="@+id/drawn_box_hun"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    app:strokeweight = "5"
+                    android:background="@null" />
+
+            </FrameLayout>
+
+        </com.example.android.constraintlayoutexamples.write.CGlyphController_Simple> -->
+
+        <!-- <com.example.android.constraintlayoutexamples.write.CGlyphController_Simple
+            android:id="@+id/glyph_controller_ten"
+            android:layout_width="@dimen/add_subtract_digit_width"
+
+            android:layout_height="100sp"
+            android:adjustViewBounds="true"
+            android:background="@null"
+            android:layout_margin="0dp">
+
+
+            <FrameLayout
+                android:id="@+id/drawn_container_ten"
+                app:layout_heightPercent="100%"
+                app:layout_aspectRatio = "100%"
+                android:background="@null"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+
+                <com.example.android.constraintlayoutexamples.write.CGlyphInputContainer_Simple
+                    android:id="@+id/drawn_box_ten"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    app:strokeweight = "5"
+                    android:background="@null" />
+
+            </FrameLayout>
+
+        </com.example.android.constraintlayoutexamples.write.CGlyphController_Simple> -->
+
+        <!-- <com.example.android.constraintlayoutexamples.write.CGlyphController_Simple
+            android:id="@+id/glyph_controller_one"
+            android:layout_width="@dimen/add_subtract_digit_width"
+
+            android:layout_height="100sp"
+            android:adjustViewBounds="true"
+            android:background="@null"
+            android:layout_margin="0dp">
+
+
+            <FrameLayout
+                android:id="@+id/drawn_container_one"
+                app:layout_heightPercent="100%"
+                app:layout_aspectRatio = "100%"
+                android:background="@null"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+
+                <com.example.android.constraintlayoutexamples.write.CGlyphInputContainer_Simple
+                    android:id="@+id/drawn_box_one"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    app:strokeweight = "5"
+                    android:background="@null" />
+
+            </FrameLayout>
+
+        </com.example.android.constraintlayoutexamples.write.CGlyphController_Simple> -->
+
+    </LinearLayout>
+
+
+
+    <!-- Operator line -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="@dimen/add_subtract_line_thickness"
+        app:layout_constraintTop_toBottomOf="@id/guideline_top_of_bottom"
+        app:layout_constraintLeft_toLeftOf="@id/guideline_vertical_0"
+        app:layout_constraintRight_toRightOf="@id/guideline_vertical_1"
+        android:background="@color/addSubtractDigitColor"/>
+
+    <!-- Third Row, result (sum or difference) -->
+    <!-- an all-encompassing box -->
+    <View
+        android:id="@+id/all_result_box"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_1"
+        app:layout_constraintRight_toRightOf="@+id/guideline_vertical_4"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_top_of_bottom"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_bottom_of_bottom"
+        android:background="@drawable/rectangle"/>
+
+    <ImageView
+        android:id="@+id/hun_result_box"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_1"
+        app:layout_constraintRight_toRightOf="@+id/guideline_vertical_2"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_top_of_bottom"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_bottom_of_bottom"
+        android:src="@drawable/inner_rectangle"
+        android:visibility="visible"/>
+
+    <ImageView
+        android:id="@+id/ten_result_box"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_2"
+        app:layout_constraintRight_toRightOf="@+id/guideline_vertical_3"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_top_of_bottom"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_bottom_of_bottom"
+        android:src="@drawable/inner_rectangle"
+        android:visibility="visible"/>
+
+    <ImageView
+        android:id="@+id/one_result_box"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_3"
+        app:layout_constraintRight_toRightOf="@+id/guideline_vertical_4"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_top_of_bottom"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_bottom_of_bottom"
+        android:src="@drawable/inner_rectangle"
+        android:visibility="visible"/>
+
+    <!-- Carry -->
+    <cmu.xprize.comp_bigmath.MovableImageView
+        android:id="@+id/carry_hun"
+        android:src="@drawable/blue_100"
+        android:layout_width="@dimen/add_subtract_100_size"
+        android:layout_height="@dimen/add_subtract_100_size"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/carry_hun_box"
+        app:layout_constraintTop_toTopOf="@+id/carry_hun_box"
+        />
+
+    <cmu.xprize.comp_bigmath.MovableImageView
+        android:id="@+id/carry_ten"
+        android:src="@drawable/blue_10_h"
+        android:layout_width="@dimen/add_subtract_10_width"
+        android:layout_height="@dimen/add_subtract_10_height"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/carry_borrow_ten_box"
+        app:layout_constraintTop_toTopOf="@+id/carry_borrow_ten_box"/>
+
+    <!-- borrowing in tens column -->
+    <cmu.xprize.comp_bigmath.MovableImageView
+        android:id="@+id/borrow_hun_helper"
+        android:layout_width="@dimen/add_subtract_100_size"
+        android:layout_height="@dimen/add_subtract_100_size"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/carry_borrow_ten_box"
+        app:layout_constraintTop_toTopOf="@+id/carry_borrow_ten_box"/>
+
+    <include android:id="@+id/borrow_tens" layout="@layout/concrete_ten_vertical"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@+id/carry_borrow_ten_box"
+        app:layout_constraintTop_toTopOf="@+id/carry_borrow_ten_box"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        />
+
+    <!-- borrowing in tens column -->
+    <cmu.xprize.comp_bigmath.MovableImageView
+        android:id="@+id/borrow_ten_helper"
+        android:layout_width="@dimen/add_subtract_10_width"
+        android:layout_height="@dimen/add_subtract_10_height"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/borrow_one_box"
+        app:layout_constraintTop_toTopOf="@+id/borrow_one_box"/>
+
+    <include android:id="@+id/borrow_ones" layout="@layout/concrete_one_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@+id/borrow_one_box"
+        app:layout_constraintTop_toTopOf="@+id/borrow_one_box"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        />
+
+
+
+    <!-- Squares -->
+    <!-- Hundreds -->
+    <include android:id="@+id/opA_huns" layout="@layout/concrete_hun_row"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@+id/hun_opA_box"
+        app:layout_constraintTop_toTopOf="@+id/hun_opA_box"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        />
+
+    <!-- end top block of hundreds -->
+
+    <!-- OpB hundreds -->
+    <include android:id="@+id/opB_huns" layout="@layout/concrete_hun_row"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@+id/hun_opB_box"
+        app:layout_constraintTop_toTopOf="@+id/hun_opB_box"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        />
+
+    <include android:id="@+id/opB_huns_helpers" layout="@layout/concrete_hun_helper_row"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@+id/hun_opB_box"
+        app:layout_constraintTop_toTopOf="@+id/hun_opB_box"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        />
+
+    <!-- Result hundreds -->
+    <include android:id="@+id/result_huns_row1" layout="@layout/concrete_hun_row"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@+id/hun_result_box"
+        app:layout_constraintTop_toTopOf="@+id/hun_result_box"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        />
+
+    <include android:id="@+id/result_huns_row2" layout="@layout/concrete_hun_row"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@+id/hun_result_box"
+        app:layout_constraintTop_toBottomOf="@+id/result_huns_row1"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        />
+
+    <include android:id="@+id/result_huns_row1_helpers" layout="@layout/concrete_hun_helper_row"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@+id/result_huns_row1"
+        app:layout_constraintTop_toTopOf="@+id/result_huns_row1"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        />
+
+    <include android:id="@+id/result_huns_row2_helpers" layout="@layout/concrete_hun_helper_row"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@+id/result_huns_row2"
+        app:layout_constraintTop_toTopOf="@+id/result_huns_row2"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        />
+
+
+
+    <!-- Top Tens -->
+    <include android:id="@+id/opA_tens" layout="@layout/concrete_ten_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layout_constraintLeft_toLeftOf="@+id/ten_opA_box"
+        app:layout_constraintTop_toTopOf="@+id/ten_opA_box"/>
+
+    <!-- Mid Tens -->
+    <include android:id="@+id/opB_tens" layout="@layout/concrete_ten_vertical"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:clipChildren="false"
+       android:clipToPadding="false"
+       app:layout_constraintLeft_toLeftOf="@+id/ten_opB_box"
+       app:layout_constraintTop_toTopOf="@+id/ten_opB_box"/>
+
+    <include android:id="@+id/opB_tens_helpers" layout="@layout/concrete_ten_vertical_helpers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layout_constraintLeft_toLeftOf="@+id/ten_opB_box"
+        app:layout_constraintTop_toTopOf="@+id/ten_opB_box"/>
+
+    <!-- Result Tens -->
+    <include android:id="@+id/result_tens" layout="@layout/concrete_ten_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layout_constraintLeft_toLeftOf="@+id/ten_result_box"
+        app:layout_constraintTop_toTopOf="@+id/ten_result_box"/>
+
+    <include android:id="@+id/result_tens_helpers" layout="@layout/concrete_ten_vertical_helpers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layout_constraintLeft_toLeftOf="@+id/ten_result_box"
+        app:layout_constraintTop_toTopOf="@+id/ten_result_box"/>
+
+
+    <!-- Top Ones -->
+    <include android:id="@+id/opA_ones" layout="@layout/concrete_one_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layout_constraintLeft_toLeftOf="@+id/one_opA_box"
+        app:layout_constraintTop_toTopOf="@+id/one_opA_box" />
+
+    <!-- Mid Ones -->
+    <include android:id="@+id/opB_ones" layout="@layout/concrete_one_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layout_constraintLeft_toLeftOf="@+id/one_opB_box"
+        app:layout_constraintTop_toTopOf="@+id/one_opB_box" />
+
+    <include android:id="@+id/opB_ones_helpers" layout="@layout/concrete_one_horizontal_helpers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layout_constraintLeft_toLeftOf="@+id/one_opB_box"
+        app:layout_constraintTop_toTopOf="@+id/one_opB_box" />
+
+    <!-- Result Ones -->
+    <include android:id="@+id/result_ones" layout="@layout/concrete_one_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layout_constraintLeft_toLeftOf="@+id/one_result_box"
+        app:layout_constraintTop_toTopOf="@+id/one_result_box" />
+
+    <include android:id="@+id/result_ones_helpers" layout="@layout/concrete_one_horizontal_helpers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layout_constraintLeft_toLeftOf="@+id/one_result_box"
+        app:layout_constraintTop_toTopOf="@+id/one_result_box" />
+
+    <!-- MATHFIX_LAYOUT (1) NEXT NEXT NEXT add another row of ones that only appear on carry-->
+
+    <!-- DEBUG OPTIONS -->
+    <LinearLayout
+        android:id="@+id/debug_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+
+        <Button
+            android:id="@+id/debug_carry_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="show carry hun"
+            android:onClick="showCarryHun"
+            />
+
+        <Button
+            android:id="@+id/debug_carry_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="show carry ten"
+            android:onClick="showCarryTen"
+            />
+
+        <Button
+            android:id="@+id/debug_subtract_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="minuend to result"
+            android:onClick="moveMinuendToResult"/>
+
+        <Button
+            android:id="@+id/debug_subtract_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="borrow hun"
+            android:onClick="borrowHun"/>
+
+        <Button
+            android:id="@+id/debug_subtract_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="borrow ten"
+            android:onClick="borrowTen"/>
+
+        <Button
+            android:id="@+id/debug_subtract_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="borrow hun symbol"
+            android:onClick="borrowHunSymbol"/>
+
+        <Button
+            android:id="@+id/debug_subtract_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="borrow ten symbol"
+            android:onClick="borrowTenSymbol"/>
+
+    </LinearLayout>
+
+    <include layout="@layout/write_controller"
+        android:visibility="invisible"
+        android:layout_width="@dimen/writebox_master_size"
+        android:layout_height="@dimen/writebox_master_size"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,445 @@
+{
+  "animatorMap": {
+    "COMMENT": "BigMath",
+
+    "bigmath": {
+
+      "type": "ANIMATOR",
+      "title": "BigMath",
+      "COMMENT": "BigMath",
+      "version": "1.0.0",
+      "rootnode": "INTRO",
+
+      "nodeMap": {
+
+        "COMMENT": "@@@@@  CNodes  @@@@@",
+
+        "INTRO": {
+          "type": "NODE",
+          "COMMENT": "Intro Clip - we only ever visit this node once",
+          "maptype":"moduleMap",
+          "mapname": "INTRO",
+          "preenter": ["SET_VERSION"],
+          "preexit": [],
+          "edges": [
+            {
+              "constraint": "",
+              "edge": "NEXT_PROBLEM"
+            }
+          ]
+        },
+
+        "NEXT_PROBLEM": {
+          "type": "NODE",
+          "COMMENT": "This node presents the next problem in the data source.",
+          "maptype":"moduleMap",
+          "mapname": "NEXTPROBLEM",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "", "edge": "BEGIN_PROBLEM_REGULAR"},
+            {"constraint": "FTR_IS_CARRY", "edge": "BEGIN_PROBLEM_CARRY"},
+            {"constraint": "FTR_IS_BORROW", "edge": "BEGIN_PROBLEM_BORROW"}
+          ]
+        },
+
+        "BEGIN_PROBLEM_REGULAR": {
+          "type": "NODE",
+          "COMMENT": "Regular problem with no carry or borrow.",
+          "maptype":"moduleMap",
+          "mapname": "EMPTY",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "", "edge": "NEXT_DIGIT_R"}
+          ]
+        },
+
+        "NEXT_DIGIT_R":{
+          "COMMENT":"This node moves to the next digit in the problem.",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "NEXTDIGIT",
+          "preenter":[],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"","edge":"USER_INPUT_R"}
+          ]
+        },
+
+        "USER_INPUT_R": {
+          "COMMENT":"Preps the tutor for user input, then waits for user input.",
+          "type": "node",
+          "maptype":"moduleMap",
+          "mapname": "USERINPUT",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "FTR_CORRECT", "edge": "CORRECT_FEEDBACK_R"},
+            {"constraint": "", "edge": "WRONG_FEEDBACK_R"}
+          ]
+        },
+
+        "CORRECT_FEEDBACK_R": {
+          "COMMENT": "Provides feedback for correct response.",
+          "type": "node",
+          "maptype": "moduleMap",
+          "mapname": "CORRECTFEEDBACK",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "FTR_PROBLEM_DONE", "edge": "PROBLEM_CORRECT_R"}, // if done with problem, continue to next problem
+            {"constraint": "FTR_PROBLEM_HAS_MORE", "edge": "NEXT_DIGIT_R"}   // if not done, progress to next digit
+          ]
+        },
+
+        "WRONG_FEEDBACK_R": {
+          "COMMENT": "Provides feedback for wrong response.",
+          "type": "node",
+          "maptype": "moduleMap",
+          "mapname": "WRONGFEEDBACK",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "", "edge": "USER_INPUT_R"} // go back to wait for user input
+          ]
+        },
+
+        "PROBLEM_CORRECT_R": {
+          "COMMENT": "When user has completed a problem.",
+          "type": "node",
+          "maptype": "moduleMap",
+          "mapname": "PROBLEMCORRECT",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "FTR_MORE_PROBLEMS", "edge": "NEXT_PROBLEM"}, // if more problems, go to next problem
+            {"constraint": "FTR_PROBLEMS_DONE", "edge": "NEXT_SCENE"}    // if problems done, go to next scene (aka finish)
+          ]
+        },
+
+        // ==========================
+        // ====== BEGIN CARRY  ======
+        // ==========================
+
+        "BEGIN_PROBLEM_CARRY": {
+          "type": "NODE",
+          "COMMENT": "Regular problem with no carry or borrow.",
+          "maptype":"moduleMap",
+          "mapname": "EMPTY",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "", "edge": "NEXT_DIGIT_C"}
+          ]
+        },
+
+        // MATH_AG (c)
+        // MATH_AG ONE_DIGIT_C
+        // MATH_AG (c) TAP_THINGIES...
+        // MATH_AG (c) "Write a one HERE... "
+        // MATH_AG (s) sound files are here
+        // MATH_AG (s) https://drive.google.com/drive/u/0/folders/1_ZaJmkW7rioIz7gIovIfdH6OQhgXyvQw
+        "NEXT_DIGIT_C":{
+          "COMMENT":"This node moves to the next digit in the problem.",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "NEXTDIGIT",
+          "preenter":[],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"","edge":"USER_INPUT_C"}
+          ]
+        },
+
+        "USER_INPUT_C": {
+          "COMMENT":"Preps the tutor for user input, then waits for user input.",
+          "type": "node",
+          "maptype":"moduleMap",
+          "mapname": "USERINPUT",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "FTR_CORRECT", "edge": "CORRECT_FEEDBACK_C"},
+            {"constraint": "", "edge": "WRONG_FEEDBACK_C"}
+          ]
+        },
+
+        "CORRECT_FEEDBACK_C": {
+          "COMMENT": "Provides feedback for correct response.",
+          "type": "node",
+          "maptype": "moduleMap",
+          "mapname": "CORRECTFEEDBACK",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "FTR_PROBLEM_DONE", "edge": "PROBLEM_CORRECT_C"}, // if done with problem, continue to next problem
+            {"constraint": "FTR_PROBLEM_HAS_MORE", "edge": "NEXT_DIGIT_C"}   // if not done, progress to next digit
+          ]
+        },
+
+        "WRONG_FEEDBACK_C": {
+          "COMMENT": "Provides feedback for wrong response.",
+          "type": "node",
+          "maptype": "moduleMap",
+          "mapname": "WRONGFEEDBACK",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "", "edge": "USER_INPUT_C"} // go back to wait for user input
+          ]
+        },
+
+        "PROBLEM_CORRECT_C": {
+          "COMMENT": "When user has completed a problem.",
+          "type": "node",
+          "maptype": "moduleMap",
+          "mapname": "PROBLEMCORRECT",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "FTR_MORE_PROBLEMS", "edge": "NEXT_PROBLEM"}, // if more problems, go to next problem
+            {"constraint": "FTR_PROBLEMS_DONE", "edge": "NEXT_SCENE"}    // if problems done, go to next scene (aka finish)
+          ]
+        },
+
+        "BEGIN_PROBLEM_BORROW": {
+          "type": "NODE",
+          "COMMENT": "Regular problem with no carry or borrow.",
+          "maptype":"moduleMap",
+          "mapname": "EMPTY",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "", "edge": "NEXT_DIGIT_B"}
+          ]
+        },
+
+        "NEXT_DIGIT_B":{
+          "COMMENT":"This node moves to the next digit in the problem.",
+          "type":"node",
+          "maptype":"moduleMap",
+          "mapname": "NEXTDIGIT",
+          "preenter":[],
+          "preexit" :[],
+          "edges":
+          [
+            {"constraint":"","edge":"USER_INPUT_B"}
+          ]
+        },
+
+        "USER_INPUT_B": {
+          "COMMENT":"Preps the tutor for user input, then waits for user input.",
+          "type": "node",
+          "maptype":"moduleMap",
+          "mapname": "USERINPUT",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "FTR_CORRECT", "edge": "CORRECT_FEEDBACK_B"},
+            {"constraint": "", "edge": "WRONG_FEEDBACK_B"}
+          ]
+        },
+
+        "CORRECT_FEEDBACK_B": {
+          "COMMENT": "Provides feedback for correct response.",
+          "type": "node",
+          "maptype": "moduleMap",
+          "mapname": "CORRECTFEEDBACK",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "FTR_PROBLEM_DONE", "edge": "PROBLEM_CORRECT_B"}, // if done with problem, continue to next problem
+            {"constraint": "FTR_PROBLEM_HAS_MORE", "edge": "NEXT_DIGIT_B"}   // if not done, progress to next digit
+          ]
+        },
+
+        "WRONG_FEEDBACK_B": {
+          "COMMENT": "Provides feedback for wrong response.",
+          "type": "node",
+          "maptype": "moduleMap",
+          "mapname": "WRONGFEEDBACK",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "", "edge": "USER_INPUT_B"} // go back to wait for user input
+          ]
+        },
+
+        "PROBLEM_CORRECT_B": {
+          "COMMENT": "When user has completed a problem.",
+          "type": "node",
+          "maptype": "moduleMap",
+          "mapname": "PROBLEMCORRECT",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+            {"constraint": "FTR_MORE_PROBLEMS", "edge": "NEXT_PROBLEM"}, // if more problems, go to next problem
+            {"constraint": "FTR_PROBLEMS_DONE", "edge": "NEXT_SCENE"}    // if problems done, go to next scene (aka finish)
+          ]
+        },
+
+        "NEXT_SCENE": {
+          "type": "NODE",
+          "COMMENT": "When module is complete - move to next scene",
+          "maptype": "actionMap",
+          "mapname": "NEXTSCENE",
+          "preenter": [],
+          "preexit": [],
+          "edges": [
+
+          ]
+        }
+
+      },
+
+      "moduleMap": {
+
+        "COMMENT": "@@@@@  CModules  @@@@@",
+
+        "INTRO": {
+          "type": "MODULE",
+          "reuse":true,
+          "COMMENT": "???",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#INTRO:String", "features":""},
+            // welcome to math
+            // TEMP
+            {"name":"Introduction Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets add some numbers now.mp3",       "soundpackage":"temp", "volume": 1.0, "mode":"flow", "features": ""}
+            ]
+        },
+
+        "NEXTPROBLEM": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "???",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#NEXTPROBLEM:String", "features":""},
+
+            {"type": "COMMAND", "id": "SBigMath", "method": "next", "features": ""}
+          ]
+        },
+
+        "EMPTY": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "???",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#EMPTY:String", "features":""}
+          ]
+        },
+
+        "NEXTDIGIT": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "???",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#NEXTDIGITs:String", "features":""},
+            {"type": "COMMAND", "id": "SBigMath", "method": "nextDigit", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each one to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each ten to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN"}
+
+
+            // tap the numbers
+
+          ]
+        },
+
+        "USERINPUT": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "???",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#USERINPUT:String", "features":""},
+            {"type": "COMMAND", "cmd": "WAIT"}
+          ]
+        },
+
+        "CORRECTFEEDBACK": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "???",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#CORRECTFEEDBACK:String", "features":""},
+            // Good!
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Right.mp3", "soundpackage":"temp", "volume": 1.0, "mode":"flow", "features": ""}
+          ]
+        },
+
+        "WRONGFEEDBACK": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "???",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#WRONGFEEDBACK:String", "features":""},
+
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Not quite try again.mp3",       "soundpackage":"temp", "volume": 1.0, "mode":"flow", "features": ""}
+          ]
+        },
+
+        "PROBLEMCORRECT": {
+          "type": "MODULE",
+          "reuse": true,
+          "COMMENT": "???",
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#PROBLEMCORRECT:String", "features":""},
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "highlightAll", "features":""},
+
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3", "soundpackage":"temp", "volume": 1.0, "mode":"flow", "features": ""}
+          ]
+        }
+
+      },
+
+      "actionMap": {
+
+        "COMMENT": "@@@@@  CActions @@@@@ ",
+
+        "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
+
+        "NEXTNODE": {"type": "COMMAND", "cmd": "NEXT"},
+
+        "NEXTSCENE": {"type":"COMMAND", "cmd": "NEXTSCENE"}
+
+      },
+
+      "constraintMap": {
+
+        "COMMENT": "@@@@@  CConstraints @@@@@ ",
+
+        "FTR_CORRECT": {
+          "type": "CONDITION",
+          "test": "FTR_CORRECT"
+        },
+
+        "FTR_WRONG": {
+          "type": "CONDITION",
+          "test": "FTR_WRONG"
+        },
+
+        "FTR_PROBLEM_DONE": {
+          "type": "CONDITION",
+          "test": "FTR_PROBLEM_DONE"
+        },
+
+        "FTR_PROBLEM_HAS_MORE": {
+          "type": "CONDITION",
+          "test": "FTR_PROBLEM_HAS_MORE"
+        },
+
+        "FTR_MORE_PROBLEMS": {
+          "type": "CONDITION",
+          "test": "FTR_MORE_PROBLEMS"
+        },
+
+        "FTR_PROBLEMS_DONE": {
+          "type": "CONDITION",
+          "test": "FTR_PROBLEMS_DONE"
+        }
+
+      }
+    }
+  }
+}

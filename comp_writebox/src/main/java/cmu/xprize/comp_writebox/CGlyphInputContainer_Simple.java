@@ -1211,10 +1211,11 @@ public class CGlyphInputContainer_Simple extends View implements IGlyphSource, O
             _drawGlyph.writeGlyphToLog("SHAPEREC_ALPHANUM", "", _sampleExpected, _ltkPlusResult);
 
         isValid = mWritingComponent.updateStatus(mGlyphController, _ltkPlusCandidates); // MATHFIX_WRITE simplify...
+        mWritingComponent.updateStatus(_ltkPlusResult); // MATHFIX_WRITE yikes! only one of these should be called
 
         // Stop listening to glyph draw events - when there is a glyph
         //
-        inhibitInput(true);
+        // inhibitInput(true);
 
         // Reconstitute the path in the correct orientation after LTK+ post-processing
         //
