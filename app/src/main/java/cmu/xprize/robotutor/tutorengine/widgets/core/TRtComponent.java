@@ -515,6 +515,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
                 String levelFolder = levelval[0];
 
+                // ALAN_HILL (5) here is how to load the image...
                 DATASOURCEPATH  = TCONST.DOWNLOAD_RT_TUTOR + "/" +  TCONST.STORY_ASSETS + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
                 STORYSOURCEPATH = DATASOURCEPATH + levelFolder + "/" + storyFolder + "/";
 

@@ -433,6 +433,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
                 in = JSON_Helper.assetManager().open(mAsset + data[mCurrPage].image); // ZZZ load image
             }
 
+            // ALAN_HILL (5) here is how to load the image...... NEXT NEXT NEXT
             mPageImage.setImageBitmap(BitmapFactory.decodeStream(in));
 
         } catch (IOException e) {

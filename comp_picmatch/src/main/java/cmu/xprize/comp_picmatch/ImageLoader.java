@@ -21,6 +21,7 @@ public class ImageLoader {
             this.context = context;
         }
 
+        // // ALAN_HILL (5) here is how to load the image... NEXT NEXT NEXT replace this...
         public RequestLoader loadDrawable(String imagePath) {
             this.imageResource = context.getResources().getIdentifier(imagePath, "drawable", context.getPackageName());
             return this;
