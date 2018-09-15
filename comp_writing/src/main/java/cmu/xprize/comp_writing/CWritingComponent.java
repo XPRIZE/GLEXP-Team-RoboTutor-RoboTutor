@@ -528,12 +528,15 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 updateSentenceEditSequence();
                 mListWordsInput = getUpdatedListWordsInput(mListWordsInput, mAlignedSourceSentence,mAlignedTargetSentence);
 
+                //since the mListWordsInput is now updated, the parameters for mActiveWord have also changed.
+                mActiveWord = mListWordsAnswer.get(currentWordIndex);
+
                 //if the word is complete, release the ON_CORRECT feature.
                 String writtenActiveWord = mActiveWord.getWrittenWordString();
-                String writtenAnswerWord = mListWordsAnswer.get(currentWordIndex).getWordAnswer();
+                String writtenAnswerWord = mActiveWord.getWordAnswer();
                 boolean writtenWordIsCorrect = writtenActiveWord.equals(writtenAnswerWord);
                 if(writtenWordIsCorrect){
-                    applyBehavior(WR_CONST.ON_CORRECT);
+                    applyBehavior(WR_CONST.ON_CORRECT); //should increment the current word index and the mActiveWord also thus changes.
                 }
             }
 
@@ -1018,6 +1021,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 //if the word is correct update its color
                 if (wordIsCorrect){
                     //turn blue
+                    //release the oncorrect behavior
+                    applyBehavior(WR_CONST.ON_CORRECT);
                     inputWord.updateWordResponse();
                 }
 
