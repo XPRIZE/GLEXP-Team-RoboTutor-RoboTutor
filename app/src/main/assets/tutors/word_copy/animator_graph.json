@@ -371,10 +371,10 @@
             // functions to be called for sentence writing
             // 1. word level feedback (the three things below and clearing the attempt index)
 
-            {"name": "deactivate edit mode for the word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "deactivateEditModeInActiveWord", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD&FTR_WORD_CORRECT"},
-            {"name": "inhibit input for the word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitWordInput", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD&FTR_WORD_CORRECT"},
-            {"name": "update the response colors for each letter in word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "updateLettersWordResponse", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD"},
-            {"name": "increment the current word index.", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "incrementCurrentWordIndex", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD&FTR_WORD_CORRECT"},
+//            {"name": "deactivate edit mode for the word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "deactivateEditModeInActiveWord", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD&FTR_WORD_CORRECT"},
+//            {"name": "inhibit input for the word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitWordInput", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD&FTR_WORD_CORRECT"},
+//            {"name": "update the response colors for each letter in word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "updateLettersWordResponse", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD"},
+//            {"name": "increment the current word index.", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "incrementCurrentWordIndex", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD&FTR_WORD_CORRECT"},
 
 
             //amogh comment - clearing attempt feature still holds for words - need to recheck for sentence writing
@@ -631,7 +631,7 @@
             {"name": "SHOW sample", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "SHOW_SAMPLE:String", "features":"FTR_TRACE&!FTR_ATTEMPT_4"},
 
             {"name": "Enable Input",  "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput",       "parms": "FALSE:Boolean", "features":""},
-            {"name": "Enable Replay", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "enableReplayButton", "parms": "TRUE:Boolean",  "features":"FTR_DICTATION"}
+            {"name": "Enable Replay", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "enableReplayButton", "parms": "TRUE:Boolean",  "features":"FTR_DICTATION"},
 
 
             //sentence level 4th attempt
@@ -639,7 +639,7 @@
             {"name": "SHOW sample for word",          "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showSampleForCurrentWord",  "parms": "",    "features":"FTR_SEN&FTR_SEN_WRD&FTR_ATTEMPT_4"},
 
             //2. sentence level feedback
-            {"name": "SHOW sample for word",          "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showSampleForCurrentWord",  "parms": "",    "features":"FTR_SEN&FTR_SEN_SEN&FTR_ATTEMPT_4"},
+            {"name": "SHOW sample for word",          "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showSampleForCurrentWord",  "parms": "",    "features":"FTR_SEN&FTR_SEN_SEN&FTR_ATTEMPT_4"}
 
 
 

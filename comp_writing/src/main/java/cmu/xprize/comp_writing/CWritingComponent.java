@@ -1004,6 +1004,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         resetHesitationFeature();
     }
 
+    public void temporaryOnCorrect(){
+        deactivateEditModeInActiveWord();
+        inhibitWordInput();
+        updateLettersWordResponse();
+        incrementCurrentWordIndex();
+    }
+
     public void evaluateSentenceWordLevel(){
 
         mWrittenSentence = getWrittenSentence();
@@ -1020,7 +1027,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         //sentence not finished.
         else{
             //starting from the currentWordIndex (since obviously the earlier ones have been evaluated), evaluate words in succession, if correct, turn blue and inhibit input, if wrong, set as mActiveWord, currentWord Index, increase attempt level and disable going to future words.
-            for(int i = currentWordIndex; i < mListWordsInput.size(); i++){
+            for(int i = currentWordIndex; i < mListWordsInput.size(); i++) {
 
                 Word inputWord = mListWordsInput.get(i);
 
@@ -1034,36 +1041,53 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //                    wordIsCorrect = true;
 //                }
 //                else{
-                    wordIsCorrect = mActiveWord.updateInputWordCorrectStatus(i); //checks indices and strings inside
+                wordIsCorrect = mActiveWord.updateInputWordCorrectStatus(i); //checks indices and strings inside
 //                }
 
                 //if the word is correct update its color
-                if (wordIsCorrect){
+                if (wordIsCorrect) {
                     //turn blue
                     //release the oncorrect behavior
                     publishFeature(WR_CONST.FTR_WORD_CORRECT);
                     applyBehavior(WR_CONST.ON_CORRECT);
+                    temporaryOnCorrect();
 //                    inputWord.updateWordResponse(); //goes in the animator graph
                 }
 
                 //if the word is incorrect, update its color to red and increase attempt, set current word as this, inhibit others.
-                else{
+                else {
 
                     //if this word has already been attempted(> 1 letter written), increment the word's attempt level and release corresponding feature
-                    if(mActiveWord.getWrittenWordString().length() > 1){
+                    if (mActiveWord.getWrittenWordString().length() > 1) {
                         mActiveWord.activateEditMode(); //put in animator graph
                         updateAttemptFeature();
                         applyBehavior(WR_CONST.ON_ERROR);
                     }
 
                     //otherwise it just means that the previous words were correct and you are beginning to write  this word, mActiveWord is set to this word, but no features are to bbe released
-                    else{
+                    else {
 
                     }
 
                     // break so that it stops at the first incorrect word that is there.
                     break;
                 }
+
+                //move to the next iteration only when on_correct is applied
+//                while (currentWordIndex == i){
+//                    try {
+//                    wait();
+//                    }
+//                    catch (InterruptedException ex) {
+//                    Thread.currentThread().interrupt();
+//                    }
+//                }
+//                while(true){
+//                    int j = 2 *8;
+//                    if(currentWordIndex != i){
+//                        break;
+//                    }
+//                }
             }
         }
 
