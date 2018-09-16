@@ -477,13 +477,15 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             updateSentenceEditSequence();
             mListWordsInput = getUpdatedListWordsInput(mListWordsInput, mAlignedSourceSentence,mAlignedTargetSentence);
             mActiveWord = mListWordsInput.get(currentWordIndex);
-            //if the word is complete, release the ON_CORRECT feature.
-            String writtenActiveWord = mActiveWord.getWrittenWordString();
-            String writtenAnswerWord = mActiveWord.getWordAnswer();
-            boolean writtenWordIsCorrect = writtenActiveWord.equals(writtenAnswerWord);
-            if(writtenWordIsCorrect){
-                applyBehavior(WR_CONST.ON_CORRECT);
-            }
+
+            evaluateSentenceWordLevel();
+//            //if the word is complete, release the ON_CORRECT feature.
+//            String writtenActiveWord = mActiveWord.getWrittenWordString();
+//            String writtenAnswerWord = mActiveWord.getWordAnswer();
+//            boolean writtenWordIsCorrect = writtenActiveWord.equals(writtenAnswerWord);
+//            if(writtenWordIsCorrect){
+//                applyBehavior(WR_CONST.ON_CORRECT);
+//            }
         }
 
         //when cannot delete

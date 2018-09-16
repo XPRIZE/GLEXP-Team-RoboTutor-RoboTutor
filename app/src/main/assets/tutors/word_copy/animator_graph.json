@@ -446,6 +446,11 @@
 
             {"name": "VERY GOOD - feedback", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Very good.mp3",          "soundpackage": "default","mode":"flow", "features":"!FTR_HAD_ERRORS"},
 
+
+            //sentence_writing_behaviors
+            {"name": "Now the next sentence", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Now the next sentence.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN"},
+
+
             // If there were errors we wait until the RIPPLE demo completes (i.e. REPLAY_COMPLETE) which fires a NEXT_NODE in this queue
             // TODO: find a way to manage multiple contingencies. e.g. here we need to wait until the word is spoken and the replay is complete.
             // TODO: Note that this problem goes away when using a game engine to drive the interactions.
