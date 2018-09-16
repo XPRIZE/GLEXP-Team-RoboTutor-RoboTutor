@@ -124,6 +124,7 @@ public class WR_CONST {
     public static final String FTR_INSERT = "FTR_INSERT";
     public static final String FTR_DELETE = "FTR_DELETE";
     public static final String FTR_REPLACE = "FTR_REPLACE";
+    public static final String FTR_PERIOD = "FTR_PERIOD";
 //    public static final String FTR_INSERT = "FTR_INSERT";
 //    public static final String FTR_INSERT = "";
 //    public static final String FTR_INSERT = "";

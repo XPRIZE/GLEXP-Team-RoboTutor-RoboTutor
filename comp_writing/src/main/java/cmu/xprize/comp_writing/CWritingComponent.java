@@ -1106,8 +1106,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 //if the word is incorrect, update its color to red and increase attempt, set current word as this, inhibit others.
                 else {
 
-                    //if this word has already been attempted(> 1 letter written), increment the word's attempt level and release corresponding feature
-                    if (mActiveWord.getWrittenWordString().length() > 1) {
+                    //if this word has already been attempted(ie the case when 1 space has not been deliberately left while continuing writing), increment the word's attempt level (as error) and release corresponding feature
+                    boolean activeWordLengthIsOne = mActiveWord.getWrittenWordString().length() == 1 ;
+                    boolean previousIsSpace = mWrittenSentence.charAt(mActiveWord.getWordIndices().get(0) - 1) == ' ' ;
+                    if (!(activeWordLengthIsOne && previousIsSpace)) {
                         mActiveWord.activateEditMode(); //put in animator graph
                         updateAttemptFeature();
                         applyBehavior(WR_CONST.ON_ERROR);
@@ -2778,13 +2780,16 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             publishFeature(WR_CONST.FTR_INSERT);
 
             //insert spacing
-            if(editValue.equals("")){
+            if(editValue.equals(" ")){
                 publishFeature(WR_CONST.FTR_AUDIO_SPACE);
             }
 
             //insert punctuation
             else if (punctuationSymbols.contains(editValue)){
                 publishFeature(WR_CONST.FTR_AUDIO_PUNC);
+                if(editValue == "."){
+                    publishFeature(WR_CONST.FTR_PERIOD);
+                }
                 publishValue(WR_CONST.AUDIO_PUNCTUATION, punctuationToString.get(editValue));
             }
 
@@ -2805,7 +2810,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             String prev = String.valueOf(e.getPrevious());
 
             //replace with space
-            if(editValue.equals("")){
+            if(editValue.equals(" ")){
                 publishFeature(WR_CONST.FTR_AUDIO_SPACE);
             }
 
@@ -2856,18 +2861,26 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         else{
 
         }
+        int i = 1;
 
     }
 
-    public void releaseFirstEditAudioFeatures(){
-        if (activityFeature.contains("FTR_SEN_WRD")){
-            int wordAttempts = mActiveWord.getAttempt();
-//            if(wordAttempts > 0){  // the number of attempts can be passed through the animator graph itself.
-                mActiveWord.releaseFirstWordEditAudioFeatures();
-//            }
-        }
 
+    public void releaseFirstEditAudioFeatures() {
+        EditOperation firstEdit = getFirstEditOperation(mWrittenSentence, mAnswer);
+        releaseAudioFeatures(firstEdit);
     }
+//    public void releaseFirstEditAudioFeatures(){
+//        if (activityFeature.contains("FTR_SEN_WRD")){
+//            int wordAttempts = mActiveWord.getAttempt();
+////            if(wordAttempts > 0){  // the number of attempts can be passed through the animator graph itself.
+//                mActiveWord.releaseFirstWordEditAudioFeatures();
+////            }
+//        }
+
+//    }
+
+//    public void
 
     //amogh added ends
 
