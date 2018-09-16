@@ -456,8 +456,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
     }
 
-    public void showSampleForActiveWord(){
-        mActiveWord.showSamples(true);
+    public void showSampleForActiveWord(Boolean show){
+        mActiveWord.showSamples(show);
     }
 
     //amogh added ends
@@ -776,6 +776,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                             // if this correct response makes the sentence correct,
                             boolean writtenSentenceIsCorrect = mWrittenSentence.equals(mAnswer);
                             if (writtenSentenceIsCorrect) {
+                                temporaryOnCorrect();
                                 applyBehavior(WR_CONST.DATA_ITEM_COMPLETE);
                             }
 
@@ -788,9 +789,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //                                String writtenAnswerWord = mListWordsAnswer.get(currentWordIndex).getWordAnswer();
 //                                boolean writtenWordIsCorrect = writtenActiveWord.equals(writtenAnswerWord);
 //                                if(writtenWordIsCorrect){
-                                    publishFeature(WR_CONST.FTR_WORD_CORRECT);
-                                    applyBehavior(WR_CONST.ON_CORRECT);
+//                                    publishFeature(WR_CONST.FTR_WORD_CORRECT);
+//                                    applyBehavior(WR_CONST.ON_CORRECT);
 //                                }
+                                // not very sure if this should come.
+                                evaluateSentenceWordLevel();
                             }
                         }
                         // else (if incorrect letter drawn, but correct place chosen for replacement), revert the glyph to what it was, then increase attempt and release on error behavior.
@@ -1055,6 +1058,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         incrementCurrentWordIndex();
     }
 
+    //goes over the unverified words and releases apt features.
     public void evaluateSentenceWordLevel(){
 
         mWrittenSentence = getWrittenSentence();
@@ -1065,6 +1069,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         // when the written sentence is correct, apply DATA_COMPLETE_ITEM behavior
         boolean writtenSentenceIsCorrect = mWrittenSentence.equals(mAnswer);
         if (writtenSentenceIsCorrect) {
+            temporaryOnCorrect();
             applyBehavior(WR_CONST.DATA_ITEM_COMPLETE);
         }
 
