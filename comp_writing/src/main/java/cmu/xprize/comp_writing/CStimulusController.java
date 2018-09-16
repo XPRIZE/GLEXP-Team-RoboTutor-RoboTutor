@@ -168,6 +168,7 @@ public class CStimulusController extends RelativeLayout implements IEventListene
         mRecogChar = (TextView)findViewById(R.id.recog_char);
         mUnderline = (ImageView)findViewById(R.id.recog_box);
         mUnderlineDrawable = (GradientDrawable) mUnderline.getDrawable();
+        mUnderlineDrawable.setStroke(TCONST.STROKE_STIM_UNDERLINE, TCONST.colorMap.get(TCONST.COLORNORMAL));
 
         // Font Face selection
         selectFont(TCONST.GRUNDSCHRIFT);
@@ -224,8 +225,8 @@ public class CStimulusController extends RelativeLayout implements IEventListene
             mUnderlineDrawable.setStroke(TCONST.STROKE_STIM_UNDERLINE, charColor);
         }
         else {
-//            charColor = TCONST.colorMap.get(TCONST.COLORRIGHT);
-            charColor = new Integer(0xff0000ff);
+            charColor = TCONST.colorMap.get(TCONST.COLORRIGHT);
+//            charColor = new Integer(0xff0000ff);
             mUnderline.setVisibility(View.INVISIBLE);
         }
 

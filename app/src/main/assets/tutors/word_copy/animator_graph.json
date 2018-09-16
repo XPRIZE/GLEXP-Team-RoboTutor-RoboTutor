@@ -260,10 +260,13 @@
             //            {"name": "show box", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox", "parms": "1:Integer", "features":""},
             //            {"name": "show box", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox2", "parms": "1:Integer", "features":""},
             //
-            {"name": "show box", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox", "parms": "1:Integer", "features":"FTR_SEN&FTR_HESITATION_1"},
-            {"name": "show box", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox", "parms": "2:Integer", "features":"FTR_SEN&FTR_HESITATION_2"},
-            {"name": "show box", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox", "parms": "3:Integer", "features":"FTR_SEN&FTR_HESITATION_3"},
-            {"name": "show box", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox", "parms": "4:Integer", "features":"FTR_SEN&FTR_HESITATION_4"},
+//            {"name": "show box", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox", "parms": "1:Integer", "features":"FTR_SEN&FTR_HESITATION_1"},
+//            {"name": "show box", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox", "parms": "2:Integer", "features":"FTR_SEN&FTR_HESITATION_2"},
+//            {"name": "show box", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox", "parms": "3:Integer", "features":"FTR_SEN&FTR_HESITATION_3"},
+//            {"name": "show box", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox", "parms": "4:Integer", "features":"FTR_SEN&FTR_HESITATION_4"},
+
+            {"name": "show box on active word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBoxOnActiveWord", "parms": "", "features":"FTR_SEN_WRD&FTR_HESITATION_1"},
+            {"name": "show box on first edit", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBoxOnFirstEdit", "parms": "", "features":"FTR_SEN_WRD&FTR_HESITATION_2"},
 
 
 
@@ -965,7 +968,11 @@
 
             // Intro for write.arith
             {"name":"PLAY - Lets add ...",      "type": "AUDIO", "command": "PLAY", "soundsource": "Lets add some numbers now.mp3",      "soundpackage":"arithmetic", "volume": 1.0, "mode":"flow", "features": "FTR_ARITH&FTR_ADD"},
-            {"name":"PLAY - Lets subtract ...", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets subtract some numbers now.mp3", "soundpackage":"arithmetic", "volume": 1.0, "mode":"flow", "features": "FTR_ARITH&FTR_SUB"}
+            {"name":"PLAY - Lets subtract ...", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets subtract some numbers now.mp3", "soundpackage":"arithmetic", "volume": 1.0, "mode":"flow", "features": "FTR_ARITH&FTR_SUB"},
+
+            // Intro for sentence writing activities
+            {"name":"PLAY - Now we will....", "type": "AUDIO", "command": "PLAY", "soundsource": "Now you will write some sentences.mp3", "soundpackage":"sentence", "volume": 1.0, "mode":"flow", "features": "FTR_SEN_COPY"},
+            {"name":"PLAY - Now we will....", "type": "AUDIO", "command": "PLAY", "soundsource": "Now you will see some sentences with errors to fix.mp3", "soundpackage":"sentence", "volume": 1.0, "mode":"flow", "features": "FTR_SEN_CORR"}
 
           ]
         },

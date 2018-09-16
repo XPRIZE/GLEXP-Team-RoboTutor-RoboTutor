@@ -339,6 +339,37 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         mActiveWord.deactivateEditMode();
     }
 
+    // highlight box functions
+    public void showHighlightBoxOnActiveWord(){
+        mActiveWord.showHighlightBox();
+    }
+
+    public void showHighlightBoxOnFirstEdit(){
+        EditOperation firstEditOperationSentence = getFirstEditOperation(mWrittenSentence, mAnswer);
+        firstEditOperationSentence.showHighlightBox();
+    }
+
+    public void showHighlightBoxOnFirstEditWord(){
+
+        EditOperation firstEditOperationSentence = getFirstEditOperation(mWrittenSentence, mAnswer);
+
+        int activeWordIndex = getActiveWordIndexForEdit(firstEditOperationSentence);
+
+        //if outside the word, highlight the error
+        if (activeWordIndex == -1) {
+
+            //highlight the error according to if its insert, replace or delete
+            firstEditOperationSentence.showHighlightBox();
+        }
+
+        // if inside the word, simply follow what was happening at the word level
+        else {
+            Word firstEditWord = mListWordsInput.get(activeWordIndex);
+            firstEditWord.showHighlightBox();
+        }
+    }
+    //
+
     //to be called by the animator graph
     public void showHighlightBox(Integer level, Word w){
 
@@ -390,7 +421,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
     //to be called by the animator graph
-    public void showHighlightBox(Integer level){
+    public void showHighlightBox(Integer level) {
 
         //for sentence level, need to check if the first edit is inside a word or not.
         if(activityFeature.contains("FTR_SEN_SEN")){
@@ -502,14 +533,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         int index = mGlyphList.indexOfChild(child);
 
-//amogh added for adding a view to the response view also, and also to check if the letter
             boolean canInsert = checkInsert(mEditSequence, index + inc);
 
             if (canInsert){
                 r = (CStimulusController) LayoutInflater.from(getContext())
                         .inflate(R.layout.recog_resp_comp, null, false);
                 mResponseViewList.addView(r, index + inc);
-
+                r.setStimulusChar(" ",false);
                 r.setLinkedScroll(mDrawnScroll);
                 r.setWritingController(this);
                 //amogh added ends
@@ -525,10 +555,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     v.setIsLast(true);
                 }
 
+
                 mGlyphList.addView(v, index + inc);
 
                 v.setLinkedScroll(mDrawnScroll);
                 v.setWritingController(this);
+
+                //if supposed to be a space here, inhibit input
 
                 updateSentenceEditSequence();
                 mListWordsInput = getUpdatedListWordsInput(mListWordsInput, mAlignedSourceSentence,mAlignedTargetSentence);
@@ -536,14 +569,16 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 //since the mListWordsInput is now updated, the parameters for mActiveWord have also changed.
                 mActiveWord = mListWordsInput.get(currentWordIndex);
 
-                //if the word is complete, release the ON_CORRECT feature.
-                String writtenActiveWord = mActiveWord.getWrittenWordString();
-                String writtenAnswerWord = mActiveWord.getWordAnswer();
-                boolean writtenWordIsCorrect = writtenActiveWord.equals(writtenAnswerWord);
-                if(writtenWordIsCorrect){
-                    applyBehavior(WR_CONST.ON_CORRECT); //should increment the current word index and the mActiveWord also thus changes.
-                    temporaryOnCorrect();
-                }
+                //might have to change this. works for now.
+                evaluateSentenceWordLevel();
+//                //if the word is complete, release the ON_CORRECT feature.
+//                String writtenActiveWord = mActiveWord.getWrittenWordString();
+//                String writtenAnswerWord = mActiveWord.getWordAnswer();
+//                boolean writtenWordIsCorrect = writtenActiveWord.equals(writtenAnswerWord);
+//                if(writtenWordIsCorrect){
+//                    applyBehavior(WR_CONST.ON_CORRECT); //should increment the current word index and the mActiveWord also thus changes.
+//                    temporaryOnCorrect();
+//                }
             }
 
             //if cannot insert
@@ -1083,9 +1118,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //                    Thread.currentThread().interrupt();
 //                    }
 //                }
-//                while(true){
+//                for(;;){
 //                    int j = 2 *8;
-//                    if(currentWordIndex != i){
+//                    if(currentWordIndex == i){
+//                        j = 2 * 299;
+//                    }
+//                    else{
+//                        j= 2 * 23;
 //                        break;
 //                    }
 //                }
@@ -2613,6 +2652,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 v.post(WR_CONST.RIPPLE_PROTO);
             }
         }
+
 
         public void showHighlightBox(){
             mHighlightErrorBoxView = new View (getContext());
