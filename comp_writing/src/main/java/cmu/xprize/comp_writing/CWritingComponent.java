@@ -476,7 +476,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             mResponseViewList.removeViewAt(index);
             updateSentenceEditSequence();
             mListWordsInput = getUpdatedListWordsInput(mListWordsInput, mAlignedSourceSentence,mAlignedTargetSentence);
-            mActiveWord = mListWordsAnswer.get(currentWordIndex);
+            mActiveWord = mListWordsInput.get(currentWordIndex);
             //if the word is complete, release the ON_CORRECT feature.
             String writtenActiveWord = mActiveWord.getWrittenWordString();
             String writtenAnswerWord = mActiveWord.getWordAnswer();
@@ -725,7 +725,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
             //for word level feedback
             if(activityFeature.contains("FTR_SEN_WRD")){
-                mActiveWord = mListWordsAnswer.get(currentWordIndex);
+
+//                mActiveWord = mListWordsInput.get(currentWordIndex);
                 int attempts = mActiveWord.getAttempt();
 
                 //when the word is being written and evaluated for the first time, also making sure that its not the first box
@@ -1651,6 +1652,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         if(activityFeature.contains("FTR_SEN")){
             mListWordsAnswer = new ArrayList<>();
             mListWordsAnswer = getListWords(mAnswer);
+            updateSentenceEditSequence();
+            mListWordsInput = getListWordsInputFromAlignedSentences(mAlignedSourceSentence,mAlignedTargetSentence);
             mActiveWord = mListWordsAnswer.get(0);
         }
 

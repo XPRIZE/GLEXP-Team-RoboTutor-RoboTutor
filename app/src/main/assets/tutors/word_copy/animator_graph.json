@@ -88,6 +88,9 @@
 
             //hesitation behaviors for sentence activities
 
+//            {"name":"Point at Glyph",   "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "POINT_AT_GLYPH:String|2000:Integer",  "features":"FTR_SEN&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3&!FTR_ATTEMPT_4"},
+
+
             //evaluate sentence on prolonged hesitation:
               //word level feedback
             {"name": "Evaluate sentence on hesitation (word level feedback)", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "evaluateSentenceWordLevel", "parms": "", "features":"FTR_SEN_WRD&FTR_HESITATION_2&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3&!FTR_ATTEMPT_4"},
@@ -265,8 +268,10 @@
 //            {"name": "show box", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox", "parms": "3:Integer", "features":"FTR_SEN&FTR_HESITATION_3"},
 //            {"name": "show box", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox", "parms": "4:Integer", "features":"FTR_SEN&FTR_HESITATION_4"},
 
-            {"name": "show box on active word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBoxOnActiveWord", "parms": "", "features":"FTR_SEN_WRD&FTR_HESITATION_1"},
-            {"name": "show box on first edit", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBoxOnFirstEdit", "parms": "", "features":"FTR_SEN_WRD&FTR_HESITATION_2"},
+            //show highlight box when hesitation 1 or 2 and attempt 1 or 2.
+            {"name": "show box on active word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBoxOnActiveWord", "parms": "", "features":"FTR_SEN_WRD&FTR_HESITATION_1&FTR_ATTEMPT_1|FTR_SEN_WRD&FTR_HESITATION_1&FTR_ATTEMPT_2"},
+            {"name": "show box on first edit", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBoxOnFirstEdit", "parms": "", "features":"FTR_SEN_WRD&FTR_HESITATION_2&FTR_ATTEMPT_1|FTR_SEN_WRD&FTR_HESITATION_2&FTR_ATTEMPT_2"},
+            {"name": "show box on first edit", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBoxOnFirstEdit", "parms": "", "features":"FTR_SEN_WRD&FTR_HESITATION_2&FTR_ATTEMPT_1|FTR_SEN_WRD&FTR_HESITATION_2&FTR_ATTEMPT_3"},
 
 
 
@@ -1136,6 +1141,10 @@
             // Play prompt & audiostimulus for write.missingLtr
             {"name":"PLAY - Write the missing letter in",  "type": "AUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim1}}.mp3", "soundpackage":"missingLtr", "volume": 1.0, "mode":"flow", "features": "FTR_MISSING_LTR"},
             {"name":"Play - .audiostimulus", "type": "AUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim2}}.mp3","soundpackage": "words","mode":"flow", "features": "FTR_MISSING_LTR"},
+
+
+            //sentence writing
+            {"name":"Play - please copy the sentence", "type": "AUDIO", "command": "PLAY", "soundsource": "Please copy the sentence.mp3","soundpackage": "sentence","mode":"flow", "features": "FTR_SEN_COPY"},
 
 
             //what we want is to set a sticky behavior, for stop writing, every time that the user stops writing, a postNamed is started, and volatile behavior is set for WRITE.
