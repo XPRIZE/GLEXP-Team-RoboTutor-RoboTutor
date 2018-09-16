@@ -223,7 +223,20 @@ public class BigMathMechanic {
             for (int i=1; i <= 10; i++) {
 
                 MovableImageView oneView = _layout.getBaseTenConcreteUnitView(numLoc, ONE_DIGIT, i);
-                oneView.setOnClickListener(ALL_AT_ONCE ? new BaseTenOnClickAnimateWaterfall(numLoc, ONE_DIGIT) : new BaseTenOnClickAnimateMe(ONE_DIGIT));
+
+                // BUG_605 table of cases:
+                // 1-digit... animate one at a time
+                // 2- or above digit... animate all at once
+                // X
+                // addition move to result row
+                // subtraction move to operand row
+                View.OnClickListener listener;
+                if (ALL_AT_ONCE) {
+                    listener  = new BaseTenOnClickAnimateWaterfall(numLoc, ONE_DIGIT);
+                }
+
+
+                oneView.setOnClickListener(ALL_AT_ONCE ? new BaseTenOnClickAnimateWaterfall(numLoc, ONE_DIGIT) : new BaseTenOnClickAnimateMe(ONE_DIGIT)); // BUG_605 this should vary depending on whether it's for subtraction, and 1-digit
             }
 
             // add listeners to Tens
