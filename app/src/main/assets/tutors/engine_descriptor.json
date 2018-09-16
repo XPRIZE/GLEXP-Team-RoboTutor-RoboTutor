@@ -19,13 +19,16 @@
   // path through the given tutors animation_graph.
   //
   "tutorVariants": {
-
     "picmatch": {
       "type": "TUTORVAR_MAP",
       "tutorName": "picmatch",
       "features": ""
     },
-
+    "spelling": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "spelling",
+      "features": ""
+    },
     "numberscale": {
       "type": "TUTORVAR_MAP",
       "tutorName": "numberscale",
@@ -284,8 +287,6 @@
   // else it is pushed in with a prefixed component:datasource compound specification.
   //
   "bindingPatterns": {
-
-
     "picmatch": {
       "type": "TUTORDATA_MAP",
       "scene_bindings": {
@@ -300,7 +301,20 @@
         }
       }
     },
-
+    "spelling": {
+      "type": "TUTORDATA_MAP",
+      "scene_bindings": {
+        "spelling": {
+          "type": "SCENEDATA_MAP",
+          "databindings": [
+            {
+              "name": "SSpelling",
+              "datasource": ""
+            }
+          ]
+        }
+      }
+    },
     "numberscale": {
       "type": "TUTORDATA_MAP",
       "scene_bindings": {
