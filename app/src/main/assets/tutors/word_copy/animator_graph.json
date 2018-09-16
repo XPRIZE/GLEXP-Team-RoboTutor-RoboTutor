@@ -269,9 +269,12 @@
 //            {"name": "show box", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox", "parms": "4:Integer", "features":"FTR_SEN&FTR_HESITATION_4"},
 
             //show highlight box when hesitation 1 or 2 and attempt 1 or 2.
-            {"name": "show box on active word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBoxOnActiveWord", "parms": "", "features":"FTR_SEN_WRD&FTR_HESITATION_1&FTR_ATTEMPT_1|FTR_SEN_WRD&FTR_HESITATION_1&FTR_ATTEMPT_2"},
-            {"name": "show box on first edit", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBoxOnFirstEdit", "parms": "", "features":"FTR_SEN_WRD&FTR_HESITATION_2&FTR_ATTEMPT_1|FTR_SEN_WRD&FTR_HESITATION_2&FTR_ATTEMPT_2"},
-            {"name": "show box on first edit", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBoxOnFirstEdit", "parms": "", "features":"FTR_SEN_WRD&FTR_HESITATION_2&FTR_ATTEMPT_1|FTR_SEN_WRD&FTR_HESITATION_2&FTR_ATTEMPT_3"},
+              //hesitation 2, attempt 1 and 2
+            {"name": "show box on active word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBoxOnActiveWord", "parms": "", "features":"FTR_SEN_WRD&FTR_HESITATION_2&FTR_ATTEMPT_1|FTR_SEN_WRD&FTR_HESITATION_2&FTR_ATTEMPT_2"},
+              //hesitation 3, attempt 1 and 2
+            {"name": "show box on first edit", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBoxOnFirstEdit", "parms": "", "features":"FTR_SEN_WRD&FTR_HESITATION_3&FTR_ATTEMPT_1|FTR_SEN_WRD&FTR_HESITATION_3&FTR_ATTEMPT_2"},
+              //
+//            {"name": "show box on first edit", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBoxOnFirstEdit", "parms": "", "features":"FTR_SEN_WRD&FTR_HESITATION_2&FTR_ATTEMPT_1|FTR_SEN_WRD&FTR_HESITATION_2&FTR_ATTEMPT_3"},
 
 
 
@@ -649,10 +652,10 @@
 
             //sentence level 4th attempt
             // 1. word level feedback
-            {"name": "SHOW sample for word",          "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showSampleForCurrentWord",  "parms": "",    "features":"FTR_SEN&FTR_SEN_WRD&FTR_ATTEMPT_4"},
+            {"name": "SHOW sample for word",          "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showSampleForActiveWord",  "parms": "",    "features":"FTR_SEN&FTR_SEN_WRD&FTR_ATTEMPT_4"},
 
             //2. sentence level feedback
-            {"name": "SHOW sample for word",          "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showSampleForCurrentWord",  "parms": "",    "features":"FTR_SEN&FTR_SEN_SEN&FTR_ATTEMPT_4"}
+            {"name": "SHOW sample for word",          "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showSampleForActiveWord",  "parms": "",    "features":"FTR_SEN&FTR_SEN_SEN&FTR_ATTEMPT_4"}
 
 
 
@@ -684,6 +687,7 @@
             {"name": "Replay Complete behavior", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "REPLAY_COMPLETE:String|DELAYED_NEXT_2:String" ,"features":""},
             {"name": "Ripple Prototype",         "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "RIPPLE_PROTO:String",  "features":"!FTR_SEN"},
             {"name": "Word Ripple Prototype",         "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "RIPPLE_REPLAY_WORD:String",  "features":"FTR_SEN"},
+//            {"name": "evaluate and update the sentence",          "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "evaluateSentenceWordLevel",  "parms": "",    "features":"FTR_SEN_WRD"},
 
             // Say correct answer
             //

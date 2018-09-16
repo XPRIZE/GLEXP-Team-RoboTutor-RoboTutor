@@ -455,6 +455,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             }
         }
     }
+
+    public void showSampleForActiveWord(){
+        mActiveWord.showSamples(true);
+    }
+
     //amogh added ends
 
     //************************************************************************
@@ -1405,6 +1410,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     public void rippleReplayCurrentWord(String type){
         mActiveWord.rippleReplayWord(type);
+        if(activityFeature.contains("FTR_SEN_WRD")){
+            evaluateSentenceWordLevel();
+        }
     }
 
     public void hideSamples() {
@@ -2700,6 +2708,16 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 controller.showDeleteSpaceButton(false);
                 controller.showInsLftButton(false);
                 controller.showInsRgtButton(false);
+            }
+        }
+
+        public void showSamples(boolean show){
+            for (int i = 0; i < listIndicesAnswer.size();i++) {
+                CGlyphController controller = (CGlyphController) mGlyphList.getChildAt(listIndicesAnswer.get(i));
+                boolean letterStatus = listCorrectStatus.get(i);
+                if (letterStatus != true){
+                    controller.showSampleChar(show);
+                }
             }
         }
     }
