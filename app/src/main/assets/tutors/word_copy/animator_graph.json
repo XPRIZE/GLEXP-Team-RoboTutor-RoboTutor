@@ -288,7 +288,7 @@
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Here write.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_PUNC&FTR_INSERT&FTR_HESITATION_4&FTR_ATTEMPT_2"},
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordStimulus.audioPunctuation}}.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_PUNC&FTR_INSERT&FTR_HESITATION_4&FTR_ATTEMPT_2"},
                                 //ATTEMPT 3
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Here write.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_PUNC&FTR_INSERT&FTR_HESITATION_4&FTR_ATTEMPT_1"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Here write.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_PUNC&FTR_INSERT&FTR_HESITATION_4&FTR_ATTEMPT_3"},
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordStimulus.audioPunctuation}}.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_PUNC&FTR_INSERT&FTR_HESITATION_4&FTR_ATTEMPT_3"},
 
 
