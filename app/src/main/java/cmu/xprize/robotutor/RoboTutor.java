@@ -77,6 +77,7 @@ import static cmu.xprize.comp_logging.PerformanceLogItem.MATRIX_TYPE.SONGS_MATRI
 import static cmu.xprize.comp_logging.PerformanceLogItem.MATRIX_TYPE.STORIES_MATRIX;
 import static cmu.xprize.comp_logging.PerformanceLogItem.MATRIX_TYPE.UNKNOWN_MATRIX;
 import static cmu.xprize.util.TCONST.CODE_DROP_1_ASSET_PATTERN;
+import static cmu.xprize.util.TCONST.CODE_DROP_2_ASSET_PATTERN;
 import static cmu.xprize.util.TCONST.GRAPH_MSG;
 import static cmu.xprize.util.TCONST.MATH_PLACEMENT;
 import static cmu.xprize.util.TCONST.PROTOTYPE_ASSET_PATTERN;
@@ -464,6 +465,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
                 // ZZZ comment out old pattern
                 tutorAssetManager.updateAssetPackages(ROBOTUTOR_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH );
                 tutorAssetManager.updateAssetPackages(CODE_DROP_1_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
+                tutorAssetManager.updateAssetPackages(CODE_DROP_2_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
                 tutorAssetManager.updateAssetPackages(PROTOTYPE_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
                 tutorAssetManager.updateAssetPackages(QA_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
 

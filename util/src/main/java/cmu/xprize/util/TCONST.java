@@ -84,6 +84,7 @@ public class TCONST {
     //
     public static final String ROBOTUTOR_ASSET_PATTERN = "rtasset_";
     public static final String CODE_DROP_1_ASSET_PATTERN = "codedrop1_";
+    public static final String CODE_DROP_2_ASSET_PATTERN = "codedrop2_";
     public static final String PROTOTYPE_ASSET_PATTERN = "protoassets_";
     public static final String QA_ASSET_PATTERN = "qa_assets";
 
