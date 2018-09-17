@@ -66,6 +66,10 @@ public class TLinkedScrollView  extends CLinkedScrollView implements ITutorObjec
     }
 
 
+    // this is literally the only use of this method
+    public void zoomInOut(Float scale, Long duration) {
+        mSceneObject.zoomInOut(scale, duration);
+    }
 
     //************************************************************************
     //************************************************************************
