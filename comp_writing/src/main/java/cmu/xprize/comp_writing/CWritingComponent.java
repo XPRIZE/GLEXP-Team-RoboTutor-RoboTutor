@@ -122,6 +122,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     protected boolean           _metricValid;
     protected boolean           _isValid;
     protected ArrayList<String> _attemptFTR = new ArrayList<>();
+    protected ArrayList<String> _senAttemptFTR = new ArrayList<>();
     protected ArrayList<String> _hesitationFTR = new ArrayList<>(); //amogh added
     private int                 _hesitationNo      = 0; //amogh added
     protected ArrayList<String> _audioFTR = new ArrayList<>();
@@ -208,6 +209,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         _attemptFTR.add(WR_CONST.FTR_ATTEMPT_4);
 
         //amogh added
+        _senAttemptFTR.add(WR_CONST.FTR_SEN_ATTEMPT_1);
+        _senAttemptFTR.add(WR_CONST.FTR_SEN_ATTEMPT_2);
+        _senAttemptFTR.add(WR_CONST.FTR_SEN_ATTEMPT_3);
+        _senAttemptFTR.add(WR_CONST.FTR_SEN_ATTEMPT_4);
+
         _hesitationFTR.add(WR_CONST.FTR_HESITATION_1);
         _hesitationFTR.add(WR_CONST.FTR_HESITATION_2);
         _hesitationFTR.add(WR_CONST.FTR_HESITATION_3);
@@ -351,6 +357,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
     // highlight box functions
+
     public void showHighlightBoxOnActiveWord(){
         mActiveWord.showHighlightBox();
     }
@@ -892,6 +899,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                             boolean writtenSentenceIsCorrect = mWrittenSentence.equals(mAnswer);
                             if (writtenSentenceIsCorrect) {
                                 applyBehavior(WR_CONST.DATA_ITEM_COMPLETE);
+                                clearSentenceAttemptFeatures(); //should go in the animator graph
                             }
 
                             // if the response is correct, but there are more corrections to be made, check if the word is correct, turn blue depending on what the attempt level of that sentence is.
@@ -903,6 +911,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                                 boolean writtenWordIsCorrect = writtenActiveWord.equals(writtenAnswerWord);
                                 if(writtenWordIsCorrect){
                                     applyBehavior(WR_CONST.ON_CORRECT);
+                                    temporaryOnCorrectSentence();
+
                                 }
                             }
                         }
@@ -987,6 +997,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             retractFeature(attempt);
         }
     }
+
+    private void clearSentenceAttemptFeatures(){
+        for (String senAttempt : _senAttemptFTR){
+            retractFeature(senAttempt);
+        }
+    }
     //amocorrectionAttgh added
     private void clearHesitationFeatures() {
 
@@ -1067,6 +1083,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         inhibitWordInput();
         updateLettersWordResponse();
         incrementCurrentWordIndex();
+    }
+
+    public void temporaryOnCorrectSentence(){
+        deactivateEditModeInActiveWord();
+        inhibitWordInput();
+        updateLettersWordResponse();
     }
 
     //goes over the unverified words and releases apt features.
@@ -1175,6 +1197,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         boolean writtenSentenceIsCorrect = mWrittenSentence.equals(mAnswer);
         if (writtenSentenceIsCorrect) {
             applyBehavior(WR_CONST.DATA_ITEM_COMPLETE);
+            clearSentenceAttemptFeatures(); //should go in the animator graph
 
             //update mEditSequence, mAlignedTarget, mTargetSource with the required changes and aligned source and target string builders
             updateSentenceEditSequence();
@@ -1195,7 +1218,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
             //make the buttons appear.
             activateEditMode(); //amogh comment put in animator graph
-            publishFeature(_attemptFTR.get(0));
+            publishFeature(WR_CONST.FTR_SEN_ATTEMPT_1);
             applyBehavior(WR_CONST.ON_ERROR);
 
         }

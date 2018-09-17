@@ -34,6 +34,11 @@ public class WR_CONST {
     public static final String FTR_ATTEMPT_4            = "FTR_ATTEMPT_4";
 
     //amogh added
+    public static final String FTR_SEN_ATTEMPT_1        = "FTR_SEN_ATTEMPT_1";
+    public static final String FTR_SEN_ATTEMPT_2        = "FTR_SEN_ATTEMPT_2";
+    public static final String FTR_SEN_ATTEMPT_3        = "FTR_SEN_ATTEMPT_3";
+    public static final String FTR_SEN_ATTEMPT_4        = "FTR_SEN_ATTEMPT_4";
+
     public static final String FTR_HESITATION_1            = "FTR_HESITATION_1";
     public static final String FTR_HESITATION_2            = "FTR_HESITATION_2";
     public static final String FTR_HESITATION_3            = "FTR_HESITATION_3";
