@@ -2847,6 +2847,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             //delete punctuation
             else if (punctuationSymbols.contains(editValue)){
                 publishFeature(WR_CONST.FTR_AUDIO_PUNC);
+                publishValue(WR_CONST.AUDIO_PUNCTUATION, punctuationToString.get(editValue));
             }
 
             //delete letter
