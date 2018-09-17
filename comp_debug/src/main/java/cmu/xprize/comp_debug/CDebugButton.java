@@ -198,14 +198,14 @@ public class CDebugButton extends ImageButton {
                 case STATE_NEXT:
                 case STATE_HARDER:
                 case STATE_EASIER:
-                    this.setBackground(getResources().getDrawable(R.drawable.outline_normal, null));
+                    this.setBackground(getResources().getDrawable(R.drawable.outline_normal));
                     this.setAlpha(0.3f); // adjust opacity to make selected tutors stand out
                     break;
 
                     // BOJACK 2 remove these
                 case STATE_CURRENT:
                     isCurrent = true;
-                    this.setBackground(getResources().getDrawable(R.drawable.outline_current, null));
+                    this.setBackground(getResources().getDrawable(R.drawable.outline_current));
                     this.setAlpha(1f); // adjust opacity to make selected tutors stand out
                     //mergeDrawableStates(drawableState, CD_CONST.SKILLS_CURRENT);
                     break;
@@ -238,7 +238,7 @@ public class CDebugButton extends ImageButton {
 
                         // story
                     case "story.echo::story_1":
-                        this.setBackground(getResources().getDrawable(R.drawable.outline_xprize, null));
+                        this.setBackground(getResources().getDrawable(R.drawable.outline_xprize));
                         this.setAlpha(0.5f); // adjust opacity to make selected tutors stand out
 
 
@@ -248,7 +248,7 @@ public class CDebugButton extends ImageButton {
             }
 
             if (isCurrent) {
-                this.setBackground(getResources().getDrawable(R.drawable.outline_current, null));
+                this.setBackground(getResources().getDrawable(R.drawable.outline_current));
                 this.setAlpha(1f); // adjust opacity to make selected tutors stand out
 
             }

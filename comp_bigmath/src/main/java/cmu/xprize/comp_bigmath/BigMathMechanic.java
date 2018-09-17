@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
@@ -2041,6 +2042,10 @@ public class BigMathMechanic {
      * @return
      */
     private Drawable getDrawable(int resID) {
-        return _activity.getDrawable(resID);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return _activity.getDrawable(resID);
+        } else {
+            return _activity.getResources().getDrawable(resID, _activity.getTheme());
+        }
     }
 }

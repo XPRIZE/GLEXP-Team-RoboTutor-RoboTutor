@@ -2,6 +2,7 @@ package cmu.xprize.comp_debug;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.percent.PercentRelativeLayout;
 import android.text.Html;
 import android.util.AttributeSet;
@@ -473,7 +474,11 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
         button.setText(text);
         button.setBackgroundColor(mContext.getResources().getColor(R.color.newCustomButton));
         button.setTextColor(Color.WHITE);
-        button.setBackground(mContext.getDrawable(R.drawable.launchnormal));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            button.setBackground(mContext.getDrawable(R.drawable.launchnormal));
+        } else {
+            button.setBackground(mContext.getResources().getDrawable(R.drawable.launchnormal));
+        }
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(0, 0, 50, 15);
         button.setLayoutParams(layoutParams);
@@ -703,7 +708,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
         }
         ScurrentTutorImage.setImageResource(thumbId);
         ScurrentTutorImage.setPadding(36, 36, 36, 36);
-        ScurrentTutorImage.setBackground(getResources().getDrawable(R.drawable.outline_current_large, null));
+        ScurrentTutorImage.setBackground(getResources().getDrawable(R.drawable.outline_current_large));
 
     }
 

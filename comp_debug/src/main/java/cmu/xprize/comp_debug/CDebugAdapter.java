@@ -2,11 +2,14 @@ package cmu.xprize.comp_debug;
 
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -315,7 +318,11 @@ public class CDebugAdapter extends BaseAdapter {
             tutorSelector = new CDebugButton(mContext);
             Log.v("BOJACK", "Creating new CDebugButton");
             Log.wtf("BOJACK", tutorSelector.hashCode() + " -- Constructor -- " + gridPosition);
-            tutorSelector.setImageDrawable(mContext.getResources().getDrawable(R.drawable.debugbutton, null)); // BOJACK setting image drawable...
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                tutorSelector.setImageDrawable(mContext.getResources().getDrawable(R.drawable.debugbutton, null)); // BOJACK setting image drawable...
+            } else {
+                tutorSelector.setImageDrawable(mContext.getResources().getDrawable(R.drawable.debugbutton)); // BOJACK setting image drawable...
+            }
             tutorSelector.setTutorData(buttonTutorData);
             tutorSelector.setLayoutParams(new GridView.LayoutParams(130, 130)); // BOJACK adjust these
             tutorSelector.setScaleType(CDebugButton.ScaleType.FIT_CENTER);

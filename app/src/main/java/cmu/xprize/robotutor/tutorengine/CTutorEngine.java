@@ -22,6 +22,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.PowerManager;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -238,9 +239,11 @@ public class CTutorEngine implements ILoadableObject2 {
         // don't create a new tutor when the screen is off, because on relaunch it will set-in-motion the "KILLTUTOR"
         // https://stackoverflow.com/questions/2474367/how-can-i-tell-if-the-screen-is-on-in-android
         PowerManager powerManager = (PowerManager) Activity.getSystemService(Context.POWER_SERVICE);
-        if (powerManager != null && !powerManager.isInteractive()) {
-            Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "fx: Not creating new tutor when screen is off...");
-            return;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            if (powerManager != null && !powerManager.isInteractive()) {
+                Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "fx: Not creating new tutor when screen is off...");
+                return;
+            }
         }
 
         createTutor(defTutor, featureString, null);
