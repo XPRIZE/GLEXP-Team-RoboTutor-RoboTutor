@@ -218,6 +218,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         _hesitationFTR.add(WR_CONST.FTR_HESITATION_2);
         _hesitationFTR.add(WR_CONST.FTR_HESITATION_3);
         _hesitationFTR.add(WR_CONST.FTR_HESITATION_4);
+        _hesitationFTR.add(WR_CONST.FTR_HESITATION_5);
 
         //amogh added to initialise the list for audio features:
             _audioFTR.add(WR_CONST.FTR_AUDIO_CAP);
@@ -886,10 +887,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     //if allowed to replace at this position
                     if(canReplace){
 
-                        //check if the correct glyph is drawn
-                        //if yes, and update the edit sequence, and check if the sentence is correct now.
                         boolean responseEqualsTargetReplacement = mResponse.equals(getReplacementTargetString(mEditSequence, mActiveIndex));
+
+                        ///if the replacement is correct and at the correct position
                         if(responseEqualsTargetReplacement){
+
                             updateSentenceEditSequence();
                             mListWordsInput = getUpdatedListWordsInput(mListWordsInput, mAlignedSourceSentence,mAlignedTargetSentence);
 
@@ -897,22 +899,33 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                             // if this correct response makes the sentence correct,
                             boolean writtenSentenceIsCorrect = mWrittenSentence.equals(mAnswer);
+
+                            //if the written sentence is correct
                             if (writtenSentenceIsCorrect) {
                                 applyBehavior(WR_CONST.DATA_ITEM_COMPLETE);
                                 clearSentenceAttemptFeatures(); //should go in the animator graph
                             }
 
-                            // if the response is correct, but there are more corrections to be made, check if the word is correct, turn blue depending on what the attempt level of that sentence is.
+                            // if the response is correct at the right place, but there are more corrections to be made, check if the word is correct, turn blue depending on what the attempt level of that sentence is.
                             else{
-                                //check if the word written is correct and release ON_CORRECT. How to check that a word is written correctly? strings should match bw
-                                //not sure yet, but let's try to set the condition as the matching of strings in the mListWordsInput and mListWordsAnswer
-                                String writtenActiveWord = mActiveWord.getWrittenWordString();
-                                String writtenAnswerWord = mListWordsAnswer.get(currentWordIndex).getWordAnswer();
-                                boolean writtenWordIsCorrect = writtenActiveWord.equals(writtenAnswerWord);
-                                if(writtenWordIsCorrect){
-                                    applyBehavior(WR_CONST.ON_CORRECT);
-                                    temporaryOnCorrectSentence();
 
+                                if(currentWordIndex != -1) { //when the replacement is in a word
+                                    // check if the word written is correct and release ON_CORRECT. How to check that a word is written correctly? strings should match bw
+
+                                    String writtenActiveWord = mActiveWord.getWrittenWordString();
+                                    String writtenAnswerWord = mListWordsAnswer.get(currentWordIndex).getWordAnswer();
+                                    boolean writtenWordIsCorrect = writtenActiveWord.equals(writtenAnswerWord);
+                                    if (writtenWordIsCorrect) {
+                                        applyBehavior(WR_CONST.ON_CORRECT); //should turn word blue
+                                        temporaryOnCorrectSentence();
+
+                                    }
+                                }
+
+                                //when not in a word (open in the sentence/space)
+                                else{
+                                    //maybe just turn this glyph controller blue?
+                                    //and inhibit input?
                                 }
                             }
                         }
@@ -921,8 +934,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                         else{
                             //revert the glyph to old one.
                             gController.setPreviousGlyph();// put in animator graph
-                            updateAttemptFeature();
-                            applyBehavior(WR_CONST.ON_ERROR);
+                            int attempt = updateAttemptFeature();
+                            if (attempt > 4) {
+                                applyBehavior(WR_CONST.MERCY_RULE); // goto node "MERCY_RULE_BEHAVIOR"
+                            } else {
+                                applyBehavior(WR_CONST.ON_ERROR); // goto node "GENERAL_ERROR_BEHAVIOR"
+                            }
                             // in the animator graph -> turn the word blue or red.
                             //set the word as red or blue depending on status.
                         }
@@ -932,8 +949,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     else{
                         gController.setPreviousGlyph();
                         //lets increase the attempt for this word, this will also release the corresponding feature which can then be used in the animator graph to call the functions that we want.
-                        updateAttemptFeature();
-                        applyBehavior(WR_CONST.ON_ERROR);
+                        int attempt = updateAttemptFeature();
+                        if (attempt > 4) {
+                            applyBehavior(WR_CONST.MERCY_RULE); // goto node "MERCY_RULE_BEHAVIOR"
+                        } else {
+                            applyBehavior(WR_CONST.ON_ERROR); // goto node "GENERAL_ERROR_BEHAVIOR"
+                        }
                     }
                 }
             }
@@ -1166,7 +1187,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     //goes over the unverified words and releases apt features.
     public void evaluateSentenceWordLevel(){
 
-        mWrittenSentence = getWrittenSentence();
         //update mEditSequence, mAlignedTarget, mTargetSource with the required changes and aligned source and target string builders
         updateSentenceEditSequence();
         mListWordsInput = getListWordsInputFromAlignedSentences(mAlignedSourceSentence,mAlignedTargetSentence);
@@ -1263,31 +1283,25 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
     public void evaluateSentenceFirstTime(){
-        mWrittenSentence = getWrittenSentence();
 
-        // evaluated on end sentence punctuation, when the written sentence is correct: apply ON_CORRECT behavior
+        // evaluated on end sentence punctuation / hesitation, when the written sentence is correct: apply ON_CORRECT behavior
+
+        //update sentence status
+        updateSentenceEditSequence();
+        //initialising
+        mListWordsInput = getListWordsInputFromAlignedSentences(mAlignedSourceSentence,mAlignedTargetSentence);
+
+        // evaluate sentence
         boolean writtenSentenceIsCorrect = mWrittenSentence.equals(mAnswer);
         if (writtenSentenceIsCorrect) {
             applyBehavior(WR_CONST.DATA_ITEM_COMPLETE);
             clearSentenceAttemptFeatures(); //should go in the animator graph
-
-            //update mEditSequence, mAlignedTarget, mTargetSource with the required changes and aligned source and target string builders
-            updateSentenceEditSequence();
-            //initialising
-            mListWordsInput = getListWordsInputFromAlignedSentences(mAlignedSourceSentence,mAlignedTargetSentence);
         }
 
         //when the written sentence does not match the expected answer
         else{
-
-            //update mEditSequence, mAlignedTarget, mTargetSource with the required changes and aligned source and target string builders
-            updateSentenceEditSequence();
-            //initialising
-            mListWordsInput = getListWordsInputFromAlignedSentences(mAlignedSourceSentence,mAlignedTargetSentence);
-
             updateSentenceAttemptFeature();
             applyBehavior(WR_CONST.ON_ERROR); //activates the edit mode.
-
         }
     }
     //amogh added ends
@@ -2578,7 +2592,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             return wordIsCorrect;
         }
 
-        //checks if the input word is the same as the answer - argument is the index of the current word
+        //checks if the input word is the same as the answer(letters AND the indices) - argument is the index of the current word
         public boolean updateInputWordCorrectStatus(int index){
 
             //indices should be same and letters should be same
