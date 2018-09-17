@@ -171,6 +171,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     protected String punctuationSymbols = ",.;:-_!?";
     protected Map<String, String> punctuationToString;
+    protected Map<String, String> punctuationToFeature;
     //amogh add ends
 
     final private String  TAG        = "CWritingComponent";
@@ -220,6 +221,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             _audioFTR.add(WR_CONST.FTR_INSERT);
             _audioFTR.add(WR_CONST.FTR_DELETE);
             _audioFTR.add(WR_CONST.FTR_REPLACE);
+            _audioFTR.add(WR_CONST.FTR_PERIOD);
+            _audioFTR.add(WR_CONST.FTR_COMMA);
+            _audioFTR.add(WR_CONST.FTR_EXCLAIM);
+            _audioFTR.add(WR_CONST.FTR_QUESTION);
+
 //            _audioFTR.add(WR_CONST.FTR_AUDIO_CAP);
 //            _audioFTR.add(WR_CONST.FTR_AUDIO_CAP);
         //amogh added finished
@@ -291,6 +297,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         punctuationToString.put("!", "exclamation point");
         punctuationToString.put("?", "question mark");
         punctuationToString.put("-","hyphen");
+
+        punctuationToString.put(",", WR_CONST.FTR_COMMA);
+        punctuationToString.put(".", WR_CONST.FTR_PERIOD);
+        punctuationToString.put("!", WR_CONST.FTR_EXCLAIM);
+        punctuationToString.put("?", WR_CONST.FTR_QUESTION);
         // Obtain the prototype glyphs from the singleton recognizer
         //
         _recognizer = CRecognizerPlus.getInstance();
@@ -2796,9 +2807,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             //insert punctuation
             else if (punctuationSymbols.contains(editValue)){
                 publishFeature(WR_CONST.FTR_AUDIO_PUNC);
-                if(editValue == "."){
-                    publishFeature(WR_CONST.FTR_PERIOD);
-                }
+                publishFeature(punctuationToFeature.get(editValue));
                 publishValue(WR_CONST.AUDIO_PUNCTUATION, punctuationToString.get(editValue));
             }
 
@@ -2832,6 +2841,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             //replace with punctuation
             else if (punctuationSymbols.contains(editValue)){
                 publishFeature(WR_CONST.FTR_AUDIO_PUNC);
+                publishFeature(punctuationToFeature.get(editValue));
                 publishValue(WR_CONST.AUDIO_PUNCTUATION, punctuationToString.get(editValue));
             }
 
@@ -2857,6 +2867,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             //delete punctuation
             else if (punctuationSymbols.contains(editValue)){
                 publishFeature(WR_CONST.FTR_AUDIO_PUNC);
+                publishFeature(punctuationToFeature.get(editValue));
                 publishValue(WR_CONST.AUDIO_PUNCTUATION, punctuationToString.get(editValue));
             }
 
