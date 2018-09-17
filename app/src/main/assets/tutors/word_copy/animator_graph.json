@@ -275,14 +275,31 @@
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix the punctuation here.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_PUNC&FTR_HESITATION_2&FTR_ATTEMPT_3"},
 
                         //HESITATION 3 //amogh comment add more punctuation rules.
+                        //period
                                 //ATTEMPT 1
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We put a period at the end of a statement.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_PUNC&FTR_PERIOD&FTR_HESITATION_3&FTR_ATTEMPT_1"},//amogh comment replace the prompt with apt punctuation rule.
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We put a period at the end of a statement.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_PUNC&FTR_PERIOD&FTR_HESITATION_3&FTR_ATTEMPT_1"},
                                 //ATTEMPT 2
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We put a period at the end of a statement.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_PUNC&FTR_PERIOD&FTR_HESITATION_3&FTR_ATTEMPT_2"},//amogh comment replace the prompt with apt punctuation rule.
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We put a period at the end of a statement.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_PUNC&FTR_PERIOD&FTR_HESITATION_3&FTR_ATTEMPT_2"},
                                 //ATTEMPT 3
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We put a period at the end of a statement.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_PUNC&FTR_PERIOD&FTR_HESITATION_3&FTR_ATTEMPT_2"},//amogh comment replace the prompt with apt punctuation rule.
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We put a period at the end of a statement.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_PUNC&FTR_PERIOD&FTR_HESITATION_3&FTR_ATTEMPT_3"},
 
-                  //INSERT
+            //exclaim
+            //ATTEMPT 1
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We use an exclamation point to show excitement or emphasis.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_PUNC&FTR_EXCLAIM&FTR_HESITATION_3&FTR_ATTEMPT_1"},
+            //ATTEMPT 2
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We use an exclamation point to show excitement or emphasis.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_PUNC&FTR_EXCLAIM&FTR_HESITATION_3&FTR_ATTEMPT_2"},
+            //ATTEMPT 3
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We use an exclamation point to show excitement or emphasis.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_PUNC&FTR_EXCLAIM&FTR_HESITATION_3&FTR_ATTEMPT_3"},
+
+            //question mark
+            //ATTEMPT 1
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We put a question mark at the end of a question.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_PUNC&FTR_QUESTION&FTR_HESITATION_3&FTR_ATTEMPT_1"},
+            //ATTEMPT 2
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We put a question mark at the end of a question.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_PUNC&FTR_QUESTION&FTR_HESITATION_3&FTR_ATTEMPT_2"},
+            //ATTEMPT 3
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We put a question mark at the end of a question.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_PUNC&FTR_QUESTION&FTR_HESITATION_3&FTR_ATTEMPT_3"},
+
+            //INSERT
                         //HESITATION 4
                                 //ATTEMPT 1
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Here write.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_PUNC&FTR_INSERT&FTR_HESITATION_4&FTR_ATTEMPT_1"},
