@@ -245,14 +245,17 @@
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We start a sentence or a name with a big letter.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_1&FTR_ATTEMPT_3"},
                           //HESITATION 2
                                 //ATTEMPT 1
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Change this letter to.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_2&FTR_ATTEMPT_1"},
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "letters",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_2&FTR_ATTEMPT_1"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Change this letter to.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_3&FTR_ATTEMPT_1"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "big.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_3&FTR_ATTEMPT_1"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "letters",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_3&FTR_ATTEMPT_1"},
                                 //ATTEMPT 2
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Change this letter to.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_2&FTR_ATTEMPT_2"},
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "letters",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_2&FTR_ATTEMPT_2"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Change this letter to.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_3&FTR_ATTEMPT_2"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "big.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_3&FTR_ATTEMPT_2"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "letters",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_3&FTR_ATTEMPT_2"},
                                 //ATTEMPT 3
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Change this letter to.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_2&FTR_ATTEMPT_3"},
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "letters",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_2&FTR_ATTEMPT_3"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Change this letter to.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_3&FTR_ATTEMPT_3"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "big.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_3&FTR_ATTEMPT_3"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "letters",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_3&FTR_ATTEMPT_3"},
 
             //Punctuation
                   //INSERT AND DELETE BOTH

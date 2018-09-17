@@ -1107,9 +1107,18 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 else {
 
                     //if this word has already been attempted(ie the case when 1 space has not been deliberately left while continuing writing), increment the word's attempt level (as error) and release corresponding feature
-                    boolean activeWordLengthIsOne = mActiveWord.getWrittenWordString().length() == 1 ;
-                    boolean previousIsSpace = mWrittenSentence.charAt(mActiveWord.getWordIndices().get(0) - 1) == ' ' ;
-                    if (!(activeWordLengthIsOne && previousIsSpace)) {
+                        boolean writingIsContinued;
+                        if(currentWordIndex == 0){
+                            writingIsContinued = false;
+                        }
+                        else{
+                            boolean activeWordLengthIsOne = mActiveWord.getWrittenWordString().length() == 1 ;
+                            boolean previousIsSpace = mWrittenSentence.charAt(mActiveWord.getWordIndices().get(0) - 1) == ' ' ;
+                            writingIsContinued = (activeWordLengthIsOne && previousIsSpace);
+                        }
+
+                    //mark the word as wrong only when it was incorrectly written, and not in continuation.
+                    if (!writingIsContinued) {
                         mActiveWord.activateEditMode(); //put in animator graph
                         updateAttemptFeature();
                         applyBehavior(WR_CONST.ON_ERROR);
@@ -2815,8 +2824,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             }
 
             //replace with an uppercase letter
-            else if(editValue.equals(prev.toLowerCase())){
+            else if(prev.equals(editValue.toLowerCase())){
                 publishFeature(WR_CONST.FTR_AUDIO_CAP);
+                publishValue(WR_CONST.AUDIO_LETTER, editValue.toUpperCase());
             }
 
             //replace with punctuation
