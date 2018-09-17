@@ -845,13 +845,15 @@
             {"name": "update the response color for the word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "updateWordResponse", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD&FTR_ATTEMPT_1"},
 
 
-              // 1. sentence level - change stimulus color for complete sentence (here we can pinpoint what error the kid made)
+              // 1. sentence level feedback - change stimulus color for complete sentence (here we can pinpoint what error the kid made)
               //            {"name": "prompt - Please rewrite the word", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix the wrong word.mp3","soundpackage": "sentence","mode": "flow", "features": "FTR_SEN&FTR_ATTEMPT_1"},
                 //not yet sure if the complete sentence should be turned red or not.
 //              {"name": "update the response colors for sentence", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "updateSentenceResponse", "parms": "FALSE:Boolean", "features":"FTR_SEN_COPY&FTR_SEN_SEN&FTR_ATTEMPT_1"},
-            {"name": "update the response color for the word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "updateWordResponse", "parms": "", "features":"FTR_SEN_SEN&FTR_SEN_WRD&FTR_ATTEMPT_1"},
+            {"name": "update the response color for the word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "updateWordResponse", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_SEN&FTR_ATTEMPT_1"},
 
-
+            //FTR_ATTEMPT_1 is used for counting errors on words, FTR_SEN_ATTEMPT_1 is for sentence level mistakes
+            {"name": "mistake in the prompt", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Sorry, what you wrote is not correct.mp3","soundpackage": "sentence","mode": "flow", "features": "FTR_SEN_COPY&FTR_SEN_SEN&FTR_SEN_ATTEMPT_1"},
+            {"name": "Activate the edit mode for the sentences", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "activateEditMode", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_SEN&FTR_SEN_ATTEMPT_1"},
 
             // 2nd-3rd wrong attempt - show overlay
 
@@ -864,11 +866,11 @@
             {"name": "Disable Input",   "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput",       "parms": "TRUE:Boolean",  "features":"!FTR_SEN&!FTR_ATTEMPT_1"},
 
             //sentence writing 2nd error
-                // 1. word level- change stimulus color for complete word (here we can pinpoint what error the kid made)
+                // 1. word level feedback- change stimulus color for complete word (here we can pinpoint what error the kid made)
 //              {"name": "prompt - Please rewrite the word", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix this word.mp3","soundpackage": "sentence","mode": "flow", "features": "FTR_SEN_COPY&FTR_SEN_WRD&FTR_ATTEMPT_2"},
               {"name": "update the response colors for each letter in word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "updateLettersWordResponse", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD&FTR_ATTEMPT_2"},
 
-              // 2. sentence level- change stimulus color for complete word (here we can pinpoint what error the kid made)
+              // 2. sentence level feedback- change stimulus color for complete word (here we can pinpoint what error the kid made)
               //            {"name": "prompt - Please rewrite the word", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix the wrong word.mp3","soundpackage": "sentence","mode": "flow", "features": "FTR_SEN&FTR_ATTEMPT_1"},
               {"name": "update the response colors for each letter in word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "updateLettersWordResponse", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_SEN&FTR_ATTEMPT_2"},
 

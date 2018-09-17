@@ -1080,6 +1080,15 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
      *
      * @return
      */
+    private int updateSentenceAttemptFeature(){
+        clearSentenceAttemptFeatures();
+        int attempt = mSentenceAttempts++;
+        if (attempt <= 4){
+            publishFeature(_senAttemptFTR.get(attempt - 1));
+        }
+        return attempt;
+    }
+
     private int updateAttemptFeature() {
 
         clearAttemptFeatures();
@@ -1276,13 +1285,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             //initialising
             mListWordsInput = getListWordsInputFromAlignedSentences(mAlignedSourceSentence,mAlignedTargetSentence);
 
-            //increase the attempt number for the sentence (FTR_ATTEMPT_1 released)
-            mSentenceAttempts++;
-
-            //make the buttons appear.
-            activateEditMode(); //amogh comment put in animator graph
-            publishFeature(WR_CONST.FTR_SEN_ATTEMPT_1);
-            applyBehavior(WR_CONST.ON_ERROR);
+            updateSentenceAttemptFeature();
+            applyBehavior(WR_CONST.ON_ERROR); //activates the edit mode.
 
         }
     }
@@ -1741,7 +1745,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 CErrorManager.logEvent(TAG, "Error no DataSource : ", null, false);
             }
         } catch (Exception e) {
-            CErrorManager.logEvent(TAG, "Data Exhuasted: call past end of data", e, true);
+            CErrorManager.logEvent(TAG, "Data Exhausted: call past end of data", e, true);
         }
     }
 
