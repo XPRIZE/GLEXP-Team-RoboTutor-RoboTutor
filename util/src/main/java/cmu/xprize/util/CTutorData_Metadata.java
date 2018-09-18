@@ -122,6 +122,24 @@ public class CTutorData_Metadata {
                 return TCONST.Thumb.WRITE;
 
 
+            // Added Tutors Code Drop 2
+            case "picmatch":
+                return TCONST.Thumb.PICMATCH;
+
+            case "placevalue":
+                return TCONST.Thumb.PLACEVALUE;
+
+            case "numcompare":
+                return TCONST.Thumb.NUMCOMPARE;
+
+            case "spelling":
+                return TCONST.Thumb.SPELLING;
+
+            case "bigmath":
+                return TCONST.Thumb.BIGMATH;
+
+
+
             default:
                 return TCONST.Thumb.NOTHING;
 
