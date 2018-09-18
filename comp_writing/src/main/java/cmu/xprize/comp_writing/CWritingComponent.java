@@ -594,6 +594,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 //since the mListWordsInput is now updated, the parameters for mActiveWord have also changed.
                 mActiveWord = mListWordsInput.get(currentWordIndex);
+                if(activityFeature.contains("FTR_SEN_WRD")){
 
                 //might have to change this. works for now.
                 evaluateSentenceWordLevel();
@@ -605,6 +606,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //                    applyBehavior(WR_CONST.ON_CORRECT); //should increment the current word index and the mActiveWord also thus changes.
 //                    temporaryOnCorrect();
 //                }
+                }
+                else if(activityFeature.contains("FTR_SEN_SEN")){
+
+                }
             }
 
             //if cannot insert
@@ -877,6 +882,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                     //set the current active word, so that hesitation and feedback can be shown on this word.
                     currentWordIndex = getActiveWordIndex(mActiveIndex);
+
+                    //amogh comment, the active word initialised here is not right, remove this declaration unless this one is used until the next declaration.
                     if (currentWordIndex != -1){
                         mActiveWord = mListWordsInput.get(currentWordIndex);
                     }
@@ -912,13 +919,23 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                                 if(currentWordIndex != -1) { //when the replacement is in a word
                                     // check if the word written is correct and release ON_CORRECT. How to check that a word is written correctly? strings should match bw
 
+                                    //refreshing mActiveWord
+                                    if (currentWordIndex != -1) {
+                                        mActiveWord = mListWordsInput.get(currentWordIndex);
+                                    }
+
                                     String writtenActiveWord = mActiveWord.getWrittenWordString();
                                     String writtenAnswerWord = mListWordsAnswer.get(currentWordIndex).getWordAnswer();
                                     boolean writtenWordIsCorrect = writtenActiveWord.equals(writtenAnswerWord);
                                     if (writtenWordIsCorrect) {
+                                        publishFeature(WR_CONST.FTR_WORD_CORRECT);
                                         applyBehavior(WR_CONST.ON_CORRECT); //should turn word blue
-                                        temporaryOnCorrectSentence();
+//                                        temporaryOnCorrectSentence();
 
+                                    }
+                                    //when correct replacement but the word or the sentence is not yet complete.
+                                    else{
+                                        applyBehavior(WR_CONST.ON_CORRECT);
                                     }
                                 }
 
@@ -1179,9 +1196,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
     public void temporaryOnCorrectSentence(){
-        deactivateEditModeInActiveWord();
-        inhibitWordInput();
-        updateLettersWordResponse();
+//        deactivateEditModeInActiveWord();
+//        inhibitWordInput();
+//        updateLettersWordResponse();
     }
 
     //goes over the unverified words and releases apt features.
@@ -1300,8 +1317,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         //when the written sentence does not match the expected answer
         else{
-            updateSentenceAttemptFeature();
             applyBehavior(WR_CONST.ON_ERROR); //activates the edit mode.
+            updateSentenceAttemptFeature();
         }
     }
     //amogh added ends
