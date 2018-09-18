@@ -1557,10 +1557,18 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         mActiveWord.hideWordGlyphs();
     }
 
+    public void clearActiveWordGlyphs(){
+        mActiveWord.clearGlyphs();
+    }
+
     public void rippleReplayCurrentWord(String type){
         mActiveWord.rippleReplayWord(type);
         if(activityFeature.contains("FTR_SEN_WRD")){
             evaluateSentenceWordLevel();
+        }
+        else if(activityFeature.contains("FTR_SEN_SEN")){
+            updateSentenceEditSequence();
+            mListWordsInput = getUpdatedListWordsInput(mListWordsInput, mAlignedSourceSentence,mAlignedTargetSentence);
         }
     }
 
@@ -2806,8 +2814,15 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             }
         }
 
+        public void clearGlyphs(){
+            CGlyphController v;
+            for (int i1 : listIndicesAnswer){
+                v = (CGlyphController) mGlyphList.getChildAt(i1);
+                v.post(WR_CONST.ERASE_GLYPH);
+            }
+        }
+
         public void rippleReplayWord(String command){
-            CStimulusController r;
             CGlyphController v;
             for (int i1 : listIndicesAnswer){
                 v = (CGlyphController) mGlyphList.getChildAt(i1);
