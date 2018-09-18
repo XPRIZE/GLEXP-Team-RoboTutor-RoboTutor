@@ -102,7 +102,7 @@
             // HESITATION AUDIO
 
             //First release the right audio features
-            {"name": "debugaudio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "SENTENCE COPYING.mp3","soundpackage": "sentence",  "mode":"flow", "features": ""},
+//            {"name": "hesitationdebugaudio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "SENTENCE COPYING.mp3","soundpackage": "sentence",  "mode":"flow", "features": ""},
             // when to release? when the sentence has been evaluated atleast once (ie one of the FTR_SEN_ATTEMPT is enabled)
             {"name": "release the audio features for the first edit", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "releaseFirstEditAudioFeatures", "parms": "", "features":"FTR_SEN&FTR_SEN_WRD|FTR_SEN&FTR_SEN_SEN&FTR_SEN_ATTEMPT_1|FTR_SEN&FTR_SEN_SEN&FTR_SEN_ATTEMPT_2|FTR_SEN&FTR_SEN_SEN&FTR_SEN_ATTEMPT_3|FTR_SEN&FTR_SEN_SEN&FTR_SEN_ATTEMPT_4"},
 
