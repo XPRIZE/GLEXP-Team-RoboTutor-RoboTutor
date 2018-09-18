@@ -871,8 +871,9 @@
             {"name": "update the response color for the word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "updateWordResponse", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_SEN&FTR_ATTEMPT_1"},
 
             //FTR_ATTEMPT_1 is used for counting errors on words, FTR_SEN_ATTEMPT_1 is for sentence level mistakes
-            {"name": "mistake in the prompt", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Sorry, what you wrote is not correct.mp3","soundpackage": "sentence","mode": "flow", "features": "FTR_SEN_COPY&FTR_SEN_SEN&FTR_SEN_ATTEMPT_1"},
+            {"name": "mistake in the prompt", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Sorry, what you wrote is not correct.mp3","soundpackage": "sentence","mode": "flow", "features": "FTR_SEN_COPY&FTR_SEN_SEN&!FTR_SEN_ATTEMPT_1&!FTR_SEN_ATTEMPT_2&!FTR_SEN_ATTEMPT_3&!FTR_SEN_ATTEMPT_4"},
             {"name": "Activate the edit mode for the sentence", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "activateEditMode", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_SEN&FTR_SEN_EVAL"}, //only play when initially evaluated not everytime.
+            {"name": "update the sentence attempt features", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "updateSentenceAttemptFeature", "parms": "", "features":""},
 
             // 2nd-3rd wrong attempt - show overlay
 
