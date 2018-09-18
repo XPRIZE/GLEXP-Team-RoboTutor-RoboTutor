@@ -2991,7 +2991,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     }
 
-
     public void releaseFirstEditAudioFeatures() {
         EditOperation firstEdit = getFirstEditOperation(mWrittenSentence, mAnswer);
         releaseAudioFeatures(firstEdit);
