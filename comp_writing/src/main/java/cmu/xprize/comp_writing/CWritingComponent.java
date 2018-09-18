@@ -1103,7 +1103,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
      */
     private int updateSentenceAttemptFeature(){
         clearSentenceAttemptFeatures();
-        int attempt = mSentenceAttempts++;
+        int attempt = ++mSentenceAttempts;
         if (attempt <= 4){
             publishFeature(_senAttemptFTR.get(attempt - 1));
         }
@@ -2987,7 +2987,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         else{
 
         }
-        int i = 1;
+        int i = 1; //just to put a breakpoint and see the features.
 
     }
 
