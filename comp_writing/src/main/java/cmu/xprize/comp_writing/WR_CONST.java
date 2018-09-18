@@ -46,6 +46,7 @@ public class WR_CONST {
     public static final String FTR_HESITATION_5            = "FTR_HESITATION_5";
 
     public static final String FTR_WORD_CORRECT            = "FTR_WORD_CORRECT";
+    public static final String FTR_SEN_EVAL                = "FTR_SEN_EVAL";
     //amogh add finish
 
 

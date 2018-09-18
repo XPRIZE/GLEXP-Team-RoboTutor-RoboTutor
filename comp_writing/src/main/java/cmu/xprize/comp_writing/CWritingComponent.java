@@ -1317,8 +1317,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         //when the written sentence does not match the expected answer
         else{
+            publishFeature(WR_CONST.FTR_SEN_EVAL);
             applyBehavior(WR_CONST.ON_ERROR); //activates the edit mode.
-            updateSentenceAttemptFeature();
         }
     }
     //amogh added ends
