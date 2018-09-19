@@ -21,7 +21,6 @@ package cmu.xprize.robotutor.tutorengine;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.PowerManager;
 import android.util.Log;
@@ -37,8 +36,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
-import cmu.xprize.comp_logging.PerformanceLogItem;
-import cmu.xprize.comp_session.AS_CONST;
 import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.tutorengine.graph.databinding;
@@ -245,8 +242,7 @@ public class CTutorEngine implements ILoadableObject2 {
             return;
         }
 
-        createTutor(defTutor, RoboTutor.SELECTOR_MODE, null);
-        launchTutor(tutorBindings);
+        createAndLaunchTutor(defTutor, RoboTutor.SELECTOR_MODE, null, tutorBindings); // FOR_MOM (-1) where Activity Selector is launched
     }
 
     /**
@@ -261,8 +257,7 @@ public class CTutorEngine implements ILoadableObject2 {
 
         initializeBindingPattern(tutorBinding, tutorFile);
 
-        createTutor(tutorDescriptor.tutorName , tutorDescriptor.features, tutorId);
-        launchTutor(tutorBinding);
+        createAndLaunchTutor(tutorDescriptor.tutorName , tutorDescriptor.features, tutorId, tutorBinding);
     }
 
     /**
@@ -339,15 +334,13 @@ public class CTutorEngine implements ILoadableObject2 {
      * @param tutorName
      * @param features
      */
-    static private void createTutor(String tutorName, String features, String tutorId) {
+    static private void createAndLaunchTutor(String tutorName, String features, String tutorId, defdata_tutor dataSource) {
 
-        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r4: killActiveTutor called from createTutor(" + tutorName + ")");
+        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r4: killActiveTutor called from createAndLaunchTutor(" + tutorName + ")");
         killActiveTutor();
 
         // GRAY_SCREEN_BUG
-        Log.d(TAG, "createTutor: " + tutorName);
-        Log.wtf("WARRIOR_MAN", "createTutor: tutorName=" + tutorName);
-        Log.wtf("WARRIOR_MAN", "createTutor: tutorId=" + tutorId);
+        Log.d(TAG, "createAndLaunchTutor: " + tutorName + ", " + tutorId);
 
         // Create a new tutor container relative to the masterContainer
         //
@@ -361,12 +354,6 @@ public class CTutorEngine implements ILoadableObject2 {
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "p2: Initializing tutor: " + tutorName);
 
         activeTutor = new CTutor(Activity, tutorName, tutorId, (ITutorManager)tutorContainer, TutorLogManager, mRootScope, language, features);
-    }
-
-    /**
-     *  Note: You must call createTutor at some point prior to this call
-     */
-    static private void launchTutor(defdata_tutor dataSource) {
 
         activeTutor.launchTutor(dataSource);
     }
@@ -532,7 +519,7 @@ public class CTutorEngine implements ILoadableObject2 {
      */
     static public void launch(String intentType, String tutorVariant, String dataSource, String tutorId) {
 
-        Log.wtf("WARRIOR_MAN", "launch: tutorId=" + tutorId);
+        Log.d(TAG, "launch: tutorId=" + tutorId);
 
         Intent extIntent = new Intent();
         String extPackage;
@@ -555,8 +542,7 @@ public class CTutorEngine implements ILoadableObject2 {
             case "native":
 
                 Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "p3b: Creating Tutor in 'CTutor.launch': " + tutorDescriptor.tutorName);
-                createTutor(tutorDescriptor.tutorName, tutorDescriptor.features, tutorId);
-                launchTutor(tutorBinding);
+                createAndLaunchTutor(tutorDescriptor.tutorName, tutorDescriptor.features, tutorId, tutorBinding);
                 break;
 
             case "browser":
