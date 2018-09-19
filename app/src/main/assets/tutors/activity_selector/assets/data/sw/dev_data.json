@@ -2,7 +2,6 @@
   "rootSkillWrite": "story.hear::School_Welcome_Song",
   "rootSkillStories": "story.hear::story_1__it_1",
   "rootSkillMath": "story.hear::Kusoma_Welcome_Song__it_1",
-  "rootSkillShapes": "bpop.shp:say_mc",
   "writeTransitions": {
     "story.hear::School_Welcome_Song": {
       "type": "TRANSITION",
@@ -29572,47 +29571,6 @@
       "prev": "bpop.mn:400..900.MN-TD-UP-OFF100-BL2.decr.103",
       "harder": "story.hear::Kusoma_Welcome_Song__it_9",
       "easier": "bpop.addsub:100..800.rand.SUB-3D-H.36"
-    }
-  },
-  "shapeTransitions": {
-    "bpop.shp:say_mc": {
-      "type": "TRANSITION",
-      "skill": "shapes",
-      "tutor_id": "bpop.shp:say_mc",
-      "tutor_desc": "bpop.shp",
-      "tutor_data": "[file]bpop.shp_say_mc.json",
-      "cell_row": "1",
-      "cell_column": "1",
-      "same": "bpop.shp:say_mc",
-      "next": "bpop.shp:say_rise",
-      "harder": "bpop.shp:say_rise",
-      "easier": "bpop.shp:say_rise"
-    },
-    "bpop.shp:say_rise": {
-      "type": "TRANSITION",
-      "skill": "shapes",
-      "tutor_id": "bpop.shp:say_rise",
-      "tutor_desc": "bpop.shp",
-      "tutor_data": "[file]bpop.shp_say_rise.json",
-      "cell_row": "1",
-      "cell_column": "2",
-      "same": "bpop.shp:say_rise",
-      "next": "bpop.shp:say_mc",
-      "harder": "bpop.shp:say_mc",
-      "easier": "bpop.shp:say_mc"
-    },
-    "numberscale:1": {
-      "type": "TRANSITION",
-      "skill": "shapes",
-      "tutor_id": "numberscale:1",
-      "tutor_desc": "numberscale",
-      "tutor_data": "[file]numberscale_1.json",
-      "cell_row": "2",
-      "cell_column": "1",
-      "same": "numberscale:1",
-      "next": "bpop.shp:say_rise",
-      "harder": "bpop.shp:say_rise",
-      "easier": "bpop.shp:say_rise"
     }
   },
   "writePlacementRoot": "bpop.ltr.uc:A..Z.vow.asc.all.stat.noShow.25",

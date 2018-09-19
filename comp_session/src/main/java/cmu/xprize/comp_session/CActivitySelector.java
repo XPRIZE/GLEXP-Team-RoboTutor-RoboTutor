@@ -57,7 +57,6 @@ public class CActivitySelector extends FrameLayout implements IButtonController,
     public HashMap      writeTransitions;
     public HashMap      storyTransitions;
     public HashMap      mathTransitions;
-    public HashMap      shapeTransitions;
 
     public CPlacementTest_Tutor[] writePlacement;
     public CPlacementTest_Tutor[]   mathPlacement;

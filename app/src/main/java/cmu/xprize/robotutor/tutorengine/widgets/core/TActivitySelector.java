@@ -117,12 +117,10 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
     private String      writingTutorID;
     private String      storiesTutorID;
     private String      mathTutorID;
-    private String      shapesTutorID;
 
     private CAt_Data    writingVector = null;
     private CAt_Data    storiesVector = null;
     private CAt_Data    mathVector    = null;
-    private CAt_Data    shapesVector  = null;
 
     private HashMap<String,String>  _StringVar  = new HashMap<>();
     private HashMap<String,Integer> _IntegerVar = new HashMap<>();
@@ -275,13 +273,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
                 rootTutor = rootSkillMath;
                 break;
 
-            case AS_CONST.BEHAVIOR_KEYS.SELECT_SHAPES:
-
-                activeTutor   = shapesTutorID;
-                transitionMap = shapeTransitions;
-                rootTutor = rootSkillShapes;
-                break;
-
         }
 
         SdebugActivity.initGrid(activeSkill, activeTutor, transitionMap, rootTutor);
@@ -418,11 +409,87 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
     /** This allows us to update the current tutor for a given skill from the CDebugComponent
      *
-      */
+     */
     @Override
     public void doDebugLaunchAction(String debugTutor) {
 
+        // RoboTutor.SELECTOR_MODE == "DEBUG_MENU"
         doButtonBehavior(debugTutor);
+
+        String buttonBehavior;
+        // Update the active skill
+        //
+
+        String buttonid = debugTutor;
+        switch (activeSkill) {
+
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
+
+                writingTutorID = buttonid;
+                break;
+
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES:
+
+                storiesTutorID = buttonid;
+                break;
+
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_MATH:
+
+                mathTutorID = buttonid;
+                break;
+        }
+
+        // just reselect the current skill and continue with next tutor
+        // no skill selection phase
+        buttonid = activeSkill;
+        RoboTutor.SELECTOR_MODE = TCONST.FTR_DEBUG_LAUNCH;
+
+        // Serialize the new state
+        // #Mod 329 language switch capability
+        //
+        SharedPreferences prefs = getStudentSharedPreferences();
+
+        SharedPreferences.Editor editor = prefs.edit();
+
+        // only one will have been changed but update all
+        //
+        editor.putString(TCONST.SKILL_WRITING, writingTutorID);
+        editor.putString(TCONST.SKILL_STORIES, storiesTutorID);
+        editor.putString(TCONST.SKILL_MATH, mathTutorID);
+
+        editor.apply();
+
+        buttonBehavior = buttonid;
+        // RoboTutor.SELECTOR_MODE == "DEBUG_LAUNCH"
+
+        processTutorSelectMode(buttonBehavior, false);
+    }
+
+    /**
+     * Button clicks may come from either the skill selector ASK component or the Difficulty
+     * selector ASK component.
+     *
+     * @param buttonBehavior
+     */
+    @Override
+    public void doButtonBehavior(String buttonBehavior) {
+
+        // RoboTutor.SELECTOR_MODE = "FTR_TUTOR_SELECT"
+        Log.d(TAG, "Button Selected: " + buttonBehavior);
+
+        boolean repeatLast = false;
+        // NEW_MENU (4)... repeat last one played!!!
+        if (buttonBehavior.equals(AS_CONST.SELECT_REPEAT)) {
+            Log.wtf("REPEAT_STUFF", "launching last played tutor... " + activeTutor);
+            Log.wtf("REPEAT_STUFF", "launching last played skill... " + activeSkill);
+            buttonBehavior = activeSkill; // NEW_MENU (7) what about first time?
+            // ytf is this different... sometimes STORIES_SELECTED...
+            repeatLast = true;
+
+        }
+
+        processTutorSelectMode(buttonBehavior, repeatLast);
+
     }
 
     /** This allows us to update the current tutor for a given skill from the CDebugComponent
@@ -463,42 +530,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
     }
 
     /**
-     * Button clicks may come from either the skill selector ASK component or the Difficulty
-     * selector ASK component.
-     *
-     * @param buttonBehavior
-     */
-    @Override
-    public void doButtonBehavior(String buttonBehavior) {
-
-        Log.d(TAG, "Button Selected: " + buttonBehavior);
-        // FOR_MOM (2.4)
-
-        if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DEBUG_SELECT)) {
-            buttonBehavior = processDebugSelectMode(buttonBehavior);
-        }
-
-        boolean repeatLast = false;
-        // NEW_MENU (4)... repeat last one played!!!
-        if (RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_TUTOR_SELECT) &&
-                buttonBehavior.equals(AS_CONST.SELECT_REPEAT)) {
-            Log.wtf("REPEAT_STUFF", "launching last played tutor... " + activeTutor);
-            Log.wtf("REPEAT_STUFF", "launching last played skill... " + activeSkill);
-            buttonBehavior = activeSkill; // NEW_MENU (7) what about first time?
-            // ytf is this different... sometimes STORIES_SELECTED...
-            repeatLast = true;
-
-        }
-
-        // If on the Tutor Select (home) screen, or we have triggered a launch from the debug screen,
-        // RoboTutor will go into an activity.
-        if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_TUTOR_SELECT) ||
-                RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DEBUG_LAUNCH)) {
-           processTutorSelectMode(buttonBehavior, repeatLast);
-        }
-    }
-
-    /**
      * FOR_MOM (7) this is the biggest mess...
      * Method for processing button press on the TUTOR_SELECT (home) screen
      * @param buttonid
@@ -507,8 +538,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
         // check SharedPreferences
         final SharedPreferences prefs = getStudentSharedPreferences();
-
-        Log.wtf("REPEAT_STUFF", "buttonid = " + buttonid);
 
 
         boolean     buttonFound = false;
@@ -549,16 +578,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
                 rootTutor     = rootSkillMath;
                 transitionMap = mathTransitions;
                 buttonFound   = true;
-                break;
-
-            case AS_CONST.BEHAVIOR_KEYS.SELECT_SHAPES:
-
-                activeSkill   = AS_CONST.BEHAVIOR_KEYS.SELECT_SHAPES;
-                activeTutor   = shapesTutorID;
-                rootTutor     = rootSkillShapes;
-                transitionMap = shapeTransitions;
-                buttonFound   = true;
-
                 break;
         }
 
@@ -805,12 +824,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
                 placementIndex = prefs.getInt("MATH_PLACEMENT_INDEX", 0);
                 break;
 
-            case AS_CONST.BEHAVIOR_KEYS.SELECT_SHAPES:
-
-                activeTutor = shapesTutorID;
-                transitionMap = shapeTransitions;
-                break;
-
         }
 
 
@@ -860,11 +873,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
                 mathTutorID = nextTutor;
                 break;
-
-            case AS_CONST.BEHAVIOR_KEYS.SELECT_SHAPES:
-
-                shapesTutorID = nextTutor;
-                break;
         }
 
         // Serialize the new state
@@ -880,7 +888,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         editor.putString(TCONST.SKILL_WRITING, writingTutorID);
         editor.putString(TCONST.SKILL_STORIES, storiesTutorID);
         editor.putString(TCONST.SKILL_MATH, mathTutorID);
-        editor.putString(TCONST.SKILL_SHAPES, shapesTutorID);
         editor.putString(TCONST.LAST_TUTOR, activeTutor);
 
         editor.apply();
@@ -1126,62 +1133,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
             childScope = "numberscale";
         }
         return childScope;
-    }
-
-    /**
-     * Method for processing button press on the DEBUG_SELECT screen
-     * @param buttonid
-     * @return new button id, to be selected for the DEBUG_LAUNCH screen
-     */
-    private String processDebugSelectMode(String buttonid) {
-        // Update the active skill
-        //
-
-        switch (activeSkill) {
-
-            case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
-
-                writingTutorID = buttonid;
-                break;
-
-            case AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES:
-
-                storiesTutorID = buttonid;
-                break;
-
-            case AS_CONST.BEHAVIOR_KEYS.SELECT_MATH:
-
-                mathTutorID = buttonid;
-                break;
-
-            case AS_CONST.BEHAVIOR_KEYS.SELECT_SHAPES:
-
-                shapesTutorID = buttonid;
-                break;
-        }
-
-        // just reselect the current skill and continue with next tutor
-        // no skill selection phase
-        buttonid = activeSkill;
-        RoboTutor.SELECTOR_MODE = TCONST.FTR_DEBUG_LAUNCH;
-
-        // Serialize the new state
-        // #Mod 329 language switch capability
-        //
-        SharedPreferences prefs = getStudentSharedPreferences();
-
-        SharedPreferences.Editor editor = prefs.edit();
-
-        // only one will have been changed but update all
-        //
-        editor.putString(TCONST.SKILL_WRITING, writingTutorID);
-        editor.putString(TCONST.SKILL_STORIES, storiesTutorID);
-        editor.putString(TCONST.SKILL_MATH, mathTutorID);
-        editor.putString(TCONST.SKILL_SHAPES, shapesTutorID);
-
-        editor.apply();
-
-        return buttonid;
     }
 
     /**
@@ -1803,7 +1754,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
         // stories doesn't have placement testing
         storiesTutorID = prefs.getString(TCONST.SKILL_STORIES, rootSkillStories);
-        shapesTutorID  = prefs.getString(TCONST.SKILL_SHAPES,  rootSkillShapes);
 
         generateTransitionVectors();
 
@@ -1820,7 +1770,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         writingVector = (CAt_Data) writeTransitions.get(writingTutorID);
         storiesVector = (CAt_Data) storyTransitions.get(storiesTutorID);
         mathVector    = (CAt_Data) mathTransitions.get(mathTutorID);
-        shapesVector  = (CAt_Data) shapeTransitions.get(shapesTutorID);
     }
 
 
@@ -1892,12 +1841,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
             Log.e(TAG, "Invalid - rootSkillMath : nomatch");
         }
 
-        outcome = validateMap(shapeTransitions, rootSkillShapes );
-        if(!outcome.equals("")) {
-
-            Log.e(TAG, "Invalid - rootSkillShapes : nomatch");
-        }
-
     }
 
 
@@ -1938,7 +1881,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         validateTable(writeTransitions,  "writeTransition: ");
         validateTable(storyTransitions,  "storyTransition: ");
         validateTable(mathTransitions ,  "mathTransition: ");
-        validateTable(shapeTransitions,  "shapeTransition: " );
     }
 
     /**

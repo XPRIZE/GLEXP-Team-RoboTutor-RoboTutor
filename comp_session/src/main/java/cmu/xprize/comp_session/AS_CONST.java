@@ -25,7 +25,6 @@ public class AS_CONST {
         public static final String SELECT_WRITING    = "SELECT_WRITING";    // Behavior Key
         public static final String SELECT_STORIES    = "SELECT_STORIES";    // Behavior Key
         public static final String SELECT_MATH       = "SELECT_MATH";       // Behavior Key
-        public static final String SELECT_SHAPES     = "SELECT_SHAPES";     // get rid of me
     }
 
     public static final String BUTTON_EVENT      = "BUTTON_EVENT";      // BUTTON_BEHAVIOR --> postEvent(this)

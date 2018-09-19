@@ -46,7 +46,6 @@ public class TCONST {
     public static final String SKILL_WRITING    = "letters";
     public static final String SKILL_STORIES    = "stories";
     public static final String SKILL_MATH       = "numbers";
-    public static final String SKILL_SHAPES     = "shapes";
 
 
     public static final String SKILL_WRITING_PLACEMENT    = "letters_placement";
