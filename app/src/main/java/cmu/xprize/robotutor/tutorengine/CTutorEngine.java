@@ -153,16 +153,6 @@ public class CTutorEngine implements ILoadableObject2 {
     }
 
 
-    /**
-     * Called from the Activity when the back button is pressed.
-     *
-     */
-    public boolean onBackButton() {
-        boolean result = false;
-
-        return result;
-    }
-
     static public TScope getScope() {
 
         return mRootScope;
@@ -249,7 +239,7 @@ public class CTutorEngine implements ILoadableObject2 {
      *
      * This launches a new tutor immediately at startup. Used for quick debugging.
      */
-    public void quickLaunch(String tutorVariant, String tutorId, String tutorFile) {
+    static public void quickLaunch(String tutorVariant, String tutorId, String tutorFile) {
 
 
         defvar_tutor  tutorDescriptor = tutorVariants.get(tutorVariant);

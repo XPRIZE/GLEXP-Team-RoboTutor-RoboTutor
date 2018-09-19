@@ -10,43 +10,44 @@
 
     <!-- NEW_MENU (0) √√√ change layout -->
     <!-- NEW_MENU (5) change image that goes here -->
+    <!-- FOR_MOM (4) can we just directly reference these buttons some how or something? -->
     <ImageButton
-        android:id="@+id/Sbutton1"
+        android:id="@+id/SbuttonOption1"
         android:layout_width="match_parent"
         android:scaleType="fitCenter"
         android:padding="40dp"
         app:layout_heightPercent="50%"
         app:layout_widthPercent="33%"
         android:background="@null"
-        android:src="@drawable/button_math_select"
+        android:src="@drawable/pentagon"
         />
 
     <ImageButton
-        android:id="@+id/Sbutton2"
-        android:layout_toRightOf="@id/Sbutton1"
+        android:id="@+id/SbuttonOption2"
+        android:layout_toRightOf="@id/SbuttonOption1"
         android:scaleType="fitCenter"
         android:layout_width="match_parent"
         android:padding="40dp"
         app:layout_heightPercent="50%"
         app:layout_widthPercent="33%"
         android:background="@null"
-        android:src="@drawable/button_math_select"/>
+        android:src="@drawable/triangle"/>
 
     <ImageButton
-        android:id="@+id/Sbutton3"
-        android:layout_toRightOf="@id/Sbutton2"
+        android:id="@+id/SbuttonOption3"
+        android:layout_toRightOf="@id/SbuttonOption2"
         android:scaleType="fitCenter"
         android:layout_width="match_parent"
         android:padding="40dp"
         app:layout_heightPercent="50%"
         app:layout_widthPercent="33%"
         android:background="@null"
-        android:src="@drawable/button_math_select"/>
+        android:src="@drawable/circle"/>
 
     <ImageButton
         android:id="@+id/SbuttonEmpty"
         android:scaleType="fitCenter"
-        android:layout_below="@+id/Sbutton1"
+        android:layout_below="@+id/SbuttonOption1"
         android:layout_width="match_parent"
         android:padding="40dp"
         app:layout_heightPercent="50%"
@@ -55,23 +56,23 @@
         />
 
     <ImageButton
-        android:id="@+id/Sbutton5"
+        android:id="@+id/SbuttonRepeat"
         android:scaleType="fitCenter"
-        android:layout_below="@+id/Sbutton2"
+        android:layout_below="@+id/SbuttonOption2"
         android:layout_toRightOf="@+id/SbuttonEmpty"
         android:layout_width="match_parent"
         android:padding="40dp"
         app:layout_heightPercent="50%"
         app:layout_widthPercent="33%"
         android:background="@null"
-        android:src="@null"
+        android:src="@drawable/button_repeat_select"
         />
     <!-- NEW_MENU (7) this should be added programatically -->
 
     <ImageButton
-        android:id="@+id/Sbutton6"
-        android:layout_toRightOf="@id/Sbutton2"
-        android:layout_below="@+id/Sbutton3"
+        android:id="@+id/SbuttonExit"
+        android:layout_toRightOf="@id/SbuttonOption2"
+        android:layout_below="@+id/SbuttonOption3"
         android:scaleType="fitCenter"
         android:layout_width="match_parent"
         android:padding="40dp"

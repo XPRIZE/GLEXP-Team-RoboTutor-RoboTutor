@@ -296,36 +296,36 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         _activeLayout.items = new CAskElement[5];
 
         _activeLayout.items[0] =  new CAskElement();
-        _activeLayout.items[0].resource = "thumb_bpop_num"; // FOR_MOM (2) this gets overriden
-        _activeLayout.items[0].componentID = "Sbutton1";    // FOR_MOM (4) direct reference
+        //_activeLayout.items[0].resource = "thumb_bpop_num"; // FOR_MOM (2) this gets overriden
+        _activeLayout.items[0].componentID = "SbuttonOption1";    // FOR_MOM (4) direct reference
         _activeLayout.items[0].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING;
         _activeLayout.items[0].prompt = "reading and writing";
         _activeLayout.items[0].help = "Tap here for reading and writing";
 
         _activeLayout.items[1] =  new CAskElement();
-        _activeLayout.items[1].resource = "button_stories_select"; // FOR_MOM (2) this gets overriden
-        _activeLayout.items[1].componentID = "Sbutton2";
+        //_activeLayout.items[1].resource = "button_stories_select"; // FOR_MOM (2) this gets overriden
+        _activeLayout.items[1].componentID = "SbuttonOption2";
         _activeLayout.items[1].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;        // FOR_MOM (2) this gets overridden
         _activeLayout.items[1].prompt = "stories";
         _activeLayout.items[1].help = "Tap here for a story";
 
         _activeLayout.items[2] =  new CAskElement();
-        _activeLayout.items[2].resource = "button_math_select"; // FOR_MOM (2) this gets overriden
-        _activeLayout.items[2].componentID = "Sbutton3";
+        //_activeLayout.items[2].resource = "button_math_select"; // FOR_MOM (2) this gets overriden
+        _activeLayout.items[2].componentID = "SbuttonOption3";
         _activeLayout.items[2].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_MATH;        // FOR_MOM (2) this gets overridden
         _activeLayout.items[2].prompt = "numbers and math";
         _activeLayout.items[2].help = "Tap here for numbers and math";
 
         _activeLayout.items[3] =  new CAskElement();
-        _activeLayout.items[3].resource = "button_repeat_select"; // FOR_MOM (2) this gets overriden
-        _activeLayout.items[3].componentID = "Sbutton5";
+        //_activeLayout.items[3].resource = "button_repeat_select"; // FOR_MOM (2) this gets overriden
+        _activeLayout.items[3].componentID = "SbuttonRepeat";
         _activeLayout.items[3].behavior = AS_CONST.SELECT_REPEAT;        // FOR_MOM (2) this gets overridden
         _activeLayout.items[3].prompt = "lets do it again";
         _activeLayout.items[3].help = "tap here to do the same thing again";
 
         _activeLayout.items[4] =  new CAskElement();
-        _activeLayout.items[4].resource = "button_exit_select"; // FOR_MOM (2) this gets overriden
-        _activeLayout.items[4].componentID = "Sbutton6";
+        //_activeLayout.items[4].resource = "button_exit_select"; // FOR_MOM (2) this gets overriden
+        _activeLayout.items[4].componentID = "SbuttonExit";
         _activeLayout.items[4].behavior = AS_CONST.SELECT_EXIT;        // FOR_MOM (2) this gets overridden
         _activeLayout.items[4].prompt = "I want to stop using RoboTutor";
         _activeLayout.items[4].help = "tap here to stop using robotutor";
@@ -432,6 +432,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         // then you turn a corner and all of a sudden you know you're exactly where you are...
         // and you're like "huh! I never would have guessed that this is where I'd end up!"
         performButtonBehavior(tag, true);
+        // FOR_MOM (6) can this be a different method from doButtonBehavior???
 
     }
 
@@ -446,12 +447,13 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
         Log.d(TAG, "Button Selected: " + buttonid);
         performButtonBehavior(buttonid, false);
+        // FOR_MOM (6) can this be a different method?
 
 
     }
 
     /**
-     *
+     * FOR_MOM (abc) THIS IS A FUCKING MESS
      *
      * @param buttonid
      * @param roboDebugger
@@ -463,29 +465,9 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         // from any of the transition entries.
         //
 
-        if (buttonid.equals("SELECT_REPEAT")) {
-            Log.wtf("REPEAT_STUFF", "repeat stuff, repeat stuff");
-        }
-
-
         if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DEBUG_SELECT)) {
             buttonid = processDebugSelectMode(buttonid, roboDebugger);
         }
-
-        // If we are in Assessment mode we have prompted the student to assess the difficulty of the
-        // tutor they have just completed.
-        // Difficulty selection
-        //
-
-        // NEW_MENU (4) REMOVE_SA this will never happen
-        //if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DIFFICULTY_ASSESS)) {
-       // if (needsToCalculateNextTutor) {
-            // REMOVE_SA how to still register student performance without switching screens?
-            // REMOVE_SA... A-HA! this isn't happening because it's triggered by a button press..
-            // REMOVE_SA it has to happen after the tutor ends...
-         //   buttonid = processDifficultyAssessMode(buttonid);
-
-        //}
 
         boolean repeatLast = false;
         // NEW_MENU (4)... repeat last one played!!!

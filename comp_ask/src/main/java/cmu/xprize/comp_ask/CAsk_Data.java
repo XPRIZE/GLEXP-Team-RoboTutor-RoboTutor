@@ -28,8 +28,6 @@ public class CAsk_Data implements ILoadableObject {
     // json loadable
     public CAskElement[]   items;
 
-
-
     //************ Serialization
 
 

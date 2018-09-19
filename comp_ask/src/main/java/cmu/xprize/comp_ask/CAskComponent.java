@@ -170,7 +170,6 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
 
     /**
-     * FOR_MOM (3) NEXT this will be the same every time... make it less convoluted.
      * call it "initializeButtonsAndSetButtonImages"...
      * @param dataSource
      */
@@ -196,11 +195,9 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
         buttonList = new ArrayList<>();
 
         for(CAskElement element : dataSource.items) {
-            int test = getResources().getIdentifier(element.componentID, "id", packageName);
+            int viewID = getResources().getIdentifier(element.componentID, "id", packageName);
 
-            ImageButton ibView = (ImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName)); // FOR_MOM (2) this happens first
-
-            ibView.setImageResource(getResources().getIdentifier(element.resource, "drawable", packageName));
+            ImageButton ibView = (ImageButton) findViewById(viewID); // FOR_MOM (2) this happens first
 
             buttonMap.put(ibView, element.componentID);
             buttonList.add(ibView);
@@ -213,6 +210,7 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
         Log.wtf("NEW_MENU", nextActivities[0].tutor_id + " " + nextActivities[1].tutor_id + " " + nextActivities[2].tutor_id);
 
+        // first three buttons are set...
         for(int i = 0; i < nextActivities.length; i++) {
             CAskElement element = mDataSource.items[i];
             ImageButton ibView = (ImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName)); // FOR_MOM (2) then it's overridden
