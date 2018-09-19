@@ -296,35 +296,30 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         _activeLayout.items = new CAskElement[5];
 
         _activeLayout.items[0] =  new CAskElement();
-        //_activeLayout.items[0].resource = "thumb_bpop_num"; // FOR_MOM (2) this gets overriden
         _activeLayout.items[0].componentID = "SbuttonOption1";    // FOR_MOM (4) direct reference
         _activeLayout.items[0].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING;
         _activeLayout.items[0].prompt = "reading and writing";
         _activeLayout.items[0].help = "Tap here for reading and writing";
 
         _activeLayout.items[1] =  new CAskElement();
-        //_activeLayout.items[1].resource = "button_stories_select"; // FOR_MOM (2) this gets overriden
         _activeLayout.items[1].componentID = "SbuttonOption2";
         _activeLayout.items[1].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;        // FOR_MOM (2) this gets overridden
         _activeLayout.items[1].prompt = "stories";
         _activeLayout.items[1].help = "Tap here for a story";
 
         _activeLayout.items[2] =  new CAskElement();
-        //_activeLayout.items[2].resource = "button_math_select"; // FOR_MOM (2) this gets overriden
         _activeLayout.items[2].componentID = "SbuttonOption3";
         _activeLayout.items[2].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_MATH;        // FOR_MOM (2) this gets overridden
         _activeLayout.items[2].prompt = "numbers and math";
         _activeLayout.items[2].help = "Tap here for numbers and math";
 
         _activeLayout.items[3] =  new CAskElement();
-        //_activeLayout.items[3].resource = "button_repeat_select"; // FOR_MOM (2) this gets overriden
         _activeLayout.items[3].componentID = "SbuttonRepeat";
         _activeLayout.items[3].behavior = AS_CONST.SELECT_REPEAT;        // FOR_MOM (2) this gets overridden
         _activeLayout.items[3].prompt = "lets do it again";
         _activeLayout.items[3].help = "tap here to do the same thing again";
 
         _activeLayout.items[4] =  new CAskElement();
-        //_activeLayout.items[4].resource = "button_exit_select"; // FOR_MOM (2) this gets overriden
         _activeLayout.items[4].componentID = "SbuttonExit";
         _activeLayout.items[4].behavior = AS_CONST.SELECT_EXIT;        // FOR_MOM (2) this gets overridden
         _activeLayout.items[4].prompt = "I want to stop using RoboTutor";
@@ -332,6 +327,27 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
     }
 
+
+    /**
+     * Replaces animator graph so we can trace variables
+     */
+    public void setAllStickyBehavior() {
+        setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.DESCRIBE_BEHAVIOR, AS_CONST.QUEUEMAP_KEYS.BUTTON_DESCRIPTION);
+        setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.DESCRIBE_COMPLETE, "SET_HESITATION_FEEDBACK");
+        setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_BEHAVIOR, "CLEAR_HESITATION_BEHAVIOR");
+        setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.LAUNCH_EVENT, "LAUNCH_BEHAVIOR");
+
+        // Home screen button behavior...
+        setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
+        setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
+        setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_MATH, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
+        setStickyBehavior(AS_CONST.SELECT_REPEAT, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
+        setStickyBehavior(AS_CONST.SELECT_EXIT, AS_CONST.QUEUEMAP_KEYS.EXIT_BUTTON_BEHAVIOR);
+
+        // Debug screen button behavior...
+        setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_DEBUGLAUNCH, AS_CONST.QUEUEMAP_KEYS.DEBUG_BUTTON_BEHAVIOR);
+        setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_DEBUG_TAG_LAUNCH, AS_CONST.QUEUEMAP_KEYS.TAG_BUTTON_BEHAVIOR);
+    }
 
     public void enableAskButtons(Boolean enable) {
 

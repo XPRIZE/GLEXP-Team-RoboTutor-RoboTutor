@@ -212,30 +212,7 @@
 
             // Input must be inhibited until all the behaviors are set
             //
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "DESCRIBE_BEHAVIOR:String|BUTTON_DESCRIPTION:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "DESCRIBE_COMPLETE:String|SET_HESITATION_FEEDBACK:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_BEHAVIOR:String|CLEAR_HESITATION_BEHAVIOR:String" ,"features":""},
-
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "LAUNCH_EVENT:String|LAUNCH_BEHAVIOR:String" ,"features":""},
-
-            // Map the button events defined in the activity_selector dataSource to Behaviors
-            //
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_WRITING:String|BUTTON_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_STORIES:String|BUTTON_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_MATH:String|BUTTON_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_SHAPES:String|BUTTON_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_ROBOTUTOR:String|BUTTON_BEHAVIOR:String" ,"features":""},
-
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_CONTINUE:String|BUTTON_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_MAKE_HARDER:String|BUTTON_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_MAKE_EASIER:String|BUTTON_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_AUTO_DIFFICULTY:String|BUTTON_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_REPEAT:String|BUTTON_BEHAVIOR:String" ,"features":""}, // NEW_MENU (7) what?
-
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_EXIT:String|EXIT_BUTTON_BEHAVIOR:String" ,"features":""},
-
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_DEBUGLAUNCH:String|DEBUG_BUTTON_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_DEBUG_TAG_LAUNCH:String|TAG_BUTTON_BEHAVIOR:String" ,"features":""}
+            {"type": "COMMAND", "id": "activity_selector", "method": "setAllStickyBehavior",  "parms": "",  "features":""}
           ]
         }
 
