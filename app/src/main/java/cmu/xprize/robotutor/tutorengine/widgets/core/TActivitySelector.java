@@ -60,6 +60,8 @@ import cmu.xprize.util.TCONST;
 
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.LAUNCH_EVENT;
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;
+import static cmu.xprize.comp_session.AS_CONST.BUTTON_EVENT;
+import static cmu.xprize.comp_session.AS_CONST.TAGGED_BUTTON_EVENT;
 import static cmu.xprize.comp_session.AS_CONST.VAR_TUTOR_ID;
 import static cmu.xprize.comp_session.AS_CONST.VAR_DATASOURCE;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENT;
@@ -303,25 +305,25 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
         _activeLayout.items[1] =  new CAskElement();
         _activeLayout.items[1].componentID = "SbuttonOption2";
-        _activeLayout.items[1].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;        // FOR_MOM (2) this gets overridden
+        _activeLayout.items[1].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;        // FOR_MOM (2.0)
         _activeLayout.items[1].prompt = "stories";
         _activeLayout.items[1].help = "Tap here for a story";
 
         _activeLayout.items[2] =  new CAskElement();
         _activeLayout.items[2].componentID = "SbuttonOption3";
-        _activeLayout.items[2].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_MATH;        // FOR_MOM (2) this gets overridden
+        _activeLayout.items[2].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_MATH;        // FOR_MOM (2.0)
         _activeLayout.items[2].prompt = "numbers and math";
         _activeLayout.items[2].help = "Tap here for numbers and math";
 
         _activeLayout.items[3] =  new CAskElement();
         _activeLayout.items[3].componentID = "SbuttonRepeat";
-        _activeLayout.items[3].behavior = AS_CONST.SELECT_REPEAT;        // FOR_MOM (2) this gets overridden
+        _activeLayout.items[3].behavior = AS_CONST.SELECT_REPEAT;        // FOR_MOM (2.0)
         _activeLayout.items[3].prompt = "lets do it again";
         _activeLayout.items[3].help = "tap here to do the same thing again";
 
         _activeLayout.items[4] =  new CAskElement();
         _activeLayout.items[4].componentID = "SbuttonExit";
-        _activeLayout.items[4].behavior = AS_CONST.SELECT_EXIT;        // FOR_MOM (2) this gets overridden
+        _activeLayout.items[4].behavior = AS_CONST.SELECT_EXIT;        // FOR_MOM (2.0)
         _activeLayout.items[4].prompt = "I want to stop using RoboTutor";
         _activeLayout.items[4].help = "tap here to stop using robotutor";
 
@@ -338,15 +340,11 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.LAUNCH_EVENT, "LAUNCH_BEHAVIOR");
 
         // Home screen button behavior...
-        setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
+        setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR); // FOR_MOM (2.2)
         setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
         setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_MATH, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
         setStickyBehavior(AS_CONST.SELECT_REPEAT, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
         setStickyBehavior(AS_CONST.SELECT_EXIT, AS_CONST.QUEUEMAP_KEYS.EXIT_BUTTON_BEHAVIOR);
-
-        // Debug screen button behavior...
-        setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_DEBUGLAUNCH, AS_CONST.QUEUEMAP_KEYS.DEBUG_BUTTON_BEHAVIOR);
-        setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_DEBUG_TAG_LAUNCH, AS_CONST.QUEUEMAP_KEYS.TAG_BUTTON_BEHAVIOR);
     }
 
     public void enableAskButtons(Boolean enable) {
@@ -411,7 +409,8 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
                     publishValue(AS_CONST.VAR_HELP_AUDIO, element.help);
                     publishValue(AS_CONST.VAR_PROMPT_AUDIO, element.prompt);
 
-                    applyBehavior(element.behavior);
+                    applyBehavior(element.behavior); // FOR_MOM (2.1) this is where the behavior gets applied... thru the stickyMap
+                    // applyBehaviorNode(element.secondary_behavior...)
                 }
             }
         }
@@ -423,106 +422,27 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
     @Override
     public void doDebugLaunchAction(String debugTutor) {
 
-        publishValue(AS_CONST.VAR_BUT_BEHAVIOR, debugTutor);
-
-        applyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_DEBUGLAUNCH);
+        doButtonBehavior(debugTutor);
     }
 
     /** This allows us to update the current tutor for a given skill from the CDebugComponent
      *
+     * Launches from a special debug menu
      */
     @Override
     public void doDebugTagLaunchAction(String tag) {
-
-        publishValue(AS_CONST.VAR_DEBUG_TAG, tag);
-
-        applyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_DEBUG_TAG_LAUNCH);
-    }
-
-    @Override
-    public void doTaggedButtonBehavior(String tag) {
+        // somehow this... goes all the way to "doTaggedButtonBehavior"... dammit.
         Log.d(TAG, "Debug Button with tag: " + tag);
 
-        // sometimes figuring out new code is like driving a new route in a slightly familiar city...
-        // you are driving along unfamiliar roats and you're like "where the heck am I?"
-        // then you turn a corner and all of a sudden you know you're exactly where you are...
-        // and you're like "huh! I never would have guessed that this is where I'd end up!"
-        performButtonBehavior(tag, true);
-        // FOR_MOM (6) can this be a different method from doButtonBehavior???
+        RoboTutor.SELECTOR_MODE = TCONST.FTR_DEBUG_LAUNCH;
 
-    }
-
-    /**
-     * Button clicks may come from either the skill selector ASK component or the Difficulty
-     * selector ASK component.
-     *
-     * @param buttonid
-     */
-    @Override
-    public void doButtonBehavior(String buttonid) {
-
-        Log.d(TAG, "Button Selected: " + buttonid);
-        performButtonBehavior(buttonid, false);
-        // FOR_MOM (6) can this be a different method?
-
-
-    }
-
-    /**
-     * FOR_MOM (abc) THIS IS A FUCKING MESS
-     *
-     * @param buttonid
-     * @param roboDebugger
-     */
-    private void performButtonBehavior(String buttonid, boolean roboDebugger) {
-        // NEW_MENU (7) buttonid = "SELECT_REPEAT"
-        // If we are in debug mode then there is a third selection phase where we are presented
-        // the transition table for the active skill - The author can select a new target tutor
-        // from any of the transition entries.
-        //
-
-        if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DEBUG_SELECT)) {
-            buttonid = processDebugSelectMode(buttonid, roboDebugger);
-        }
-
-        boolean repeatLast = false;
-        // NEW_MENU (4)... repeat last one played!!!
-        if (RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_TUTOR_SELECT) &&
-                buttonid.equals(AS_CONST.SELECT_REPEAT)) {
-            Log.wtf("REPEAT_STUFF", "launching last played tutor... " + activeTutor);
-            Log.wtf("REPEAT_STUFF", "launching last played skill... " + activeSkill);
-            buttonid = activeSkill; // NEW_MENU (7) what about first time?
-            // ytf is this different... sometimes STORIES_SELECTED...
-            repeatLast = true;
-
-        }
-
-        // If on the Tutor Select (home) screen, or we have triggered a launch from the debug screen,
-        // RoboTutor will go into an activity.
-        if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_TUTOR_SELECT) ||
-           RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DEBUG_LAUNCH)) {
-
-            if (roboDebugger) {
-                launchFromDebugMenu(buttonid);
-            } else {
-                processTutorSelectMode(buttonid, repeatLast);
-            }
-
-        }
-    }
-
-    /**
-     * Launches from special custom menu???
-     * @param buttonid
-     */
-    private void launchFromDebugMenu(String buttonid) {
         String intent;
         String file;
 
-        intent = buttonid;
+        intent = tag;
 
         // specify the file name we're debugging with
-        switch (buttonid) {
+        switch (tag) {
             case TCONST.TAG_DEBUG_TAP_COUNT:
                 file = ROBO_DEBUG_FILE_TAP_COUNT;
                 break;
@@ -543,6 +463,43 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
     }
 
     /**
+     * Button clicks may come from either the skill selector ASK component or the Difficulty
+     * selector ASK component.
+     *
+     * @param buttonBehavior
+     */
+    @Override
+    public void doButtonBehavior(String buttonBehavior) {
+
+        Log.d(TAG, "Button Selected: " + buttonBehavior);
+        // FOR_MOM (2.4)
+
+        if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DEBUG_SELECT)) {
+            buttonBehavior = processDebugSelectMode(buttonBehavior);
+        }
+
+        boolean repeatLast = false;
+        // NEW_MENU (4)... repeat last one played!!!
+        if (RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_TUTOR_SELECT) &&
+                buttonBehavior.equals(AS_CONST.SELECT_REPEAT)) {
+            Log.wtf("REPEAT_STUFF", "launching last played tutor... " + activeTutor);
+            Log.wtf("REPEAT_STUFF", "launching last played skill... " + activeSkill);
+            buttonBehavior = activeSkill; // NEW_MENU (7) what about first time?
+            // ytf is this different... sometimes STORIES_SELECTED...
+            repeatLast = true;
+
+        }
+
+        // If on the Tutor Select (home) screen, or we have triggered a launch from the debug screen,
+        // RoboTutor will go into an activity.
+        if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_TUTOR_SELECT) ||
+                RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DEBUG_LAUNCH)) {
+           processTutorSelectMode(buttonBehavior, repeatLast);
+        }
+    }
+
+    /**
+     * FOR_MOM (7) this is the biggest mess...
      * Method for processing button press on the TUTOR_SELECT (home) screen
      * @param buttonid
      */
@@ -556,33 +513,10 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
         boolean     buttonFound = false;
 
-        // DEPRECATED // If user selects "Let robotutor decide" then use student model to decide skill to work next
-        // DEPRECATED // At the moment default to Stories
-        // DEPRECATED
-//        if (buttonid.toUpperCase().equals(AS_CONST.SELECT_ROBOTUTOR)) {
-//
-//            int next = (new Random()).nextInt(3);
-//            switch(next) {
-//                case 0:
-//                    buttonid = AS_CONST.SELECT_WRITING;
-//                    break;
-//
-//                case 1:
-//                    buttonid = AS_CONST.SELECT_STORIES;
-//                    break;
-//
-//                case 2:
-//                    buttonid = AS_CONST.SELECT_MATH;
-//                    break;
-//            }
-//
-//        }
-
         // 2. finish RoboTutor or the ActivitySelector, if necessary
         if(buttonid.toUpperCase().equals(AS_CONST.SELECT_EXIT)) {
             // if EXIT, we finish the app
             mTutor.post(TCONST.FINISH);
-
         }
 
         // First check if it is a skill selection button =
@@ -633,15 +567,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
             if (lastTutor != null) { // for when it's the first time...s
                 activeTutor = lastTutor;
             }
-        }
-
-        if (buttonFound) {
-
-            publishValue(TCONST.SKILL_SELECTED, activeSkill);
-            publishValue(TCONST.TUTOR_SELECTED, activeTutor);
-            publishValue(TCONST.SELECTOR_MODE, RoboTutor.SELECTOR_MODE); // REMOVE_SA (x) publish
-
-            Log.wtf("REPEAT_STUFF", "will launch tutor: " + activeTutor);
         }
 
         if (buttonFound) {
@@ -960,13 +885,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
         editor.apply();
 
-        publishValue(TCONST.SKILL_SELECTED, nextTutor);
-        publishValue(TCONST.SKILL_WRITING, writingTutorID);
-        publishValue(TCONST.SKILL_STORIES, storiesTutorID);
-        publishValue(TCONST.SKILL_MATH, mathTutorID);
-        publishValue(TCONST.SKILL_SHAPES, shapesTutorID);
-        publishValue(TCONST.SELECTOR_MODE, RoboTutor.SELECTOR_MODE); // REMOVE_SA (x) publish
-
         RoboTutor.MUST_CALCULATE_NEXT_TUTOR = false;
 
         return buttonid;
@@ -1215,15 +1133,9 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
      * @param buttonid
      * @return new button id, to be selected for the DEBUG_LAUNCH screen
      */
-    private String processDebugSelectMode(String buttonid, boolean roboDebugger) {
+    private String processDebugSelectMode(String buttonid) {
         // Update the active skill
         //
-        if(roboDebugger){
-            // we know which selector mode we're in, so we can return without changing anything
-            RoboTutor.SELECTOR_MODE = TCONST.FTR_DEBUG_LAUNCH;
-            return buttonid;
-
-        }
 
         switch (activeSkill) {
 
@@ -1260,22 +1172,12 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
         SharedPreferences.Editor editor = prefs.edit();
 
-        // Log.wtf("REPEAT_STUFF", "(processDebugSelectMode) setting SKILL_SELECTED... " + AS_CONST.SELECT_NONE);
-        // editor.putString(TCONST.SKILL_SELECTED, AS_CONST.SELECT_NONE); // √√√ √√√
-
         // only one will have been changed but update all
         //
         editor.putString(TCONST.SKILL_WRITING, writingTutorID);
         editor.putString(TCONST.SKILL_STORIES, storiesTutorID);
         editor.putString(TCONST.SKILL_MATH, mathTutorID);
         editor.putString(TCONST.SKILL_SHAPES, shapesTutorID);
-
-        publishValue(TCONST.SKILL_SELECTED, activeSkill);
-        publishValue(TCONST.SKILL_WRITING, writingTutorID);
-        publishValue(TCONST.SKILL_STORIES, storiesTutorID);
-        publishValue(TCONST.SKILL_MATH, mathTutorID);
-        publishValue(TCONST.SKILL_SHAPES, shapesTutorID);
-        publishValue(TCONST.SELECTOR_MODE, RoboTutor.SELECTOR_MODE); // REMOVE_SA (x) publish
 
         editor.apply();
 
@@ -1546,7 +1448,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
 
     /**
-     * FOR_MOM (x) this stickyBehavior is where events are set
+     * FOR_MOM (2) this stickyBehavior is where events are set
      *
      * // UTILITY
      * DESCRIBE_BEHAVIOR -> BUTTON_DESCRIPTION

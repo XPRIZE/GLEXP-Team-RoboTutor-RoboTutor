@@ -179,8 +179,7 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
         //
         mDataSource = dataSource;
 
-        // FOR_MOM (3) will be the same every time...
-
+        // this will be the same every time...
         int layoutID = getResources().getIdentifier("ask_activity_selector", "layout", packageName);
 
         removeAllViews();
@@ -197,7 +196,7 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
         for(CAskElement element : dataSource.items) {
             int viewID = getResources().getIdentifier(element.componentID, "id", packageName);
 
-            ImageButton ibView = (ImageButton) findViewById(viewID); // FOR_MOM (2) this happens first
+            ImageButton ibView = (ImageButton) findViewById(viewID);
 
             buttonMap.put(ibView, element.componentID);
             buttonList.add(ibView);
@@ -213,7 +212,7 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
         // first three buttons are set...
         for(int i = 0; i < nextActivities.length; i++) {
             CAskElement element = mDataSource.items[i];
-            ImageButton ibView = (ImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName)); // FOR_MOM (2) then it's overridden
+            ImageButton ibView = (ImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
 
             TCONST.Thumb resource = CTutorData_Metadata.getThumbImage(nextActivities[i]);
             Log.wtf("NEW_MENU", resource.toString());

@@ -12,8 +12,6 @@ public class AS_CONST {
         public static final String INTRO_STATEMENT_BEHAVIOR = "INTRO_STATEMENT_BEHAVIOR";
         public static final String INPUT_HESITATION_FEEDBACK = "INPUT_HESITATION_FEEDBACK";
         public static final String BUTTON_DESCRIPTION = "BUTTON_DESCRIPTION";
-        public static final String DEBUG_BUTTON_BEHAVIOR = "DEBUG_BUTTON_BEHAVIOR";
-        public static final String TAG_BUTTON_BEHAVIOR = "TAG_BUTTON_BEHAVIOR";
         public static final String BUTTON_BEHAVIOR = "BUTTON_BEHAVIOR";
         public static final String EXIT_BUTTON_BEHAVIOR = "EXIT_BUTTON_BEHAVIOR";
     }
@@ -28,14 +26,10 @@ public class AS_CONST {
         public static final String SELECT_STORIES    = "SELECT_STORIES";    // Behavior Key
         public static final String SELECT_MATH       = "SELECT_MATH";       // Behavior Key
         public static final String SELECT_SHAPES     = "SELECT_SHAPES";     // get rid of me
-        public static final String SELECT_ROBOTUTOR  = "SELECT_ROBOTUTOR";  // get rid of me
-
-        public static final String SELECT_DEBUGLAUNCH= "SELECT_DEBUGLAUNCH"; // Behavior Key --> DEBUG_BUTTON_BEHAVIOR --> postEvent(BUTTON_EVENT, as.buttonbehavior)
-        public static final String SELECT_DEBUG_TAG_LAUNCH= "SELECT_DEBUG_TAG_LAUNCH"; // Behavior Key --> TAG_BUTTON_BEHAVIOR --> postEvent(TAGGED_BUTTON_EVENT, as.debugTag)
     }
 
-    public static final String BUTTON_EVENT      = "BUTTON_EVENT";      // postEvent
-    public static final String TAGGED_BUTTON_EVENT = "TAGGED_BUTTON_EVENT"; // postEvent
+    public static final String BUTTON_EVENT      = "BUTTON_EVENT";      // BUTTON_BEHAVIOR --> postEvent(this)
+    public static final String TAGGED_BUTTON_EVENT = "TAGGED_BUTTON_EVENT"; // TAG_BUTTON_BEHAVIOR --> postEvent(this)
 
     public static final String BUTTON1           = "SBUTTON1";
     public static final String BUTTON2           = "SBUTTON2";
@@ -53,7 +47,7 @@ public class AS_CONST {
     public static final String SELECT_NONE            = "SELECT_NONE";
 
     public static final String VAR_BUTTONID         = ".buttonid";
-    public static final String VAR_BUT_BEHAVIOR     = ".buttonbehavior";
+    public static final String VAR_BUT_BEHAVIOR     = ".buttonBehavior";
     public static final String VAR_DEBUG_TAG        = ".debugTag";
     public static final String VAR_HELP_AUDIO       = ".helpAudio";
     public static final String VAR_PROMPT_AUDIO     = ".promptAudio";
