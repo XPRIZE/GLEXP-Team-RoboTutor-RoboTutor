@@ -12,11 +12,8 @@ import android.widget.FrameLayout;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import cmu.xprize.comp_ask.CAskComponent;
@@ -25,7 +22,6 @@ import cmu.xprize.util.CPlacementTest_Tutor;
 import cmu.xprize.util.IButtonController;
 import cmu.xprize.comp_debug.CDebugComponent;
 import cmu.xprize.comp_logging.CErrorManager;
-import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IPublisher;
 import cmu.xprize.util.IScope;

@@ -19,7 +19,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 
 import cmu.xprize.comp_ask.ASK_CONST;
 import cmu.xprize.comp_ask.CAskElement;
@@ -52,7 +51,6 @@ import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.CPlacementTest_Tutor;
-import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.IEventSource;
 import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.util.IPublisher;
@@ -223,7 +221,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
         // English version still defined in JSON...
         if (CTutorEngine.language.equals(TCONST.LANG_SW)) {
-            initializeDataSource();
+            initializeActiveLayout();
         }
 
         SaskActivity.setVisibility(VISIBLE);
@@ -234,14 +232,12 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
             processDifficultyAssessMode();
         }
 
-        _activeLayout = dataSource[0];
-        SaskActivity.setDataSource(_activeLayout);
-
         CAt_Data[] nextTutors = new CAt_Data[3];
         nextTutors[0] = (CAt_Data) writeTransitions.get(writingTutorID);
         nextTutors[1] = (CAt_Data) storyTransitions.get(storiesTutorID);
         nextTutors[2] = (CAt_Data) mathTransitions.get(mathTutorID);
-        SaskActivity.setButtonImages(nextTutors); // NEW_MENU (6) can possibly be next.next
+        SaskActivity.initializeButtonsAndSetButtonImages(_activeLayout, nextTutors);
+        //SaskActivity.setButtonImages(); // NEW_MENU (6) can possibly be next.next
     }
 
     /**
@@ -293,53 +289,46 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
      * moving this from JSON... because we need to make it more dynamic...
      * how will this affect the English version???
      */
-    private void initializeDataSource() {
-        dataSource = new CAsk_Data[1];
+    private void initializeActiveLayout() {
 
-        dataSource[0] = new CAsk_Data();
-        dataSource[0].name = "FTR_TUTOR_SELECT";
-        dataSource[0].layoutID = "ask_activity_selector";
-        dataSource[0].items = new CAskElement[5];
+        _activeLayout = new CAsk_Data();
+        //activeLayout.layoutID =
+        _activeLayout.items = new CAskElement[5];
 
-        dataSource[0].items[0] =  new CAskElement();
-        dataSource[0].items[0].datatype = ASK_CONST.IMAGEBUTTON;
-        dataSource[0].items[0].resource = "thumb_bpop_num"; // FOR_MOM (2) this gets overriden
-        dataSource[0].items[0].componentID = "Sbutton1";
-        dataSource[0].items[0].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING;
-        dataSource[0].items[0].prompt = "reading and writing";
-        dataSource[0].items[0].help = "Tap here for reading and writing";
+        _activeLayout.items[0] =  new CAskElement();
+        _activeLayout.items[0].resource = "thumb_bpop_num"; // FOR_MOM (2) this gets overriden
+        _activeLayout.items[0].componentID = "Sbutton1";    // FOR_MOM (4) direct reference
+        _activeLayout.items[0].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING;
+        _activeLayout.items[0].prompt = "reading and writing";
+        _activeLayout.items[0].help = "Tap here for reading and writing";
 
-        dataSource[0].items[1] =  new CAskElement();
-        dataSource[0].items[1].datatype = ASK_CONST.IMAGEBUTTON;
-        dataSource[0].items[1].resource = "button_stories_select"; // FOR_MOM (2) this gets overriden
-        dataSource[0].items[1].componentID = "Sbutton2";
-        dataSource[0].items[1].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;        // FOR_MOM (2) this gets overridden
-        dataSource[0].items[1].prompt = "stories";
-        dataSource[0].items[1].help = "Tap here for a story";
+        _activeLayout.items[1] =  new CAskElement();
+        _activeLayout.items[1].resource = "button_stories_select"; // FOR_MOM (2) this gets overriden
+        _activeLayout.items[1].componentID = "Sbutton2";
+        _activeLayout.items[1].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;        // FOR_MOM (2) this gets overridden
+        _activeLayout.items[1].prompt = "stories";
+        _activeLayout.items[1].help = "Tap here for a story";
 
-        dataSource[0].items[2] =  new CAskElement();
-        dataSource[0].items[2].datatype = ASK_CONST.IMAGEBUTTON;
-        dataSource[0].items[2].resource = "button_math_select"; // FOR_MOM (2) this gets overriden
-        dataSource[0].items[2].componentID = "Sbutton3";
-        dataSource[0].items[2].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_MATH;        // FOR_MOM (2) this gets overridden
-        dataSource[0].items[2].prompt = "numbers and math";
-        dataSource[0].items[2].help = "Tap here for numbers and math";
+        _activeLayout.items[2] =  new CAskElement();
+        _activeLayout.items[2].resource = "button_math_select"; // FOR_MOM (2) this gets overriden
+        _activeLayout.items[2].componentID = "Sbutton3";
+        _activeLayout.items[2].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_MATH;        // FOR_MOM (2) this gets overridden
+        _activeLayout.items[2].prompt = "numbers and math";
+        _activeLayout.items[2].help = "Tap here for numbers and math";
 
-        dataSource[0].items[3] =  new CAskElement();
-        dataSource[0].items[3].datatype = ASK_CONST.IMAGEBUTTON;
-        dataSource[0].items[3].resource = "button_repeat_select"; // FOR_MOM (2) this gets overriden
-        dataSource[0].items[3].componentID = "Sbutton5";
-        dataSource[0].items[3].behavior = AS_CONST.SELECT_REPEAT;        // FOR_MOM (2) this gets overridden
-        dataSource[0].items[3].prompt = "lets do it again";
-        dataSource[0].items[3].help = "tap here to do the same thing again";
+        _activeLayout.items[3] =  new CAskElement();
+        _activeLayout.items[3].resource = "button_repeat_select"; // FOR_MOM (2) this gets overriden
+        _activeLayout.items[3].componentID = "Sbutton5";
+        _activeLayout.items[3].behavior = AS_CONST.SELECT_REPEAT;        // FOR_MOM (2) this gets overridden
+        _activeLayout.items[3].prompt = "lets do it again";
+        _activeLayout.items[3].help = "tap here to do the same thing again";
 
-        dataSource[0].items[4] =  new CAskElement();
-        dataSource[0].items[4].datatype = ASK_CONST.IMAGEBUTTON;
-        dataSource[0].items[4].resource = "button_exit_select"; // FOR_MOM (2) this gets overriden
-        dataSource[0].items[4].componentID = "Sbutton6";
-        dataSource[0].items[4].behavior = AS_CONST.SELECT_EXIT;        // FOR_MOM (2) this gets overridden
-        dataSource[0].items[4].prompt = "I want to stop using RoboTutor";
-        dataSource[0].items[4].help = "tap here to stop using robotutor";
+        _activeLayout.items[4] =  new CAskElement();
+        _activeLayout.items[4].resource = "button_exit_select"; // FOR_MOM (2) this gets overriden
+        _activeLayout.items[4].componentID = "Sbutton6";
+        _activeLayout.items[4].behavior = AS_CONST.SELECT_EXIT;        // FOR_MOM (2) this gets overridden
+        _activeLayout.items[4].prompt = "I want to stop using RoboTutor";
+        _activeLayout.items[4].help = "tap here to stop using robotutor";
 
     }
 

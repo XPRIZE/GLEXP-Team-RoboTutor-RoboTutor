@@ -171,15 +171,18 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
     /**
      * FOR_MOM (3) NEXT this will be the same every time... make it less convoluted.
+     * call it "initializeButtonsAndSetButtonImages"...
      * @param dataSource
      */
-    public void setDataSource(CAsk_Data dataSource) {
+    public void initializeButtonsAndSetButtonImages(CAsk_Data dataSource, CAt_Data[] nextActivities) {
 
         // Keep track of the datasource so we can destroy the references when finished.
         //
         mDataSource = dataSource;
 
-        int layoutID = getResources().getIdentifier(dataSource.layoutID, "layout", packageName);
+        // FOR_MOM (3) will be the same every time...
+
+        int layoutID = getResources().getIdentifier("ask_activity_selector", "layout", packageName);
 
         removeAllViews();
 
@@ -193,39 +196,26 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
         buttonList = new ArrayList<>();
 
         for(CAskElement element : dataSource.items) {
+            int test = getResources().getIdentifier(element.componentID, "id", packageName);
 
-            // FOR_MOM (3) NEXT they will all be IMAGEBUTTON...
-            switch(element.datatype) {
+            ImageButton ibView = (ImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName)); // FOR_MOM (2) this happens first
 
-                case ASK_CONST.IMAGEBUTTON: // NEW_MENU (2) √√√ here is where the images are set!!!
-                    int test = getResources().getIdentifier(element.componentID, "id", packageName);
+            ibView.setImageResource(getResources().getIdentifier(element.resource, "drawable", packageName));
 
-                    ImageButton ibView = (ImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
-
-                    ibView.setImageResource(getResources().getIdentifier(element.resource, "drawable", packageName));
-
-                    buttonMap.put(ibView, element.componentID);
-                    buttonList.add(ibView);
-                    break;
-            }
+            buttonMap.put(ibView, element.componentID);
+            buttonList.add(ibView);
         }
 
         enableButtons(true);
         requestLayout();
-    }
 
-    /**
-     * NEW_MENU √√√
-     * sets the button images to show next tutor, instead of separate for reading, writing, math
-     * @param nextActivities
-     */
-    public void setButtonImages(CAt_Data[] nextActivities) {
+        // here is where button images start...
 
         Log.wtf("NEW_MENU", nextActivities[0].tutor_id + " " + nextActivities[1].tutor_id + " " + nextActivities[2].tutor_id);
 
         for(int i = 0; i < nextActivities.length; i++) {
             CAskElement element = mDataSource.items[i];
-            ImageButton ibView = (ImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
+            ImageButton ibView = (ImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName)); // FOR_MOM (2) then it's overridden
 
             TCONST.Thumb resource = CTutorData_Metadata.getThumbImage(nextActivities[i]);
             Log.wtf("NEW_MENU", resource.toString());
@@ -244,16 +234,11 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
             for (CAskElement element : mDataSource.items) {
 
-                switch (element.datatype) {
+                int test = getResources().getIdentifier(element.componentID, "id", packageName);
 
-                    case ASK_CONST.IMAGEBUTTON:
-                        int test = getResources().getIdentifier(element.componentID, "id", packageName);
+                ImageButton ibView = (ImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
 
-                        ImageButton ibView = (ImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
-
-                        ibView.setImageDrawable(null);
-                        break;
-                }
+                ibView.setImageDrawable(null);
             }
         }
     }

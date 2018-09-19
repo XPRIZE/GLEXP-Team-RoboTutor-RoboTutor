@@ -26,9 +26,6 @@ import cmu.xprize.util.*;
 public class CAsk_Data implements ILoadableObject {
 
     // json loadable
-    public String          name;
-    public String          layoutID;
-
     public CAskElement[]   items;
 
 
