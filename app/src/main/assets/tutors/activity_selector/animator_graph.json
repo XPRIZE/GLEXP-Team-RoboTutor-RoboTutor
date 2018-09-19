@@ -207,9 +207,8 @@
 
             // Conditionally load the layout
             //
-            {"type": "COMMAND", "id": "activity_selector", "method": "setLayout",  "parms": "FTR_TUTOR_SELECT:String",  "features":"FTR_TUTOR_SELECT"},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setLayout",  "parms": "FTR_DIFFICULTY_ASSESS:String",  "features":"FTR_DIFFICULTY_ASSESS"},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setLayout",  "parms": "FTR_DEBUG_SELECT:String",  "features":"FTR_DEBUG_SELECT"},
+            {"type": "COMMAND", "id": "activity_selector", "method": "setTutorSelectLayout",  "parms": "",  "features":"FTR_TUTOR_SELECT"},
+            {"type": "COMMAND", "id": "activity_selector", "method": "setDebugLayout",  "parms": "",  "features":"FTR_DEBUG_SELECT"},
 
             // Input must be inhibited until all the behaviors are set
             //

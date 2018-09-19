@@ -3,18 +3,29 @@ package cmu.xprize.comp_session;
 
 public class AS_CONST {
 
-    public static final String RIPPLE_DESCRIBE  = "RIPPLE_DESCRIBE";
-    public static final String DESCRIBE_NEXT    = "DESCRIBE_NEXT";
+    public static final String RIPPLE_DESCRIBE  = "RIPPLE_DESCRIBE";    // postEvent
+    public static final String DESCRIBE_NEXT    = "DESCRIBE_NEXT";      // postNamed
 
     public static final String CANCEL_DESCRIBE  = "CANCEL_DESCRIBE";
 
-    public static final String DESCRIBE_BEHAVIOR = "DESCRIBE_BEHAVIOR";
-    public static final String SELECT_BEHAVIOR   = "SELECT_BEHAVIOR";
-    public static final String DESCRIBE_COMPLETE = "DESCRIBE_COMPLETE";
-    public static final String BUTTON_EVENT      = "BUTTON_EVENT";
-    public static final String LAUNCH_EVENT      = "LAUNCH_EVENT";
+    public static final class BEHAVIOR_KEYS {
+        public static final String DESCRIBE_BEHAVIOR = "DESCRIBE_BEHAVIOR"; // Behavior Key --> BUTTON_DESCRIPTION (queueMap)
+        public static final String SELECT_BEHAVIOR   = "SELECT_BEHAVIOR";   // Behavior Key --> CLEAR_HESITATION_FEEDBACK (actionMap)
+        public static final String DESCRIBE_COMPLETE = "DESCRIBE_COMPLETE"; // Behavior Key --> SET_HESITATION_FEEDBACK (actionMap)
+        public static final String LAUNCH_EVENT      = "LAUNCH_EVENT";      // Behavior Key --> LAUNCH_BEHAVIOR (actionMap)
 
-    public static final String TAGGED_BUTTON_EVENT = "TAGGED_BUTTON_EVENT";
+        public static final String SELECT_WRITING    = "SELECT_WRITING";    // Behavior Key
+        public static final String SELECT_STORIES    = "SELECT_STORIES";    // Behavior Key
+        public static final String SELECT_MATH       = "SELECT_MATH";       // Behavior Key
+        public static final String SELECT_SHAPES     = "SELECT_SHAPES";     // get rid of me
+        public static final String SELECT_ROBOTUTOR  = "SELECT_ROBOTUTOR";  // get rid of me
+
+        public static final String SELECT_DEBUGLAUNCH= "SELECT_DEBUGLAUNCH"; // Behavior Key --> DEBUG_BUTTON_BEHAVIOR
+        public static final String SELECT_DEBUG_TAG_LAUNCH= "SELECT_DEBUG_TAG_LAUNCH"; // Behavior Key --> TAG_BUTTON_BEHAVIOR
+    }
+
+    public static final String BUTTON_EVENT      = "BUTTON_EVENT";      // postEvent
+    public static final String TAGGED_BUTTON_EVENT = "TAGGED_BUTTON_EVENT"; // postEvent
 
     public static final String BUTTON1           = "SBUTTON1";
     public static final String BUTTON2           = "SBUTTON2";
@@ -22,18 +33,10 @@ public class AS_CONST {
     public static final String BUTTON4           = "SBUTTON4";
     public static final String BUTTON5           = "SBUTTON5";
 
-    public static final String SELECT_WRITING    = "SELECT_WRITING";
-    public static final String SELECT_STORIES    = "SELECT_STORIES";
-    public static final String SELECT_MATH       = "SELECT_MATH";
-    public static final String SELECT_SHAPES     = "SELECT_SHAPES";
-    public static final String SELECT_ROBOTUTOR  = "SELECT_ROBOTUTOR";
-    public static final String SELECT_DEBUGLAUNCH= "SELECT_DEBUGLAUNCH";
-    public static final String SELECT_DEBUG_TAG_LAUNCH= "SELECT_DEBUG_TAG_LAUNCH";
-
-    public static final String SELECT_CONTINUE        = "SELECT_CONTINUE";
-    public static final String SELECT_MAKE_HARDER     = "SELECT_MAKE_HARDER";
-    public static final String SELECT_MAKE_EASIER     = "SELECT_MAKE_EASIER";
-    public static final String SELECT_AUTO_DIFFICULTY = "SELECT_AUTO_DIFFICULTY";
+    public static final String SELECT_CONTINUE        = "SELECT_CONTINUE";          // get rid of me
+    public static final String SELECT_MAKE_HARDER     = "SELECT_MAKE_HARDER";       // get rid of me
+    public static final String SELECT_MAKE_EASIER     = "SELECT_MAKE_EASIER";       // get rid of me
+    public static final String SELECT_AUTO_DIFFICULTY = "SELECT_AUTO_DIFFICULTY";   // get rid of me
     public static final String SELECT_REPEAT          = "SELECT_REPEAT"; // NEW_MENU (7) trace me
     public static final String SELECT_EXIT            = "SELECT_EXIT";
 

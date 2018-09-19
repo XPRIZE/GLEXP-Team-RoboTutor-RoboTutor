@@ -55,7 +55,7 @@ public class PerformancePromotionRules extends PromotionRules {
 
         // make it so if in story.hear... the smiley face actually does something? They may have gotten used to being able to navigate...
         // if student is in the "stories" skill, then give them ability to navigate. Otherwise they could never repeat a story again without cycling through end.
-        if (performance.getActiveSkill().equals(AS_CONST.SELECT_STORIES)) {
+        if (performance.getActiveSkill().equals(AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES)) {
             return SelectedActivity.NEXT;
         }
 

@@ -21,6 +21,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
+import cmu.xprize.comp_ask.ASK_CONST;
 import cmu.xprize.comp_ask.CAskElement;
 import cmu.xprize.comp_ask.CAsk_Data;
 import cmu.xprize.comp_debug.CDebugComponent;
@@ -59,8 +60,8 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
-import static cmu.xprize.comp_session.AS_CONST.LAUNCH_EVENT;
-import static cmu.xprize.comp_session.AS_CONST.SELECT_STORIES;
+import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.LAUNCH_EVENT;
+import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;
 import static cmu.xprize.comp_session.AS_CONST.VAR_TUTOR_ID;
 import static cmu.xprize.comp_session.AS_CONST.VAR_DATASOURCE;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENT;
@@ -74,7 +75,7 @@ import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_BPOP;
 import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_TAP_COUNT;
 import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 
-public class TActivitySelector extends CActivitySelector implements IBehaviorManager, ITutorSceneImpl, IDataSink, IEventSource, IPublisher, ITutorLogger {
+public class TActivitySelector extends CActivitySelector implements ITutorSceneImpl, IDataSink, IEventSource, IPublisher, ITutorLogger {
 
 
     // NEW_MENU TODO:
@@ -213,79 +214,133 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
 
     // REMOVE_SA... perhaps call it here? how is TActivitySelector created?
-    public void setLayout(String name) {
 
-        if(name.equals(TCONST.FTR_DEBUG_SELECT)) {
+    /**
+     * Initialize Layout in Tutor Select mode...
+     * Called from AG, don't delete.
+     */
+    public void setTutorSelectLayout() {
 
-            SaskActivity.setVisibility(GONE);
-            SdebugActivity.setVisibility(VISIBLE);
-
-            // Init the skill pointers
-            //
-            switch (activeSkill) {
-
-                case AS_CONST.SELECT_WRITING:
-
-                    activeTutor   = writingTutorID;
-                    transitionMap = writeTransitions;
-                    rootTutor = rootSkillWrite;
-                    break;
-
-                case AS_CONST.SELECT_STORIES:
-
-                    activeTutor   = storiesTutorID;
-                    transitionMap = storyTransitions;
-                    rootTutor = rootSkillStories;
-                    break;
-
-                case AS_CONST.SELECT_MATH:
-
-                    activeTutor   = mathTutorID;
-                    transitionMap = mathTransitions;
-                    rootTutor = rootSkillMath;
-                    break;
-
-                case AS_CONST.SELECT_SHAPES:
-
-                    activeTutor   = shapesTutorID;
-                    transitionMap = shapeTransitions;
-                    rootTutor = rootSkillShapes;
-                    break;
-
-            }
-
-            SdebugActivity.initGrid(activeSkill, activeTutor, transitionMap, rootTutor);
+        // English version still defined in JSON...
+        if (CTutorEngine.language.equals(TCONST.LANG_SW)) {
+            initializeDataSource();
         }
-        else {
 
-            SaskActivity.setVisibility(VISIBLE);
-            SdebugActivity.setVisibility(GONE);
+        SaskActivity.setVisibility(VISIBLE);
+        SdebugActivity.setVisibility(GONE);
 
-            // REMOVE_SA put it here
-            if (RoboTutor.MUST_CALCULATE_NEXT_TUTOR) {
-                processDifficultyAssessMode();
-            }
-
-            // NEW_MENU (4) REMOVE_SA now there's only one menu!
-            for (CAsk_Data layout : dataSource) {
-
-                if (layout.name.equals(name)) {
-
-                    _activeLayout = layout;
-
-                    SaskActivity.setDataSource(layout); // NEW_MENU (2) √√√ images set inside
-
-                    if (name.equals(TCONST.FTR_TUTOR_SELECT)) {
-                        CAt_Data[] nextTutors = new CAt_Data[3];
-                        nextTutors[0] = (CAt_Data) writeTransitions.get(writingTutorID);
-                        nextTutors[1] = (CAt_Data) storyTransitions.get(storiesTutorID);
-                        nextTutors[2] = (CAt_Data) mathTransitions.get(mathTutorID);
-                        SaskActivity.setButtonImages(nextTutors); // NEW_MENU (6) can possibly be next.next
-                    }
-                    break;
-                }
-            }
+        // REMOVE_SA put it here
+        if (RoboTutor.MUST_CALCULATE_NEXT_TUTOR) {
+            processDifficultyAssessMode();
         }
+
+        _activeLayout = dataSource[0];
+        SaskActivity.setDataSource(_activeLayout);
+
+        CAt_Data[] nextTutors = new CAt_Data[3];
+        nextTutors[0] = (CAt_Data) writeTransitions.get(writingTutorID);
+        nextTutors[1] = (CAt_Data) storyTransitions.get(storiesTutorID);
+        nextTutors[2] = (CAt_Data) mathTransitions.get(mathTutorID);
+        SaskActivity.setButtonImages(nextTutors); // NEW_MENU (6) can possibly be next.next
+    }
+
+    /**
+     * Initialize Layout in Debug Mode...
+     * Called from AG, don't delete.
+     */
+    public void setDebugLayout() {
+        SaskActivity.setVisibility(GONE);
+        SdebugActivity.setVisibility(VISIBLE);
+
+        // Init the skill pointers
+        //
+        switch (activeSkill) {
+
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
+
+                activeTutor   = writingTutorID;
+                transitionMap = writeTransitions;
+                rootTutor = rootSkillWrite;
+                break;
+
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES:
+
+                activeTutor   = storiesTutorID;
+                transitionMap = storyTransitions;
+                rootTutor = rootSkillStories;
+                break;
+
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_MATH:
+
+                activeTutor   = mathTutorID;
+                transitionMap = mathTransitions;
+                rootTutor = rootSkillMath;
+                break;
+
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_SHAPES:
+
+                activeTutor   = shapesTutorID;
+                transitionMap = shapeTransitions;
+                rootTutor = rootSkillShapes;
+                break;
+
+        }
+
+        SdebugActivity.initGrid(activeSkill, activeTutor, transitionMap, rootTutor);
+    }
+
+    /**
+     * moving this from JSON... because we need to make it more dynamic...
+     * how will this affect the English version???
+     */
+    private void initializeDataSource() {
+        dataSource = new CAsk_Data[1];
+
+        dataSource[0] = new CAsk_Data();
+        dataSource[0].name = "FTR_TUTOR_SELECT";
+        dataSource[0].layoutID = "ask_activity_selector";
+        dataSource[0].items = new CAskElement[5];
+
+        dataSource[0].items[0] =  new CAskElement();
+        dataSource[0].items[0].datatype = ASK_CONST.IMAGEBUTTON;
+        dataSource[0].items[0].resource = "thumb_bpop_num"; // FOR_MOM (2) this gets overriden
+        dataSource[0].items[0].componentID = "Sbutton1";
+        dataSource[0].items[0].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING;
+        dataSource[0].items[0].prompt = "reading and writing";
+        dataSource[0].items[0].help = "Tap here for reading and writing";
+
+        dataSource[0].items[1] =  new CAskElement();
+        dataSource[0].items[1].datatype = ASK_CONST.IMAGEBUTTON;
+        dataSource[0].items[1].resource = "button_stories_select"; // FOR_MOM (2) this gets overriden
+        dataSource[0].items[1].componentID = "Sbutton2";
+        dataSource[0].items[1].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;        // FOR_MOM (2) this gets overridden
+        dataSource[0].items[1].prompt = "stories";
+        dataSource[0].items[1].help = "Tap here for a story";
+
+        dataSource[0].items[2] =  new CAskElement();
+        dataSource[0].items[2].datatype = ASK_CONST.IMAGEBUTTON;
+        dataSource[0].items[2].resource = "button_math_select"; // FOR_MOM (2) this gets overriden
+        dataSource[0].items[2].componentID = "Sbutton3";
+        dataSource[0].items[2].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_MATH;        // FOR_MOM (2) this gets overridden
+        dataSource[0].items[2].prompt = "numbers and math";
+        dataSource[0].items[2].help = "Tap here for numbers and math";
+
+        dataSource[0].items[3] =  new CAskElement();
+        dataSource[0].items[3].datatype = ASK_CONST.IMAGEBUTTON;
+        dataSource[0].items[3].resource = "button_repeat_select"; // FOR_MOM (2) this gets overriden
+        dataSource[0].items[3].componentID = "Sbutton5";
+        dataSource[0].items[3].behavior = AS_CONST.SELECT_REPEAT;        // FOR_MOM (2) this gets overridden
+        dataSource[0].items[3].prompt = "lets do it again";
+        dataSource[0].items[3].help = "tap here to do the same thing again";
+
+        dataSource[0].items[4] =  new CAskElement();
+        dataSource[0].items[4].datatype = ASK_CONST.IMAGEBUTTON;
+        dataSource[0].items[4].resource = "button_exit_select"; // FOR_MOM (2) this gets overriden
+        dataSource[0].items[4].componentID = "Sbutton6";
+        dataSource[0].items[4].behavior = AS_CONST.SELECT_EXIT;        // FOR_MOM (2) this gets overridden
+        dataSource[0].items[4].prompt = "I want to stop using RoboTutor";
+        dataSource[0].items[4].help = "tap here to stop using robotutor";
+
     }
 
 
@@ -315,12 +370,12 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                 publishValue(AS_CONST.VAR_HELP_AUDIO, _activeLayout.items[_describeIndex].help);
                 publishValue(AS_CONST.VAR_PROMPT_AUDIO, _activeLayout.items[_describeIndex].prompt);
 
-                applyBehavior(AS_CONST.DESCRIBE_BEHAVIOR);
+                applyBehavior(AS_CONST.BEHAVIOR_KEYS.DESCRIBE_BEHAVIOR);
 
                 _describeIndex++;
             } else {
 
-                applyBehavior(AS_CONST.DESCRIBE_COMPLETE);
+                applyBehavior(AS_CONST.BEHAVIOR_KEYS.DESCRIBE_COMPLETE);
             }
         }
     }
@@ -340,7 +395,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
             askButtonsEnabled = false;
 
-            applyBehavior(AS_CONST.SELECT_BEHAVIOR);
+            applyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_BEHAVIOR);
 
             for (CAskElement element : _activeLayout.items) {
 
@@ -365,7 +420,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
         publishValue(AS_CONST.VAR_BUT_BEHAVIOR, debugTutor);
 
-        applyBehavior(AS_CONST.SELECT_DEBUGLAUNCH);
+        applyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_DEBUGLAUNCH);
     }
 
     /** This allows us to update the current tutor for a given skill from the CDebugComponent
@@ -376,7 +431,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
         publishValue(AS_CONST.VAR_DEBUG_TAG, tag);
 
-        applyBehavior(AS_CONST.SELECT_DEBUG_TAG_LAUNCH);
+        applyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_DEBUG_TAG_LAUNCH);
     }
 
     @Override
@@ -547,18 +602,18 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         // NEW_MENU (7) if it's a repeat... don't change activeTutor...
         switch (buttonid.toUpperCase()) {
 
-            case AS_CONST.SELECT_WRITING:
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
 
-                activeSkill   = AS_CONST.SELECT_WRITING;
+                activeSkill   = AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING;
                 activeTutor   = writingTutorID;
                 rootTutor     = rootSkillWrite;
                 transitionMap = writeTransitions;
                 buttonFound   = true;
                 break;
 
-            case AS_CONST.SELECT_STORIES:
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES:
 
-                activeSkill   = AS_CONST.SELECT_STORIES;
+                activeSkill   = AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;
                 activeTutor   = storiesTutorID;
                 rootTutor     = rootSkillStories;
                 transitionMap = storyTransitions;
@@ -566,18 +621,18 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
                 break;
 
-            case AS_CONST.SELECT_MATH:
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_MATH:
 
-                activeSkill   = AS_CONST.SELECT_MATH;
+                activeSkill   = AS_CONST.BEHAVIOR_KEYS.SELECT_MATH;
                 activeTutor   = mathTutorID;
                 rootTutor     = rootSkillMath;
                 transitionMap = mathTransitions;
                 buttonFound   = true;
                 break;
 
-            case AS_CONST.SELECT_SHAPES:
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_SHAPES:
 
-                activeSkill   = AS_CONST.SELECT_SHAPES;
+                activeSkill   = AS_CONST.BEHAVIOR_KEYS.SELECT_SHAPES;
                 activeTutor   = shapesTutorID;
                 rootTutor     = rootSkillShapes;
                 transitionMap = shapeTransitions;
@@ -815,7 +870,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         //
         switch (activeSkill) {
 
-            case AS_CONST.SELECT_WRITING:
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
 
                 activeTutor = writingTutorID;
                 transitionMap = writeTransitions;
@@ -824,13 +879,13 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
                 break;
 
-            case AS_CONST.SELECT_STORIES:
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES:
 
                 activeTutor = storiesTutorID;
                 transitionMap = storyTransitions;
                 break;
 
-            case AS_CONST.SELECT_MATH:
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_MATH:
 
                 activeTutor = mathTutorID;
                 transitionMap = mathTransitions;
@@ -838,7 +893,7 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
                 placementIndex = prefs.getInt("MATH_PLACEMENT_INDEX", 0);
                 break;
 
-            case AS_CONST.SELECT_SHAPES:
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_SHAPES:
 
                 activeTutor = shapesTutorID;
                 transitionMap = shapeTransitions;
@@ -879,22 +934,22 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
         //
         switch (activeSkill) {
 
-            case AS_CONST.SELECT_WRITING:
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
 
                 writingTutorID = nextTutor;
                 break;
 
-            case AS_CONST.SELECT_STORIES:
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES:
 
                 storiesTutorID = nextTutor;
                 break;
 
-            case AS_CONST.SELECT_MATH:
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_MATH:
 
                 mathTutorID = nextTutor;
                 break;
 
-            case AS_CONST.SELECT_SHAPES:
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_SHAPES:
 
                 shapesTutorID = nextTutor;
                 break;
@@ -1185,22 +1240,22 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
 
         switch (activeSkill) {
 
-            case AS_CONST.SELECT_WRITING:
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
 
                 writingTutorID = buttonid;
                 break;
 
-            case AS_CONST.SELECT_STORIES:
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES:
 
                 storiesTutorID = buttonid;
                 break;
 
-            case AS_CONST.SELECT_MATH:
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_MATH:
 
                 mathTutorID = buttonid;
                 break;
 
-            case AS_CONST.SELECT_SHAPES:
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_SHAPES:
 
                 shapesTutorID = buttonid;
                 break;
@@ -1503,6 +1558,26 @@ public class TActivitySelector extends CActivitySelector implements IBehaviorMan
     }
 
 
+    /**
+     * FOR_MOM (x) this stickyBehavior is where events are set
+     *
+     * // UTILITY
+     * DESCRIBE_BEHAVIOR -> BUTTON_DESCRIPTION
+     * DESCRIBE_COMPLETE -> SET_HESITATION_FEEDBACK
+     * SELECT_BEHAVIOR   -> DLEAR_HESITATION_BEHAVIOR
+     * LAUNCH_EVENT      -> LAUNCH_BEHAVIOR
+     *
+     * // BUTTONS....
+     * SELECT_WRITING -> BUTTON_BEHAVIOR
+     * SELECT_STORIES -> BUTTON_BEHAVIOR
+     * SELECT_MATH    -> BUTTON_BEHAVIOR
+     *
+     * SELECT_REPEAT  -> BUTTON_BEHAVIOR
+     * SELECT_EXIT    -> EXIT_BUTTON_BEHAVIOR
+     *
+     * @param event
+     * @param behavior
+     */
     public void setStickyBehavior(String event, String behavior) {
 
         if (behavior.toUpperCase().equals(TCONST.NULL)) {

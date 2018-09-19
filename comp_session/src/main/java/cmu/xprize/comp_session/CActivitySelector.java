@@ -32,7 +32,7 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.TCONST;
 
 
-public class CActivitySelector extends FrameLayout implements IBehaviorManager, IButtonController, ILoadableObject, IPublisher {
+public class CActivitySelector extends FrameLayout implements IButtonController, ILoadableObject, IPublisher {
 
     protected Context           mContext;
 
@@ -50,9 +50,9 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
 
     protected LocalBroadcastManager bManager;
 
-    // json loadable
     public CAsk_Data[]  dataSource;
 
+    // json loadable
     public String       rootSkillWrite;
     public String       rootSkillStories;
     public String       rootSkillMath;
@@ -164,24 +164,25 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
     //************************************************************************
     //************************************************************************
     // IBehaviorManager Interface START
+    // TODO fix architecture...
+    // this doesn't even need to "implement IBehaviorManager"? THere's never an object declared as IBehaviorManager... these methods are only used internally
 
-
-    @Override
+    //@Override
     public void setVolatileBehavior(String event, String behavior) {
 
     }
 
-    @Override
+    //@Override
     public void setStickyBehavior(String event, String behavior) {
 
     }
 
-    @Override
+    //@Override
     public boolean applyBehavior(String event) {
         return false;
     }
 
-    @Override
+    //@Override
     public void applyBehaviorNode(String nodeName) {
 
     }
