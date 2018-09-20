@@ -369,7 +369,8 @@
             {"name": "show box on first edit", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBoxOnFirstEdit", "parms": "", "features":"FTR_SEN_SEN&FTR_HESITATION_3&FTR_SEN_ATTEMPT_1|FTR_SEN_SEN&FTR_HESITATION_3&FTR_SEN_ATTEMPT_2|FTR_SEN_SEN&FTR_HESITATION_3&FTR_SEN_ATTEMPT_3"},
 
 
-            //give up on the word if not written
+            //mercy behavior for the word that is not written.
+            {"name":"post APPLY_BEHAVIOR - MERCY_RULE_BEHAVIOR", "type": "COMMAND", "id": "SWordCopy", "method": "post",           "parms": "APPLY_BEHAVIOR:String|MERCY_RULE_BEHAVIOR:String", "features":"FTR_SEN&FTR_HESITATION_4"},
 
 
 
