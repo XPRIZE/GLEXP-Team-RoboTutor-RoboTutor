@@ -2783,14 +2783,17 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             // change the color for all written letters according to the state of the word.
                 for(int i = 0; i < listCorrectStatus.size(); i++){
                     int index = listIndicesAnswer.get(i);
-                    CStimulusController responseController = (CStimulusController) mResponseViewList.getChildAt(index);
-                    responseController.updateResponseState(wordStatus);
+//                    if(wordAnswer.charAt(i) != ' ') {
+                        CStimulusController responseController = (CStimulusController) mResponseViewList.getChildAt(index);
+                        responseController.updateResponseState(wordStatus);
+//                    }
                 }
         }
 
         public void updateLettersWordResponse(){
             for(int i = 0; i < listCorrectStatus.size(); i++){
                 int index = listIndicesAnswer.get(i);
+//                if()
                 CStimulusController responseController = (CStimulusController) mResponseViewList.getChildAt(index);
                 responseController.updateResponseState(listCorrectStatus.get(i));
             }
