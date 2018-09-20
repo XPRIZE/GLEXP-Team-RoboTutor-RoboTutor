@@ -19,6 +19,7 @@
 package cmu.xprize.robotutor.tutorengine;
 
 
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -86,7 +87,6 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
 
 
     final private String       TAG       = "CTutorGraph";
-
 
     /**
      *
@@ -208,7 +208,8 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
 
                             //mainHandler.post(mTutor.new Queue(TCONST.ENDTUTOR));
 
-                            // REMOVE_SA here is where the tutor ends...
+                            // ASSESS_ME this is where assessment should be
+                            // ASSESS_ME construct a PromotionMechanism based on STUDENT_ID, and Transition Matrix?
                             PerformanceLogItem event = new PerformanceLogItem();
                             event.setUserId(RoboTutor.STUDENT_ID);
                             event.setSessionId(RoboTutor.SESSION_ID);
@@ -238,7 +239,6 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
             }
         }
     }
-
 
     /**
      *  Disable the input queue permenantly in prep for destruction

@@ -8,7 +8,6 @@
     android:layout_height="match_parent"
     android:background="#F3FAFF">
 
-    <!-- NEW_MENU (5) change image that goes here -->
     <ImageButton
         android:id="@+id/SbuttonOption1"
         android:layout_width="match_parent"
@@ -65,7 +64,6 @@
         android:background="@null"
         android:src="@drawable/button_repeat_select"
         />
-    <!-- NEW_MENU (7) this should be added programatically -->
 
     <ImageButton
         android:id="@+id/SbuttonExit"

@@ -243,7 +243,7 @@ public class CActivitySelector extends FrameLayout implements IButtonController,
 
                     case AS_CONST.BUTTON_EVENT:
 
-                        doButtonBehavior(_target); // FOR_MOM (2.4)
+                        doButtonBehavior(_target);
                         break;
 
                     case AS_CONST.CANCEL_DESCRIBE:

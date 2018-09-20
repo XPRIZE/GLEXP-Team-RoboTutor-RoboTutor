@@ -18,7 +18,6 @@ import cmu.xprize.common.R;
 
 public class CTutorData_Metadata {
 
-    // NEW_MENU (3) √√√ this is where the thumb image comes from!!!!
     public static TCONST.Thumb getThumbImage(CAt_Data tutor) {
 
 

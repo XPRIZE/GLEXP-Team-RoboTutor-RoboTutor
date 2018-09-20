@@ -80,12 +80,6 @@ import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 
 public class TActivitySelector extends CActivitySelector implements ITutorSceneImpl, IDataSink, IEventSource, IPublisher, ITutorLogger {
 
-
-    // NEW_MENU TODO:
-    // NEW_MENU (5) make button look tappable
-    // NEW_MENU (6) variability (e.g. next tutor, etc)
-    // NEW_MENU (7)
-
     private static boolean          DEBUG_LANCHER = false;
     public  static String           DEBUG_TUTORID = "";
 
@@ -99,12 +93,10 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
     private HashMap<String, String> volatileMap = new HashMap<>();
     private HashMap<String, String> stickyMap   = new HashMap<>();
 
-    // FOR_MOM (goals)
+    // OH_BEHAVE (goals)
     // goal 1: get repeat working properly...
-    // option 1: story -> lit -> story -> math... show N and N+1
-    // option 2: something more complicated?
-    // goal 3: make double screen go away
-    // goal 4: why is repeat button failing in dev branch? (requires a merge)
+    // goal 2: story -> lit -> story -> math... show N and N+1
+    // goal 3: why is repeat button failing in dev branch? (requires a merge)
 
     private boolean     askButtonsEnabled = false;
 
@@ -196,9 +188,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
     }
 
-
-    // REMOVE_SA... perhaps call it here? how is TActivitySelector created?
-
     /**
      * Initialize Layout in Tutor Select mode...
      * Called from AG, don't delete.
@@ -213,15 +202,8 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         SaskActivity.setVisibility(VISIBLE);
         SdebugActivity.setVisibility(GONE);
 
-        // REMOVE_SA put it here
         if (RoboTutor.MUST_CALCULATE_NEXT_TUTOR) {
-            // FOR_MOM (4.1) simplify this... even better, can it go somewhere else???
-            // what happens after a tutor finishes???
-            // - bpop: NEXTSCENE
-            // -akira "gotoNextScene"
-            // - add_subtract "NEXTSCENE"...
-            // - story_reading "NEXTSCENE"
-            // - word_copy "NEXTSCENE"
+            // ASSESS_ME let's put this after the tutor is done
             adjustPositionFromPreviousPerformance();
         }
 
@@ -230,7 +212,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         nextTutors[1] = (CAt_Data) matrix.storyTransitions.get(studentModel.getStoryTutorID());
         nextTutors[2] = (CAt_Data) matrix.mathTransitions.get(studentModel.getMathTutorID());
         SaskActivity.initializeButtonsAndSetButtonImages(_activeLayout, nextTutors);
-        //SaskActivity.setButtonImages(); // NEW_MENU (6) can possibly be next.next
     }
 
     /**
@@ -287,33 +268,34 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         //activeLayout.layoutID =
         _activeLayout.items = new CAskElement[5];
 
+        // OH_BEHAVE (0) the prompts and the actions and the behaviors should depend on which skill matrix we're in
         _activeLayout.items[0] =  new CAskElement();
         _activeLayout.items[0].componentID = "SbuttonOption1";
-        _activeLayout.items[0].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING; // FOR_MOM (2.0)
+        _activeLayout.items[0].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING;
         _activeLayout.items[0].prompt = "reading and writing";
         _activeLayout.items[0].help = "Tap here for reading and writing";
 
         _activeLayout.items[1] =  new CAskElement();
         _activeLayout.items[1].componentID = "SbuttonOption2";
-        _activeLayout.items[1].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;        // FOR_MOM (2.0)
+        _activeLayout.items[1].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;
         _activeLayout.items[1].prompt = "stories";
         _activeLayout.items[1].help = "Tap here for a story";
 
         _activeLayout.items[2] =  new CAskElement();
         _activeLayout.items[2].componentID = "SbuttonOption3";
-        _activeLayout.items[2].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_MATH;        // FOR_MOM (2.0)
+        _activeLayout.items[2].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_MATH;
         _activeLayout.items[2].prompt = "numbers and math";
         _activeLayout.items[2].help = "Tap here for numbers and math";
 
         _activeLayout.items[3] =  new CAskElement();
         _activeLayout.items[3].componentID = "SbuttonRepeat";
-        _activeLayout.items[3].behavior = AS_CONST.SELECT_REPEAT;        // FOR_MOM (2.0)
+        _activeLayout.items[3].behavior = AS_CONST.SELECT_REPEAT;
         _activeLayout.items[3].prompt = "lets do it again";
         _activeLayout.items[3].help = "tap here to do the same thing again";
 
         _activeLayout.items[4] =  new CAskElement();
         _activeLayout.items[4].componentID = "SbuttonExit";
-        _activeLayout.items[4].behavior = AS_CONST.SELECT_EXIT;        // FOR_MOM (2.0)
+        _activeLayout.items[4].behavior = AS_CONST.SELECT_EXIT;
         _activeLayout.items[4].prompt = "I want to stop using RoboTutor";
         _activeLayout.items[4].help = "tap here to stop using robotutor";
 
@@ -330,11 +312,11 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         //setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.LAUNCH_EVENT, "LAUNCH_BEHAVIOR"); // (2.7) collapsed into one function
 
         // Home screen button behavior...
-        // FOR_MOM... clean this ish up
-        setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR); // FOR_MOM (2.2)
-        setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR); // FOR_MOM (2.2)
-        setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_MATH, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR); // FOR_MOM (2.2)
-        setStickyBehavior(AS_CONST.SELECT_REPEAT, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR); // FOR_MOM (2.2)
+        // OH_BEHAVE (2)... keep mapping to BUTTON_BEHAVIOR, but make different options...
+        setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
+        setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
+        setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_MATH, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
+        setStickyBehavior(AS_CONST.SELECT_REPEAT, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
         setStickyBehavior(AS_CONST.SELECT_EXIT, AS_CONST.QUEUEMAP_KEYS.EXIT_BUTTON_BEHAVIOR);
     }
 
@@ -400,7 +382,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
                     publishValue(AS_CONST.VAR_HELP_AUDIO, element.help);
                     publishValue(AS_CONST.VAR_PROMPT_AUDIO, element.prompt);
 
-                    applyBehavior(element.behavior); // FOR_MOM (2.1) this is where the behavior gets applied... thru the stickyMap
+                    applyBehavior(element.behavior); // OH_BEHAVE (1) this is where the behavior gets applied... thru the stickyMap
                     // applyBehaviorNode(element.secondary_behavior...)
                 }
             }
@@ -511,8 +493,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         boolean     buttonFound = false;
         String activeSkill = null;
 
-        // First check if it is a skill selection button =
-        // NEW_MENU (7) if it's a repeat... don't change activeTutorId...
         switch (buttonBehavior.toUpperCase()) {
 
             case AS_CONST.SELECT_EXIT:
@@ -802,7 +782,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
 
     /**
-     * NEW_MENU (4) REMOVE_SA this should be moved into the FTR_TUTOR_SELECT screen
      *
      * Adjust the student's position in matrix based on their last performance
      *
@@ -815,9 +794,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
         SharedPreferences prefs = getStudentSharedPreferences();
 
-        // REMOVE_SA Init the skill pointers...
-        // REMOVE_SA ??? figure this out
-        //
         String activeTutorId = "";
         HashMap transitionMap = null;
         // look up activeSkill every time?
@@ -850,8 +826,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
         }
 
-
-        // FOR_MOM (4.0) important part...
         String nextTutor = selectNextTutor(activeTutorId, activeSkill, useWritingPlacement, useMathPlacement, prefs, transitionMap, placementIndex); // √
 
         RoboTutor.logManager.postEvent_I(TCONST.PLACEMENT_TAG, "nextTutor = " + nextTutor);
@@ -1750,7 +1724,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
             editor.apply();
 
         }
-        // FOR_MOM (4.5) initialize only once??? and then load as needed?
+        // DATA_MODEL initialize only once??? and then load as needed?
         boolean useMathPlacement = prefs.getBoolean(MATH_PLACEMENT_KEY, true);
         boolean useWritingPlacement = prefs.getBoolean(WRITING_PLACEMENT_KEY, true);
 
@@ -1763,7 +1737,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
             int mathPlacementIndex = prefs.getInt(MATH_PLACEMENT_INDEX_KEY, 0);
             CPlacementTest_Tutor mathPlacementTutor = matrix.mathPlacement[mathPlacementIndex];
             RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("mathPlacementIndex = %d", mathPlacementIndex));
-            mathTutorID = mathPlacementTutor.tutor; // FOR_MOM (4.5) for example, only load mathTutorID when needed...
+            mathTutorID = mathPlacementTutor.tutor; // DATA_MODEL for example, only load mathTutorID when needed...
 
         } else {
             mathTutorID    = prefs.getString(TCONST.SKILL_MATH,    matrix.rootSkillMath); // does this get overwritten or something???
@@ -1778,7 +1752,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
             int writingPlacementIndex = prefs.getInt(WRITING_PLACEMENT_INDEX_KEY, 0);
             CPlacementTest_Tutor writePlacementTutor = matrix.writePlacement[writingPlacementIndex];
             RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("writePlacementIndex = %d", writingPlacementIndex));
-            writingTutorID = writePlacementTutor.tutor; // FOR_MOM (4.5) for example, only load writingTutorID when needed...
+            writingTutorID = writePlacementTutor.tutor; // DATA_MODEL for example, only load writingTutorID when needed...
         } else {
             writingTutorID = prefs.getString(TCONST.SKILL_WRITING, matrix.rootSkillWrite);
         }
