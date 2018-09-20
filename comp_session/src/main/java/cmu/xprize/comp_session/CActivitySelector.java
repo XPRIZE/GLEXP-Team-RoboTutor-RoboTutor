@@ -32,7 +32,7 @@ public class CActivitySelector extends FrameLayout implements IButtonController,
 
     protected Context           mContext;
 
-    protected CAskComponent     SaskActivity; // NEW_MENU (2) √√√ sets images
+    protected CAskComponent     SaskActivity;
     protected CDebugComponent   SdebugActivity;
 
     protected final Handler     mainHandler  = new Handler(Looper.getMainLooper());
@@ -40,7 +40,6 @@ public class CActivitySelector extends FrameLayout implements IButtonController,
     protected HashMap           nameMap      = new HashMap();
     protected boolean           _qDisabled   = false;
 
-    // NEW_MENU (4) trace me!
     protected CAsk_Data         _activeLayout;
     protected int               _describeIndex;
 
@@ -257,9 +256,9 @@ public class CActivitySelector extends FrameLayout implements IButtonController,
                         describeNext();
                         break;
 
-                    case AS_CONST.BUTTON_EVENT: // NEW_MENU (7) BUTTON_BEHAVIOR
+                    case AS_CONST.BUTTON_EVENT:
 
-                        doButtonBehavior(_target); // FOR_MOM (2.3)
+                        doButtonBehavior(_target); // FOR_MOM (2.4)
                         break;
 
                     case AS_CONST.CANCEL_DESCRIBE:

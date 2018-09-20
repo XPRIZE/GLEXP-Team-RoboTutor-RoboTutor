@@ -213,14 +213,14 @@ public class CTutorEngine implements ILoadableObject2 {
         CLogManager.setTutor(defTutor);
 
         // NEW_MENU (4) REMOVE_SA this conditional will never happen
-        if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DIFFICULTY_ASSESS)) {
+
             // generate a random number to choose which goodbye sound clip to use
             // IMPROVE ISSUE 119 better way to do this
             // see app/src/main/assets/tutors/activity_selector/animator_graph.json "GOODBYE_BUTTON_BEHAVIOR"
             // NEW_MENU (4) REMOVE_SA goodbye clip should move to FTR_TUTOR_SELECT screen
-            int goodbyeId = (new Random()).nextInt(TCONST.NUM_GOODBYE_SOUND_CLIPS) + 1;
+        //    int goodbyeId = (new Random()).nextInt(TCONST.NUM_GOODBYE_SOUND_CLIPS) + 1;
             //featureString += ":" + TCONST.FTR_GOODBYE + "_" + goodbyeId;
-        }
+
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "**: Creating Tutor in startSessionManager: " + defTutor);
 
@@ -327,7 +327,7 @@ public class CTutorEngine implements ILoadableObject2 {
     static private void createAndLaunchTutor(String tutorName, String features, String tutorId, defdata_tutor dataSource) {
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r4: killActiveTutor called from createAndLaunchTutor(" + tutorName + ")");
-        killActiveTutor();
+        killActiveTutor(); // FOR_MOM (2.10)... active TActivitySelector never finishes!
 
         // GRAY_SCREEN_BUG
         Log.d(TAG, "createAndLaunchTutor: " + tutorName + ", " + tutorId);

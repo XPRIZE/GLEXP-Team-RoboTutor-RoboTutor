@@ -217,7 +217,6 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
             TCONST.Thumb resource = CTutorData_Metadata.getThumbImage(nextActivities[i]);
             Log.wtf("NEW_MENU", resource.toString());
 
-            //  √√√NEW_MENU very hacky!
             ibView.setImageResource(CDebugComponent.getThumbId(resource));
 
         }

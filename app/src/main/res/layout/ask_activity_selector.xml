@@ -8,9 +8,7 @@
     android:layout_height="match_parent"
     android:background="#F3FAFF">
 
-    <!-- NEW_MENU (0) √√√ change layout -->
     <!-- NEW_MENU (5) change image that goes here -->
-    <!-- FOR_MOM (4) can we just directly reference these buttons some how or something? -->
     <ImageButton
         android:id="@+id/SbuttonOption1"
         android:layout_width="match_parent"

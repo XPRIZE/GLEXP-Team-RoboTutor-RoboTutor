@@ -357,7 +357,6 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
         int thumbId;
 
-        // NEW_MENU (3) √√√ here's where images are retrieved!!!
         // https://stackoverflow.com/questions/4427608/android-getting-resource-id-from-string
         thumbId = getThumbId(tutorThumb);
         ScurrentTutorImage.setImageResource(thumbId);

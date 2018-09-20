@@ -157,32 +157,6 @@ public class type_action extends scene_node {
         if (cmd != null) {
             switch (cmd) {
 
-                // System Scope command to launch a new Tutor Instance.
-                //
-                case TCONST.CMD_LAUNCH:
-                    try {
-                        // We demand a parm list of the form intent:String|intentdata:String
-                        //
-                        List<String> parmList = Arrays.asList(parms.split("[:\\|]"));
-
-                        // Resolve any variables in the parameters.
-                        // Session manager uses TScope variables to store intents
-                        //
-                        String intent     = getScope().parseTemplate(parmList.get(0));
-                        String intentData = getScope().parseTemplate(parmList.get(2));
-                        String dataSource = getScope().parseTemplate(parmList.get(4));
-                        String tutorId    = getScope().parseTemplate(parmList.get(6));
-
-
-                        Log.wtf("WARRIOR_MAN", "tutorId = " + tutorId);
-
-                        CTutorEngine.launch(intentData, intent, dataSource, tutorId);
-
-                    } catch (Exception e) {
-                        CErrorManager.logEvent(TAG, "Launch Command Invalid: ", e, false);
-                    }
-                    break;
-
                 case TCONST.NEXTSCENE:
                     _scope.tutor().mTutorGraph.post(this, TCONST.NEXTSCENE);
                     break;
