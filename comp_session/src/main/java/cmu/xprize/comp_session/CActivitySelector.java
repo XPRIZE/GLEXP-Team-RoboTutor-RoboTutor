@@ -45,21 +45,6 @@ public class CActivitySelector extends FrameLayout implements IButtonController,
 
     protected LocalBroadcastManager bManager;
 
-    public CAsk_Data[]  dataSource;
-
-    // json loadable
-    public String       rootSkillWrite;
-    public String       rootSkillStories;
-    public String       rootSkillMath;
-    public String       rootSkillShapes;
-
-    public HashMap      writeTransitions;
-    public HashMap      storyTransitions;
-    public HashMap      mathTransitions;
-
-    public CPlacementTest_Tutor[] writePlacement;
-    public CPlacementTest_Tutor[]   mathPlacement;
-
     final private String  TAG = "CActivitySelector";
 
 
