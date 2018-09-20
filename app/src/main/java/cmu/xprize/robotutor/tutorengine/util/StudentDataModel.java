@@ -60,4 +60,12 @@ public class StudentDataModel {
     }
 
 
+
+    public final static String HAS_PLAYED_KEY = "HAS_PLAYED";
+    public final static String MATH_PLACEMENT_KEY = "MATH_PLACEMENT";
+    public final static String MATH_PLACEMENT_INDEX_KEY = "MATH_PLACEMENT_INDEX";
+    public final static String WRITING_PLACEMENT_KEY = "WRITING_PLACEMENT";
+    public final static String WRITING_PLACEMENT_INDEX_KEY = "WRITING_PLACEMENT_INDEX";
+
+
 }

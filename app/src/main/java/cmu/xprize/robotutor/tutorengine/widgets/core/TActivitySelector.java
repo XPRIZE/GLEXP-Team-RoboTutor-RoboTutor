@@ -64,6 +64,11 @@ import static cmu.xprize.comp_session.AS_CONST.VAR_TUTOR_ID;
 import static cmu.xprize.comp_session.AS_CONST.VAR_DATASOURCE;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENT;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENTDATA;
+import static cmu.xprize.robotutor.tutorengine.util.StudentDataModel.HAS_PLAYED_KEY;
+import static cmu.xprize.robotutor.tutorengine.util.StudentDataModel.MATH_PLACEMENT_INDEX_KEY;
+import static cmu.xprize.robotutor.tutorengine.util.StudentDataModel.MATH_PLACEMENT_KEY;
+import static cmu.xprize.robotutor.tutorengine.util.StudentDataModel.WRITING_PLACEMENT_INDEX_KEY;
+import static cmu.xprize.robotutor.tutorengine.util.StudentDataModel.WRITING_PLACEMENT_KEY;
 import static cmu.xprize.util.TCONST.LAST_TUTOR;
 import static cmu.xprize.util.TCONST.PLACEMENT_TAG;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
@@ -795,13 +800,12 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
     }
 
+
     /**
      * NEW_MENU (4) REMOVE_SA this should be moved into the FTR_TUTOR_SELECT screen
      *
      * Adjust the student's position in matrix based on their last performance
      *
-     * @param buttonid
-     * @return new buttonid, to be used for next screen
      */
     private void adjustPositionFromPreviousPerformance() {
 
@@ -1717,12 +1721,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         // we probably don't need this
 
     }
-
-    private final static String HAS_PLAYED_KEY = "HAS_PLAYED";
-    private final static String MATH_PLACEMENT_KEY = "MATH_PLACEMENT";
-    private final static String MATH_PLACEMENT_INDEX_KEY = "MATH_PLACEMENT_INDEX";
-    private final static String WRITING_PLACEMENT_KEY = "WRITING_PLACEMENT";
-    private final static String WRITING_PLACEMENT_INDEX_KEY = "WRITING_PLACEMENT_INDEX";
 
     /**
      * initializes everything
