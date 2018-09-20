@@ -2190,6 +2190,14 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     public void applyBehaviorNode(String nodeName) {
     }
 
+    //amogh added custom pointing behaviors for sentence writing tutors
+
+//    public void pointAtFirstEdit(){
+//        EditOperation = firstEdit = getFirstEditOperation()
+//    }
+
+    //amogh added ends
+
     public void pointAtEraseButton() {
 
         IGlyphController glyphInput;
@@ -2783,10 +2791,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             // change the color for all written letters according to the state of the word.
                 for(int i = 0; i < listCorrectStatus.size(); i++){
                     int index = listIndicesAnswer.get(i);
-//                    if(wordAnswer.charAt(i) != ' ') {
+                    if(wordAnswer.charAt(i) != ' ') {
                         CStimulusController responseController = (CStimulusController) mResponseViewList.getChildAt(index);
                         responseController.updateResponseState(wordStatus);
-//                    }
+                    }
                 }
         }
 
@@ -2800,9 +2808,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
 
         public void inhibitWordInput(){
-            for(int index : listIndicesAnswer){
-                CGlyphController glyphController = (CGlyphController) mGlyphList.getChildAt(index);
-                glyphController.inhibitInput(true);
+            for(int i = 0; i < listIndicesAnswer.size(); i++){
+                boolean letterIsCorrect = listCorrectStatus.get(i);
+                int glyphIndex = listIndicesAnswer.get(i);
+                if(letterIsCorrect) {
+                    CGlyphController glyphController = (CGlyphController) mGlyphList.getChildAt(index);
+                    glyphController.inhibitInput(true);
+                }
             }
         }
 

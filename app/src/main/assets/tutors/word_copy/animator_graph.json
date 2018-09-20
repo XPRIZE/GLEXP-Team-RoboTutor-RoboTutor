@@ -102,7 +102,7 @@
             // HESITATION AUDIO
 
             //First release the right audio features
-//            {"name": "hesitationdebugaudio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "SENTENCE COPYING.mp3","soundpackage": "sentence",  "mode":"flow", "features": ""},
+            {"name": "hesitationdebugaudio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "SENTENCE COPYING.mp3","soundpackage": "sentence",  "mode":"flow", "features": ""},
             // when to release? when the sentence has been evaluated atleast once (ie one of the FTR_SEN_ATTEMPT is enabled)
             {"name": "release the audio features for the first edit", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "releaseFirstEditAudioFeatures", "parms": "", "features":"FTR_SEN&FTR_SEN_WRD|FTR_SEN&FTR_SEN_SEN&FTR_SEN_ATTEMPT_1|FTR_SEN&FTR_SEN_SEN&FTR_SEN_ATTEMPT_2|FTR_SEN&FTR_SEN_SEN&FTR_SEN_ATTEMPT_3|FTR_SEN&FTR_SEN_SEN&FTR_SEN_ATTEMPT_4"},
 
@@ -135,7 +135,6 @@
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Here there should be a.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_3&FTR_ATTEMPT_3"},
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "letters",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_3&FTR_ATTEMPT_3"},
 
-            //Letter
                   //REPLACE
                         //HESITATION 1
                               //ATTEMPT 1
@@ -245,7 +244,7 @@
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We start a sentence or a name with a big letter.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_1&FTR_ATTEMPT_2"},
                                 //ATTEMPT 3
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We start a sentence or a name with a big letter.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_1&FTR_ATTEMPT_3"},
-                          //HESITATION 2
+                          //HESITATION 3
                                 //ATTEMPT 1
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Change this letter to.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_3&FTR_ATTEMPT_1|FTR_SEN&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_3&FTR_SEN_ATTEMPT_1"},
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "big.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_3&FTR_ATTEMPT_1|FTR_SEN&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_3&FTR_SEN_ATTEMPT_1"},
@@ -889,22 +888,26 @@
                 // 1. word level feedback- change stimulus color for complete word (here we can pinpoint what error the kid made)
 //              {"name": "prompt - Please rewrite the word", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix this word.mp3","soundpackage": "sentence","mode": "flow", "features": "FTR_SEN_COPY&FTR_SEN_WRD&FTR_ATTEMPT_2"},
               {"name": "update the response colors for each letter in word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "updateLettersWordResponse", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD&FTR_ATTEMPT_2"},
+              {"name": "inhibit input for the word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitWordInput", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD&FTR_ATTEMPT_2"},
 
-              // 2. sentence level feedback- change stimulus color for complete word (here we can pinpoint what error the kid made)
+
+            // 2. sentence level feedback- change stimulus color for complete word (here we can pinpoint what error the kid made)
               //            {"name": "prompt - Please rewrite the word", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix the wrong word.mp3","soundpackage": "sentence","mode": "flow", "features": "FTR_SEN&FTR_ATTEMPT_1"},
               {"name": "update the response colors for each letter in word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "updateLettersWordResponse", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_SEN&FTR_ATTEMPT_2"},
+              {"name": "inhibit input for the word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitWordInput", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD&FTR_ATTEMPT_2"},
 
             //sentence writing 3nd error
               // 1. word level- change stimulus color for complete word (here we can pinpoint what error the kid made)
 //              {"name": "prompt - Please rewrite the word", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix this word.mp3","soundpackage": "sentence","mode": "flow", "features": "FTR_SEN&FTR_ATTEMPT_1"},
             //again, so that the new errors can be reflected.(might need to change though)
               {"name": "update the response colors for each letter in word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "updateLettersWordResponse", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD&FTR_ATTEMPT_3"},
-
+              {"name": "inhibit input for the word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitWordInput", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD&FTR_ATTEMPT_2"},
 
               // 2. sentence level- change stimulus color for complete word (here we can pinpoint what error the kid made)
               //            {"name": "prompt - Please rewrite the word", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix the wrong word.mp3","soundpackage": "sentence","mode": "flow", "features": "FTR_SEN&FTR_ATTEMPT_1"},
-            {"name": "prompt - Please rewrite the word", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix this word.mp3","soundpackage": "sentence","mode": "flow", "features": "FTR_SEN&FTR_ATTEMPT_1"},
+//            {"name": "prompt - Please rewrite the word", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please fix this word.mp3","soundpackage": "sentence","mode": "flow", "features": "FTR_SEN_SEN&FTR_ATTEMPT_1"},
               {"name": "update the response colors for each letter in word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "updateLettersWordResponse", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_SEN&FTR_ATTEMPT_3"},
+            {"name": "inhibit input for the word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitWordInput", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD&FTR_ATTEMPT_2"},
 
 
             // For dictation activity
