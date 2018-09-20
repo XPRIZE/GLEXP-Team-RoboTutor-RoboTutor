@@ -1038,34 +1038,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //                    applyBehavior(WR_CONST.ON_ERROR);
 //                }
                 //update sentence status
-                updateSentenceEditSequence();
-                //initialising
-                mListWordsInput = getListWordsInputFromAlignedSentences(mAlignedSourceSentence,mAlignedTargetSentence);
-
-                // evaluate sentence
-                boolean writtenSentenceIsCorrect = mWrittenSentence.equals(mAnswer);
-                if (writtenSentenceIsCorrect) {
-                    applyBehavior(WR_CONST.DATA_ITEM_COMPLETE);
-                    clearSentenceAttemptFeatures(); //should go in the animator graph
-                }
-
-                //when the written sentence does not match the expected answer
-                else{
-                    publishFeature(WR_CONST.FTR_SEN_EVAL);
-                    applyBehavior(WR_CONST.ON_ERROR); //activates the edit mode.
-                }
-
-                //when the sentence attempts > 0,
-                // functions to implement -> identify the current word indices(separate), turn those red/blue(easy), turn indivdual red/blue(easy).
-                else if(mSentenceAttempts > 0){
-
-                    //set the current active word, so that hesitation and feedback can be shown on this word.
-                    currentWordIndex = getActiveWordIndex(mActiveIndex);
-
-                    //amogh comment, the active word initialised here is not right, remove this declaration unless this one is used until the next declaration.
-                    if (currentWordIndex != -1){
-                        mActiveWord = mListWordsInput.get(currentWordIndex);
-                    }
 
                     //check if allowed to write here
                     boolean canReplace = checkReplace(mEditSequence, mActiveIndex);
@@ -1152,7 +1124,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                             applyBehavior(WR_CONST.ON_ERROR); // goto node "GENERAL_ERROR_BEHAVIOR"
                         }
                     }
-                }
+
 
             }
         }
@@ -2808,7 +2780,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         public void updateWordResponse(){
             boolean wordStatus = wordIsCorrect;
-            // change the color for all letters according to the state of the word.
+            // change the color for all written letters according to the state of the word.
                 for(int i = 0; i < listCorrectStatus.size(); i++){
                     int index = listIndicesAnswer.get(i);
                     CStimulusController responseController = (CStimulusController) mResponseViewList.getChildAt(index);
@@ -2863,7 +2835,26 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             int left = mResponseViewList.getChildAt(leftLetterIndex).getLeft();
             int rightLetterIndex = listIndicesAnswer.get(listIndicesAnswer.size()-1);
             int right = mResponseViewList.getChildAt(rightLetterIndex).getRight();
-            int wid = right-left;
+            int wid = right - left;
+            return wid;
+        }
+
+        //gets the width for the part of word that is written. if nothing is written width 0.
+        public int getWrapWidth(){
+
+            String writtenWord = getWrittenWordString();
+            int rightLetterIndex = 0;
+            for (int i = writtenWord.length() - 1 ; i >= 0; i--){
+                if (writtenWord.charAt(i) != ' '){
+                    rightLetterIndex = i;
+                    break;
+                }
+            }
+
+            int leftLetterIndex = listIndicesAnswer.get(0);
+            int left = mResponseViewList.getChildAt(leftLetterIndex).getLeft();
+            int right = mResponseViewList.getChildAt(rightLetterIndex).getRight();
+            int wid = right - left;
             return wid;
         }
 
@@ -2952,7 +2943,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         public void showHighlightBox(){
             mHighlightErrorBoxView = new View (getContext());
 
-            int wid = this.getWidth();
+            int wid = this.getWrapWidth();
             int left = this.getLeft();
 
             //now that the width and the position of this box has been set, set its drawable and show for some time.

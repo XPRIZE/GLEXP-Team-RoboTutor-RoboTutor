@@ -337,7 +337,7 @@
             //highlight box for word level feedback
             //show highlight box when hesitation 1 or 2 and attempt 1 or 2.
               //hesitation 2, attempt 1 2 3, box the word but not when there is insert space or punctuation
-                      //not when space and punc
+                      //when no space and no punc
             {"name": "show box on active word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBoxOnActiveWord", "parms": "", "features":"!FTR_AUDIO_SPACE&!FTR_AUDIO_PUNC&FTR_SEN_WRD&FTR_HESITATION_2&FTR_ATTEMPT_1|!FTR_AUDIO_SPACE&!FTR_AUDIO_PUNC&FTR_SEN_WRD&FTR_HESITATION_2&FTR_ATTEMPT_2|!FTR_AUDIO_SPACE&!FTR_AUDIO_PUNC&FTR_SEN_WRD&FTR_HESITATION_2&FTR_ATTEMPT_3"},
 
             //hesitation 2, attempt 1 2 3, box the edit when space or punc
