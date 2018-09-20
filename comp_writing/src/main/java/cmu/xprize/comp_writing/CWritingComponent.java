@@ -1343,9 +1343,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                             writingIsContinued = false;
                         }
                         else{
-                            boolean activeWordLengthIsOne = mActiveWord.getWrittenWordString().length() == 1 ;
+                            boolean activeWordLengthIsOneOrZero = mActiveWord.getWrittenWordString().length() <= 1 ;
                             boolean previousIsSpace = mWrittenSentence.charAt(mActiveWord.getWordIndices().get(0) - 1) == ' ' ;
-                            writingIsContinued = (activeWordLengthIsOne && previousIsSpace);
+                            writingIsContinued = (activeWordLengthIsOneOrZero && previousIsSpace);
                         }
 
                     //mark the word as wrong only when it was incorrectly written, and not in continuation.
@@ -2196,6 +2196,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //        EditOperation = firstEdit = getFirstEditOperation()
 //    }
 
+    //points at the first letter of active word
+    public void pointAtActiveWord(){
+        mActiveWord.pointAtFirstGlyph();
+    }
+
     //amogh added ends
 
     public void pointAtEraseButton() {
@@ -2859,18 +2864,29 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
             String writtenWord = getWrittenWordString();
             int rightLetterIndex = 0;
-            for (int i = writtenWord.length() - 1 ; i >= 0; i--){
-                if (writtenWord.charAt(i) != ' '){
-                    rightLetterIndex = i;
-                    break;
-                }
+            int wid = 0;
+
+            //if the word is empty return the width of the word as 0.
+            if(writtenWord.equals("")){
+                wid = 0;
+                return wid;
             }
 
-            int leftLetterIndex = listIndicesAnswer.get(0);
-            int left = mResponseViewList.getChildAt(leftLetterIndex).getLeft();
-            int right = mResponseViewList.getChildAt(rightLetterIndex).getRight();
-            int wid = right - left;
-            return wid;
+            //otherwise find the index upto which the word has been written.
+            else {
+                for (int i = writtenWord.length() - 1; i >= 0; i--) {
+                    if (writtenWord.charAt(i) != ' ') {
+                        rightLetterIndex = i;
+                        break;
+                    }
+                }
+
+                int leftLetterIndex = listIndicesAnswer.get(0);
+                int left = mResponseViewList.getChildAt(leftLetterIndex).getLeft();
+                int right = mResponseViewList.getChildAt(rightLetterIndex).getRight();
+                wid = right - left;
+                return wid;
+            }
         }
 
         //gets the left coordinate of the word
@@ -3008,6 +3024,18 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 }
             }
         }
+
+        //point to the first glyph if its empty.
+        public void pointAtFirstGlyph(){
+            int firstLetterIndex = listIndicesAnswer.get(0);
+            CGlyphController firstGlyph = (CGlyphController) mGlyphList.getChildAt(firstLetterIndex);
+            if(!firstGlyph.hasGlyph()) {
+                firstGlyph.pointAtGlyph();
+            }
+        }
+
+        //add a new function to word class here
+
     }
     //Word class ends
 
