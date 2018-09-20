@@ -2817,7 +2817,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 boolean letterIsCorrect = listCorrectStatus.get(i);
                 int glyphIndex = listIndicesAnswer.get(i);
                 if(letterIsCorrect) {
-                    CGlyphController glyphController = (CGlyphController) mGlyphList.getChildAt(index);
+                    CGlyphController glyphController = (CGlyphController) mGlyphList.getChildAt(glyphIndex);
                     glyphController.inhibitInput(true);
                 }
             }
