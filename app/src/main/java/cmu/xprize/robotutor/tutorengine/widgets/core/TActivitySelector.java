@@ -101,11 +101,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
     // goal 3: make double screen go away
     // goal 4: why is repeat button failing in dev branch? (requires a merge)
 
-    private String      activeSkill = AS_CONST.SELECT_NONE;
     private boolean     askButtonsEnabled = false;
-
-
-    private boolean IS_USING_PLACEMENT; // YYY true at first, then turns to false after a failure
 
     private TransitionMatrixModel matrix; // now holds the transition map things...
     private StudentDataModel studentModel; // holds student location and such...
@@ -247,7 +243,8 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         HashMap transitionMap = null;
         String rootTutor = "";
 
-        // FOR_MOM (4.1) look up activeSkill every time
+        // look up activeSkill every time?
+        String activeSkill = getStudentSharedPreferences().getString(TCONST.SKILL_SELECTED, SELECT_STORIES); // √√√ √√√
         switch (activeSkill) { // √
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
@@ -406,61 +403,93 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         }
     }
 
-    /** This allows us to update the current tutor for a given skill from the CDebugComponent
-     *
+    /**
+     * This allows us to update the current tutor for a given skill from the CDebugComponent
+     * @param debugTutor should be a tutorId
      */
     @Override
     public void doDebugLaunchAction(String debugTutor) {
 
         // RoboTutor.SELECTOR_MODE == "DEBUG_MENU"
-        doButtonBehavior(debugTutor);
-
-        String buttonBehavior;
-        // Update the active skill
-        //
-
-        String buttonid = debugTutor;
         String writingTutorID = null, storiesTutorID = null, mathTutorID = null;
-        // FOR_MOM (4.1) look up activeSkill every time
+
+        HashMap transitionMap = null;
+        String rootTutor = "";
+
+        // look up activeSkill every time?
+        String activeSkill = getStudentSharedPreferences().getString(TCONST.SKILL_SELECTED, SELECT_STORIES); // √√√ √√√
         switch (activeSkill) { // √
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
 
-                writingTutorID = buttonid; // update √√√
+                studentModel.updateWritingTutorID(debugTutor);
+                rootTutor     = matrix.rootSkillWrite;
+                transitionMap = matrix.writeTransitions;
                 break;
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES:
 
-                storiesTutorID = buttonid; // update √√√
+                studentModel.updateStoryTutorID(debugTutor);
+                rootTutor     = matrix.rootSkillStories;
+                transitionMap = matrix.storyTransitions;
                 break;
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_MATH:
 
-                mathTutorID = buttonid; // update √√√
+                studentModel.updateMathTutorID(debugTutor);
+                rootTutor     = matrix.rootSkillMath;
+                transitionMap = matrix.mathTransitions;
                 break;
         }
 
-        // just reselect the current skill and continue with next tutor
-        // no skill selection phase
-        buttonid = activeSkill; // √
         RoboTutor.SELECTOR_MODE = TCONST.FTR_DEBUG_LAUNCH;
 
-        // DATA_MODEL will it crash if we try to edit it multiple times???
-        if (writingTutorID != null) studentModel.updateWritingTutorID(writingTutorID);
-        if (storiesTutorID != null) studentModel.updateStoryTutorID(storiesTutorID);
-        if (mathTutorID != null)    studentModel.updateMathTutorID(mathTutorID);
+        // Special Flavor processing to exclude ASR apps - this was a constraint for BETA trials
+        // reenable the ASK buttons if we don't execute the story_tutor
+        //
+        if (BuildConfig.NO_ASR_APPS && transitionMap == matrix.storyTransitions) {
+            SaskActivity.enableButtons(true);
+            return;
+        }
 
-        buttonBehavior = buttonid;
-        // RoboTutor.SELECTOR_MODE == "DEBUG_LAUNCH"
+        // the next tutor to be launched
+        CAt_Data tutorToLaunch = (CAt_Data) transitionMap.get(debugTutor);
 
-        processTutorSelectMode(buttonBehavior);
+        // This is just to make sure we go somewhere if there is a bad link - which
+        // there shuoldn't be :)
+        //
+        if (tutorToLaunch == null) {
+            tutorToLaunch = (CAt_Data) transitionMap.get(rootTutor);
+        }
+
+        // #Mod 330 Show TutorID in Banner in debug builds
+        // DEBUG_TUTORID is used to communicate the active tutor to the Banner in DEBUG mode
+        //
+        if (BuildConfig.SHOW_TUTORVERSION) {
+            DEBUG_TUTORID = debugTutor;
+        }
+
+        // check SharedPreferences
+
+        doTutorLaunchWithVideosAndStuff(debugTutor, tutorToLaunch);
+
+
+        SharedPreferences prefs = getStudentSharedPreferences();
+        SharedPreferences.Editor editor = prefs.edit();
+
+        // Serialize the new state
+        // #Mod 329 language switch capability
+        //
+        editor.putString(TCONST.SKILL_SELECTED, activeSkill); // √√√ √√√
+        editor.apply();
+
     }
 
     /**
      * Button clicks may come from either the skill selector ASK component or the Difficulty
      * selector ASK component.
      *
-     * @param buttonBehavior
+     * @param buttonBehavior  one of {SELECT_WRITING, SELECT_STORIES, SELECT_MATH, SELECT_REPEAT, SELECT_EXIT}
      */
     @Override
     public void doButtonBehavior(String buttonBehavior) {
@@ -468,9 +497,107 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         // RoboTutor.SELECTOR_MODE = "FTR_TUTOR_SELECT"
         Log.d(TAG, "Button Selected: " + buttonBehavior);
 
+        // check SharedPreferences
+        final SharedPreferences prefs = getStudentSharedPreferences();
+
+        String activeTutorId = "";
+        HashMap transitionMap = null;
+        String rootTutor = "";
+
+        boolean     buttonFound = false;
+        String activeSkill = null;
+
+        // First check if it is a skill selection button =
+        // NEW_MENU (7) if it's a repeat... don't change activeTutorId...
+        switch (buttonBehavior.toUpperCase()) {
+
+            case AS_CONST.SELECT_EXIT:
+                mTutor.post(TCONST.FINISH);
+                return;
+
+            case AS_CONST.SELECT_REPEAT:
+                // how to do this???
+                buttonBehavior = prefs.getString(TCONST.SKILL_SELECTED, SELECT_STORIES); // √√√ √√√
+                // ytf is this different... sometimes STORIES_SELECTED...
+
+                String lastTutor = prefs.getString(LAST_TUTOR, null);
+                if (lastTutor != null) { // for when it's the first time...s
+                    activeTutorId = lastTutor;
+                }
+                break;
+
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
+
+                activeSkill   = AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING; // √
+                activeTutorId = studentModel.getWritingTutorID();
+                rootTutor     = matrix.rootSkillWrite;
+                transitionMap = matrix.writeTransitions;
+                buttonFound   = true;
+                break;
+
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES:
+
+                activeSkill   = AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES; // √
+                activeTutorId = studentModel.getStoryTutorID();
+                rootTutor     = matrix.rootSkillStories;
+                transitionMap = matrix.storyTransitions;
+                buttonFound = true;
+
+                break;
+
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_MATH:
+
+                activeSkill   = AS_CONST.BEHAVIOR_KEYS.SELECT_MATH; // √
+                activeTutorId = studentModel.getMathTutorID();
+                rootTutor     = matrix.rootSkillMath;
+                transitionMap = matrix.mathTransitions;
+                buttonFound   = true;
+                break;
+        }
 
 
-        processTutorSelectMode(buttonBehavior);
+        // Special Flavor processing to exclude ASR apps - this was a constraint for BETA trials
+        // reenable the ASK buttons if we don't execute the story_tutor
+        //
+        if (BuildConfig.NO_ASR_APPS && transitionMap == matrix.storyTransitions) {
+            SaskActivity.enableButtons(true);
+            return;
+        }
+
+        // the next tutor to be launched
+        CAt_Data tutorToLaunch = (CAt_Data) transitionMap.get(activeTutorId);
+
+        // This is just to make sure we go somewhere if there is a bad link - which
+        // there shuoldn't be :)
+        //
+        if (tutorToLaunch == null) {
+            tutorToLaunch = (CAt_Data) transitionMap.get(rootTutor);
+        }
+
+        // #Mod 330 Show TutorID in Banner in debug builds
+        // DEBUG_TUTORID is used to communicate the active tutor to the Banner in DEBUG mode
+        //
+        if (BuildConfig.SHOW_TUTORVERSION) {
+            DEBUG_TUTORID = activeTutorId;
+        }
+
+        // This is where we go to the debug view...
+        //
+        if(DEBUG_LANCHER) {
+            mTutor.post(TCONST.ENDTUTOR); // ends current tutor???
+            RoboTutor.SELECTOR_MODE = TCONST.FTR_DEBUG_SELECT;
+        }
+        else {
+            doTutorLaunchWithVideosAndStuff(activeTutorId, tutorToLaunch);
+        }
+
+        SharedPreferences.Editor editor = prefs.edit();
+
+        // Serialize the new state
+        // #Mod 329 language switch capability
+        //
+        if (activeSkill != null) editor.putString(TCONST.SKILL_SELECTED, activeSkill); // √√√ √√√
+        editor.apply();
 
     }
 
@@ -512,131 +639,15 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
     }
 
     /**
-     * FOR_MOM (2.5)
-     * Method for processing button press on the TUTOR_SELECT (home) screen
-     * @param buttonid
-     */
-    private void processTutorSelectMode(String buttonid) {
-
-        // check SharedPreferences
-        final SharedPreferences prefs = getStudentSharedPreferences();
-
-        String activeTutorId = "";
-        HashMap transitionMap = null;
-        String rootTutor = "";
-
-        boolean     buttonFound = false;
-
-        // 2. finish RoboTutor or the ActivitySelector, if necessary
-        if(buttonid.toUpperCase().equals(AS_CONST.SELECT_EXIT)) {
-            // if EXIT, we finish the app
-            mTutor.post(TCONST.FINISH);
-        }
-
-        // First check if it is a skill selection button =
-        // NEW_MENU (7) if it's a repeat... don't change activeTutorId...
-        switch (buttonid.toUpperCase()) {
-
-            case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
-
-                activeSkill   = AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING; // √
-                activeTutorId = studentModel.getWritingTutorID();
-                rootTutor     = matrix.rootSkillWrite;
-                transitionMap = matrix.writeTransitions;
-                buttonFound   = true;
-                break;
-
-            case AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES:
-
-                activeSkill   = AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES; // √
-                activeTutorId = studentModel.getStoryTutorID();
-                rootTutor     = matrix.rootSkillStories;
-                transitionMap = matrix.storyTransitions;
-                buttonFound = true;
-
-                break;
-
-            case AS_CONST.BEHAVIOR_KEYS.SELECT_MATH:
-
-                activeSkill   = AS_CONST.BEHAVIOR_KEYS.SELECT_MATH; // √
-                activeTutorId = studentModel.getMathTutorID();
-                rootTutor     = matrix.rootSkillMath;
-                transitionMap = matrix.mathTransitions;
-                buttonFound   = true;
-                break;
-        }
-
-
-        // FOR_MOM (4.1) save activeSkill after setting
-        if (buttonid.equals(AS_CONST.SELECT_REPEAT)) {
-            buttonid = activeSkill; // √
-            // ytf is this different... sometimes STORIES_SELECTED...
-
-            String lastTutor = prefs.getString(LAST_TUTOR, null);
-            if (lastTutor != null) { // for when it's the first time...s
-                activeTutorId = lastTutor;
-            }
-
-        }
-
-        if (buttonFound) {
-
-            // Special Flavor processing to exclude ASR apps - this was a constraint for BETA trials
-            // reenable the ASK buttons if we don't execute the story_tutor
-            //
-            if (!BuildConfig.NO_ASR_APPS || (transitionMap != matrix.storyTransitions)) {
-
-                // the next tutor to be launched
-                CAt_Data tutorToLaunch = (CAt_Data) transitionMap.get(activeTutorId);
-
-                // This is just to make sure we go somewhere if there is a bad link - which
-                // there shuoldn't be :)
-                //
-                if (tutorToLaunch == null) {
-                    tutorToLaunch = (CAt_Data) transitionMap.get(rootTutor);
-                }
-
-                // #Mod 330 Show TutorID in Banner in debug builds
-                // DEBUG_TUTORID is used to communicate the active tutor to the Banner in DEBUG mode
-                //
-                if (BuildConfig.SHOW_TUTORVERSION) {
-                    DEBUG_TUTORID = activeTutorId;
-                }
-
-                // This is where we go to the debug view...
-                //
-                // REMOVE_SA something going on here... "ENDTUTOR" ends the Activity Selector
-                if(DEBUG_LANCHER && RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_TUTOR_SELECT)) {
-
-                    mTutor.post(TCONST.ENDTUTOR); // ends current tutor???
-                    RoboTutor.SELECTOR_MODE = TCONST.FTR_DEBUG_SELECT;
-                }
-                else {
-                    doTutorLaunchWithVideosAndStuff(activeTutorId, tutorToLaunch, prefs);
-                }
-
-                SharedPreferences.Editor editor = prefs.edit();
-
-                // Serialize the new state
-                // #Mod 329 language switch capability
-                //
-                editor.putString(TCONST.SKILL_SELECTED, activeSkill); // √√√ √√√
-                editor.apply();
-
-            } else
-                SaskActivity.enableButtons(true);
-        }
-    }
-
-    /**
      * A big and cumbersome method that will launch a tutor eventually
      * @param prefs
      */
-    private void doTutorLaunchWithVideosAndStuff(String activeTutorId, CAt_Data tutorToLaunch, final SharedPreferences prefs) {
+    private void doTutorLaunchWithVideosAndStuff(String activeTutorId, CAt_Data tutorToLaunch) {
         // Update the tutor id shown in the log stream
 
         if(BuildConfig.SHOW_DEMO_VIDS && false) {
 
+            SharedPreferences prefs = getStudentSharedPreferences();
 
             String whichActivityIsNext = parseActiveTutorForTutorName(activeTutorId);
             final String activityPreferenceKey = whichActivityIsNext + "_TIMES_PLAYED";
@@ -649,7 +660,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
             if(playDemoVid && pathToFile != null) {
 
-                playTutorDemoVid(activeTutorId, tutorToLaunch, prefs, activityPreferenceKey, timesPlayedActivity, pathToFile);
+                playTutorDemoVid(activeTutorId, tutorToLaunch, activityPreferenceKey, timesPlayedActivity, pathToFile);
 
             } else {
 
@@ -674,7 +685,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
      * @param timesPlayedActivity
      * @param pathToFile
      */
-    private void playTutorDemoVid(final String activeTutorId, final CAt_Data tutorToLaunch, final SharedPreferences prefs, final String activityPreferenceKey, final int timesPlayedActivity, String pathToFile) {
+    private void playTutorDemoVid(final String activeTutorId, final CAt_Data tutorToLaunch, final String activityPreferenceKey, final int timesPlayedActivity, String pathToFile) {
         // load SurfaceView to hold the video
         final SurfaceView fullscreenView = (SurfaceView) findViewById(R.id.SvideoSurface);
         fullscreenView.setVisibility(View.VISIBLE);
@@ -712,6 +723,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
                 fullscreenView.setVisibility(View.INVISIBLE);
                 langToggle.setVisibility(View.VISIBLE); // prevent from changing language
 
+                SharedPreferences prefs = getStudentSharedPreferences();
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putInt(activityPreferenceKey, timesPlayedActivity + 1); // increment to let them know we watched the video
                 editor.apply();
@@ -805,15 +817,16 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         //
         String activeTutorId = "";
         HashMap transitionMap = null;
-        // FOR_MOM (4.1) look up activeSkill every time
+        // look up activeSkill every time?
+        String activeSkill = getStudentSharedPreferences().getString(TCONST.SKILL_SELECTED, SELECT_STORIES); // √√√ √√√
         switch (activeSkill) { // √
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
 
                 activeTutorId = studentModel.getWritingTutorID();
                 transitionMap = matrix.writeTransitions;
-                useWritingPlacement = prefs.getBoolean("WRITING_PLACEMENT", false);
-                placementIndex = prefs.getInt("WRITING_PLACEMENT_INDEX", 0);
+                useWritingPlacement = prefs.getBoolean(WRITING_PLACEMENT_KEY, false);
+                placementIndex = prefs.getInt(WRITING_PLACEMENT_INDEX_KEY, 0);
 
                 break;
 
@@ -827,8 +840,8 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
                 activeTutorId = studentModel.getMathTutorID();
                 transitionMap = matrix.mathTransitions;
-                useMathPlacement = prefs.getBoolean("MATH_PLACEMENT", false);
-                placementIndex = prefs.getInt("MATH_PLACEMENT_INDEX", 0);
+                useMathPlacement = prefs.getBoolean(MATH_PLACEMENT_KEY, false);
+                placementIndex = prefs.getInt(MATH_PLACEMENT_INDEX_KEY, 0);
                 break;
 
         }
@@ -845,7 +858,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
         // Update the active skill
         //
-        // FOR_MOM (4.1) look up activeSkill every time
+        // look up activeSkill every time?
         String writingTutorID = null, storiesTutorID = null, mathTutorID = null;
         switch (activeSkill) { // √
 
@@ -904,7 +917,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
         PerformanceData performance = new PerformanceData();
         performance.setActivityType(activeTutorId);
-        // FOR_MOM (4.1) look up activeSkill every time
+        // look up activeSkill every time?
         performance.setActiveSkill(activeSkill);
 
         // need to get the previous tutor and all that jazz...
@@ -1335,6 +1348,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
     // DataSink Implementation Start
 
 
+
     @Override
     public void setDataSource(String dataNameDescriptor) {
 
@@ -1704,6 +1718,12 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
     }
 
+    private final static String HAS_PLAYED_KEY = "HAS_PLAYED";
+    private final static String MATH_PLACEMENT_KEY = "MATH_PLACEMENT";
+    private final static String MATH_PLACEMENT_INDEX_KEY = "MATH_PLACEMENT_INDEX";
+    private final static String WRITING_PLACEMENT_KEY = "WRITING_PLACEMENT";
+    private final static String WRITING_PLACEMENT_INDEX_KEY = "WRITING_PLACEMENT_INDEX";
+
     /**
      * initializes everything
      *
@@ -1718,24 +1738,23 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         for (Map.Entry<String, ?> entry : prefs.getAll().entrySet()) {
             RoboTutor.logManager.postEvent_D(TAG, "SharedPreferences: " + entry.getKey() + " -- " + entry.getValue().toString());
         }
-        activeSkill = prefs.getString(TCONST.SKILL_SELECTED, SELECT_STORIES); // √√√ √√√
 
         // YYY maybe move this somewhere else???
-        String firstTime = prefs.getString("HAS_PLAYED", null);
+        String firstTime = prefs.getString(HAS_PLAYED_KEY, null);
         // if it's the first time playing, we want to initialize our placement values
         if (firstTime == null) {
             SharedPreferences.Editor editor = prefs.edit();
-            editor.putString("HAS_PLAYED", String.valueOf(true));
-            editor.putBoolean("MATH_PLACEMENT", true);
-            editor.putInt("MATH_PLACEMENT_INDEX", 0);
-            editor.putBoolean("WRITING_PLACEMENT", true);
-            editor.putInt("WRITING_PLACEMENT_INDEX", 0);
+            editor.putString(HAS_PLAYED_KEY, String.valueOf(true));
+            editor.putBoolean(MATH_PLACEMENT_KEY, true);
+            editor.putInt(MATH_PLACEMENT_INDEX_KEY, 0);
+            editor.putBoolean(WRITING_PLACEMENT_KEY, true);
+            editor.putInt(WRITING_PLACEMENT_INDEX_KEY, 0);
             editor.apply();
 
         }
         // FOR_MOM (4.5) initialize only once??? and then load as needed?
-        boolean useMathPlacement = prefs.getBoolean("MATH_PLACEMENT", true);
-        boolean useWritingPlacement = prefs.getBoolean("WRITING_PLACEMENT", true);
+        boolean useMathPlacement = prefs.getBoolean(MATH_PLACEMENT_KEY, true);
+        boolean useWritingPlacement = prefs.getBoolean(WRITING_PLACEMENT_KEY, true);
 
 
         RoboTutor.logManager.postEvent_V(PLACEMENT_TAG, String.format("useMathPlacement = %s", useMathPlacement));
@@ -1743,7 +1762,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
         String mathTutorID;
         if(useMathPlacement) {
-            int mathPlacementIndex = prefs.getInt("MATH_PLACEMENT_INDEX", 0);
+            int mathPlacementIndex = prefs.getInt(MATH_PLACEMENT_INDEX_KEY, 0);
             CPlacementTest_Tutor mathPlacementTutor = matrix.mathPlacement[mathPlacementIndex];
             RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("mathPlacementIndex = %d", mathPlacementIndex));
             mathTutorID = mathPlacementTutor.tutor; // FOR_MOM (4.5) for example, only load mathTutorID when needed...
@@ -1758,7 +1777,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         String writingTutorID;
 
         if (useWritingPlacement) {
-            int writingPlacementIndex = prefs.getInt("WRITING_PLACEMENT_INDEX", 0);
+            int writingPlacementIndex = prefs.getInt(WRITING_PLACEMENT_INDEX_KEY, 0);
             CPlacementTest_Tutor writePlacementTutor = matrix.writePlacement[writingPlacementIndex];
             RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("writePlacementIndex = %d", writingPlacementIndex));
             writingTutorID = writePlacementTutor.tutor; // FOR_MOM (4.5) for example, only load writingTutorID when needed...
@@ -1767,7 +1786,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         }
         RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("writingTutorID = %s", writingTutorID));
 
-        // DATA_MODEL (9) only perform on first update
         studentModel.updateWritingTutorID(writingTutorID);
 
         // stories doesn't have placement testing

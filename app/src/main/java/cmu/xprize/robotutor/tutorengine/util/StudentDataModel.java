@@ -18,12 +18,6 @@ public class StudentDataModel {
     private String _prefsID;
     private SharedPreferences _preferences;
 
-    // DATA_MODEL (1) put placeholders
-    // DATA_MODEL (2) insert SharedPreferences functionality
-    // DATA_MODEL (3) replace static w/ instance-based
-    // DATA_MODEL (4) do for other content-areas
-    // DATA_MODEL (9) other small things...
-
     public StudentDataModel(Context context, String prefsID) {
         this._context = context;
         this._prefsID = prefsID;

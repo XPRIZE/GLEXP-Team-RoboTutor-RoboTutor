@@ -34,7 +34,7 @@ public class TCONST {
     // the user wants to select another tutor.
     //
 
-    public static final String FTR_TUTOR_SELECT       = "FTR_TUTOR_SELECT"; // FOR_MOM trace me
+    public static final String FTR_TUTOR_SELECT       = "FTR_TUTOR_SELECT"; // these are never read anymore, but are still used as features
     public static final String FTR_DEBUG_SELECT       = "FTR_DEBUG_SELECT";
     public static final String FTR_DEBUG_LAUNCH       = "FTR_DEBUG_LAUNCH";
 
