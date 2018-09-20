@@ -34,6 +34,7 @@ import cmu.xprize.robotutor.tutorengine.util.PerformanceData;
 import cmu.xprize.robotutor.tutorengine.util.PerformancePromotionRules;
 import cmu.xprize.robotutor.tutorengine.util.PlacementPromotionRules;
 import cmu.xprize.robotutor.tutorengine.util.PromotionRules;
+import cmu.xprize.robotutor.tutorengine.util.StudentDataModel;
 import cmu.xprize.robotutor.tutorengine.util.TransitionMatrixModel;
 import cmu.xprize.util.CAt_Data;
 import cmu.xprize.robotutor.BuildConfig;
@@ -101,25 +102,13 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
     // goal 4: why is repeat button failing in dev branch? (requires a merge)
 
     private String      activeSkill = AS_CONST.SELECT_NONE;
-    private String      rootTutor;
     private boolean     askButtonsEnabled = false;
 
 
     private boolean IS_USING_PLACEMENT; // YYY true at first, then turns to false after a failure
-    private ArrayList<CPlacementTest_Tutor> placementArray;
 
-
-    private HashMap<String, CAt_Data> transitionMap; // YYY track me
-
-    private TransitionMatrixModel matrix;
-
-    private String      writingTutorID;
-    private String      storiesTutorID;
-    private String      mathTutorID;
-
-    private CAt_Data    writingVector = null;
-    private CAt_Data    storiesVector = null;
-    private CAt_Data    mathVector    = null;
+    private TransitionMatrixModel matrix; // now holds the transition map things...
+    private StudentDataModel studentModel; // holds student location and such...
 
     private HashMap<String,String>  _StringVar  = new HashMap<>();
     private HashMap<String,Integer> _IntegerVar = new HashMap<>();
@@ -237,9 +226,9 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         }
 
         CAt_Data[] nextTutors = new CAt_Data[3];
-        nextTutors[0] = (CAt_Data) matrix.writeTransitions.get(writingTutorID);
-        nextTutors[1] = (CAt_Data) matrix.storyTransitions.get(storiesTutorID);
-        nextTutors[2] = (CAt_Data) matrix.mathTransitions.get(mathTutorID);
+        nextTutors[0] = (CAt_Data) matrix.writeTransitions.get(studentModel.getWritingTutorID());
+        nextTutors[1] = (CAt_Data) matrix.storyTransitions.get(studentModel.getStoryTutorID());
+        nextTutors[2] = (CAt_Data) matrix.mathTransitions.get(studentModel.getMathTutorID());
         SaskActivity.initializeButtonsAndSetButtonImages(_activeLayout, nextTutors);
         //SaskActivity.setButtonImages(); // NEW_MENU (6) can possibly be next.next
     }
@@ -255,26 +244,29 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         // Init the skill pointers
         //
         String activeTutorId = "";
+        HashMap transitionMap = null;
+        String rootTutor = "";
+
         // FOR_MOM (4.1) look up activeSkill every time
         switch (activeSkill) { // √
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
 
-                activeTutorId = writingTutorID;
+                activeTutorId = studentModel.getWritingTutorID();
                 transitionMap = matrix.writeTransitions;
                 rootTutor = matrix.rootSkillWrite;
                 break;
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES:
 
-                activeTutorId = storiesTutorID;
+                activeTutorId = studentModel.getStoryTutorID();
                 transitionMap = matrix.storyTransitions;
                 rootTutor = matrix.rootSkillStories;
                 break;
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_MATH:
 
-                activeTutorId = mathTutorID;
+                activeTutorId = studentModel.getMathTutorID();
                 transitionMap = matrix.mathTransitions;
                 rootTutor = matrix.rootSkillMath;
                 break;
@@ -337,7 +329,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         //setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.LAUNCH_EVENT, "LAUNCH_BEHAVIOR"); // (2.7) collapsed into one function
 
         // Home screen button behavior...
-        // FOR_MOM next... clean this ish up
+        // FOR_MOM... clean this ish up
         setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR); // FOR_MOM (2.2)
         setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR); // FOR_MOM (2.2)
         setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_MATH, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR); // FOR_MOM (2.2)
@@ -428,22 +420,23 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         //
 
         String buttonid = debugTutor;
+        String writingTutorID = null, storiesTutorID = null, mathTutorID = null;
         // FOR_MOM (4.1) look up activeSkill every time
         switch (activeSkill) { // √
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
 
-                writingTutorID = buttonid;
+                writingTutorID = buttonid; // update √√√
                 break;
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES:
 
-                storiesTutorID = buttonid;
+                storiesTutorID = buttonid; // update √√√
                 break;
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_MATH:
 
-                mathTutorID = buttonid;
+                mathTutorID = buttonid; // update √√√
                 break;
         }
 
@@ -452,20 +445,10 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         buttonid = activeSkill; // √
         RoboTutor.SELECTOR_MODE = TCONST.FTR_DEBUG_LAUNCH;
 
-        // Serialize the new state
-        // #Mod 329 language switch capability
-        //
-        SharedPreferences prefs = getStudentSharedPreferences();
-
-        SharedPreferences.Editor editor = prefs.edit();
-
-        // only one will have been changed but update all
-        //
-        editor.putString(TCONST.SKILL_WRITING, writingTutorID);
-        editor.putString(TCONST.SKILL_STORIES, storiesTutorID);
-        editor.putString(TCONST.SKILL_MATH, mathTutorID);
-
-        editor.apply();
+        // DATA_MODEL will it crash if we try to edit it multiple times???
+        if (writingTutorID != null) studentModel.updateWritingTutorID(writingTutorID);
+        if (storiesTutorID != null) studentModel.updateStoryTutorID(storiesTutorID);
+        if (mathTutorID != null)    studentModel.updateMathTutorID(mathTutorID);
 
         buttonBehavior = buttonid;
         // RoboTutor.SELECTOR_MODE == "DEBUG_LAUNCH"
@@ -539,6 +522,8 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         final SharedPreferences prefs = getStudentSharedPreferences();
 
         String activeTutorId = "";
+        HashMap transitionMap = null;
+        String rootTutor = "";
 
         boolean     buttonFound = false;
 
@@ -555,7 +540,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
             case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
 
                 activeSkill   = AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING; // √
-                activeTutorId = writingTutorID;
+                activeTutorId = studentModel.getWritingTutorID();
                 rootTutor     = matrix.rootSkillWrite;
                 transitionMap = matrix.writeTransitions;
                 buttonFound   = true;
@@ -564,7 +549,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
             case AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES:
 
                 activeSkill   = AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES; // √
-                activeTutorId = storiesTutorID;
+                activeTutorId = studentModel.getStoryTutorID();
                 rootTutor     = matrix.rootSkillStories;
                 transitionMap = matrix.storyTransitions;
                 buttonFound = true;
@@ -574,7 +559,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
             case AS_CONST.BEHAVIOR_KEYS.SELECT_MATH:
 
                 activeSkill   = AS_CONST.BEHAVIOR_KEYS.SELECT_MATH; // √
-                activeTutorId = mathTutorID;
+                activeTutorId = studentModel.getMathTutorID();
                 rootTutor     = matrix.rootSkillMath;
                 transitionMap = matrix.mathTransitions;
                 buttonFound   = true;
@@ -819,12 +804,13 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         // REMOVE_SA ??? figure this out
         //
         String activeTutorId = "";
+        HashMap transitionMap = null;
         // FOR_MOM (4.1) look up activeSkill every time
         switch (activeSkill) { // √
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
 
-                activeTutorId = writingTutorID;
+                activeTutorId = studentModel.getWritingTutorID();
                 transitionMap = matrix.writeTransitions;
                 useWritingPlacement = prefs.getBoolean("WRITING_PLACEMENT", false);
                 placementIndex = prefs.getInt("WRITING_PLACEMENT_INDEX", 0);
@@ -833,13 +819,13 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES:
 
-                activeTutorId = storiesTutorID;
+                activeTutorId = studentModel.getStoryTutorID();
                 transitionMap = matrix.storyTransitions;
                 break;
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_MATH:
 
-                activeTutorId = mathTutorID;
+                activeTutorId = studentModel.getMathTutorID();
                 transitionMap = matrix.mathTransitions;
                 useMathPlacement = prefs.getBoolean("MATH_PLACEMENT", false);
                 placementIndex = prefs.getInt("MATH_PLACEMENT_INDEX", 0);
@@ -849,7 +835,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
 
         // FOR_MOM (4.0) important part...
-        String nextTutor = selectNextTutor(activeTutorId, activeSkill, useWritingPlacement, useMathPlacement, prefs); // √
+        String nextTutor = selectNextTutor(activeTutorId, activeSkill, useWritingPlacement, useMathPlacement, prefs, transitionMap); // √
 
         RoboTutor.logManager.postEvent_I(TCONST.PLACEMENT_TAG, "nextTutor = " + nextTutor);
 
@@ -860,6 +846,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         // Update the active skill
         //
         // FOR_MOM (4.1) look up activeSkill every time
+        String writingTutorID = null, storiesTutorID = null, mathTutorID = null;
         switch (activeSkill) { // √
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
@@ -888,9 +875,9 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
         // only one will have been changed but update all
         //
-        editor.putString(TCONST.SKILL_WRITING, writingTutorID);
-        editor.putString(TCONST.SKILL_STORIES, storiesTutorID);
-        editor.putString(TCONST.SKILL_MATH, mathTutorID);
+        if (writingTutorID != null) editor.putString(TCONST.SKILL_WRITING, writingTutorID);
+        if (storiesTutorID != null) editor.putString(TCONST.SKILL_STORIES, storiesTutorID);
+        if (mathTutorID != null) editor.putString(TCONST.SKILL_MATH, mathTutorID);
         editor.putString(TCONST.LAST_TUTOR, activeTutorId);
 
         editor.apply();
@@ -902,7 +889,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
      * select Next Tutor
      * @param buttonid
      */
-    private String selectNextTutor(String activeTutorId, String activeSkill, boolean useWritingPlacement, boolean useMathPlacement, SharedPreferences prefs) {
+    private String selectNextTutor(String activeTutorId, String activeSkill, boolean useWritingPlacement, boolean useMathPlacement, SharedPreferences prefs, HashMap transitionMap) {
         RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format(Locale.US, "selectNextTutor, w=%s, m=%s",
                 String.valueOf(useWritingPlacement),
                 String.valueOf(useMathPlacement)));
@@ -940,10 +927,10 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         // YYY use placement logic
         String nextTutor;
         if (useWritingPlacement || useMathPlacement) {
-            nextTutor = getNextPlacementTutor(activeTutorId, useMathPlacement, prefs, selectedActivity);
+            nextTutor = getNextPlacementTutor(activeTutorId, useMathPlacement, prefs, selectedActivity, transitionMap);
 
         } else {
-            nextTutor = getNextPromotionTutor(activeTutorId, selectedActivity);
+            nextTutor = getNextPromotionTutor(activeTutorId, selectedActivity, transitionMap);
         }
         return nextTutor;
     }
@@ -953,7 +940,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
      * @param selectedActivity
      * @return
      */
-    private String getNextPromotionTutor(String activeTutorId, PromotionRules.SelectedActivity selectedActivity) {
+    private String getNextPromotionTutor(String activeTutorId, PromotionRules.SelectedActivity selectedActivity, HashMap<String, CAt_Data> transitionMap) {
         // this is
         CAt_Data transitionData = transitionMap.get(activeTutorId);
         switch (selectedActivity) {
@@ -1011,7 +998,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
      * @param selectedActivity
      * @return
      */
-    private String getNextPlacementTutor(String activeTutorId, boolean useMathPlacement, SharedPreferences prefs, PromotionRules.SelectedActivity selectedActivity) {
+    private String getNextPlacementTutor(String activeTutorId, boolean useMathPlacement, SharedPreferences prefs, PromotionRules.SelectedActivity selectedActivity, HashMap<String, CAt_Data> transitionMap) {
         RoboTutor.logManager.postEvent_V(TCONST.PLACEMENT_TAG, "using placement logic");
 
         String placementKey;
@@ -1372,6 +1359,9 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
                 matrix = new TransitionMatrixModel(dataPath + dataFile, mTutor.getScope());
                 matrix.validateAll();
 
+                initializeStudentDataModel();
+
+
                 initializeState();
                 //loadJSON(new JSONObject(jsonData), mTutor.getScope() );
 
@@ -1389,6 +1379,19 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         } catch (Exception e) {
             CErrorManager.logEvent(TAG, "Invalid Data Source - " + dataNameDescriptor + " for : " + name() + " : ", e, true);
         }
+    }
+
+    /**
+     * Initialize the student data model
+     */
+    private void initializeStudentDataModel() {
+        // initialize
+        String prefsName = "";
+        if(RoboTutor.STUDENT_ID != null) {
+            prefsName += RoboTutor.STUDENT_ID + "_";
+        }
+        prefsName += mMediaManager.getLanguageFeature(mTutor);
+        studentModel = new StudentDataModel(RoboTutor.ACTIVITY, prefsName);
     }
 
     // DataSink Implementation END
@@ -1738,6 +1741,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         RoboTutor.logManager.postEvent_V(PLACEMENT_TAG, String.format("useMathPlacement = %s", useMathPlacement));
         RoboTutor.logManager.postEvent_V(PLACEMENT_TAG, String.format("useWritingPlacement = %s", useWritingPlacement));
 
+        String mathTutorID;
         if(useMathPlacement) {
             int mathPlacementIndex = prefs.getInt("MATH_PLACEMENT_INDEX", 0);
             CPlacementTest_Tutor mathPlacementTutor = matrix.mathPlacement[mathPlacementIndex];
@@ -1749,6 +1753,10 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         }
         RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("mathTutorID = %s", mathTutorID));
 
+        studentModel.updateMathTutorID(mathTutorID);
+
+        String writingTutorID;
+
         if (useWritingPlacement) {
             int writingPlacementIndex = prefs.getInt("WRITING_PLACEMENT_INDEX", 0);
             CPlacementTest_Tutor writePlacementTutor = matrix.writePlacement[writingPlacementIndex];
@@ -1759,8 +1767,12 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         }
         RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("writingTutorID = %s", writingTutorID));
 
+        // DATA_MODEL (9) only perform on first update
+        studentModel.updateWritingTutorID(writingTutorID);
 
         // stories doesn't have placement testing
-        storiesTutorID = prefs.getString(TCONST.SKILL_STORIES, matrix.rootSkillStories);
+        if (studentModel.getStoryTutorID() == null) {
+            studentModel.updateStoryTutorID(matrix.rootSkillStories);
+        }
     }
 }
