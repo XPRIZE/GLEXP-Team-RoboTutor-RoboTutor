@@ -112,7 +112,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
 
     final private String  TAG = "TActivitySelector";
-    private int placementIndex;
     private boolean needsToCalculateNextTutor = false; // initialize as false... only set after tutor launched
 
 
@@ -819,6 +818,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         HashMap transitionMap = null;
         // look up activeSkill every time?
         String activeSkill = getStudentSharedPreferences().getString(TCONST.SKILL_SELECTED, SELECT_STORIES); // √√√ √√√
+        int placementIndex = 0;
         switch (activeSkill) { // √
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
@@ -848,7 +848,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
 
         // FOR_MOM (4.0) important part...
-        String nextTutor = selectNextTutor(activeTutorId, activeSkill, useWritingPlacement, useMathPlacement, prefs, transitionMap); // √
+        String nextTutor = selectNextTutor(activeTutorId, activeSkill, useWritingPlacement, useMathPlacement, prefs, transitionMap, placementIndex); // √
 
         RoboTutor.logManager.postEvent_I(TCONST.PLACEMENT_TAG, "nextTutor = " + nextTutor);
 
@@ -902,7 +902,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
      * select Next Tutor
      * @param buttonid
      */
-    private String selectNextTutor(String activeTutorId, String activeSkill, boolean useWritingPlacement, boolean useMathPlacement, SharedPreferences prefs, HashMap transitionMap) {
+    private String selectNextTutor(String activeTutorId, String activeSkill, boolean useWritingPlacement, boolean useMathPlacement, SharedPreferences prefs, HashMap transitionMap, int placementIndex) {
         RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format(Locale.US, "selectNextTutor, w=%s, m=%s",
                 String.valueOf(useWritingPlacement),
                 String.valueOf(useMathPlacement)));
@@ -940,7 +940,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         // YYY use placement logic
         String nextTutor;
         if (useWritingPlacement || useMathPlacement) {
-            nextTutor = getNextPlacementTutor(activeTutorId, useMathPlacement, prefs, selectedActivity, transitionMap);
+            nextTutor = getNextPlacementTutor(activeTutorId, useMathPlacement, prefs, selectedActivity, transitionMap, placementIndex);
 
         } else {
             nextTutor = getNextPromotionTutor(activeTutorId, selectedActivity, transitionMap);
@@ -1011,7 +1011,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
      * @param selectedActivity
      * @return
      */
-    private String getNextPlacementTutor(String activeTutorId, boolean useMathPlacement, SharedPreferences prefs, PromotionRules.SelectedActivity selectedActivity, HashMap<String, CAt_Data> transitionMap) {
+    private String getNextPlacementTutor(String activeTutorId, boolean useMathPlacement, SharedPreferences prefs, PromotionRules.SelectedActivity selectedActivity, HashMap<String, CAt_Data> transitionMap, int placementIndex) {
         RoboTutor.logManager.postEvent_V(TCONST.PLACEMENT_TAG, "using placement logic");
 
         String placementKey;
