@@ -16,7 +16,7 @@ import static cmu.xprize.util.TCONST.LAST_TUTOR;
  * <p>
  * Created by kevindeland on 9/20/18.
  *
- * DATA_MODEL this may be too slow... change to a JSON object, and store all at once
+ * DATA_MODEL this *may* be too slow... change to a JSON object, and store all at once
  * DATA_MODEL see https://stackoverflow.com/questions/7145606/how-android-sharedpreferences-save-store-object
  */
 
@@ -24,21 +24,51 @@ public class StudentDataModel {
 
     private static final String TAG = "StudentDataModel";
 
-    private Context _context;
-    private String _prefsID;
+    private static SharedPreferences _preferences;
+    private static SharedPreferences.Editor _editor;
 
-    private SharedPreferences _preferences;
-    private SharedPreferences.Editor _editor;
+    private final static String HAS_PLAYED_KEY = "HAS_PLAYED";
+    private final static String MATH_PLACEMENT_KEY = "MATH_PLACEMENT";
+    private final static String MATH_PLACEMENT_INDEX_KEY = "MATH_PLACEMENT_INDEX";
+    private final static String WRITING_PLACEMENT_KEY = "WRITING_PLACEMENT";
+    private final static String WRITING_PLACEMENT_INDEX_KEY = "WRITING_PLACEMENT_INDEX";
+    private static final String SKILL_SELECTED_KEY = "SKILL_SELECTED";
 
+    /**
+     * Constructor
+     * @param context needed to call getSharedPreferences
+     * @param prefsID the ID of the student
+     */
     public StudentDataModel(Context context, String prefsID) {
-        this._context = context;
-        this._prefsID = prefsID;
-
-        _preferences = getStudentSharedPreferences();
+        _preferences = context.getSharedPreferences(prefsID, Context.MODE_PRIVATE);
     }
 
-    private SharedPreferences getStudentSharedPreferences() {
-        return _context.getSharedPreferences(_prefsID, Context.MODE_PRIVATE);
+    /**
+     * Initializes the student with beginning values
+     */
+    public static void createNewStudent() {
+        _editor = _preferences.edit();
+        _editor.putString(HAS_PLAYED_KEY, String.valueOf(true));
+
+        // writing: Placement = true. Placement Index starts at 0
+        _editor.putBoolean(StudentDataModel.WRITING_PLACEMENT_KEY, true);
+        _editor.putInt(StudentDataModel.WRITING_PLACEMENT_INDEX_KEY, 0);
+
+        // math: Placement = true. Placement Index starts at 0
+        _editor.putBoolean(StudentDataModel.MATH_PLACEMENT_KEY, true);
+        _editor.putInt(StudentDataModel.MATH_PLACEMENT_INDEX_KEY, 0);
+
+        _editor.apply();
+    }
+
+    /**
+     * Whether the student has played RoboTutor before.
+     * If not, will be updated
+     *
+     * @return "true" or null.
+     */
+    public String getHasPlayed() {
+        return _preferences.getString(StudentDataModel.HAS_PLAYED_KEY, null);
     }
 
     public String getWritingTutorID() {
@@ -71,13 +101,6 @@ public class StudentDataModel {
         _editor.apply();
     }
 
-    public final static String HAS_PLAYED_KEY = "HAS_PLAYED";
-    public final static String MATH_PLACEMENT_KEY = "MATH_PLACEMENT";
-    public final static String MATH_PLACEMENT_INDEX_KEY = "MATH_PLACEMENT_INDEX";
-    public final static String WRITING_PLACEMENT_KEY = "WRITING_PLACEMENT";
-    public final static String WRITING_PLACEMENT_INDEX_KEY = "WRITING_PLACEMENT_INDEX";
-    private static final String SKILL_SELECTED_KEY = "SKILL_SELECTED";
-
     public String getActiveSkill() {
         return _preferences.getString(SKILL_SELECTED_KEY, SELECT_STORIES);
     }
@@ -88,19 +111,19 @@ public class StudentDataModel {
         _editor.apply();
     }
 
-    boolean getWritingPlacement() {
+    public boolean getWritingPlacement() {
         return _preferences.getBoolean(WRITING_PLACEMENT_KEY, false);
     }
 
-    int getWritingPlacementIndex() {
+    public int getWritingPlacementIndex() {
         return _preferences.getInt(WRITING_PLACEMENT_INDEX_KEY, 0);
     }
 
-    boolean getMathPlacement() {
+    public boolean getMathPlacement() {
         return _preferences.getBoolean(MATH_PLACEMENT_KEY, false);
     }
 
-    int getMathPlacementIndex() {
+    public int getMathPlacementIndex() {
         return  _preferences.getInt(MATH_PLACEMENT_INDEX_KEY, 0);
     }
 
@@ -143,6 +166,22 @@ public class StudentDataModel {
         } else {
             _editor.putInt(WRITING_PLACEMENT_INDEX_KEY, i);
         }
+        _editor.apply();
+    }
+
+    /**
+     * Gets how many times a tutor has been played, to determine whether or not to play a video
+     * @param tutor
+     * @return
+     */
+    public int getTimesPlayedTutor(String tutor) {
+        String key = tutor + "_TIMES_PLAYED";
+        return _preferences.getInt(key, 0);
+    }
+
+    public void updateTimesPlayedTutor(String tutor, int i) {
+        _editor = _preferences.edit();
+        _editor.putInt(tutor, i);
         _editor.apply();
     }
 

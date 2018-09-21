@@ -238,11 +238,6 @@ public class PromotionMechanism {
     private String getNextPlacementTutor(String activeTutorId, boolean useMathPlacement, PromotionRules.SelectedActivity selectedActivity, HashMap<String, CAt_Data> transitionMap, int placementIndex) {
         RoboTutor.logManager.postEvent_V(TCONST.PLACEMENT_TAG, "using placement logic");
 
-        String placementKey;
-        String placementIndexKey;
-
-        String nextTutor;
-
         switch(selectedActivity) {
 
             /// YYY it might be better to keep the placement tutors in a map instead of in an array
@@ -319,8 +314,6 @@ public class PromotionMechanism {
                 // set prefs.usesThingy to false
                 if(useMathPlacement) {
                     lastPlacementTest = _matrix.mathPlacement[placementIndex];
-                    placementKey = "MATH_PLACEMENT";
-                    placementIndexKey = "MATH_PLACEMENT_INDEX";
                     _studentModel.updateMathPlacement(false); // editor.putBoolean(placementKey, false); // no more placement
                     _studentModel.updateMathPlacementIndex(null);
 
@@ -328,8 +321,6 @@ public class PromotionMechanism {
                 // useWritePlacement only other option
                 else {
                     lastPlacementTest = _matrix.writePlacement[placementIndex];
-                    placementKey = "WRITING_PLACEMENT";
-                    placementIndexKey = "WRITING_PLACEMENT_INDEX";
                     _studentModel.updateWritingPlacement(false); // editor.putBoolean(placementKey, false); // no more placement
                     _studentModel.updateWritingPlacementIndex(null); // editor.remove(placementIndexKey);
                 }

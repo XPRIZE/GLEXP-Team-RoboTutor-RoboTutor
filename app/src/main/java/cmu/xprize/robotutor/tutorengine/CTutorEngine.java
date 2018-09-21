@@ -71,7 +71,6 @@ public class CTutorEngine implements ILoadableObject2 {
 
     private CMediaManager                   mMediaManager;
 
-    // DATA_MODEL
     public static StudentDataModel          studentModel;
     public static TransitionMatrixModel     matrix;
     public static PromotionMechanism        promotionMechanism;
@@ -609,7 +608,7 @@ public class CTutorEngine implements ILoadableObject2 {
     }
 
     /**
-     * Initialize the student data model
+     * DATA_MODEL Initialize the student data model
      */
     private static StudentDataModel loadStudentModel() {
         // initialize
@@ -618,7 +617,15 @@ public class CTutorEngine implements ILoadableObject2 {
             prefsName += RoboTutor.STUDENT_ID + "_";
         }
         prefsName += CTutorEngine.language;
-        return new StudentDataModel(RoboTutor.ACTIVITY, prefsName);
+        StudentDataModel model = new StudentDataModel(RoboTutor.ACTIVITY, prefsName);
+
+        // if it's the first time playing, we want to initialize our placement values
+        String firstTime = model.getHasPlayed();
+        if (firstTime == null) {
+            model.createNewStudent();
+        }
+
+        return model;
     }
 
     /**

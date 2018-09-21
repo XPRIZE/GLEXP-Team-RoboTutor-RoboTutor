@@ -97,7 +97,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
     // goal 2: show N and N+1 √√√
     // goal 3: story -> lit -> story -> math (next)
     // goal 4: what to do for placement???
-    private boolean OLD_WAY = false;
+    private boolean OLD_WAY = true;
 
     private boolean     askButtonsEnabled = false;
 
@@ -692,28 +692,23 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
     /**
      * A big and cumbersome method that will launch a tutor eventually
-     * @param prefs
      */
     private void doTutorLaunchWithVideosAndStuff(String activeTutorId, CAt_Data tutorToLaunch) {
         // Update the tutor id shown in the log stream
 
         if(BuildConfig.SHOW_DEMO_VIDS && false) {
 
-            SharedPreferences prefs = getStudentSharedPreferences();
-
             String whichActivityIsNext = parseActiveTutorForTutorName(activeTutorId);
-            final String activityPreferenceKey = whichActivityIsNext + "_TIMES_PLAYED";
 
             // bpop, write, akira, story, math, etc
-            // DATA_MODEL (read)
-            final int timesPlayedActivity = prefs.getInt(activityPreferenceKey, 0); // i = default value
+            final int timesPlayedActivity = studentModel.getTimesPlayedTutor(whichActivityIsNext);
             boolean playDemoVid = timesPlayedActivity < 1; // only play video once
 
             String pathToFile = getTutorInstructionalVideoPath(activeTutorId, whichActivityIsNext);
 
             if(playDemoVid && pathToFile != null) {
 
-                playTutorDemoVid(activeTutorId, tutorToLaunch, activityPreferenceKey, timesPlayedActivity, pathToFile);
+                playTutorDemoVid(activeTutorId, tutorToLaunch, whichActivityIsNext, timesPlayedActivity, pathToFile);
 
             } else {
 
@@ -738,7 +733,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
      * @param timesPlayedActivity
      * @param pathToFile
      */
-    private void playTutorDemoVid(final String activeTutorId, final CAt_Data tutorToLaunch, final String activityPreferenceKey, final int timesPlayedActivity, String pathToFile) {
+    private void playTutorDemoVid(final String activeTutorId, final CAt_Data tutorToLaunch, final String whichActivityIsNext, final int timesPlayedActivity, String pathToFile) {
         // load SurfaceView to hold the video
         final SurfaceView fullscreenView = (SurfaceView) findViewById(R.id.SvideoSurface);
         fullscreenView.setVisibility(View.VISIBLE);
@@ -776,12 +771,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
                 fullscreenView.setVisibility(View.INVISIBLE);
                 langToggle.setVisibility(View.VISIBLE); // prevent from changing language
 
-                SharedPreferences prefs = getStudentSharedPreferences();
-                SharedPreferences.Editor editor = prefs.edit();
-                // DATA_MODEL (update)
-                editor.putInt(activityPreferenceKey, timesPlayedActivity + 1); // increment to let them know we watched the video
-                editor.apply();
-
+                studentModel.updateTimesPlayedTutor(whichActivityIsNext, timesPlayedActivity + 1); // increment to let them know we watched the video
 
                 CLogManager.setTutor(activeTutorId);
 
@@ -849,23 +839,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         return PATH_TO_FILE;
 
     }
-
-    /**
-     * gets the stored data for each student based on STUDENT_ID.
-     * YYY if this is a student's first time logging in, use PLACEMENT
-     */
-    private SharedPreferences getStudentSharedPreferences() {
-        // each ID name is composed of the STUDENT_ID plus the language i.e. EN or SW
-        String prefsName = "";
-        if(RoboTutor.STUDENT_ID != null) {
-            prefsName += RoboTutor.STUDENT_ID + "_";
-        }
-        prefsName += mMediaManager.getLanguageFeature(mTutor);
-
-        RoboTutor.logManager.postEvent_I(TAG, "Getting SharedPreferences: " + prefsName);
-        return RoboTutor.ACTIVITY.getSharedPreferences(prefsName, Context.MODE_PRIVATE);
-    }
-
 
     /**
      * The session manager set the \<varname\>.intent and intentData scoped variables
@@ -1398,77 +1371,36 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
     /**
      * initializes everything
-     *
+     * DATA_MODEL this could/should be moved to the creation sequence...
      */
     private void initializeState() {
 
-        SharedPreferences prefs = getStudentSharedPreferences(); // YYY
-
-        if(prefs.getAll().entrySet().isEmpty())
-            RoboTutor.logManager.postEvent_W(TAG, "SharedPreferences is empty");
-
-        for (Map.Entry<String, ?> entry : prefs.getAll().entrySet()) {
-            RoboTutor.logManager.postEvent_D(TAG, "SharedPreferences: " + entry.getKey() + " -- " + entry.getValue().toString());
-        }
-
-        // DATA_MODEL (read)
-        String firstTime = prefs.getString(StudentDataModel.HAS_PLAYED_KEY, null);
-        // if it's the first time playing, we want to initialize our placement values
-        if (firstTime == null) {
-            // DATA_MODEL (create)
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putString(StudentDataModel.HAS_PLAYED_KEY, String.valueOf(true));
-            editor.putBoolean(StudentDataModel.MATH_PLACEMENT_KEY, true);
-            editor.putInt(StudentDataModel.MATH_PLACEMENT_INDEX_KEY, 0);
-            editor.putBoolean(StudentDataModel.WRITING_PLACEMENT_KEY, true);
-            editor.putInt(StudentDataModel.WRITING_PLACEMENT_INDEX_KEY, 0);
-            editor.apply();
-
-        }
-        // DATA_MODEL (read)
-        boolean useMathPlacement = prefs.getBoolean(StudentDataModel.MATH_PLACEMENT_KEY, true);
-        boolean useWritingPlacement = prefs.getBoolean(StudentDataModel.WRITING_PLACEMENT_KEY, true);
-
+        boolean useMathPlacement = studentModel.getMathPlacement();
+        boolean useWritingPlacement = studentModel.getWritingPlacement();
 
         RoboTutor.logManager.postEvent_V(PLACEMENT_TAG, String.format("useMathPlacement = %s", useMathPlacement));
-        RoboTutor.logManager.postEvent_V(PLACEMENT_TAG, String.format("useWritingPlacement = %s", useWritingPlacement));
-
-        String mathTutorID;
         if(useMathPlacement) {
-            // DATA_MODEL (read)
-            int mathPlacementIndex = prefs.getInt(StudentDataModel.MATH_PLACEMENT_INDEX_KEY, 0);
+            int mathPlacementIndex = studentModel.getMathPlacementIndex();
             CPlacementTest_Tutor mathPlacementTutor = matrix.mathPlacement[mathPlacementIndex];
             RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("mathPlacementIndex = %d", mathPlacementIndex));
-            mathTutorID = mathPlacementTutor.tutor; // DATA_MODEL for example, only load mathTutorID when needed...
-
-        } else {
-            // DATA_MODEL (read)
-            mathTutorID    = prefs.getString(TCONST.SKILL_MATH,    matrix.rootSkillMath); // does this get overwritten or something???
+            String mathTutorID = mathPlacementTutor.tutor; // does this need to happen every time???
+            studentModel.updateMathTutorID(mathTutorID);
+            RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("mathTutorID = %s", mathTutorID));
         }
-        RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("mathTutorID = %s", mathTutorID));
 
-        studentModel.updateMathTutorID(mathTutorID);
-
-        String writingTutorID;
-
+        RoboTutor.logManager.postEvent_V(PLACEMENT_TAG, String.format("useWritingPlacement = %s", useWritingPlacement));
         if (useWritingPlacement) {
-            // DATA_MODEL (read)
-            int writingPlacementIndex = prefs.getInt(StudentDataModel.WRITING_PLACEMENT_INDEX_KEY, 0);
+            int writingPlacementIndex = studentModel.getWritingPlacementIndex();
             CPlacementTest_Tutor writePlacementTutor = matrix.writePlacement[writingPlacementIndex];
             RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("writePlacementIndex = %d", writingPlacementIndex));
-            writingTutorID = writePlacementTutor.tutor; // DATA_MODEL for example, only load writingTutorID when needed...
-        } else {
-            // DATA_MODEL (read)
-            writingTutorID = prefs.getString(TCONST.SKILL_WRITING, matrix.rootSkillWrite);
+            String writingTutorID = writePlacementTutor.tutor;
+            studentModel.updateWritingTutorID(writingTutorID);
+            RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("writingTutorID = %s", writingTutorID));
         }
-        RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("writingTutorID = %s", writingTutorID));
 
-        // DATA_MODEL (update)
-        studentModel.updateWritingTutorID(writingTutorID);
-
+        // DATA_MODEL this could be somewhere better...
         // stories doesn't have placement testing
         if (studentModel.getStoryTutorID() == null) {
-            // DATA_MODEL (update)
             studentModel.updateStoryTutorID(matrix.rootSkillStories);
         }
     }
