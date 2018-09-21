@@ -800,24 +800,34 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                             // if this correct response makes the sentence correct,
                             boolean writtenSentenceIsCorrect = mWrittenSentence.equals(mAnswer);
                             if (writtenSentenceIsCorrect) {
-                                temporaryOnCorrect();
+                                temporaryOnCorrect(); //to update the word
                                 applyBehavior(WR_CONST.DATA_ITEM_COMPLETE);
                             }
 
                             // if the response is correct(item not yet over), check if the word is correct,apply ON_CORRECT
                             else{
-                                //since the replacement is correct, still apply the oncorrect; its just that according to the attempt feature apt fn will be called.
+                                //since the replacement is correct, still apply the oncorrect; its just that according to the attempt feature attempt fn will be called.
 
-//                                //check if the word written is correct and release ON_CORRECT. How to check that a word is written correctly?
-//                                String writtenActiveWord = mActiveWord.getWrittenWordString();
-//                                String writtenAnswerWord = mListWordsAnswer.get(currentWordIndex).getWordAnswer();
-//                                boolean writtenWordIsCorrect = writtenActiveWord.equals(writtenAnswerWord);
-//                                if(writtenWordIsCorrect){
-//                                    publishFeature(WR_CONST.FTR_WORD_CORRECT);
-//                                    applyBehavior(WR_CONST.ON_CORRECT);
-//                                }
-                                // not very sure if this should come.
-                                evaluateSentenceWordLevel();
+                                //checking if this completes the word
+                                mActiveWord = mListWordsInput.get(currentWordIndex);
+                                boolean wordIsCorrect = mActiveWord.updateInputWordCorrectStatus(currentWordIndex);
+                                //if the word is correct update its color
+                                if (wordIsCorrect) {
+                                    //turn blue
+                                    //release the oncorrect behavior with word correct feature.
+                                    publishFeature(WR_CONST.FTR_WORD_CORRECT);
+                                    temporaryOnCorrect();
+                                    applyBehavior(WR_CONST.ON_CORRECT);
+//                                    temporaryOnCorrect();
+                                }
+
+                                //if the replacement is correct but the word is not, turn it in blue and inhibit input if attempt 2/3 when each letter is colored.
+                                else{
+                                    applyBehavior(WR_CONST.ON_CORRECT);
+                                }
+
+
+//                                evaluateSentenceWordLevel(); // not applied because it is primarily for going over all words in a loop. Although code above is almost same.
                             }
                         }
                         // else (if incorrect letter drawn, but correct place chosen for replacement), revert the glyph to what it was, then increase attempt and release on error behavior.
@@ -1294,6 +1304,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     //goes over the unverified words and releases apt features.
     public void evaluateSentenceWordLevel(){
+        //the main structure is that, it updates the sentence parameters, checks if sentence complete, else, checks if all the words not evaluated before are complete, stops at the first incorrect one, takes a call on whether to call error behavior on the incorrect one depending on whether it was being written at the time of evaluation or not.
+
 
         //update mEditSequence, mAlignedTarget, mTargetSource with the required changes and aligned source and target string builders
         updateSentenceEditSequence();
@@ -1329,14 +1341,14 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 //if the word is correct update its color
                 if (wordIsCorrect) {
                     //turn blue
-                    //release the oncorrect behavior
+                    //release the oncorrect behavior with word correct feature.
                     publishFeature(WR_CONST.FTR_WORD_CORRECT);
                     applyBehavior(WR_CONST.ON_CORRECT);
                     temporaryOnCorrect();
 //                    inputWord.updateWordResponse(); //goes in the animator graph
                 }
 
-                //if the word is incorrect, update its color to red and increase attempt, set current word as this, inhibit others.
+                //if the word is incorrect, set current word as this, increase attempt if in middle of being written. update colors if
                 else {
 
                     //if this word has already been attempted(ie the case when 1 space has not been deliberately left while continuing writing), increment the word's attempt level (as error) and release corresponding feature

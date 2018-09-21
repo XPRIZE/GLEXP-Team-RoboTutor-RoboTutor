@@ -479,13 +479,20 @@
             // functions to be called for sentence writing
             // 1. word level feedback (the three things below and clearing the attempt index)
 
+              //when word is correct -> deactive edit mode, inhibit word input, update response colors
 //            {"name": "deactivate edit mode for the word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "deactivateEditModeInActiveWord", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD&FTR_WORD_CORRECT"},
 //            {"name": "inhibit input for the word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitWordInput", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD&FTR_WORD_CORRECT"},
-//            {"name": "update the response colors for each letter in word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "updateLettersWordResponse", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD"},
-//            {"name": "increment the current word index.", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "incrementCurrentWordIndex", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD&FTR_WORD_CORRECT"},
+
+            //update colors irrespective of whether the word was in which attempt, it is necessary to convey that the
+            {"name": "update the response colors for each letter in word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "updateLettersWordResponse", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD"},
+            {"name": "inhibit input for the word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitWordInput", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD"},
+
+            //            {"name": "increment the current word index.", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "incrementCurrentWordIndex", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_WRD&FTR_WORD_CORRECT"},
 
             //2. sentence level on_correct behaviors (called when correct replacement)
+            //
             //when the word is already colored letterwise
+
 
             {"name": "update the response colors for each letter in word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "updateLettersWordResponse", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_SEN&FTR_ATTEMPT_2|FTR_SEN_COPY&FTR_SEN_SEN&FTR_ATTEMPT_3|FTR_SEN_COPY&FTR_SEN_SEN&FTR_ATTEMPT_4"},
               //additional behaviors for when the word is complete
