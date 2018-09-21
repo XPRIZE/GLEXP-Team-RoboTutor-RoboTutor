@@ -26,7 +26,8 @@ public class AS_CONST {
         public static final String SELECT_STORIES    = "SELECT_STORIES";    // Behavior Key
         public static final String SELECT_MATH       = "SELECT_MATH";       // Behavior Key
 
-        // OH_BEHAVE new ones!!!
+        // behavior options for new menu
+        public static final String SELECT_OPTION_0 = "SELECT_OPTION_0";
         public static final String SELECT_OPTION_1 = "SELECT_OPTION_1";
         public static final String SELECT_OPTION_2 = "SELECT_OPTION_2";
     }

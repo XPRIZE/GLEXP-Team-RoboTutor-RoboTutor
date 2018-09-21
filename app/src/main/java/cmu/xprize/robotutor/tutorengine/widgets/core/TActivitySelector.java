@@ -58,6 +58,7 @@ import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_MATH;
+import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_OPTION_0;
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_OPTION_1;
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_OPTION_2;
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;
@@ -93,10 +94,10 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
     // OH_BEHAVE (goals)
     // goal 1: get repeat working properly... √√√
-    // goal 2: story -> lit -> story -> math... show N and N+1
-    // OH_BEHAVE this alters between new way and old way
-    private boolean OLD_WAY = true;
-    // goal 3: why is repeat button failing in dev branch? (requires a merge)
+    // goal 2: show N and N+1 √√√
+    // goal 3: story -> lit -> story -> math (next)
+    // goal 4: what to do for placement???
+    private boolean OLD_WAY = false;
 
     private boolean     askButtonsEnabled = false;
 
@@ -235,11 +236,11 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
             }
 
 
-            // OH_BEHAVE... has to be different for placement! .next won't work in placement mode
+            // OH_BEHAVE... has to be different for placement! .next won't work in placement mode... what to do??? idk
             // solution? when any placement mode, use the old way
-            nextTutors[0] = (CAt_Data) transitionMap.get(tutorId);
-            nextTutors[1] = (CAt_Data) transitionMap.get(nextTutors[1].next); // next hardest tutor!!!
-            // OH_BEHAVE should be one more option???
+            nextTutors[1] = (CAt_Data) transitionMap.get(tutorId);
+            nextTutors[0] = (CAt_Data) transitionMap.get(nextTutors[1].easier); // next hardest tutor!!!
+            nextTutors[2] = (CAt_Data) transitionMap.get(nextTutors[1].next); // next hardest tutor!!!
         }
 
         SaskActivity.initializeButtonsAndSetButtonImages(_activeLayout, nextTutors);
@@ -303,19 +304,19 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         // OH_BEHAVE (0) the prompts and the actions and the behaviors should depend on which skill matrix we're in
         _activeLayout.items[0] =  new CAskElement();
         _activeLayout.items[0].componentID = "SbuttonOption1";
-        _activeLayout.items[0].behavior = OLD_WAY ? AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING : SELECT_OPTION_1;
+        _activeLayout.items[0].behavior = OLD_WAY ? AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING : SELECT_OPTION_0;
         _activeLayout.items[0].prompt = "reading and writing";
         _activeLayout.items[0].help = "Tap here for reading and writing";
 
         _activeLayout.items[1] =  new CAskElement();
         _activeLayout.items[1].componentID = "SbuttonOption2";
-        _activeLayout.items[1].behavior = OLD_WAY ? AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES : SELECT_OPTION_2;
+        _activeLayout.items[1].behavior = OLD_WAY ? AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES : SELECT_OPTION_1;
         _activeLayout.items[1].prompt = "stories";
         _activeLayout.items[1].help = "Tap here for a story";
 
         _activeLayout.items[2] =  new CAskElement();
         _activeLayout.items[2].componentID = "SbuttonOption3";
-        _activeLayout.items[2].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_MATH;
+        _activeLayout.items[2].behavior = OLD_WAY ? AS_CONST.BEHAVIOR_KEYS.SELECT_MATH : SELECT_OPTION_2;
         _activeLayout.items[2].prompt = "numbers and math";
         _activeLayout.items[2].help = "Tap here for numbers and math";
 
@@ -344,12 +345,13 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         //setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.LAUNCH_EVENT, "LAUNCH_BEHAVIOR"); // (2.7) collapsed into one function
 
         // Home screen button behavior...
-        // OH_BEHAVE (2)... keep mapping to BUTTON_BEHAVIOR, but make different options...
         if(OLD_WAY) {
             setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
             setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
             setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_MATH, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
         } else {
+            // now we have different options, instead of choosing a content area
+            setStickyBehavior(SELECT_OPTION_0, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
             setStickyBehavior(SELECT_OPTION_1, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
             setStickyBehavior(SELECT_OPTION_2, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
         }
@@ -419,7 +421,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
                     publishValue(AS_CONST.VAR_HELP_AUDIO, element.help);
                     publishValue(AS_CONST.VAR_PROMPT_AUDIO, element.prompt);
 
-                    applyBehavior(element.behavior); // OH_BEHAVE (1) this is where the behavior gets applied... thru the stickyMap
+                    applyBehavior(element.behavior);
                     // applyBehaviorNode(element.secondary_behavior...)
                 }
             }
@@ -512,67 +514,103 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
     @Override
     public void doButtonBehavior(String buttonBehavior) {
 
-        // OH_BEHAVE NEXT NEXT NEXT
-        if (!OLD_WAY) {
-           Log.d("OH_BEHAVE", "some behavior here should be different...");
-
-           switch(buttonBehavior.toUpperCase()) {
-               case SELECT_OPTION_1:
-                   // launch the next tutor
-                   break;
-
-               case SELECT_OPTION_2:
-                   // launch the next.next tutor
-                   break;
-           }
-        }
-
         String activeTutorId = "";
         HashMap transitionMap = null;
         String rootTutor = "";
 
         String activeSkill = null;
 
-        // this could seriously be cleaned up...
-        switch (buttonBehavior.toUpperCase()) {
+        if (!OLD_WAY) {
+            Log.d("OH_BEHAVE", "some behavior here should be different...");
 
-            case AS_CONST.SELECT_EXIT:
-                mTutor.post(TCONST.FINISH);
-                return;
+            CAt_Data activeTutor;
+            String[] nextTutors = new String[3];
 
-            case AS_CONST.SELECT_REPEAT:
+            activeSkill = studentModel.getActiveSkill();
 
-                String lastTutor = studentModel.getLastTutor();
-                if (lastTutor != null) { // for when it's the first time...s
-                    activeTutorId = lastTutor;
-                }
-                activeSkill = studentModel.getActiveSkill();
-                transitionMap = matrix.getTransitionMapByContentArea(activeSkill);
-                break;
+            switch(activeSkill) {
+                case SELECT_WRITING:
+                    activeTutorId = studentModel.getWritingTutorID();
+                    break;
 
-            case SELECT_WRITING:
+                case SELECT_STORIES:
+                    activeTutorId = studentModel.getStoryTutorID();
+                    break;
 
-                activeSkill   = SELECT_WRITING; // √
-                activeTutorId = studentModel.getWritingTutorID();
-                rootTutor     = matrix.getRootSkillByContentArea(SELECT_WRITING);
-                transitionMap = matrix.getTransitionMapByContentArea(SELECT_WRITING);
-                break;
+                case SELECT_MATH:
+                    activeTutorId = studentModel.getMathTutorID();
+                    break;
+            }
+            transitionMap = matrix.getTransitionMapByContentArea(activeSkill);
+            activeTutor = (CAt_Data) transitionMap.get(activeTutorId);
+            nextTutors[1] = activeTutor.tutor_id;
+            nextTutors[0] = ((CAt_Data) transitionMap.get(activeTutor.easier)).tutor_id; // next hardest tutor!!!
+            nextTutors[2] = ((CAt_Data) transitionMap.get(activeTutor.next)).tutor_id; // next hardest tutor!!!
 
-            case SELECT_STORIES:
+            switch(buttonBehavior.toUpperCase()) {
+                case AS_CONST.SELECT_EXIT:
+                    mTutor.post(TCONST.FINISH);
+                    return;
 
-                activeSkill   = SELECT_STORIES; // √
-                activeTutorId = studentModel.getStoryTutorID();
-                rootTutor     = matrix.getRootSkillByContentArea(SELECT_STORIES);
-                transitionMap = matrix.getTransitionMapByContentArea(SELECT_STORIES);
-                break;
+                case SELECT_OPTION_0:
+                    activeTutorId = nextTutors[0];
+                    break;
 
-            case SELECT_MATH:
+                case SELECT_OPTION_1:
+                    // launch the next tutor
+                    // something like this...
+                    activeTutorId = nextTutors[1];
 
-                activeSkill   = SELECT_MATH; // √
-                activeTutorId = studentModel.getMathTutorID();
-                rootTutor     = matrix.getRootSkillByContentArea(SELECT_MATH);
-                transitionMap = matrix.getTransitionMapByContentArea(SELECT_MATH);
-                break;
+                    break;
+
+                case SELECT_OPTION_2:
+                    // launch the next.next tutor
+                    activeTutorId = nextTutors[2];
+                    break;
+            }
+        } else {
+
+            // this could seriously be cleaned up...
+            switch (buttonBehavior.toUpperCase()) {
+
+                case AS_CONST.SELECT_EXIT:
+                    mTutor.post(TCONST.FINISH);
+                    return;
+
+                case AS_CONST.SELECT_REPEAT:
+
+                    String lastTutor = studentModel.getLastTutor();
+                    if (lastTutor != null) { // for when it's the first time...s
+                        activeTutorId = lastTutor;
+                    }
+                    activeSkill = studentModel.getActiveSkill();
+                    transitionMap = matrix.getTransitionMapByContentArea(activeSkill);
+                    break;
+
+                case SELECT_WRITING:
+
+                    activeSkill   = SELECT_WRITING; // √
+                    activeTutorId = studentModel.getWritingTutorID();
+                    rootTutor     = matrix.getRootSkillByContentArea(SELECT_WRITING);
+                    transitionMap = matrix.getTransitionMapByContentArea(SELECT_WRITING);
+                    break;
+
+                case SELECT_STORIES:
+
+                    activeSkill   = SELECT_STORIES; // √
+                    activeTutorId = studentModel.getStoryTutorID();
+                    rootTutor     = matrix.getRootSkillByContentArea(SELECT_STORIES);
+                    transitionMap = matrix.getTransitionMapByContentArea(SELECT_STORIES);
+                    break;
+
+                case SELECT_MATH:
+
+                    activeSkill   = SELECT_MATH; // √
+                    activeTutorId = studentModel.getMathTutorID();
+                    rootTutor     = matrix.getRootSkillByContentArea(SELECT_MATH);
+                    transitionMap = matrix.getTransitionMapByContentArea(SELECT_MATH);
+                    break;
+            }
         }
 
 
