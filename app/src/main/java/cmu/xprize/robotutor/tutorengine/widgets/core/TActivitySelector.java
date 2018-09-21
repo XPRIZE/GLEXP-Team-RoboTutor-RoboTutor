@@ -236,7 +236,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
             }
 
 
-            // OH_BEHAVE... has to be different for placement! .next won't work in placement mode... what to do??? idk
+            // OH_BEHAVE (0)s has to be different for placement! .next won't work in placement mode... what to do??? idk
             // solution? when any placement mode, use the old way
             nextTutors[1] = (CAt_Data) transitionMap.get(tutorId);
             nextTutors[0] = (CAt_Data) transitionMap.get(nextTutors[1].easier); // next hardest tutor!!!
@@ -302,6 +302,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         _activeLayout.items = new CAskElement[5];
 
         // OH_BEHAVE (0) the prompts and the actions and the behaviors should depend on which skill matrix we're in
+        // OH_BEHAVE (0) AND should depend on whether we've completed placement...
         _activeLayout.items[0] =  new CAskElement();
         _activeLayout.items[0].componentID = "SbuttonOption1";
         _activeLayout.items[0].behavior = OLD_WAY ? AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING : SELECT_OPTION_0;
@@ -1371,7 +1372,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
     /**
      * initializes everything
-     * DATA_MODEL this could/should be moved to the creation sequence...
+     * DATA_MODEL (0) this could/should be moved to the creation sequence...
      */
     private void initializeState() {
 
@@ -1398,7 +1399,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
             RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("writingTutorID = %s", writingTutorID));
         }
 
-        // DATA_MODEL this could be somewhere better...
+        // DATA_MODEL (0) this could be somewhere better...
         // stories doesn't have placement testing
         if (studentModel.getStoryTutorID() == null) {
             studentModel.updateStoryTutorID(matrix.rootSkillStories);

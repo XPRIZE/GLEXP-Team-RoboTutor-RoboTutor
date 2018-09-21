@@ -608,7 +608,7 @@ public class CTutorEngine implements ILoadableObject2 {
     }
 
     /**
-     * DATA_MODEL Initialize the student data model
+     * DATA_MODEL (0) Initialize the student data model
      */
     private static StudentDataModel loadStudentModel() {
         // initialize
