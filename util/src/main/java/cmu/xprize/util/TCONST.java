@@ -46,17 +46,7 @@ public class TCONST {
     public static final String SKILL_STORIES    = "stories";
     public static final String SKILL_MATH       = "numbers";
 
-
-    public static final String SKILL_WRITING_PLACEMENT    = "letters_placement";
-    public static final String SKILL_MATH_PLACEMENT       = "numbers_placement";
-
-
     public static final String FINISH           = "FINISH";
-    public static final String SELECTOR_MODE    = "SELECTOR_MODE";
-
-    public static final String TUTOR_SELECTED   = "TUTOR_SELECTED";
-    public static final String SKILL_SELECTED   = "SKILL_SELECTED";
-    public static final String DEBUG_LAYOUT     = "DEBUG_LAYOUT";
 
 
     // RoboTutor Version spec Index meaning 0.1.2.3

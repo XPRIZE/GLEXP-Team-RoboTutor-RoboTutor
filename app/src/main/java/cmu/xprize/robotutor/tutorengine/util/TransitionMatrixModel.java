@@ -17,6 +17,9 @@ import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 
+import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_MATH;
+import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;
+import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING;
 import static cmu.xprize.util.TCONST.PLACEMENT_TAG;
 
 /**
@@ -32,10 +35,12 @@ public class TransitionMatrixModel implements ILoadableObject {
     public String       rootSkillWrite;
     public String       rootSkillStories;
     public String       rootSkillMath;
+    private HashMap<String, String>     contentAreaRootSkills;
 
-    public HashMap writeTransitions;
+    public HashMap      writeTransitions;
     public HashMap      storyTransitions;
     public HashMap      mathTransitions;
+    private HashMap<String, HashMap>     contentAreaTransitionMaps;
 
     public CPlacementTest_Tutor[] writePlacement;
     public CPlacementTest_Tutor[]   mathPlacement;
@@ -53,9 +58,28 @@ public class TransitionMatrixModel implements ILoadableObject {
 
     }
 
+    public String getRootSkillByContentArea(String contentArea) {
+        return contentAreaRootSkills.get(contentArea);
+    }
+
+    public HashMap getTransitionMapByContentArea(String contentArea) {
+        return contentAreaTransitionMaps.get(contentArea);
+    }
+
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
         JSON_Helper.parseSelf(jsonObj, this, CClassMap2.classMap, scope);
+
+        contentAreaTransitionMaps = new HashMap<>();
+        contentAreaTransitionMaps.put(SELECT_WRITING, writeTransitions);
+        contentAreaTransitionMaps.put(SELECT_STORIES, storyTransitions);
+        contentAreaTransitionMaps.put(SELECT_MATH, mathTransitions);
+
+        contentAreaRootSkills = new HashMap<>();
+        contentAreaRootSkills.put(SELECT_WRITING, rootSkillWrite);
+        contentAreaRootSkills.put(SELECT_STORIES, rootSkillStories);
+        contentAreaRootSkills.put(SELECT_MATH, rootSkillMath);
+
     }
 
     public void validateAll() {

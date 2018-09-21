@@ -9,13 +9,14 @@ import com.google.gson.Gson;
 import cmu.xprize.util.TCONST;
 
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;
+import static cmu.xprize.util.TCONST.LAST_TUTOR;
 
 /**
  * RoboTutor
  * <p>
  * Created by kevindeland on 9/20/18.
  *
- * DATA_MODEL this is too slow... change to a JSON object, and store all at once
+ * DATA_MODEL this may be too slow... change to a JSON object, and store all at once
  * DATA_MODEL see https://stackoverflow.com/questions/7145606/how-android-sharedpreferences-save-store-object
  */
 
@@ -70,27 +71,28 @@ public class StudentDataModel {
         _editor.apply();
     }
 
-
-
     public final static String HAS_PLAYED_KEY = "HAS_PLAYED";
     public final static String MATH_PLACEMENT_KEY = "MATH_PLACEMENT";
     public final static String MATH_PLACEMENT_INDEX_KEY = "MATH_PLACEMENT_INDEX";
     public final static String WRITING_PLACEMENT_KEY = "WRITING_PLACEMENT";
     public final static String WRITING_PLACEMENT_INDEX_KEY = "WRITING_PLACEMENT_INDEX";
-
+    private static final String SKILL_SELECTED_KEY = "SKILL_SELECTED";
 
     public String getActiveSkill() {
-        /// √√√
-        return _preferences.getString(TCONST.SKILL_SELECTED, SELECT_STORIES);
+        return _preferences.getString(SKILL_SELECTED_KEY, SELECT_STORIES);
+    }
+
+    public void updateActiveSkill(String skill) {
+        _editor = _preferences.edit();
+        _editor.putString(SKILL_SELECTED_KEY, skill);
+        _editor.apply();
     }
 
     boolean getWritingPlacement() {
-        // √√√
         return _preferences.getBoolean(WRITING_PLACEMENT_KEY, false);
     }
 
     int getWritingPlacementIndex() {
-        // √√√
         return _preferences.getInt(WRITING_PLACEMENT_INDEX_KEY, 0);
     }
 
@@ -103,10 +105,13 @@ public class StudentDataModel {
     }
 
     void updateLastTutor(String activeTutorId) {
-
         _editor = _preferences.edit();
         _editor.putString (TCONST.LAST_TUTOR, activeTutorId);
         _editor.apply();
+    }
+
+    public String getLastTutor() {
+        return _preferences.getString(LAST_TUTOR, null);
     }
 
     void updateMathPlacement(boolean b) {

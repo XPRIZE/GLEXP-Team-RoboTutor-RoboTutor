@@ -618,7 +618,7 @@ public class CTutorEngine implements ILoadableObject2 {
             prefsName += RoboTutor.STUDENT_ID + "_";
         }
         prefsName += CTutorEngine.language;
-        return new StudentDataModel(RoboTutor.ACTIVITY, prefsName);  // DATA_MODEL (create) this should be created at lower level
+        return new StudentDataModel(RoboTutor.ACTIVITY, prefsName);
     }
 
     /**

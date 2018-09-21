@@ -92,7 +92,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
     private HashMap<String, String> stickyMap   = new HashMap<>();
 
     // OH_BEHAVE (goals)
-    // goal 1: get repeat working properly...
+    // goal 1: get repeat working properly... √√√
     // goal 2: story -> lit -> story -> math... show N and N+1
     // OH_BEHAVE this alters between new way and old way
     private boolean OLD_WAY = true;
@@ -261,7 +261,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         String rootTutor = "";
 
         // look up activeSkill every time?
-        String activeSkill = getStudentSharedPreferences().getString(TCONST.SKILL_SELECTED, SELECT_STORIES); // √√√ √√√
+        String activeSkill = studentModel.getActiveSkill();
         switch (activeSkill) { // √
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
@@ -427,6 +427,8 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
     }
 
     /**
+     * TODO this and doButtonBehavior are very similar...
+     *
      * This allows us to update the current tutor for a given skill from the CDebugComponent
      * @param debugTutor should be a tutorId
      */
@@ -440,28 +442,28 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         String rootTutor = "";
 
         // look up activeSkill every time?
-        String activeSkill = getStudentSharedPreferences().getString(TCONST.SKILL_SELECTED, SELECT_STORIES); // √√√ √√√
+        String activeSkill = studentModel.getActiveSkill();
         switch (activeSkill) { // √
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
 
                 studentModel.updateWritingTutorID(debugTutor);
-                rootTutor     = matrix.rootSkillWrite;
-                transitionMap = matrix.writeTransitions;
+                rootTutor     = matrix.getRootSkillByContentArea(SELECT_WRITING);
+                transitionMap = matrix.getTransitionMapByContentArea(SELECT_WRITING);
                 break;
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES:
 
                 studentModel.updateStoryTutorID(debugTutor);
-                rootTutor     = matrix.rootSkillStories;
-                transitionMap = matrix.storyTransitions;
+                rootTutor     = matrix.getRootSkillByContentArea(SELECT_STORIES);
+                transitionMap = matrix.getTransitionMapByContentArea(SELECT_STORIES);
                 break;
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_MATH:
 
                 studentModel.updateMathTutorID(debugTutor);
-                rootTutor     = matrix.rootSkillMath;
-                transitionMap = matrix.mathTransitions;
+                rootTutor     = matrix.getRootSkillByContentArea(SELECT_MATH);
+                transitionMap = matrix.getTransitionMapByContentArea(SELECT_MATH);
                 break;
         }
 
@@ -496,20 +498,12 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
         doTutorLaunchWithVideosAndStuff(debugTutor, tutorToLaunch);
 
-
-        SharedPreferences prefs = getStudentSharedPreferences();
-        SharedPreferences.Editor editor = prefs.edit();
-
-        // Serialize the new state
-        // #Mod 329 language switch capability
-        //
-        // DATA_MODEL (update)
-        editor.putString(TCONST.SKILL_SELECTED, activeSkill); // √√√ √√√
-        editor.apply();
-
+        studentModel.updateActiveSkill(activeSkill);
     }
 
     /**
+     * TODO this and doDebugLaunchAction are very similar...
+     *
      * Button clicks may come from either the skill selector ASK component or the Difficulty
      * selector ASK component.
      *
@@ -517,7 +511,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
      */
     @Override
     public void doButtonBehavior(String buttonBehavior) {
-
 
         // OH_BEHAVE NEXT NEXT NEXT
         if (!OLD_WAY) {
@@ -534,18 +527,13 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
            }
         }
 
-        // RoboTutor.SELECTOR_MODE = "FTR_TUTOR_SELECT"
-        Log.d(TAG, "Button Selected: " + buttonBehavior);
-
-        // check SharedPreferences
-        final SharedPreferences prefs = getStudentSharedPreferences();
-
         String activeTutorId = "";
         HashMap transitionMap = null;
         String rootTutor = "";
 
         String activeSkill = null;
 
+        // this could seriously be cleaned up...
         switch (buttonBehavior.toUpperCase()) {
 
             case AS_CONST.SELECT_EXIT:
@@ -553,39 +541,37 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
                 return;
 
             case AS_CONST.SELECT_REPEAT:
-                // how to do this???
-                // DATA_MODEL (read)
-                buttonBehavior = prefs.getString(TCONST.SKILL_SELECTED, SELECT_STORIES); // √√√ √√√
-                // ytf is this different... sometimes STORIES_SELECTED...
 
-                String lastTutor = prefs.getString(LAST_TUTOR, null);
+                String lastTutor = studentModel.getLastTutor();
                 if (lastTutor != null) { // for when it's the first time...s
                     activeTutorId = lastTutor;
                 }
+                activeSkill = studentModel.getActiveSkill();
+                transitionMap = matrix.getTransitionMapByContentArea(activeSkill);
                 break;
 
-            case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
+            case SELECT_WRITING:
 
-                activeSkill   = AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING; // √
+                activeSkill   = SELECT_WRITING; // √
                 activeTutorId = studentModel.getWritingTutorID();
-                rootTutor     = matrix.rootSkillWrite;
-                transitionMap = matrix.writeTransitions;
+                rootTutor     = matrix.getRootSkillByContentArea(SELECT_WRITING);
+                transitionMap = matrix.getTransitionMapByContentArea(SELECT_WRITING);
                 break;
 
-            case AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES:
+            case SELECT_STORIES:
 
-                activeSkill   = AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES; // √
+                activeSkill   = SELECT_STORIES; // √
                 activeTutorId = studentModel.getStoryTutorID();
-                rootTutor     = matrix.rootSkillStories;
-                transitionMap = matrix.storyTransitions;
+                rootTutor     = matrix.getRootSkillByContentArea(SELECT_STORIES);
+                transitionMap = matrix.getTransitionMapByContentArea(SELECT_STORIES);
                 break;
 
-            case AS_CONST.BEHAVIOR_KEYS.SELECT_MATH:
+            case SELECT_MATH:
 
-                activeSkill   = AS_CONST.BEHAVIOR_KEYS.SELECT_MATH; // √
+                activeSkill   = SELECT_MATH; // √
                 activeTutorId = studentModel.getMathTutorID();
-                rootTutor     = matrix.rootSkillMath;
-                transitionMap = matrix.mathTransitions;
+                rootTutor     = matrix.getRootSkillByContentArea(SELECT_MATH);
+                transitionMap = matrix.getTransitionMapByContentArea(SELECT_MATH);
                 break;
         }
 
@@ -625,14 +611,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
             doTutorLaunchWithVideosAndStuff(activeTutorId, tutorToLaunch);
         }
 
-        SharedPreferences.Editor editor = prefs.edit();
-
-        // Serialize the new state
-        // #Mod 329 language switch capability
-        //
-        // DATA_MODEL (update)
-        if (activeSkill != null) editor.putString(TCONST.SKILL_SELECTED, activeSkill); // √√√ √√√
-        editor.apply();
+        if (activeSkill != null) studentModel.updateActiveSkill(activeSkill);
 
     }
 
