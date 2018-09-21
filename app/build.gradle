@@ -201,6 +201,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support:percent:25.2.0'
+    compile 'com.google.code.gson:gson:2.8.0'
     compile project(':comp_banner')
     compile project(':comp_ltkplus')
     compile project(':util')

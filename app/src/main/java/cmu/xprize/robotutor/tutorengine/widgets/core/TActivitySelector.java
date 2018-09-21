@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -29,7 +28,6 @@ import cmu.xprize.comp_session.AS_CONST;
 import cmu.xprize.comp_session.CActivitySelector;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
-import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.robotutor.tutorengine.util.PerformanceData;
 import cmu.xprize.robotutor.tutorengine.util.PerformancePromotionRules;
 import cmu.xprize.robotutor.tutorengine.util.PlacementPromotionRules;
@@ -59,16 +57,14 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_OPTION_1;
+import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_OPTION_2;
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;
 import static cmu.xprize.comp_session.AS_CONST.VAR_TUTOR_ID;
 import static cmu.xprize.comp_session.AS_CONST.VAR_DATASOURCE;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENT;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENTDATA;
-import static cmu.xprize.robotutor.tutorengine.util.StudentDataModel.HAS_PLAYED_KEY;
-import static cmu.xprize.robotutor.tutorengine.util.StudentDataModel.MATH_PLACEMENT_INDEX_KEY;
-import static cmu.xprize.robotutor.tutorengine.util.StudentDataModel.MATH_PLACEMENT_KEY;
-import static cmu.xprize.robotutor.tutorengine.util.StudentDataModel.WRITING_PLACEMENT_INDEX_KEY;
-import static cmu.xprize.robotutor.tutorengine.util.StudentDataModel.WRITING_PLACEMENT_KEY;
+import cmu.xprize.robotutor.tutorengine.util.StudentDataModel;
 import static cmu.xprize.util.TCONST.LAST_TUTOR;
 import static cmu.xprize.util.TCONST.PLACEMENT_TAG;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
@@ -96,12 +92,14 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
     // OH_BEHAVE (goals)
     // goal 1: get repeat working properly...
     // goal 2: story -> lit -> story -> math... show N and N+1
+    // OH_BEHAVE this alters between new way and old way
+    private boolean OLD_WAY = true;
     // goal 3: why is repeat button failing in dev branch? (requires a merge)
 
     private boolean     askButtonsEnabled = false;
 
     private TransitionMatrixModel matrix; // now holds the transition map things...
-    private StudentDataModel studentModel; // holds student location and such...
+    private StudentDataModel studentModel; // DATA_MODEL (instance 2) these should be accessed from something lower, i.e. CTutorEngine
 
     private HashMap<String,String>  _StringVar  = new HashMap<>();
     private HashMap<String,Integer> _IntegerVar = new HashMap<>();
@@ -110,7 +108,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
     final private String  TAG = "TActivitySelector";
     private boolean needsToCalculateNextTutor = false; // initialize as false... only set after tutor launched
-
 
     public TActivitySelector(Context context) {
         super(context);
@@ -203,8 +200,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         SdebugActivity.setVisibility(GONE);
 
         if (RoboTutor.MUST_CALCULATE_NEXT_TUTOR) {
-            // ASSESS_ME let's put this after the tutor is done
-            adjustPositionFromPreviousPerformance();
+
         }
 
         CAt_Data[] nextTutors = new CAt_Data[3];
@@ -271,13 +267,13 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         // OH_BEHAVE (0) the prompts and the actions and the behaviors should depend on which skill matrix we're in
         _activeLayout.items[0] =  new CAskElement();
         _activeLayout.items[0].componentID = "SbuttonOption1";
-        _activeLayout.items[0].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING;
+        _activeLayout.items[0].behavior = OLD_WAY ? AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING : SELECT_OPTION_1;
         _activeLayout.items[0].prompt = "reading and writing";
         _activeLayout.items[0].help = "Tap here for reading and writing";
 
         _activeLayout.items[1] =  new CAskElement();
         _activeLayout.items[1].componentID = "SbuttonOption2";
-        _activeLayout.items[1].behavior = AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;
+        _activeLayout.items[1].behavior = OLD_WAY ? AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES : SELECT_OPTION_2;
         _activeLayout.items[1].prompt = "stories";
         _activeLayout.items[1].help = "Tap here for a story";
 
@@ -313,9 +309,14 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
         // Home screen button behavior...
         // OH_BEHAVE (2)... keep mapping to BUTTON_BEHAVIOR, but make different options...
-        setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
-        setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
-        setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_MATH, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
+        if(OLD_WAY) {
+            setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
+            setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
+            setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_MATH, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
+        } else {
+            setStickyBehavior(SELECT_OPTION_1, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
+            setStickyBehavior(SELECT_OPTION_2, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
+        }
         setStickyBehavior(AS_CONST.SELECT_REPEAT, AS_CONST.QUEUEMAP_KEYS.BUTTON_BEHAVIOR);
         setStickyBehavior(AS_CONST.SELECT_EXIT, AS_CONST.QUEUEMAP_KEYS.EXIT_BUTTON_BEHAVIOR);
     }
@@ -466,6 +467,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         // Serialize the new state
         // #Mod 329 language switch capability
         //
+        // DATA_MODEL (update)
         editor.putString(TCONST.SKILL_SELECTED, activeSkill); // √√√ √√√
         editor.apply();
 
@@ -480,6 +482,22 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
     @Override
     public void doButtonBehavior(String buttonBehavior) {
 
+
+        // OH_BEHAVE NEXT NEXT NEXT
+        if (!OLD_WAY) {
+           Log.d("OH_BEHAVE", "some behavior here should be different...");
+
+           switch(buttonBehavior.toUpperCase()) {
+               case SELECT_OPTION_1:
+                   // launch the next tutor
+                   break;
+
+               case SELECT_OPTION_2:
+                   // launch the next.next tutor
+                   break;
+           }
+        }
+
         // RoboTutor.SELECTOR_MODE = "FTR_TUTOR_SELECT"
         Log.d(TAG, "Button Selected: " + buttonBehavior);
 
@@ -490,7 +508,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         HashMap transitionMap = null;
         String rootTutor = "";
 
-        boolean     buttonFound = false;
         String activeSkill = null;
 
         switch (buttonBehavior.toUpperCase()) {
@@ -501,6 +518,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
             case AS_CONST.SELECT_REPEAT:
                 // how to do this???
+                // DATA_MODEL (read)
                 buttonBehavior = prefs.getString(TCONST.SKILL_SELECTED, SELECT_STORIES); // √√√ √√√
                 // ytf is this different... sometimes STORIES_SELECTED...
 
@@ -516,7 +534,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
                 activeTutorId = studentModel.getWritingTutorID();
                 rootTutor     = matrix.rootSkillWrite;
                 transitionMap = matrix.writeTransitions;
-                buttonFound   = true;
                 break;
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES:
@@ -525,8 +542,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
                 activeTutorId = studentModel.getStoryTutorID();
                 rootTutor     = matrix.rootSkillStories;
                 transitionMap = matrix.storyTransitions;
-                buttonFound = true;
-
                 break;
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_MATH:
@@ -535,7 +550,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
                 activeTutorId = studentModel.getMathTutorID();
                 rootTutor     = matrix.rootSkillMath;
                 transitionMap = matrix.mathTransitions;
-                buttonFound   = true;
                 break;
         }
 
@@ -580,6 +594,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         // Serialize the new state
         // #Mod 329 language switch capability
         //
+        // DATA_MODEL (update)
         if (activeSkill != null) editor.putString(TCONST.SKILL_SELECTED, activeSkill); // √√√ √√√
         editor.apply();
 
@@ -637,6 +652,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
             final String activityPreferenceKey = whichActivityIsNext + "_TIMES_PLAYED";
 
             // bpop, write, akira, story, math, etc
+            // DATA_MODEL (read)
             final int timesPlayedActivity = prefs.getInt(activityPreferenceKey, 0); // i = default value
             boolean playDemoVid = timesPlayedActivity < 1; // only play video once
 
@@ -709,6 +725,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
                 SharedPreferences prefs = getStudentSharedPreferences();
                 SharedPreferences.Editor editor = prefs.edit();
+                // DATA_MODEL (update)
                 editor.putInt(activityPreferenceKey, timesPlayedActivity + 1); // increment to let them know we watched the video
                 editor.apply();
 
@@ -778,349 +795,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
         return PATH_TO_FILE;
 
-    }
-
-
-    /**
-     *
-     * Adjust the student's position in matrix based on their last performance
-     *
-     */
-    private void adjustPositionFromPreviousPerformance() {
-
-        boolean useMathPlacement = false;
-        boolean useWritingPlacement = false;
-
-
-        SharedPreferences prefs = getStudentSharedPreferences();
-
-        String activeTutorId = "";
-        HashMap transitionMap = null;
-        // look up activeSkill every time?
-        String activeSkill = getStudentSharedPreferences().getString(TCONST.SKILL_SELECTED, SELECT_STORIES); // √√√ √√√
-        int placementIndex = 0;
-        switch (activeSkill) { // √
-
-            case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
-
-                activeTutorId = studentModel.getWritingTutorID();
-                transitionMap = matrix.writeTransitions;
-                useWritingPlacement = prefs.getBoolean(WRITING_PLACEMENT_KEY, false);
-                placementIndex = prefs.getInt(WRITING_PLACEMENT_INDEX_KEY, 0);
-
-                break;
-
-            case AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES:
-
-                activeTutorId = studentModel.getStoryTutorID();
-                transitionMap = matrix.storyTransitions;
-                break;
-
-            case AS_CONST.BEHAVIOR_KEYS.SELECT_MATH:
-
-                activeTutorId = studentModel.getMathTutorID();
-                transitionMap = matrix.mathTransitions;
-                useMathPlacement = prefs.getBoolean(MATH_PLACEMENT_KEY, false);
-                placementIndex = prefs.getInt(MATH_PLACEMENT_INDEX_KEY, 0);
-                break;
-
-        }
-
-        String nextTutor = selectNextTutor(activeTutorId, activeSkill, useWritingPlacement, useMathPlacement, prefs, transitionMap, placementIndex); // √
-
-        RoboTutor.logManager.postEvent_I(TCONST.PLACEMENT_TAG, "nextTutor = " + nextTutor);
-
-
-        // 3. Set SELECTOR_MODE
-        RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
-
-        // Update the active skill
-        //
-        // look up activeSkill every time?
-        String writingTutorID = null, storiesTutorID = null, mathTutorID = null;
-        switch (activeSkill) { // √
-
-            case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
-
-                writingTutorID = nextTutor;
-                break;
-
-            case AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES:
-
-                storiesTutorID = nextTutor;
-                break;
-
-            case AS_CONST.BEHAVIOR_KEYS.SELECT_MATH:
-
-                mathTutorID = nextTutor;
-                break;
-        }
-
-        // Serialize the new state
-        // #Mod 329 language switch capability
-        //
-        SharedPreferences.Editor editor = prefs.edit();
-
-        //editor.putString(TCONST.SKILL_SELECTED, AS_CONST.SELECT_NONE); // √√√ √√√
-        //Log.wtf("REPEAT_STUFF", "(difficultySelectMode) setting SKILL_SELECTED... " + AS_CONST.SELECT_NONE);
-
-        // only one will have been changed but update all
-        //
-        if (writingTutorID != null) editor.putString(TCONST.SKILL_WRITING, writingTutorID);
-        if (storiesTutorID != null) editor.putString(TCONST.SKILL_STORIES, storiesTutorID);
-        if (mathTutorID != null) editor.putString(TCONST.SKILL_MATH, mathTutorID);
-        editor.putString(TCONST.LAST_TUTOR, activeTutorId);
-
-        editor.apply();
-
-        RoboTutor.MUST_CALCULATE_NEXT_TUTOR = false;
-    }
-
-    /**
-     * select Next Tutor
-     * @param buttonid
-     */
-    private String selectNextTutor(String activeTutorId, String activeSkill, boolean useWritingPlacement, boolean useMathPlacement, SharedPreferences prefs, HashMap transitionMap, int placementIndex) {
-        RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format(Locale.US, "selectNextTutor, w=%s, m=%s",
-                String.valueOf(useWritingPlacement),
-                String.valueOf(useMathPlacement)));
-        // 1. pick the next tutor
-        // YYY if placement, we will go by different rules
-        PromotionRules rules;
-        if(useWritingPlacement || useMathPlacement) {
-            rules = new PlacementPromotionRules();
-        } else {
-            rules = new PerformancePromotionRules();
-        }
-
-        PerformanceData performance = new PerformanceData();
-        performance.setActivityType(activeTutorId);
-        // look up activeSkill every time?
-        performance.setActiveSkill(activeSkill);
-
-        // need to get the previous tutor and all that jazz...
-        String childScope = getChildScope(activeTutorId);
-
-        // get tutor data from last tutor the user played
-        TScope lastScope = TScope.root().getChildScope(childScope);
-        CTutor lastTutor;
-        if(lastScope != null) {
-            lastTutor = lastScope.tutor();
-            performance.setNumberCorrect(lastTutor.getScore());
-            performance.setNumberWrong(lastTutor.getIncorrect());
-            performance.setNumberAttempts(lastTutor.getAttempts());
-            performance.setTotalNumberQuestions(lastTutor.getTotalQuestions());
-        }
-
-        PromotionRules.SelectedActivity selectedActivity = rules.selectActivityByPerformance(performance);
-        Log.d(TAG, "PerformancePromotionRules result: " + selectedActivity);
-
-        // YYY use placement logic
-        String nextTutor;
-        if (useWritingPlacement || useMathPlacement) {
-            nextTutor = getNextPlacementTutor(activeTutorId, useMathPlacement, prefs, selectedActivity, transitionMap, placementIndex);
-
-        } else {
-            nextTutor = getNextPromotionTutor(activeTutorId, selectedActivity, transitionMap);
-        }
-        return nextTutor;
-    }
-
-    /**
-     * get next tutor using Promotion Logic
-     * @param selectedActivity
-     * @return
-     */
-    private String getNextPromotionTutor(String activeTutorId, PromotionRules.SelectedActivity selectedActivity, HashMap<String, CAt_Data> transitionMap) {
-        // this is
-        CAt_Data transitionData = transitionMap.get(activeTutorId);
-        switch (selectedActivity) {
-            case NEXT:
-                return transitionData.next;
-
-            case SAME:
-                return transitionData.same;
-
-            case OLD_EASIER:
-                return transitionData.easier;
-
-            case OLD_HARDER:
-                return transitionData.harder;
-
-            case PREVIOUS:
-                // XXX FIXME nextTutor = transitionData.previous;
-                // for now... do the super hacky way of iterating through the whole map until we find one who refers to "activeTutorId" via "next"
-                String tempNextTutor = null;
-                for (Map.Entry<String, CAt_Data> e : transitionMap.entrySet()) {
-                    Log.d("TRANSITION_MAP", e.getValue().toString());
-                    CAt_Data value = e.getValue();
-                    if (value.next.equals(activeTutorId)) {
-                        tempNextTutor = e.getKey();
-                    }
-                }
-                // no "next" reference, probably means it's the first item
-                if (tempNextTutor == null) {
-                    tempNextTutor = activeTutorId;
-                }
-                return tempNextTutor;
-            // XXX FIXME end super hacky code
-
-
-            case DOUBLE_NEXT:
-                // XXX FIXME nextTutor = transitionData.double_next;
-                // for now... do the slightly less hacky way of doing "next" of "next"
-                String notNextTutor = transitionData.next;
-
-                CAt_Data nextTransitionData = transitionMap.get(notNextTutor);
-                return nextTransitionData.next;
-            // XXX FIXME end slightly less hacky code
-            // XXX note that these will not show up in the debugger graph
-
-            // this shouldn't happen...
-            default:
-                return transitionData.next;
-        }
-    }
-
-    /**
-     * get next tutor using Placement Logic
-     * @param useMathPlacement
-     * @param prefs
-     * @param selectedActivity
-     * @return
-     */
-    private String getNextPlacementTutor(String activeTutorId, boolean useMathPlacement, SharedPreferences prefs, PromotionRules.SelectedActivity selectedActivity, HashMap<String, CAt_Data> transitionMap, int placementIndex) {
-        RoboTutor.logManager.postEvent_V(TCONST.PLACEMENT_TAG, "using placement logic");
-
-        String placementKey;
-        String placementIndexKey;
-
-        String nextTutor;
-
-        switch(selectedActivity) {
-
-            /// YYY it might be better to keep the placement tutors in a map instead of in an array
-            /// YYY logic might be more symmetrical
-            /// YYY if (placement) {placementMap.get(activeTutorId)} else {transitionMap.get(activeTutorId)}
-            // NEXT is equivalent to passing the placement test and moving to next placement test
-
-            case NEXT:
-                // pass to next
-                //
-                if(useMathPlacement) {
-                    int mathPlacementIndex = placementIndex;
-
-
-                    if (mathPlacementIndex == matrix.mathPlacement.length) {
-                        // student has made it to the end
-                        CPlacementTest_Tutor lastPlacementTest = matrix.mathPlacement[mathPlacementIndex];
-                        // update our preferences to exit PLACEMENT mode
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putBoolean("MATH_PLACEMENT", false);
-                        editor.remove("MATH_PLACEMENT_INDEX");
-                        editor.apply();
-
-                        return lastPlacementTest.fail;
-                    } else {
-                        mathPlacementIndex++; // passing means incrementing by one
-                        CPlacementTest_Tutor nextPlacementTest = matrix.mathPlacement[mathPlacementIndex];
-
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putInt("MATH_PLACEMENT_INDEX", mathPlacementIndex);
-                        editor.apply();
-
-                        return nextPlacementTest.tutor; // go to beginning of last level
-                    }
-                }
-                // writingPlacement is only other option
-                else {
-                    int writingPlacementIndex = placementIndex;
-
-                    if (writingPlacementIndex == matrix.writePlacement.length) {
-                        // student has made it to the end
-                        CPlacementTest_Tutor lastPlacementTest = matrix.writePlacement[writingPlacementIndex];
-                        // update our preferences to exit PLACEMENT mode
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putBoolean("WRITING_PLACEMENT", false);
-                        editor.remove("WRITING_PLACEMENT_INDEX");
-                        editor.apply();
-
-                        return lastPlacementTest.fail; // go to beginning of last level
-                    } else {
-                        writingPlacementIndex++; // passing means incrementing by one
-                        CPlacementTest_Tutor nextPlacementTest = matrix.writePlacement[writingPlacementIndex];
-
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putInt("WRITING_PLACEMENT_INDEX", writingPlacementIndex);
-                        editor.apply();
-
-                        return nextPlacementTest.tutor;
-                    }
-
-                }
-
-
-            // SAME occurs when the student doesn't finish and we don't have enough information
-            case SAME:
-                // play again
-                // do nothing
-                CAt_Data transitionData = transitionMap.get(activeTutorId);
-                return transitionData.same;
-
-
-            // PREVIOUS is equivalent to failing the placement test and going to first activity in level
-            case PREVIOUS:
-            default:
-                CPlacementTest_Tutor lastPlacementTest;
-
-                // set prefs.usesThingy to false
-                if(useMathPlacement) {
-                    lastPlacementTest = matrix.mathPlacement[placementIndex];
-                    placementKey = "MATH_PLACEMENT";
-                    placementIndexKey = "MATH_PLACEMENT_INDEX";
-
-                }
-                // useWritePlacement only other option
-                else {
-                    lastPlacementTest = matrix.writePlacement[placementIndex];
-                    placementKey = "WRITING_PLACEMENT";
-                    placementIndexKey = "WRITING_PLACEMENT_INDEX";
-
-                }
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putBoolean(placementKey, false); // no more placement
-                editor.remove(placementIndexKey);
-                editor.apply();
-
-                return lastPlacementTest.fail;
-
-
-        }
-    }
-
-    private String getChildScope(String activeTutorId) {
-        String childScope = null;
-        if(activeTutorId.startsWith("bpop")) {
-            childScope = "bubble_pop";
-
-        } else if (activeTutorId.startsWith("akira")) {
-            childScope = "akira";
-
-        } else if (activeTutorId.startsWith("math")) {
-            childScope = "add_subtract";
-
-        } else if (activeTutorId.startsWith("write")) {
-            childScope = "word_copy";
-
-        } else if (activeTutorId.startsWith("story")) {
-            childScope = "story_reading";
-
-        } else if (activeTutorId.startsWith("countingx")) {
-            childScope = "countingx";
-        } else if (activeTutorId.startsWith("num.scale")) {
-            childScope = "numberscale";
-        }
-        return childScope;
     }
 
     /**
@@ -1348,7 +1022,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
                 //
                 // Load the datasource into a separate class...
-                matrix = new TransitionMatrixModel(dataPath + dataFile, mTutor.getScope());
+                matrix = new TransitionMatrixModel(dataPath + dataFile, mTutor.getScope()); // MATRIX_REFACTOR (create) this should be created at lower level
                 matrix.validateAll();
 
                 initializeStudentDataModel();
@@ -1383,7 +1057,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
             prefsName += RoboTutor.STUDENT_ID + "_";
         }
         prefsName += mMediaManager.getLanguageFeature(mTutor);
-        studentModel = new StudentDataModel(RoboTutor.ACTIVITY, prefsName);
+        studentModel = new StudentDataModel(RoboTutor.ACTIVITY, prefsName); // DATA_MODEL (create) this should be created at lower level
     }
 
     // DataSink Implementation END
@@ -1711,22 +1385,23 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
             RoboTutor.logManager.postEvent_D(TAG, "SharedPreferences: " + entry.getKey() + " -- " + entry.getValue().toString());
         }
 
-        // YYY maybe move this somewhere else???
-        String firstTime = prefs.getString(HAS_PLAYED_KEY, null);
+        // DATA_MODEL (read)
+        String firstTime = prefs.getString(StudentDataModel.HAS_PLAYED_KEY, null);
         // if it's the first time playing, we want to initialize our placement values
         if (firstTime == null) {
+            // DATA_MODEL (create)
             SharedPreferences.Editor editor = prefs.edit();
-            editor.putString(HAS_PLAYED_KEY, String.valueOf(true));
-            editor.putBoolean(MATH_PLACEMENT_KEY, true);
-            editor.putInt(MATH_PLACEMENT_INDEX_KEY, 0);
-            editor.putBoolean(WRITING_PLACEMENT_KEY, true);
-            editor.putInt(WRITING_PLACEMENT_INDEX_KEY, 0);
+            editor.putString(StudentDataModel.HAS_PLAYED_KEY, String.valueOf(true));
+            editor.putBoolean(StudentDataModel.MATH_PLACEMENT_KEY, true);
+            editor.putInt(StudentDataModel.MATH_PLACEMENT_INDEX_KEY, 0);
+            editor.putBoolean(StudentDataModel.WRITING_PLACEMENT_KEY, true);
+            editor.putInt(StudentDataModel.WRITING_PLACEMENT_INDEX_KEY, 0);
             editor.apply();
 
         }
-        // DATA_MODEL initialize only once??? and then load as needed?
-        boolean useMathPlacement = prefs.getBoolean(MATH_PLACEMENT_KEY, true);
-        boolean useWritingPlacement = prefs.getBoolean(WRITING_PLACEMENT_KEY, true);
+        // DATA_MODEL (read)
+        boolean useMathPlacement = prefs.getBoolean(StudentDataModel.MATH_PLACEMENT_KEY, true);
+        boolean useWritingPlacement = prefs.getBoolean(StudentDataModel.WRITING_PLACEMENT_KEY, true);
 
 
         RoboTutor.logManager.postEvent_V(PLACEMENT_TAG, String.format("useMathPlacement = %s", useMathPlacement));
@@ -1734,12 +1409,14 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
         String mathTutorID;
         if(useMathPlacement) {
-            int mathPlacementIndex = prefs.getInt(MATH_PLACEMENT_INDEX_KEY, 0);
+            // DATA_MODEL (read)
+            int mathPlacementIndex = prefs.getInt(StudentDataModel.MATH_PLACEMENT_INDEX_KEY, 0);
             CPlacementTest_Tutor mathPlacementTutor = matrix.mathPlacement[mathPlacementIndex];
             RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("mathPlacementIndex = %d", mathPlacementIndex));
             mathTutorID = mathPlacementTutor.tutor; // DATA_MODEL for example, only load mathTutorID when needed...
 
         } else {
+            // DATA_MODEL (read)
             mathTutorID    = prefs.getString(TCONST.SKILL_MATH,    matrix.rootSkillMath); // does this get overwritten or something???
         }
         RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("mathTutorID = %s", mathTutorID));
@@ -1749,19 +1426,23 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         String writingTutorID;
 
         if (useWritingPlacement) {
-            int writingPlacementIndex = prefs.getInt(WRITING_PLACEMENT_INDEX_KEY, 0);
+            // DATA_MODEL (read)
+            int writingPlacementIndex = prefs.getInt(StudentDataModel.WRITING_PLACEMENT_INDEX_KEY, 0);
             CPlacementTest_Tutor writePlacementTutor = matrix.writePlacement[writingPlacementIndex];
             RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("writePlacementIndex = %d", writingPlacementIndex));
             writingTutorID = writePlacementTutor.tutor; // DATA_MODEL for example, only load writingTutorID when needed...
         } else {
+            // DATA_MODEL (read)
             writingTutorID = prefs.getString(TCONST.SKILL_WRITING, matrix.rootSkillWrite);
         }
         RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("writingTutorID = %s", writingTutorID));
 
+        // DATA_MODEL (update)
         studentModel.updateWritingTutorID(writingTutorID);
 
         // stories doesn't have placement testing
         if (studentModel.getStoryTutorID() == null) {
+            // DATA_MODEL (update)
             studentModel.updateStoryTutorID(matrix.rootSkillStories);
         }
     }

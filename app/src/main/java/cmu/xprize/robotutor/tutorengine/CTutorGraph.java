@@ -40,6 +40,9 @@ import cmu.xprize.robotutor.tutorengine.graph.databinding;
 import cmu.xprize.robotutor.tutorengine.graph.defdata_tutor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
+import cmu.xprize.robotutor.tutorengine.util.PromotionMechanism;
+import cmu.xprize.robotutor.tutorengine.util.StudentDataModel;
+import cmu.xprize.robotutor.tutorengine.util.TransitionMatrixModel;
 import cmu.xprize.robotutor.tutorengine.widgets.core.IDataSink;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_logging.CLogManager;
@@ -208,8 +211,6 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
 
                             //mainHandler.post(mTutor.new Queue(TCONST.ENDTUTOR));
 
-                            // ASSESS_ME this is where assessment should be
-                            // ASSESS_ME construct a PromotionMechanism based on STUDENT_ID, and Transition Matrix?
                             PerformanceLogItem event = new PerformanceLogItem();
                             event.setUserId(RoboTutor.STUDENT_ID);
                             event.setSessionId(RoboTutor.SESSION_ID);
@@ -217,6 +218,10 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
                             event.setTaskName("ENDTUTOR");
                             event.setTimestamp(System.currentTimeMillis());
                             RoboTutor.perfLogManager.postPerformanceLogWithoutContext(event);
+
+                            // assess student performance
+                            PromotionMechanism pMechanism = new PromotionMechanism(initializeStudentDataModel(), initializeTransitionMatrixModel());
+                            pMechanism.adjustPositionFromPreviousPerformance(mTutor);
 
                             mTutor.post(TCONST.ENDTUTOR);
                         }
@@ -238,6 +243,45 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
                 CErrorManager.logEvent(TAG, "Run Error:", e, false);
             }
         }
+    }
+
+    /**
+     * Initialize the student data model
+     * DATA_MODEL (create) this should be created at lower level
+     */
+    private StudentDataModel initializeStudentDataModel() {
+        // initialize
+        String prefsName = "";
+        if(RoboTutor.STUDENT_ID != null) {
+            prefsName += RoboTutor.STUDENT_ID + "_";
+        }
+        prefsName += CTutorEngine.language;
+        return new StudentDataModel(RoboTutor.ACTIVITY, prefsName);  // DATA_MODEL (create) this should be created at lower level
+    }
+
+    /**
+     *  // MATRIX_REFACTOR (create) this should be created at lower level
+     * @return
+     */
+    private TransitionMatrixModel initializeTransitionMatrixModel() {
+
+        // this is whack and should be moved... see "activity_selector/tutor_descriptor.json"
+        String tutorName = "activity_selector";
+        String dataFile = "dev_data.json";
+
+        // must be easier way to get this... ?
+        String lang = CMediaController.getManagerInstance(mTutor.getTutorName()).getLanguageIANA_2(mTutor);
+
+        String dataPath = TCONST.TUTORROOT + "/" + tutorName + "/" + TCONST.TASSETS;
+        dataPath += "/" +  TCONST.DATA_PATH + "/" + lang + "/";
+
+        String jsonData = JSON_Helper.cacheData(dataPath + dataFile);
+
+        //
+        // Load the datasource into a separate class...
+        TransitionMatrixModel matrix = new TransitionMatrixModel(dataPath + dataFile, mTutor.getScope());  // MATRIX_REFACTOR (create) this should be created at lower level
+        matrix.validateAll();
+        return matrix;
     }
 
     /**

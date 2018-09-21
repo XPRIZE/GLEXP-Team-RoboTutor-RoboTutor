@@ -17,10 +17,6 @@ import cmu.xprize.util.CPlacementTest_Tutor;
 import cmu.xprize.util.TCONST;
 
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;
-import static cmu.xprize.robotutor.tutorengine.util.StudentDataModel.MATH_PLACEMENT_INDEX_KEY;
-import static cmu.xprize.robotutor.tutorengine.util.StudentDataModel.MATH_PLACEMENT_KEY;
-import static cmu.xprize.robotutor.tutorengine.util.StudentDataModel.WRITING_PLACEMENT_INDEX_KEY;
-import static cmu.xprize.robotutor.tutorengine.util.StudentDataModel.WRITING_PLACEMENT_KEY;
 import static cmu.xprize.util.TCONST.PLACEMENT_TAG;
 
 /**
@@ -31,60 +27,63 @@ import static cmu.xprize.util.TCONST.PLACEMENT_TAG;
 
 public class PromotionMechanism {
 
-    // ASSESS_ME how to construct?
-    // ASSESS_ME must have studentModel, matrix, and access to SharedPrefs (a.k.a. student id)
+    private StudentDataModel _studentModel; // DATA_MODEL (instance 1)
+    private TransitionMatrixModel _matrix; // now holds the transition map things...
+
+    public PromotionMechanism(StudentDataModel studentModel, TransitionMatrixModel matrix) {
+        this._studentModel = studentModel;
+        this._matrix = matrix;
+    }
+
 
     private static final String TAG = "PromotionMechanism";
 
 
     /**
      *
-     * Adjust the student's position in matrix based on their last performance
+     * Adjust the student's position in _matrix based on their last performance
      *
      */
-    private void adjustPositionFromPreviousPerformance() {
+    public void adjustPositionFromPreviousPerformance(CTutor tutor) {
 
         boolean useMathPlacement = false;
         boolean useWritingPlacement = false;
-
-
-        SharedPreferences prefs = getStudentSharedPreferences();
 
         //
         String activeTutorId = "";
         HashMap transitionMap = null;
         // look up activeSkill every time?
-        String activeSkill = getStudentSharedPreferences().getString(TCONST.SKILL_SELECTED, SELECT_STORIES); // √√√ √√√
+        String activeSkill = _studentModel.getActiveSkill();
         int placementIndex = 0;
         switch (activeSkill) { // √
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
 
-                activeTutorId = studentModel.getWritingTutorID();
-                transitionMap = matrix.writeTransitions;
-                useWritingPlacement = prefs.getBoolean(WRITING_PLACEMENT_KEY, false);
-                placementIndex = prefs.getInt(WRITING_PLACEMENT_INDEX_KEY, 0);
+                activeTutorId = _studentModel.getWritingTutorID();
+                transitionMap = _matrix.writeTransitions;
+                useWritingPlacement = _studentModel.getWritingPlacement();
+                placementIndex = _studentModel.getWritingPlacementIndex();
 
                 break;
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES:
 
-                activeTutorId = studentModel.getStoryTutorID();
-                transitionMap = matrix.storyTransitions;
+                activeTutorId = _studentModel.getStoryTutorID();
+                transitionMap = _matrix.storyTransitions;
                 break;
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_MATH:
 
-                activeTutorId = studentModel.getMathTutorID();
-                transitionMap = matrix.mathTransitions;
-                useMathPlacement = prefs.getBoolean(MATH_PLACEMENT_KEY, false);
-                placementIndex = prefs.getInt(MATH_PLACEMENT_INDEX_KEY, 0);
+                activeTutorId = _studentModel.getMathTutorID();
+                transitionMap = _matrix.mathTransitions;
+                useMathPlacement = _studentModel.getMathPlacement();
+                placementIndex = _studentModel.getMathPlacementIndex();
                 break;
 
         }
 
-        // ASSESS_ME break up appropriately
-        String nextTutor = selectNextTutor(activeTutorId, activeSkill, useWritingPlacement, useMathPlacement, prefs, transitionMap, placementIndex); // √
+        // this should be broken up appropriately...
+        String nextTutor = selectNextTutor(tutor, activeTutorId, activeSkill, useWritingPlacement, useMathPlacement, transitionMap, placementIndex); // √
 
         RoboTutor.logManager.postEvent_I(TCONST.PLACEMENT_TAG, "nextTutor = " + nextTutor);
 
@@ -117,19 +116,18 @@ public class PromotionMechanism {
         // Serialize the new state
         // #Mod 329 language switch capability
         //
-        SharedPreferences.Editor editor = prefs.edit();
+
 
         //editor.putString(TCONST.SKILL_SELECTED, AS_CONST.SELECT_NONE); // √√√ √√√
         //Log.wtf("REPEAT_STUFF", "(difficultySelectMode) setting SKILL_SELECTED... " + AS_CONST.SELECT_NONE);
 
         // only one will have been changed but update all
         //
-        if (writingTutorID != null) editor.putString(TCONST.SKILL_WRITING, writingTutorID);
-        if (storiesTutorID != null) editor.putString(TCONST.SKILL_STORIES, storiesTutorID);
-        if (mathTutorID != null) editor.putString(TCONST.SKILL_MATH, mathTutorID);
-        editor.putString(TCONST.LAST_TUTOR, activeTutorId);
+        if (writingTutorID != null) _studentModel.updateWritingTutorID(writingTutorID);
+        if (storiesTutorID != null) _studentModel.updateStoryTutorID(storiesTutorID);
+        if (mathTutorID != null) _studentModel.updateMathTutorID(mathTutorID);
 
-        editor.apply();
+        _studentModel.updateLastTutor(activeTutorId);
 
         RoboTutor.MUST_CALCULATE_NEXT_TUTOR = false;
     }
@@ -138,7 +136,7 @@ public class PromotionMechanism {
     /**
      * select Next Tutor
      */
-    private String selectNextTutor(String activeTutorId, String activeSkill, boolean useWritingPlacement, boolean useMathPlacement, SharedPreferences prefs, HashMap transitionMap, int placementIndex) {
+    private String selectNextTutor(CTutor lastTutor, String activeTutorId, String activeSkill, boolean useWritingPlacement, boolean useMathPlacement, HashMap transitionMap, int placementIndex) {
         RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format(Locale.US, "selectNextTutor, w=%s, m=%s",
                 String.valueOf(useWritingPlacement),
                 String.valueOf(useMathPlacement)));
@@ -156,19 +154,13 @@ public class PromotionMechanism {
         // look up activeSkill every time?
         performance.setActiveSkill(activeSkill);
 
-        // need to get the previous tutor and all that jazz...
-        String childScope = getChildScope(activeTutorId);
 
-        // get tutor data from last tutor the user played
-        TScope lastScope = TScope.root().getChildScope(childScope);
-        CTutor lastTutor;
-        if(lastScope != null) {
-            lastTutor = lastScope.tutor();
-            performance.setNumberCorrect(lastTutor.getScore());
-            performance.setNumberWrong(lastTutor.getIncorrect());
-            performance.setNumberAttempts(lastTutor.getAttempts());
-            performance.setTotalNumberQuestions(lastTutor.getTotalQuestions());
-        }
+        // can this work from last tutor???
+        performance.setNumberCorrect(lastTutor.getScore());
+        performance.setNumberWrong(lastTutor.getIncorrect());
+        performance.setNumberAttempts(lastTutor.getAttempts());
+        performance.setTotalNumberQuestions(lastTutor.getTotalQuestions());
+
 
         PromotionRules.SelectedActivity selectedActivity = rules.selectActivityByPerformance(performance);
         Log.d(TAG, "PerformancePromotionRules result: " + selectedActivity);
@@ -176,7 +168,7 @@ public class PromotionMechanism {
         // YYY use placement logic
         String nextTutor;
         if (useWritingPlacement || useMathPlacement) {
-            nextTutor = getNextPlacementTutor(activeTutorId, useMathPlacement, prefs, selectedActivity, transitionMap, placementIndex);
+            nextTutor = getNextPlacementTutor(activeTutorId, useMathPlacement, selectedActivity, transitionMap, placementIndex);
 
         } else {
             nextTutor = getNextPromotionTutor(activeTutorId, selectedActivity, transitionMap);
@@ -242,12 +234,8 @@ public class PromotionMechanism {
 
     /**
      * get next tutor using Placement Logic
-     * @param useMathPlacement
-     * @param prefs
-     * @param selectedActivity
-     * @return
      */
-    private String getNextPlacementTutor(String activeTutorId, boolean useMathPlacement, SharedPreferences prefs, PromotionRules.SelectedActivity selectedActivity, HashMap<String, CAt_Data> transitionMap, int placementIndex) {
+    private String getNextPlacementTutor(String activeTutorId, boolean useMathPlacement, PromotionRules.SelectedActivity selectedActivity, HashMap<String, CAt_Data> transitionMap, int placementIndex) {
         RoboTutor.logManager.postEvent_V(TCONST.PLACEMENT_TAG, "using placement logic");
 
         String placementKey;
@@ -269,23 +257,20 @@ public class PromotionMechanism {
                     int mathPlacementIndex = placementIndex;
 
 
-                    if (mathPlacementIndex == matrix.mathPlacement.length) {
+                    if (mathPlacementIndex == _matrix.mathPlacement.length) {
                         // student has made it to the end
-                        CPlacementTest_Tutor lastPlacementTest = matrix.mathPlacement[mathPlacementIndex];
+                        CPlacementTest_Tutor lastPlacementTest = _matrix.mathPlacement[mathPlacementIndex];
                         // update our preferences to exit PLACEMENT mode
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putBoolean("MATH_PLACEMENT", false);
-                        editor.remove("MATH_PLACEMENT_INDEX");
-                        editor.apply();
+                        _studentModel.updateMathPlacement(false);
+                        _studentModel.updateMathPlacementIndex(null);
+
 
                         return lastPlacementTest.fail;
                     } else {
                         mathPlacementIndex++; // passing means incrementing by one
-                        CPlacementTest_Tutor nextPlacementTest = matrix.mathPlacement[mathPlacementIndex];
+                        CPlacementTest_Tutor nextPlacementTest = _matrix.mathPlacement[mathPlacementIndex];
 
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putInt("MATH_PLACEMENT_INDEX", mathPlacementIndex);
-                        editor.apply();
+                        _studentModel.updateMathPlacementIndex(mathPlacementIndex);
 
                         return nextPlacementTest.tutor; // go to beginning of last level
                     }
@@ -294,23 +279,23 @@ public class PromotionMechanism {
                 else {
                     int writingPlacementIndex = placementIndex;
 
-                    if (writingPlacementIndex == matrix.writePlacement.length) {
+                    if (writingPlacementIndex == _matrix.writePlacement.length) {
                         // student has made it to the end
-                        CPlacementTest_Tutor lastPlacementTest = matrix.writePlacement[writingPlacementIndex];
+                        CPlacementTest_Tutor lastPlacementTest = _matrix.writePlacement[writingPlacementIndex];
                         // update our preferences to exit PLACEMENT mode
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putBoolean("WRITING_PLACEMENT", false);
-                        editor.remove("WRITING_PLACEMENT_INDEX");
-                        editor.apply();
+
+                        _studentModel.updateWritingPlacement(false);
+                        _studentModel.updateWritingPlacementIndex(null); //editor.remove("WRITING_PLACEMENT_INDEX");
+
 
                         return lastPlacementTest.fail; // go to beginning of last level
                     } else {
                         writingPlacementIndex++; // passing means incrementing by one
-                        CPlacementTest_Tutor nextPlacementTest = matrix.writePlacement[writingPlacementIndex];
+                        CPlacementTest_Tutor nextPlacementTest = _matrix.writePlacement[writingPlacementIndex];
 
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putInt("WRITING_PLACEMENT_INDEX", writingPlacementIndex);
-                        editor.apply();
+
+                        _studentModel.updateWritingPlacementIndex(writingPlacementIndex); //editor.putInt("WRITING_PLACEMENT_INDEX", writingPlacementIndex);
+
 
                         return nextPlacementTest.tutor;
                     }
@@ -333,22 +318,21 @@ public class PromotionMechanism {
 
                 // set prefs.usesThingy to false
                 if(useMathPlacement) {
-                    lastPlacementTest = matrix.mathPlacement[placementIndex];
+                    lastPlacementTest = _matrix.mathPlacement[placementIndex];
                     placementKey = "MATH_PLACEMENT";
                     placementIndexKey = "MATH_PLACEMENT_INDEX";
+                    _studentModel.updateMathPlacement(false); // editor.putBoolean(placementKey, false); // no more placement
+                    _studentModel.updateMathPlacementIndex(null);
 
                 }
                 // useWritePlacement only other option
                 else {
-                    lastPlacementTest = matrix.writePlacement[placementIndex];
+                    lastPlacementTest = _matrix.writePlacement[placementIndex];
                     placementKey = "WRITING_PLACEMENT";
                     placementIndexKey = "WRITING_PLACEMENT_INDEX";
-
+                    _studentModel.updateWritingPlacement(false); // editor.putBoolean(placementKey, false); // no more placement
+                    _studentModel.updateWritingPlacementIndex(null); // editor.remove(placementIndexKey);
                 }
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putBoolean(placementKey, false); // no more placement
-                editor.remove(placementIndexKey);
-                editor.apply();
 
                 return lastPlacementTest.fail;
 
@@ -380,21 +364,5 @@ public class PromotionMechanism {
             childScope = "numberscale";
         }
         return childScope;
-    }
-
-    /**
-     * gets the stored data for each student based on STUDENT_ID.
-     * YYY if this is a student's first time logging in, use PLACEMENT
-     */
-    private SharedPreferences getStudentSharedPreferences() {
-        // each ID name is composed of the STUDENT_ID plus the language i.e. EN or SW
-        String prefsName = "";
-        if(RoboTutor.STUDENT_ID != null) {
-            prefsName += RoboTutor.STUDENT_ID + "_";
-        }
-        prefsName += mMediaManager.getLanguageFeature(mTutor);
-
-        RoboTutor.logManager.postEvent_I(TAG, "Getting SharedPreferences: " + prefsName);
-        return RoboTutor.ACTIVITY.getSharedPreferences(prefsName, Context.MODE_PRIVATE);
     }
 }
