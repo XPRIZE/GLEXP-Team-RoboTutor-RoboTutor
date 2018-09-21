@@ -220,7 +220,32 @@
                                 //ATTEMPT 1
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We leave one space between words.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_SPACE&FTR_INSERT&FTR_HESITATION_3&FTR_ATTEMPT_1|FTR_SEN&FTR_AUDIO_SPACE&FTR_INSERT&FTR_HESITATION_3&FTR_SEN_ATTEMPT_1&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3&!FTR_ATTEMPT_4"}, //self recorded
                                 //ATTEMPT 2
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We leave one space between words.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_SPACE&FTR_INSERT&FTR_HESITATION_3&FTR_ATTEMPT_2"}, //self recorded
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We leave one space between words.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_SPACE&FTR_INSERT&FTR_HESITATION_3&FTR_ATTEMPT_2"},
+
+
+            //REPLACE
+                        //HESITATION 1 (ALREADY COVERED ABOVE)
+                              //ATTEMPT 1
+//            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We leave one space between words.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_SPACE&FTR_HESITATION_1&FTR_ATTEMPT_1|FTR_SEN&FTR_AUDIO_SPACE&FTR_HESITATION_1&FTR_SEN_ATTEMPT_1&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3&!FTR_ATTEMPT_4"},
+//                              //ATTEMPT 2
+//            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We leave one space between words.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_SPACE&FTR_HESITATION_1&FTR_ATTEMPT_2"},
+//                              //ATTEMPT 3
+//            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We leave one space between words.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_SPACE&FTR_HESITATION_1&FTR_ATTEMPT_3"},
+
+                        //HESITATION 2
+                              //ATTEMPT 1
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "There should be a space here.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_SPACE&FTR_REPLACE&FTR_HESITATION_2&FTR_ATTEMPT_1|FTR_SEN&FTR_AUDIO_SPACE&FTR_REPLACE&FTR_HESITATION_2&FTR_SEN_ATTEMPT_1&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3&!FTR_ATTEMPT_4"},
+                              //ATTEMPT 2
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "There should be a space here.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_SPACE&FTR_REPLACE&FTR_HESITATION_2&FTR_ATTEMPT_2"},
+                              //ATTEMPT 3
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "There should be a space here.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_SPACE&FTR_REPLACE&FTR_HESITATION_2&FTR_ATTEMPT_3"},
+
+                        //HESITATION 3
+                              //ATTEMPT 1
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We leave one space between words.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_SPACE&FTR_REPLACE&FTR_HESITATION_3&FTR_ATTEMPT_1|FTR_SEN&FTR_AUDIO_SPACE&FTR_REPLACE&FTR_HESITATION_3&FTR_SEN_ATTEMPT_1&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3&!FTR_ATTEMPT_4"}, //self recorded
+                              //ATTEMPT 2
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We leave one space between words.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_SPACE&FTR_REPLACE&FTR_HESITATION_3&FTR_ATTEMPT_2"},
+
 
                   //DELETE
                         //HESITATION 1
