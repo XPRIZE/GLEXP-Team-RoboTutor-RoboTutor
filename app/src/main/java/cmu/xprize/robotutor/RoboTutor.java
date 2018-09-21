@@ -717,8 +717,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         super.onPause();
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "rt: onPause");
         logManager.postEvent_V(TAG, "RoboTutor:onPause");
-
-        SharedPreferences.Editor prefs = getPreferences(Context.MODE_PRIVATE).edit();
     }
 
 

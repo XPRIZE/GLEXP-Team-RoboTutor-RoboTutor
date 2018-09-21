@@ -79,7 +79,7 @@ public class StudentDataModel {
     public final static String WRITING_PLACEMENT_INDEX_KEY = "WRITING_PLACEMENT_INDEX";
 
 
-    String getActiveSkill() {
+    public String getActiveSkill() {
         /// √√√
         return _preferences.getString(TCONST.SKILL_SELECTED, SELECT_STORIES);
     }
@@ -156,12 +156,12 @@ public class StudentDataModel {
      * DATA_MODEL how to save whole model at once, instead of individual elements...
      * @param model
      */
-    private void saveWholeModel(StudentDataModel model) {
+    private boolean saveWholeModel(StudentDataModel model) {
         _editor = _preferences.edit();
         Gson gson = new Gson();
         String json = gson.toJson(model);
         Log.d(TAG, "This is what it looks like: " + json);
         _editor.putString("key", json);
-        _editor.commit();
+        return _editor.commit();
     }
 }

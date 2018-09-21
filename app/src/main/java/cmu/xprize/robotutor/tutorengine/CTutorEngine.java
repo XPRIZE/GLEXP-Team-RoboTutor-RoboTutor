@@ -34,7 +34,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Random;
 
 import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
@@ -44,6 +43,9 @@ import cmu.xprize.robotutor.tutorengine.graph.defdata_tutor;
 import cmu.xprize.robotutor.tutorengine.graph.defvar_tutor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
+import cmu.xprize.robotutor.tutorengine.util.PromotionMechanism;
+import cmu.xprize.robotutor.tutorengine.util.StudentDataModel;
+import cmu.xprize.robotutor.tutorengine.util.TransitionMatrixModel;
 import cmu.xprize.robotutor.tutorengine.widgets.core.TSceneAnimatorLayout;
 import cmu.xprize.comp_logging.CLogManager;
 import cmu.xprize.comp_logging.ILogManager;
@@ -68,6 +70,11 @@ public class CTutorEngine implements ILoadableObject2 {
     private static CTutorEngine             singletonTutorEngine;
 
     private CMediaManager                   mMediaManager;
+
+    // DATA_MODEL
+    public static StudentDataModel          studentModel;
+    public static TransitionMatrixModel     matrix;
+    public static PromotionMechanism        promotionMechanism;
 
     static public  RoboTutor                Activity;
     static public  ILogManager              TutorLogManager;
@@ -141,6 +148,10 @@ public class CTutorEngine implements ILoadableObject2 {
      */
     static public void setDefaultLanguage(String newLang) {
         language = newLang;
+        //  any time the language changes, so should the Transition Matrix and the Student Model
+        studentModel = loadStudentModel();
+        matrix = loadTransitionMatrixModel();
+        promotionMechanism = new PromotionMechanism(studentModel, matrix);
     }
 
 
@@ -580,11 +591,59 @@ public class CTutorEngine implements ILoadableObject2 {
             //
             if(BuildConfig.LANGUAGE_OVERRIDE) {
                 language = BuildConfig.LANGUAGE_FEATURE_ID;
+                //  any time the language changes, so should the Transition Matrix and the Student Model
+            } else {
+                language = BuildConfig.LANGUAGE_FEATURE_ID;
+                if (language.equals("LANG_NULL")) {
+                    language = TCONST.LANG_SW;
+                }
             }
+
+            studentModel = loadStudentModel();
+            matrix = loadTransitionMatrixModel();
+            promotionMechanism = new PromotionMechanism(studentModel, matrix);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Initialize the student data model
+     */
+    private static StudentDataModel loadStudentModel() {
+        // initialize
+        String prefsName = "";
+        if(RoboTutor.STUDENT_ID != null) {
+            prefsName += RoboTutor.STUDENT_ID + "_";
+        }
+        prefsName += CTutorEngine.language;
+        return new StudentDataModel(RoboTutor.ACTIVITY, prefsName);  // DATA_MODEL (create) this should be created at lower level
+    }
+
+    /**
+     *  load the transition matrix model from JSON
+     * @return
+     */
+    private static TransitionMatrixModel loadTransitionMatrixModel() {
+
+        // this is whack and should be moved... see "activity_selector/tutor_descriptor.json"
+        String tutorName = "activity_selector";
+        String dataFile = "dev_data.json";
+
+        // simpler way to refer to languge
+        String lang = TCONST.langMap.get(CTutorEngine.language);
+
+        String dataPath = TCONST.TUTORROOT + "/" + tutorName + "/" + TCONST.TASSETS;
+        dataPath += "/" +  TCONST.DATA_PATH + "/" + lang + "/";
+
+        String jsonData = JSON_Helper.cacheData(dataPath + dataFile);
+
+        //
+        // Load the datasource into a separate class...
+        TransitionMatrixModel matrix = new TransitionMatrixModel(dataPath + dataFile, mRootScope);
+        matrix.validateAll();
+        return matrix;
     }
 
 

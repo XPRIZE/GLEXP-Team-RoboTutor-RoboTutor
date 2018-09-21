@@ -27,7 +27,7 @@ import static cmu.xprize.util.TCONST.PLACEMENT_TAG;
 
 public class PromotionMechanism {
 
-    private StudentDataModel _studentModel; // DATA_MODEL (instance 1)
+    private StudentDataModel _studentModel; // holds the StudentDataModel
     private TransitionMatrixModel _matrix; // now holds the transition map things...
 
     public PromotionMechanism(StudentDataModel studentModel, TransitionMatrixModel matrix) {

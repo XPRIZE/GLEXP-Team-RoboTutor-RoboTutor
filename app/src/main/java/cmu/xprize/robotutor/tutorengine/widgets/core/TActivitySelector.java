@@ -57,9 +57,11 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_MATH;
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_OPTION_1;
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_OPTION_2;
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;
+import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING;
 import static cmu.xprize.comp_session.AS_CONST.VAR_TUTOR_ID;
 import static cmu.xprize.comp_session.AS_CONST.VAR_DATASOURCE;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENT;
@@ -99,7 +101,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
     private boolean     askButtonsEnabled = false;
 
     private TransitionMatrixModel matrix; // now holds the transition map things...
-    private StudentDataModel studentModel; // DATA_MODEL (instance 2) these should be accessed from something lower, i.e. CTutorEngine
+    private StudentDataModel studentModel; // holds the StudentDataModel
 
     private HashMap<String,String>  _StringVar  = new HashMap<>();
     private HashMap<String,Integer> _IntegerVar = new HashMap<>();
@@ -204,10 +206,44 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         }
 
         CAt_Data[] nextTutors = new CAt_Data[3];
-        nextTutors[0] = (CAt_Data) matrix.writeTransitions.get(studentModel.getWritingTutorID());
-        nextTutors[1] = (CAt_Data) matrix.storyTransitions.get(studentModel.getStoryTutorID());
-        nextTutors[2] = (CAt_Data) matrix.mathTransitions.get(studentModel.getMathTutorID());
+
+        if (OLD_WAY) {
+            nextTutors[0] = (CAt_Data) matrix.writeTransitions.get(studentModel.getWritingTutorID());
+            nextTutors[1] = (CAt_Data) matrix.storyTransitions.get(studentModel.getStoryTutorID());
+            nextTutors[2] = (CAt_Data) matrix.mathTransitions.get(studentModel.getMathTutorID());
+        } else {
+
+            HashMap transitionMap = matrix.storyTransitions;
+            String tutorId = "";
+            switch(studentModel.getActiveSkill()) {
+
+
+                case SELECT_WRITING:
+                    transitionMap = matrix.writeTransitions;
+                    tutorId = studentModel.getWritingTutorID();
+                    break;
+
+                case SELECT_STORIES:
+                    transitionMap = matrix.storyTransitions;
+                    tutorId = studentModel.getStoryTutorID();
+                    break;
+
+                case SELECT_MATH:
+                    transitionMap = matrix.mathTransitions;
+                    tutorId = studentModel.getMathTutorID();
+                    break;
+            }
+
+
+            // OH_BEHAVE... has to be different for placement! .next won't work in placement mode
+            // solution? when any placement mode, use the old way
+            nextTutors[0] = (CAt_Data) transitionMap.get(tutorId);
+            nextTutors[1] = (CAt_Data) transitionMap.get(nextTutors[1].next); // next hardest tutor!!!
+            // OH_BEHAVE should be one more option???
+        }
+
         SaskActivity.initializeButtonsAndSetButtonImages(_activeLayout, nextTutors);
+
     }
 
     /**
@@ -1009,23 +1045,9 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         try {
             if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
 
-                String dataFile = dataNameDescriptor.substring(TCONST.SOURCEFILE.length());
-
-                // Generate a langauage specific path to the data source -
-                // i.e. tutors/word_copy/assets/data/<iana2_language_id>/
-                // e.g. tutors/word_copy/assets/data/sw/
-                //
-                String dataPath = TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS;
-                dataPath += "/" +  TCONST.DATA_PATH + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
-
-                String jsonData = JSON_Helper.cacheData(dataPath + dataFile);
-
-                //
-                // Load the datasource into a separate class...
-                matrix = new TransitionMatrixModel(dataPath + dataFile, mTutor.getScope()); // MATRIX_REFACTOR (create) this should be created at lower level
-                matrix.validateAll();
-
-                initializeStudentDataModel();
+                // The new way to load the TransitionMatrix and StudentModel
+                matrix = CTutorEngine.matrix;
+                studentModel = CTutorEngine.studentModel;
 
 
                 initializeState();
@@ -1045,19 +1067,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         } catch (Exception e) {
             CErrorManager.logEvent(TAG, "Invalid Data Source - " + dataNameDescriptor + " for : " + name() + " : ", e, true);
         }
-    }
-
-    /**
-     * Initialize the student data model
-     */
-    private void initializeStudentDataModel() {
-        // initialize
-        String prefsName = "";
-        if(RoboTutor.STUDENT_ID != null) {
-            prefsName += RoboTutor.STUDENT_ID + "_";
-        }
-        prefsName += mMediaManager.getLanguageFeature(mTutor);
-        studentModel = new StudentDataModel(RoboTutor.ACTIVITY, prefsName); // DATA_MODEL (create) this should be created at lower level
     }
 
     // DataSink Implementation END
