@@ -935,6 +935,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                         break;
 
                 }
+
             }
         }
 

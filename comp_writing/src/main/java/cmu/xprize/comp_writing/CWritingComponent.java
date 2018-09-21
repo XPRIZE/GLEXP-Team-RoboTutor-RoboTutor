@@ -1278,10 +1278,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
     public void temporaryOnCorrect(){
+        //when transferring to the animator graph,remember to pass the word completed feature and then retract it.
         deactivateEditModeInActiveWord();
         inhibitWordInput();
         updateLettersWordResponse();
         incrementCurrentWordIndex();
+        clearHesitationFeatures(); //although already there in the ON_CORRECT behavior
     }
 
     public void temporaryOnCorrectSentence(){
@@ -1651,6 +1653,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     public void rippleReplayCurrentWord(String type){
         mActiveWord.rippleReplayWord(type);
+        mActiveWord.updatePostReplay();
         if(activityFeature.contains("FTR_SEN_WRD")){
             evaluateSentenceWordLevel();
         }
@@ -2963,11 +2966,24 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
 
         public void rippleReplayWord(String command){
+            //amogh comment, this might be wrong for the cases when the word is not written at the place it should've been, so to accommodate that, the indices from the answer and not the written part should be received, the glyphs at wrong places(all listindicesanswer) be erased and the correct ones(from listwordsanswer) replaced.
             CGlyphController v;
             for (int i1 : listIndicesAnswer){
                 v = (CGlyphController) mGlyphList.getChildAt(i1);
                 v.post(WR_CONST.RIPPLE_PROTO);
+
+                //amogh added to set the valid character in response.
+
+                //amogh comment move to the animator graph -> call update letters word response,
+                CStimulusController resp = (CStimulusController) mResponseViewList.getChildAt(i1);
+                resp.setStimulusChar(mAnswer.substring(i1,i1 + 1), false);
+                resp.updateResponseState(true);
+                v.inhibitInput(true);
             }
+        }
+
+        public void updatePostReplay(){
+            //need to update the
         }
 
 
