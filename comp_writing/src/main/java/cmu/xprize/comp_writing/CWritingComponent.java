@@ -390,90 +390,90 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     //
 
     //to be called by the animator graph
-    public void showHighlightBox(Integer level, Word w){
-
-        mHighlightErrorBoxView = new View (getContext());
-        int wid = 0;
-        int left = 0;
-        //switch case sets the width, and the position of the box.
-        switch (level){
-
-            case 1:
-
-                break;
-
-            case 2:
-
-                wid = w.getWidth();
-                left = w.getLeft();
-
-                break;
-
-            case 3:
-
-                wid  = mResponseViewList.getChildAt(0).getWidth();
-                left = w.getFirstEditLeft();
-
-                break;
-
-            case 4:
-
-                break;
-        }
-
-        //now that the width and the position of this box has been set, set its drawable and show for some time.
-        mHighlightErrorBoxView.setX((float)left);
-        mHighlightErrorBoxView.setLayoutParams(new LayoutParams(wid, 90));
-        mHighlightErrorBoxView.setBackgroundResource(R.drawable.highlight_error);
-        //        MarginLayoutParams mp = (MarginLayoutParams) mHighlightErrorBoxView.getLayoutParams();
-        //        mp.setMargins(100,00,0,100);
-        //                mHighlightErrorBoxView.setX((float)300.00);
-        //        int pos = mResponseViewList.getChildAt(index+2).getLeft();
-        //        mHighlightErrorBoxView.setX(100);
-        //        mHighlightErrorBoxView.setLeft(1000);
-        mResponseScrollLayout.addView(mHighlightErrorBoxView);
-        mHighlightErrorBoxView.postDelayed(new Runnable() {
-            public void run() {
-                mHighlightErrorBoxView.setVisibility(View.GONE);
-            }
-        }, 2000);
-    }
+//    public void showHighlightBox(Integer level, Word w){
+//
+//        mHighlightErrorBoxView = new View (getContext());
+//        int wid = 0;
+//        int left = 0;
+//        //switch case sets the width, and the position of the box.
+//        switch (level){
+//
+//            case 1:
+//
+//                break;
+//
+//            case 2:
+//
+//                wid = w.getWidth();
+//                left = w.getLeft();
+//
+//                break;
+//
+//            case 3:
+//
+//                wid  = mResponseViewList.getChildAt(0).getWidth();
+//                left = w.getFirstEditLeft();
+//
+//                break;
+//
+//            case 4:
+//
+//                break;
+//        }
+//
+//        //now that the width and the position of this box has been set, set its drawable and show for some time.
+//        mHighlightErrorBoxView.setX((float)left);
+//        mHighlightErrorBoxView.setLayoutParams(new LayoutParams(wid, 90));
+//        mHighlightErrorBoxView.setBackgroundResource(R.drawable.highlight_error);
+//        //        MarginLayoutParams mp = (MarginLayoutParams) mHighlightErrorBoxView.getLayoutParams();
+//        //        mp.setMargins(100,00,0,100);
+//        //                mHighlightErrorBoxView.setX((float)300.00);
+//        //        int pos = mResponseViewList.getChildAt(index+2).getLeft();
+//        //        mHighlightErrorBoxView.setX(100);
+//        //        mHighlightErrorBoxView.setLeft(1000);
+//        mResponseScrollLayout.addView(mHighlightErrorBoxView);
+//        mHighlightErrorBoxView.postDelayed(new Runnable() {
+//            public void run() {
+//                mHighlightErrorBoxView.setVisibility(View.GONE);
+//            }
+//        }, 2000);
+//    }
 
     //to be called by the animator graph
-    public void showHighlightBox(Integer level) {
-
-        //for sentence level, need to check if the first edit is inside a word or not.
-        if(activityFeature.contains("FTR_SEN_SEN")){
-            if(mSentenceAttempts > 0) {
-                //find first edit, it can be R,I,D
-                EditOperation firstEditOperationSentence = getFirstEditOperation(mWrittenSentence, mAnswer);
-
-                int activeWordIndex = getActiveWordIndexForEdit(firstEditOperationSentence);
-
-                //if outside the word, highlight the error
-                if (activeWordIndex == -1) {
-
-                    //highlight the error according to if its insert, replace or delete
-                    firstEditOperationSentence.showHighlightBox();
-                }
-
-                // if inside the word, simply follow what was happening at the word level
-                else {
-                    Word firstEditWord = mListWordsInput.get(activeWordIndex);
-//                    if (firstEditWord.getAttempt() > 0) {
-                        showHighlightBox(level, firstEditWord);
-//                    }
-                }
-            }
-        }
-
-        //for word level
-        else{
-            if (mActiveWord.getAttempt() > 0 ) {
-                showHighlightBox(level, mActiveWord);
-            }
-        }
-    }
+//    public void showHighlightBox(Integer level) {
+//
+//        //for sentence level, need to check if the first edit is inside a word or not.
+//        if(activityFeature.contains("FTR_SEN_SEN")){
+//            if(mSentenceAttempts > 0) {
+//                //find first edit, it can be R,I,D
+//                EditOperation firstEditOperationSentence = getFirstEditOperation(mWrittenSentence, mAnswer);
+//
+//                int activeWordIndex = getActiveWordIndexForEdit(firstEditOperationSentence);
+//
+//                //if outside the word, highlight the error
+//                if (activeWordIndex == -1) {
+//
+//                    //highlight the error according to if its insert, replace or delete
+//                    firstEditOperationSentence.showHighlightBox();
+//                }
+//
+//                // if inside the word, simply follow what was happening at the word level
+//                else {
+//                    Word firstEditWord = mListWordsInput.get(activeWordIndex);
+////                    if (firstEditWord.getAttempt() > 0) {
+//                        showHighlightBox(level, firstEditWord);
+////                    }
+//                }
+//            }
+//        }
+//
+//        //for word level
+//        else{
+//            if (mActiveWord.getAttempt() > 0 ) {
+//                showHighlightBox(level, mActiveWord);
+//            }
+//        }
+//    }
 
     public void showSampleForActiveWord(Boolean show){
         mActiveWord.showSamples(show);
@@ -2910,6 +2910,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             return left;
         }
 
+        public int getHeight(){
+            int height = mResponseViewList.getChildAt(listIndicesAnswer.get(0)).getHeight();
+            return height;
+        }
+
         //gets the first edit of the word, although the index wrt its start point
         public EditOperation getFirstWordEditOperation(){
             String sourceWord = this.getWrittenWordString();
@@ -3004,10 +3009,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
             int wid = this.getWrapWidth();
             int left = this.getLeft();
+            int height = this.getHeight();
+
 
             //now that the width and the position of this box has been set, set its drawable and show for some time.
             mHighlightErrorBoxView.setX((float)left);
-            mHighlightErrorBoxView.setLayoutParams(new LayoutParams(wid, 90));
+            mHighlightErrorBoxView.setLayoutParams(new LayoutParams(wid, height));
             mHighlightErrorBoxView.setBackgroundResource(R.drawable.highlight_error);
             //        MarginLayoutParams mp = (MarginLayoutParams) mHighlightErrorBoxView.getLayoutParams();
             //        mp.setMargins(100,00,0,100);
@@ -3306,10 +3313,11 @@ public class EditOperation {
         mHighlightErrorBoxView = new View (getContext());
         int wid = mResponseViewList.getChildAt(0).getWidth();;
         int left = this.getLeft();
+        int height = mResponseViewList.getChildAt(0).getHeight();
 
         //now that the width and the position of this box has been set, set its drawable and show for some time.
         mHighlightErrorBoxView.setX((float)left);
-        mHighlightErrorBoxView.setLayoutParams(new LayoutParams(wid, 90));
+        mHighlightErrorBoxView.setLayoutParams(new LayoutParams(wid, height));
         mHighlightErrorBoxView.setBackgroundResource(R.drawable.highlight_error);
         //        MarginLayoutParams mp = (MarginLayoutParams) mHighlightErrorBoxView.getLayoutParams();
         //        mp.setMargins(100,00,0,100);
