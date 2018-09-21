@@ -125,7 +125,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 //    private static final String debugTutorFile = "[file]write.ltr.uc.trc_vow.asc.A..Z.1.json";
 
 
-    private CTutorEngine        tutorEngine;
     private CMediaController    mMediaController;
 
     private CLoaderView         progressView;
@@ -160,7 +159,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     private boolean                 isReady       = false;
     private boolean                 engineStarted = false;
     static public boolean           STANDALONE    = false;
-    static public String            SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
+    static public String            SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT; // this is only used as a feature, when launching TActivitySelector...
+    static public boolean           MUST_CALCULATE_NEXT_TUTOR = false;
 //    static public String        SELECTOR_MODE = TCONST.FTR_DEBUG_SELECT;
 
 
@@ -547,7 +547,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
             // Load the default tutor defined in assets/tutors/engine_descriptor.json
             // TODO: Handle tutor creation failure
             //
-            tutorEngine = CTutorEngine.getTutorEngine(RoboTutor.this);
+            CTutorEngine.getTutorEngine(RoboTutor.this);
 
             // If running without built-in home screen add a start screen
             //
@@ -599,7 +599,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         LOG_ID = CPreferenceCache.initLogPreference(this);
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "xx: startSessionManager in 'onStartTutor'");
-        tutorEngine.startSessionManager();
+        CTutorEngine.startSessionManager();
 
         startView.stopTapTutor();
         masterContainer.removeView(startView);
@@ -619,7 +619,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         LOG_ID = CPreferenceCache.initLogPreference(this);
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "xx: startSessionManager in 'onStartTutor'");
-        tutorEngine.quickLaunch(debugTutorVariant, debugTutorId, debugTutorFile);
+        CTutorEngine.quickLaunch(debugTutorVariant, debugTutorId, debugTutorFile);
 
         startView.stopTapTutor();
         masterContainer.removeView(startView);
@@ -639,7 +639,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         logManager.postEvent_V(TAG, "RoboTuTor:onBackPressed");
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r4: killActiveTutor called from onBackPressed()");
-        tutorEngine.killActiveTutor();
+        CTutorEngine.killActiveTutor();
 
         // Allow the screen to sleep when not in a session
         //
@@ -650,12 +650,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         masterContainer.addAndShow(startView);
         startView.startTapTutor();
         setFullScreen();
-
-        if(tutorEngine != null) {
-            if(tutorEngine.onBackButton()) {
-                super.onBackPressed();
-            }
-        }
     }
 
 
@@ -744,7 +738,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         // Need to do this before releasing TTS
         //
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r4: killActiveTutor called from onStop()");
-        tutorEngine.killActiveTutor();
+        CTutorEngine.killActiveTutor();
 
         if(TTS != null && TTS.isReady()) {
 
@@ -772,8 +766,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         super.onPause();
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "rt: onPause");
         logManager.postEvent_V(TAG, "RoboTutor:onPause");
-
-        SharedPreferences.Editor prefs = getPreferences(Context.MODE_PRIVATE).edit();
     }
 
 

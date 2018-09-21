@@ -18,7 +18,6 @@ import cmu.xprize.common.R;
 
 public class CTutorData_Metadata {
 
-
     public static TCONST.Thumb getThumbImage(CAt_Data tutor) {
 
 

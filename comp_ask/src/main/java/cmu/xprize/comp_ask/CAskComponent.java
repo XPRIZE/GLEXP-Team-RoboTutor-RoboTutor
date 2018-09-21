@@ -37,7 +37,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import cmu.xprize.comp_debug.CDebugComponent;
+import cmu.xprize.util.CAt_Data;
 import cmu.xprize.util.CClassMap;
+import cmu.xprize.util.CTutorData_Metadata;
 import cmu.xprize.util.IButtonController;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
@@ -166,13 +169,18 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
     public void setDataSource(String[] dataSource) {}
 
 
-    public void setDataSource(CAsk_Data dataSource) {
+    /**
+     * call it "initializeButtonsAndSetButtonImages"...
+     * @param dataSource
+     */
+    public void initializeButtonsAndSetButtonImages(CAsk_Data dataSource, CAt_Data[] nextActivities) {
 
         // Keep track of the datasource so we can destroy the references when finished.
         //
         mDataSource = dataSource;
 
-        int layoutID = getResources().getIdentifier(dataSource.layoutID, "layout", packageName);
+        // this will be the same every time...
+        int layoutID = getResources().getIdentifier("ask_activity_selector", "layout", packageName);
 
         removeAllViews();
 
@@ -186,44 +194,32 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
         buttonList = new ArrayList<>();
 
         for(CAskElement element : dataSource.items) {
+            int viewID = getResources().getIdentifier(element.componentID, "id", packageName);
 
-            switch(element.datatype) {
-                case ASK_CONST.IMAGE:
-                    ImageView iView = (ImageView) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
+            ImageButton ibView = (ImageButton) findViewById(viewID);
 
-                    iView.setImageResource(getResources().getIdentifier(element.resource, "drawable", packageName));
-                    break;
-
-                case ASK_CONST.TEXT:
-                    TextView tView = (TextView) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
-
-                    tView.setText(element.resource);
-                    break;
-
-                case ASK_CONST.IMAGEBUTTON:
-                    int test = getResources().getIdentifier(element.componentID, "id", packageName);
-
-                    ImageButton ibView = (ImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
-
-                    ibView.setImageResource(getResources().getIdentifier(element.resource, "drawable", packageName));
-
-                    buttonMap.put(ibView, element.componentID);
-                    buttonList.add(ibView);
-                    break;
-
-                case ASK_CONST.TEXTBUTTON:
-                    Button tbView = (Button) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
-
-                    tbView.setText(element.resource);
-
-                    buttonMap.put(tbView, element.componentID);
-                    buttonList.add(tbView);
-                    break;
-            }
+            buttonMap.put(ibView, element.componentID);
+            buttonList.add(ibView);
         }
 
         enableButtons(true);
         requestLayout();
+
+        // here is where button images start...
+
+        Log.wtf("NEW_MENU", nextActivities[0].tutor_id + " " + nextActivities[1].tutor_id + " " + nextActivities[2].tutor_id);
+
+        // first three buttons are set...
+        for(int i = 0; i < nextActivities.length; i++) {
+            CAskElement element = mDataSource.items[i];
+            ImageButton ibView = (ImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
+
+            TCONST.Thumb resource = CTutorData_Metadata.getThumbImage(nextActivities[i]);
+            Log.wtf("NEW_MENU", resource.toString());
+
+            ibView.setImageResource(CDebugComponent.getThumbId(resource));
+
+        }
     }
 
     private void releaseReferences() {
@@ -234,21 +230,11 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
             for (CAskElement element : mDataSource.items) {
 
-                switch (element.datatype) {
-                    case ASK_CONST.IMAGE:
-                        ImageView iView = (ImageView) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
+                int test = getResources().getIdentifier(element.componentID, "id", packageName);
 
-                        iView.setImageDrawable(null);
-                        break;
+                ImageButton ibView = (ImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
 
-                    case ASK_CONST.IMAGEBUTTON:
-                        int test = getResources().getIdentifier(element.componentID, "id", packageName);
-
-                        ImageButton ibView = (ImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
-
-                        ibView.setImageDrawable(null);
-                        break;
-                }
+                ibView.setImageDrawable(null);
             }
         }
     }

@@ -12,11 +12,8 @@ import android.widget.FrameLayout;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import cmu.xprize.comp_ask.CAskComponent;
@@ -25,14 +22,13 @@ import cmu.xprize.util.CPlacementTest_Tutor;
 import cmu.xprize.util.IButtonController;
 import cmu.xprize.comp_debug.CDebugComponent;
 import cmu.xprize.comp_logging.CErrorManager;
-import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IPublisher;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.TCONST;
 
 
-public class CActivitySelector extends FrameLayout implements IBehaviorManager, IButtonController, ILoadableObject, IPublisher {
+public class CActivitySelector extends FrameLayout implements IButtonController, ILoadableObject, IPublisher {
 
     protected Context           mContext;
 
@@ -48,22 +44,6 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
     protected int               _describeIndex;
 
     protected LocalBroadcastManager bManager;
-
-    // json loadable
-    public CAsk_Data[]  dataSource;
-
-    public String       rootSkillWrite;
-    public String       rootSkillStories;
-    public String       rootSkillMath;
-    public String       rootSkillShapes;
-
-    public HashMap      writeTransitions;
-    public HashMap      storyTransitions;
-    public HashMap      mathTransitions;
-    public HashMap      shapeTransitions;
-
-    public CPlacementTest_Tutor[] writePlacement;
-    public CPlacementTest_Tutor[]   mathPlacement;
 
     final private String  TAG = "CActivitySelector";
 
@@ -137,10 +117,6 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
     }
 
     @Override
-    public void doTaggedButtonBehavior(String tag) {
-    }
-
-    @Override
     public void doAskButtonAction(String actionid) {
     }
 
@@ -163,24 +139,25 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
     //************************************************************************
     //************************************************************************
     // IBehaviorManager Interface START
+    // TODO fix architecture...
+    // this doesn't even need to "implement IBehaviorManager"? THere's never an object declared as IBehaviorManager... these methods are only used internally
 
-
-    @Override
+    //@Override
     public void setVolatileBehavior(String event, String behavior) {
 
     }
 
-    @Override
+    //@Override
     public void setStickyBehavior(String event, String behavior) {
 
     }
 
-    @Override
+    //@Override
     public boolean applyBehavior(String event) {
         return false;
     }
 
-    @Override
+    //@Override
     public void applyBehaviorNode(String nodeName) {
 
     }
@@ -268,10 +245,6 @@ public class CActivitySelector extends FrameLayout implements IBehaviorManager, 
 
                         doButtonBehavior(_target);
                         break;
-
-                    case AS_CONST.TAGGED_BUTTON_EVENT:
-
-                        doTaggedButtonBehavior(_target);
 
                     case AS_CONST.CANCEL_DESCRIBE:
 

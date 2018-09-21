@@ -13,8 +13,6 @@ import cmu.xprize.util.JSON_Helper;
 public class CAskElement implements ILoadableObject {
 
     // json loadable
-    public String                   datatype         = null;   // "text" OR "image"
-    public String                   resource         = null;   // resource ID OR text literal
     public String                   componentID      = null;   // The target UI element in Layout
 
     public String                   behavior         = null;   // The button behavior

@@ -627,6 +627,16 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
         int thumbId;
 
+        // https://stackoverflow.com/questions/4427608/android-getting-resource-id-from-string
+        thumbId = getThumbId(tutorThumb);
+        ScurrentTutorImage.setImageResource(thumbId);
+        ScurrentTutorImage.setPadding(36, 36, 36, 36);
+        ScurrentTutorImage.setBackground(getResources().getDrawable(R.drawable.outline_current_large, null));
+
+    }
+
+    public static int getThumbId(Thumb tutorThumb) {
+        int thumbId;
         switch(tutorThumb) {
             case AKIRA:
                 thumbId = R.drawable.thumb_akira;
@@ -726,10 +736,8 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
                 break;
 
         }
-        ScurrentTutorImage.setImageResource(thumbId);
-        ScurrentTutorImage.setPadding(36, 36, 36, 36);
-        ScurrentTutorImage.setBackground(getResources().getDrawable(R.drawable.outline_current_large));
 
+        return thumbId;
     }
 
 
