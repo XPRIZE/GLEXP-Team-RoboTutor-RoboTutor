@@ -936,13 +936,14 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                                     String writtenActiveWord = mActiveWord.getWrittenWordString();
                                     String writtenAnswerWord = mListWordsAnswer.get(currentWordIndex).getWordAnswer();
+                                    //checking if the letters of the word are correct
                                     boolean writtenWordIsCorrect = writtenActiveWord.equals(writtenAnswerWord);
                                     if (writtenWordIsCorrect) {
                                         publishFeature(WR_CONST.FTR_WORD_CORRECT);
                                         applyBehavior(WR_CONST.ON_CORRECT); //should turn word blue
-//                                        temporaryOnCorrectSentence();
-
+//                                        temporaryOnCorrectSentence(); //already in animator graph, doesnt deactivate the edits until the letters AND the position of the word is correct.
                                     }
+
                                     //when correct replacement but the word or the sentence is not yet complete.
                                     else{
                                         applyBehavior(WR_CONST.ON_CORRECT);
@@ -1217,7 +1218,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
      *
      * @return
      */
-    private int updateSentenceAttemptFeature(){
+    public int updateSentenceAttemptFeature(){
         clearSentenceAttemptFeatures();
         int attempt = ++mSentenceAttempts;
         if (attempt <= 4){
@@ -1297,9 +1298,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
     public void temporaryOnCorrectSentence(){
-//        deactivateEditModeInActiveWord();
-//        inhibitWordInput();
-//        updateLettersWordResponse();
+//        deactivateEditModeInActiveWord(); //deactivate only if the position of the word is also correct
+        inhibitWordInput();
+        updateLettersWordResponse();
     }
 
     //goes over the unverified words and releases apt features.
