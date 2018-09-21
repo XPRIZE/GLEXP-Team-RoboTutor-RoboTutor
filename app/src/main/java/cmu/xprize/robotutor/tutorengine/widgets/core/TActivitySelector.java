@@ -306,31 +306,31 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         _activeLayout.items[0].componentID = "SbuttonOption1";
         _activeLayout.items[0].behavior = OLD_WAY ? AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING : SELECT_OPTION_0;
         _activeLayout.items[0].prompt = "reading and writing";
-        _activeLayout.items[0].help = "Tap here for reading and writing";
+        _activeLayout.items[0].help = "reading and writing";
 
         _activeLayout.items[1] =  new CAskElement();
         _activeLayout.items[1].componentID = "SbuttonOption2";
         _activeLayout.items[1].behavior = OLD_WAY ? AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES : SELECT_OPTION_1;
         _activeLayout.items[1].prompt = "stories";
-        _activeLayout.items[1].help = "Tap here for a story";
+        _activeLayout.items[1].help = "stories";
 
         _activeLayout.items[2] =  new CAskElement();
         _activeLayout.items[2].componentID = "SbuttonOption3";
         _activeLayout.items[2].behavior = OLD_WAY ? AS_CONST.BEHAVIOR_KEYS.SELECT_MATH : SELECT_OPTION_2;
         _activeLayout.items[2].prompt = "numbers and math";
-        _activeLayout.items[2].help = "Tap here for numbers and math";
+        _activeLayout.items[2].help = "numbers and math";
 
         _activeLayout.items[3] =  new CAskElement();
         _activeLayout.items[3].componentID = "SbuttonRepeat";
         _activeLayout.items[3].behavior = AS_CONST.SELECT_REPEAT;
         _activeLayout.items[3].prompt = "lets do it again";
-        _activeLayout.items[3].help = "tap here to do the same thing again";
+        _activeLayout.items[3].help = "lets do it again";
 
         _activeLayout.items[4] =  new CAskElement();
         _activeLayout.items[4].componentID = "SbuttonExit";
         _activeLayout.items[4].behavior = AS_CONST.SELECT_EXIT;
         _activeLayout.items[4].prompt = "I want to stop using RoboTutor";
-        _activeLayout.items[4].help = "tap here to stop using robotutor";
+        _activeLayout.items[4].help = "I want to stop using RoboTutor";
 
     }
 
