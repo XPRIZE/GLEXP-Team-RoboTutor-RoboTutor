@@ -757,6 +757,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             //for word level feedback
             if(activityFeature.contains("FTR_SEN_WRD")){
 
+                mActiveWord = mListWordsInput.get(currentWordIndex);
 //                mActiveWord = mListWordsInput.get(currentWordIndex);
                 int attempts = mActiveWord.getAttempt();
 
