@@ -1745,10 +1745,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
     private void replayNext() {
 
-        if(activityFeature.contains("FTR_SEN_WRD") || activityFeature.contains("FTR_SEN_SEN")){
-            rippleReplayWordContinued();
-        }
-        else {
+//        if(activityFeature.contains("FTR_SEN_WRD") || activityFeature.contains("FTR_SEN_SEN")){
+//            rippleReplayWordContinued();
+//        }
+//        else {
             CStimulusController r;
             CGlyphController v;
 
@@ -1772,7 +1772,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 applyBehavior(WR_CONST.REPLAY_COMPLETE);
             }
-        }
+//        }
     }
 
 
