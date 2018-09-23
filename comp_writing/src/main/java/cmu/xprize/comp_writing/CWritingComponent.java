@@ -1714,8 +1714,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     public void rippleReplayWordContinued(){
         //amogh comment, this might be wrong for the cases when the word is not written at the place it should've been, so to accommodate that, the indices from the answer and not the written part should be received, the glyphs at wrong places(all listindicesanswer) be erased and the correct ones(from listwordsanswer) replaced.
-        int  max= mActiveWord.listIndicesAnswer.get(mActiveWord.listIndicesAnswer.size() - 1);
-        if(_fieldIndex < max) {
+        ArrayList<Integer> activeWordIndices = mActiveWord.listIndicesAnswer;
+        int  max = activeWordIndices.get(activeWordIndices.size() - 1);
+        if(_fieldIndex <= max) {
             CGlyphController v;
             Word correctWord = mListWordsAnswer.get(currentWordIndex);
             ArrayList<Integer> correctIndices = correctWord.listIndicesAnswer;
