@@ -1712,6 +1712,28 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
     }
 
+    public void rippleReplayWordContinued(){
+        //amogh comment, this might be wrong for the cases when the word is not written at the place it should've been, so to accommodate that, the indices from the answer and not the written part should be received, the glyphs at wrong places(all listindicesanswer) be erased and the correct ones(from listwordsanswer) replaced.
+        if(_fieldIndex < mActiveWord.listIndicesAnswer.get(mActiveWord.listIndicesAnswer.size() - 1)) {
+            CGlyphController v;
+            Word correctWord = mListWordsAnswer.get(currentWordIndex);
+            ArrayList<Integer> correctIndices = correctWord.listIndicesAnswer;
+            v = (CGlyphController) mGlyphList.getChildAt(_fieldIndex);
+            v.post(WR_CONST.RIPPLE_PROTO);
+
+            //amogh added to set the valid character in response.
+
+            //amogh comment move to the animator graph -> call update letters word response,
+            CStimulusController resp = (CStimulusController) mResponseViewList.getChildAt(_fieldIndex);
+            resp.setStimulusChar(mAnswer.substring(_fieldIndex, _fieldIndex + 1), false);
+            resp.updateResponseState(true);
+            v.inhibitInput(true);
+            _fieldIndex++;
+        }
+        else{
+            applyBehavior(WR_CONST.REPLAY_COMPLETE);
+        }
+    }
 
     public void rippleReplay(String type, boolean isDemo) {
 
@@ -1723,29 +1745,33 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
     private void replayNext() {
 
-        CStimulusController r;
-        CGlyphController   v;
-
-        if( _fieldIndex < mGlyphList.getChildCount()) {
-
-            v = (CGlyphController) mGlyphList.getChildAt(_fieldIndex);
-
-            if (v.checkIsStimulus()) {
-
-                // For write.missingLtr: To omit non-answer Glyphs from replay.
-                _fieldIndex++;
-                replayNext();
-            } else {
-
-                v.post(_replayType);
-                _fieldIndex++;
-            }
+        if(activityFeature.contains("FTR_SEN_WRD") || activityFeature.contains("FTR_SEN_SEN")){
+            rippleReplayWordContinued();
         }
         else {
-            if(_isDemo)
-              broadcastMsg(TCONST.POINT_FADE);
+            CStimulusController r;
+            CGlyphController v;
 
-            applyBehavior(WR_CONST.REPLAY_COMPLETE);
+            if (_fieldIndex < mGlyphList.getChildCount()) {
+
+                v = (CGlyphController) mGlyphList.getChildAt(_fieldIndex);
+
+                if (v.checkIsStimulus()) {
+
+                    // For write.missingLtr: To omit non-answer Glyphs from replay.
+                    _fieldIndex++;
+                    replayNext();
+                } else {
+
+                    v.post(_replayType);
+                    _fieldIndex++;
+                }
+            } else {
+                if (_isDemo)
+                    broadcastMsg(TCONST.POINT_FADE);
+
+                applyBehavior(WR_CONST.REPLAY_COMPLETE);
+            }
         }
     }
 
@@ -2983,25 +3009,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 v.post(WR_CONST.ERASE_GLYPH);
             }
         }
-
+        private int _fieldIndex;
         public void rippleReplayWord(String command){
-            //amogh comment, this might be wrong for the cases when the word is not written at the place it should've been, so to accommodate that, the indices from the answer and not the written part should be received, the glyphs at wrong places(all listindicesanswer) be erased and the correct ones(from listwordsanswer) replaced.
-            CGlyphController v;
-            Word correctWord = mListWordsAnswer.get(currentWordIndex);
-            ArrayList<Integer> correctIndices = correctWord.listIndicesAnswer;
-            for (int i1 : correctIndices){
-                v = (CGlyphController) mGlyphList.getChildAt(i1);
-                v.post(WR_CONST.RIPPLE_PROTO);
-
-                //amogh added to set the valid character in response.
-
-                //amogh comment move to the animator graph -> call update letters word response,
-                CStimulusController resp = (CStimulusController) mResponseViewList.getChildAt(i1);
-                resp.setStimulusChar(mAnswer.substring(i1,i1 + 1), false);
-                resp.updateResponseState(true);
-                v.inhibitInput(true);
-            }
+            _fieldIndex = listIndicesAnswer.get(0);
+            rippleReplayWordContinued();
         }
+
 
         public void updatePostReplay(){
             //need to update the
