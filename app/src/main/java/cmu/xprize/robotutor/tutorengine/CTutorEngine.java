@@ -22,6 +22,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.PowerManager;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -34,9 +35,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Random;
 
-import cmu.xprize.comp_logging.PerformanceLogItem;
 import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.tutorengine.graph.databinding;
@@ -45,6 +44,9 @@ import cmu.xprize.robotutor.tutorengine.graph.defdata_tutor;
 import cmu.xprize.robotutor.tutorengine.graph.defvar_tutor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
+import cmu.xprize.robotutor.tutorengine.util.PromotionMechanism;
+import cmu.xprize.robotutor.tutorengine.util.StudentDataModel;
+import cmu.xprize.robotutor.tutorengine.util.TransitionMatrixModel;
 import cmu.xprize.robotutor.tutorengine.widgets.core.TSceneAnimatorLayout;
 import cmu.xprize.comp_logging.CLogManager;
 import cmu.xprize.comp_logging.ILogManager;
@@ -69,6 +71,10 @@ public class CTutorEngine implements ILoadableObject2 {
     private static CTutorEngine             singletonTutorEngine;
 
     private CMediaManager                   mMediaManager;
+
+    public static StudentDataModel          studentModel;
+    public static TransitionMatrixModel     matrix;
+    public static PromotionMechanism        promotionMechanism;
 
     static public  RoboTutor                Activity;
     static public  ILogManager              TutorLogManager;
@@ -142,6 +148,10 @@ public class CTutorEngine implements ILoadableObject2 {
      */
     static public void setDefaultLanguage(String newLang) {
         language = newLang;
+        //  any time the language changes, so should the Transition Matrix and the Student Model
+        studentModel = loadStudentModel();
+        matrix = loadTransitionMatrixModel();
+        promotionMechanism = new PromotionMechanism(studentModel, matrix);
     }
 
 
@@ -153,16 +163,6 @@ public class CTutorEngine implements ILoadableObject2 {
         return language;
     }
 
-
-    /**
-     * Called from the Activity when the back button is pressed.
-     *
-     */
-    public boolean onBackButton() {
-        boolean result = false;
-
-        return result;
-    }
 
     static public TScope getScope() {
 
@@ -223,35 +223,26 @@ public class CTutorEngine implements ILoadableObject2 {
         //
         CLogManager.setTutor(defTutor);
 
-        String featureString = RoboTutor.SELECTOR_MODE;
-
-        if(RoboTutor.SELECTOR_MODE.equals(TCONST.FTR_DIFFICULTY_ASSESS)) {
-            // generate a random number to choose which goodbye sound clip to use
-            // IMPROVE ISSUE 119 better way to do this
-            // see app/src/main/assets/tutors/activity_selector/animator_graph.json "GOODBYE_BUTTON_BEHAVIOR"
-            int goodbyeId = (new Random()).nextInt(TCONST.NUM_GOODBYE_SOUND_CLIPS) + 1;
-            featureString += ":" + TCONST.FTR_GOODBYE + "_" + goodbyeId;
-        }
-
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "**: Creating Tutor in startSessionManager: " + defTutor);
 
         // don't create a new tutor when the screen is off, because on relaunch it will set-in-motion the "KILLTUTOR"
         // https://stackoverflow.com/questions/2474367/how-can-i-tell-if-the-screen-is-on-in-android
         PowerManager powerManager = (PowerManager) Activity.getSystemService(Context.POWER_SERVICE);
-        if (powerManager != null && !powerManager.isInteractive()) {
-            Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "fx: Not creating new tutor when screen is off...");
-            return;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            if (powerManager != null && !powerManager.isInteractive()) {
+                Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "fx: Not creating new tutor when screen is off...");
+                return;
+            }
         }
 
-        createTutor(defTutor, featureString, null);
-        launchTutor(tutorBindings);
+        createAndLaunchTutor(defTutor, RoboTutor.SELECTOR_MODE, null, tutorBindings); // where Activity Selector is launched
     }
 
     /**
      *
      * This launches a new tutor immediately at startup. Used for quick debugging.
      */
-    public void quickLaunch(String tutorVariant, String tutorId, String tutorFile) {
+    static public void quickLaunch(String tutorVariant, String tutorId, String tutorFile) {
 
         for (String name: tutorVariants.keySet()){
 
@@ -269,8 +260,7 @@ public class CTutorEngine implements ILoadableObject2 {
 
         initializeBindingPattern(tutorBinding, tutorFile);
 
-        createTutor(tutorDescriptor.tutorName , tutorDescriptor.features, tutorId);
-        launchTutor(tutorBinding);
+        createAndLaunchTutor(tutorDescriptor.tutorName , tutorDescriptor.features, tutorId, tutorBinding);
     }
 
     /**
@@ -287,6 +277,7 @@ public class CTutorEngine implements ILoadableObject2 {
         RoboTutor.masterContainer.removeView(deadTutor.getTutorContainer());
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "p4: StartSessionManager in 'CTutorEngine.destroyCurrentTutor': " + defTutor);
+
         startSessionManager();
 
         Log.d(TAG, "destroyCurrentTutor: " + deadTutor.getTutorName());
@@ -343,15 +334,13 @@ public class CTutorEngine implements ILoadableObject2 {
      * @param tutorName
      * @param features
      */
-    static private void createTutor(String tutorName, String features, String tutorId) {
+    static private void createAndLaunchTutor(String tutorName, String features, String tutorId, defdata_tutor dataSource) {
 
-        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r4: killActiveTutor called from createTutor(" + tutorName + ")");
+        Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r4: killActiveTutor called from createAndLaunchTutor(" + tutorName + ")");
         killActiveTutor();
 
         // GRAY_SCREEN_BUG
-        Log.d(TAG, "createTutor: " + tutorName);
-        Log.wtf("WARRIOR_MAN", "createTutor: tutorName=" + tutorName);
-        Log.wtf("WARRIOR_MAN", "createTutor: tutorId=" + tutorId);
+        Log.d(TAG, "createAndLaunchTutor: " + tutorName + ", " + tutorId);
 
         // Create a new tutor container relative to the masterContainer
         //
@@ -365,12 +354,6 @@ public class CTutorEngine implements ILoadableObject2 {
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "p2: Initializing tutor: " + tutorName);
 
         activeTutor = new CTutor(Activity, tutorName, tutorId, (ITutorManager)tutorContainer, TutorLogManager, mRootScope, language, features);
-    }
-
-    /**
-     *  Note: You must call createTutor at some point prior to this call
-     */
-    static private void launchTutor(defdata_tutor dataSource) {
 
         activeTutor.launchTutor(dataSource);
     }
@@ -537,7 +520,7 @@ public class CTutorEngine implements ILoadableObject2 {
      */
     static public void launch(String intentType, String tutorVariant, String dataSource, String tutorId) {
 
-        Log.wtf("WARRIOR_MAN", "launch: tutorId=" + tutorId);
+        Log.d(TAG, "launch: tutorId=" + tutorId);
 
         Intent extIntent = new Intent();
         String extPackage;
@@ -560,8 +543,7 @@ public class CTutorEngine implements ILoadableObject2 {
             case "native":
 
                 Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "p3b: Creating Tutor in 'CTutor.launch': " + tutorDescriptor.tutorName);
-                createTutor(tutorDescriptor.tutorName, tutorDescriptor.features, tutorId);
-                launchTutor(tutorBinding);
+                createAndLaunchTutor(tutorDescriptor.tutorName, tutorDescriptor.features, tutorId, tutorBinding);
                 break;
 
             case "browser":
@@ -622,11 +604,67 @@ public class CTutorEngine implements ILoadableObject2 {
             //
             if(BuildConfig.LANGUAGE_OVERRIDE) {
                 language = BuildConfig.LANGUAGE_FEATURE_ID;
+                //  any time the language changes, so should the Transition Matrix and the Student Model
+            } else {
+                language = BuildConfig.LANGUAGE_FEATURE_ID;
+                if (language.equals("LANG_NULL")) {
+                    language = TCONST.LANG_SW;
+                }
             }
+
+            studentModel = loadStudentModel();
+            matrix = loadTransitionMatrixModel();
+            promotionMechanism = new PromotionMechanism(studentModel, matrix);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * DATA_MODEL (0) Initialize the student data model
+     */
+    private static StudentDataModel loadStudentModel() {
+        // initialize
+        String prefsName = "";
+        if(RoboTutor.STUDENT_ID != null) {
+            prefsName += RoboTutor.STUDENT_ID + "_";
+        }
+        prefsName += CTutorEngine.language;
+        StudentDataModel model = new StudentDataModel(RoboTutor.ACTIVITY, prefsName);
+
+        // if it's the first time playing, we want to initialize our placement values
+        String firstTime = model.getHasPlayed();
+        if (firstTime == null) {
+            model.createNewStudent();
+        }
+
+        return model;
+    }
+
+    /**
+     *  load the transition matrix model from JSON
+     * @return
+     */
+    private static TransitionMatrixModel loadTransitionMatrixModel() {
+
+        // this is whack and should be moved... see "activity_selector/tutor_descriptor.json"
+        String tutorName = "activity_selector";
+        String dataFile = "dev_data.cd1.json";
+
+        // simpler way to refer to languge
+        String lang = TCONST.langMap.get(CTutorEngine.language);
+
+        String dataPath = TCONST.TUTORROOT + "/" + tutorName + "/" + TCONST.TASSETS;
+        dataPath += "/" +  TCONST.DATA_PATH + "/" + lang + "/";
+
+        String jsonData = JSON_Helper.cacheData(dataPath + dataFile);
+
+        //
+        // Load the datasource into a separate class...
+        TransitionMatrixModel matrix = new TransitionMatrixModel(dataPath + dataFile, mRootScope);
+        matrix.validateAll();
+        return matrix;
     }
 
 

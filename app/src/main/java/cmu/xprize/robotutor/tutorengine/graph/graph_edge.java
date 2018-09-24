@@ -102,4 +102,9 @@ public class graph_edge implements ILoadableObject2 {
         // Log.d(TAG, "Loader iteration");
         loadJSON(jsonObj, (IScope2) scope);
     }
+
+    @Override
+    public String toString() {
+        return "graph_edge:constraint=" + constraint + ",edge=" + edge;
+    }
 }

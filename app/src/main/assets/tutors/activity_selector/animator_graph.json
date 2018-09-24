@@ -69,40 +69,6 @@
           ]
         },
 
-        "DEBUG_BUTTON_BEHAVIOR": {
-          "type": "QUEUE",
-          "COMMENT": "User selected Math Activity",
-          "preenter": [],
-          "reuse": true,
-          "tracks": [
-            {"name":"DEBUG_BUTTON EVENT", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "postEvent",  "parms": "BUTTON_EVENT:String|{{activity_selector.buttonbehavior}}:String", "features":""},
-
-            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "logState", "parms": "type#behavior,value#DEBUG_BUTTON_BEHAVIOR:String", "features":""}
-          ],
-          "preexit": [
-          ],
-          "edges": [
-          ]
-        },
-
-        "TAG_BUTTON_BEHAVIOR": {
-          "type": "QUEUE",
-          "COMMENT": "special tag",
-          "preenter": [],
-          "reuse": true,
-          "tracks": [
-            {"name":"TAG_BUTTON EVENT", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "postEvent",  "parms": "TAGGED_BUTTON_EVENT:String|{{activity_selector.debugTag}}:String", "features":""},
-
-            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "logState", "parms": "type#behavior,value#TAG_BUTTON_BEHAVIOR:String", "features":""}
-
-          ],
-          "preexit": [
-          ],
-          "edges": [
-
-          ]
-        },
-
         "BUTTON_BEHAVIOR": {
           "type": "QUEUE",
           "COMMENT": "User selected Math Activity",
@@ -110,7 +76,7 @@
           "reuse": true,
           "tracks": [
             {"name":"AUDIO BUTTON SELECTED", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{activity_selector.promptAudio}}.mp3","soundpackage": "default","mode": "flow", "features": ""},
-            {"name":"BUTTON ACTION EVENT", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "postEvent",  "parms": "BUTTON_EVENT:String|{{activity_selector.buttonbehavior}}:String", "features":""},
+            {"name":"BUTTON ACTION EVENT", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "postEvent",  "parms": "BUTTON_EVENT:String|{{activity_selector.buttonBehavior}}:String", "features":""},
 
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "logState", "parms": "type#behavior,value#BUTTON_BEHAVIOR:String", "features":""}
           ],
@@ -138,7 +104,7 @@
             {"name":"SAY GOODBYE", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Tell your friends and family what you learned today.mp3","soundpackage": "default","mode": "flow", "features": "FTR_DIFFICULTY_ASSESS&GOODBYE_8"},
             {"name":"SAY GOODBYE", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Can you teach your friends what you learned today.mp3","soundpackage": "default","mode": "flow", "features": "FTR_DIFFICULTY_ASSESS&GOODBYE_9"},
 
-            {"name":"BUTTON ACTION EVENT", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "postEvent",  "parms": "BUTTON_EVENT:String|{{activity_selector.buttonbehavior}}:String", "features":""},
+            {"name":"BUTTON ACTION EVENT", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "postEvent",  "parms": "BUTTON_EVENT:String|{{activity_selector.buttonBehavior}}:String", "features":""},
 
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "activity_selector", "method": "logState", "parms": "type#behavior,value#GOODBYE_BUTTON_BEHAVIOR:String", "features":""}
           ],
@@ -207,36 +173,12 @@
 
             // Conditionally load the layout
             //
-            {"type": "COMMAND", "id": "activity_selector", "method": "setLayout",  "parms": "FTR_TUTOR_SELECT:String",  "features":"FTR_TUTOR_SELECT"},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setLayout",  "parms": "FTR_DIFFICULTY_ASSESS:String",  "features":"FTR_DIFFICULTY_ASSESS"},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setLayout",  "parms": "FTR_DEBUG_SELECT:String",  "features":"FTR_DEBUG_SELECT"},
+            {"type": "COMMAND", "id": "activity_selector", "method": "setTutorSelectLayout",  "parms": "",  "features":"FTR_TUTOR_SELECT"},
+            {"type": "COMMAND", "id": "activity_selector", "method": "setDebugLayout",  "parms": "",  "features":"FTR_DEBUG_SELECT"},
 
             // Input must be inhibited until all the behaviors are set
             //
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "DESCRIBE_BEHAVIOR:String|BUTTON_DESCRIPTION:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "DESCRIBE_COMPLETE:String|SET_HESITATION_FEEDBACK:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_BEHAVIOR:String|CLEAR_HESITATION_BEHAVIOR:String" ,"features":""},
-
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "LAUNCH_EVENT:String|LAUNCH_BEHAVIOR:String" ,"features":""},
-
-            // Map the button events defined in the activity_selector dataSource to Behaviors
-            //
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_WRITING:String|BUTTON_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_STORIES:String|BUTTON_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_MATH:String|BUTTON_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_SHAPES:String|BUTTON_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_ROBOTUTOR:String|BUTTON_BEHAVIOR:String" ,"features":""},
-
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_CONTINUE:String|BUTTON_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_MAKE_HARDER:String|BUTTON_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_MAKE_EASIER:String|BUTTON_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_AUTO_DIFFICULTY:String|BUTTON_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_REPEAT:String|BUTTON_BEHAVIOR:String" ,"features":""},
-
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_EXIT:String|EXIT_BUTTON_BEHAVIOR:String" ,"features":""},
-
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_DEBUGLAUNCH:String|DEBUG_BUTTON_BEHAVIOR:String" ,"features":""},
-            {"type": "COMMAND", "id": "activity_selector", "method": "setStickyBehavior", "parms": "SELECT_DEBUG_TAG_LAUNCH:String|TAG_BUTTON_BEHAVIOR:String" ,"features":""}
+            {"type": "COMMAND", "id": "activity_selector", "method": "setAllStickyBehavior",  "parms": "",  "features":""}
           ]
         }
 
@@ -250,9 +192,6 @@
 
         "CANCEL_BUTTON_DESCRIPTION":  {"type": "COMMAND", "id": "BUTTON_DESCRIPTION", "method": "cancelNode", "parms": "", "features":""},
         "CANCEL_INTRO_STATEMENT":  {"type": "COMMAND", "id": "INTRO_STATEMENT_BEHAVIOR", "method": "cancelNode", "parms": "", "features":""},
-
-        "LAUNCH_BEHAVIOR_OLD":{"type": "COMMAND", "cmd": "LAUNCH-TUTOR", "parms":"{{activity_selector.intent}}:String|{{activity_selector.intentData}}:String|{{activity_selector.dataSource}}:String|{{activity_selector.features}}:String" },
-        "LAUNCH_BEHAVIOR":{"type": "COMMAND", "cmd": "LAUNCH-TUTOR", "parms":"{{activity_selector.intent}}:String|{{activity_selector.intentData}}:String|{{activity_selector.dataSource}}:|{{activity_selector.tutorId}}:String|{{activity_selector.features}}:String" },
 
         "CANCEL_POINT":    {"type": "COMMAND", "id": "activity_selector", "method": "postEvent",  "parms": "CANCEL_POINTAT:String", "features":""},
         "CANCEL_FEEDBACK": {"type": "COMMAND", "cmd": "CANCEL_NODE"},

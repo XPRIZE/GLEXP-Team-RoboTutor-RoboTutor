@@ -77,6 +77,7 @@ import static cmu.xprize.comp_logging.PerformanceLogItem.MATRIX_TYPE.SONGS_MATRI
 import static cmu.xprize.comp_logging.PerformanceLogItem.MATRIX_TYPE.STORIES_MATRIX;
 import static cmu.xprize.comp_logging.PerformanceLogItem.MATRIX_TYPE.UNKNOWN_MATRIX;
 import static cmu.xprize.util.TCONST.CODE_DROP_1_ASSET_PATTERN;
+import static cmu.xprize.util.TCONST.CODE_DROP_2_ASSET_PATTERN;
 import static cmu.xprize.util.TCONST.GRAPH_MSG;
 import static cmu.xprize.util.TCONST.MATH_PLACEMENT;
 import static cmu.xprize.util.TCONST.PROTOTYPE_ASSET_PATTERN;
@@ -99,9 +100,9 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     // VARIABLES FOR QUICK DEBUG LAUNCH
     private static final boolean QUICK_DEBUG = true;
-    private static final String debugTutorVariant = "write.sen.copy.wrd";
+    private static final String debugTutorVariant = "write.sen.copy.sen";
     private static final String debugTutorId = "write.wrd:story_1_1";
-    private static final String debugTutorFile = "[file]write.sen.copy.wrd_1.json";
+    private static final String debugTutorFile = "[file]write.sen.copy.wrd.1.json";
 
     //amogh missing letter
 //    private static final String debugTutorFile = "[file]write.missingLtr_0.1.2.fin.s.json";
@@ -112,6 +113,10 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 //    private static final String debugTutorId = "write.wrd:story_1_1";
 //    private static final String debugTutorFile = "[file]write.ltr.uc.trc_vow.asc.A..Z.1.json";
 
+//    private static final boolean QUICK_DEBUG = false;
+//    private static final String debugTutorVariant = "picmatch";
+//    private static final String debugTutorId = "picmatch::animal";
+//    private static final String debugTutorFile = "[file]picmatch_food.json";
     //private static final String debugTutorVariant = "numdiscr";
     //private static final String debugTutorVariant = "math";
     //private static final String debugTutorId = "numdiscr:sample";
@@ -119,6 +124,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     //private static final String debugTutorFile = "[file]numdiscr_sample.json";
     // private static final String debugTutorFile = "[file]math_0..800.ADD-100-V-S.incr.13.json";
 
+    public static final boolean TURN_OFF_PLACEMENT_FOR_QA = true;
     //private static final String debugTutorFile = "[file]math_10..80.SUB-2D-V-S.rand.12.json";
 
     private static final String LOG_SEQUENCE_ID = "LOG_SEQUENCE_ID";
@@ -133,7 +139,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 //    private static final String debugTutorFile = "[file]write.ltr.uc.trc_vow.asc.A..Z.1.json";
 
 
-    private CTutorEngine        tutorEngine;
     private CMediaController    mMediaController;
 
     private CLoaderView         progressView;
@@ -168,7 +173,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     private boolean                 isReady       = false;
     private boolean                 engineStarted = false;
     static public boolean           STANDALONE    = false;
-    static public String            SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
+    static public String            SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT; // this is only used as a feature, when launching TActivitySelector...
+    static public boolean           MUST_CALCULATE_NEXT_TUTOR = false;
 //    static public String        SELECTOR_MODE = TCONST.FTR_DEBUG_SELECT;
 
 
@@ -473,6 +479,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
                 // ZZZ comment out old pattern
                 tutorAssetManager.updateAssetPackages(ROBOTUTOR_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH );
                 tutorAssetManager.updateAssetPackages(CODE_DROP_1_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
+                tutorAssetManager.updateAssetPackages(CODE_DROP_2_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
                 tutorAssetManager.updateAssetPackages(PROTOTYPE_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
                 tutorAssetManager.updateAssetPackages(QA_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
 
@@ -554,7 +561,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
             // Load the default tutor defined in assets/tutors/engine_descriptor.json
             // TODO: Handle tutor creation failure
             //
-            tutorEngine = CTutorEngine.getTutorEngine(RoboTutor.this);
+            CTutorEngine.getTutorEngine(RoboTutor.this);
 
             // If running without built-in home screen add a start screen
             //
@@ -606,7 +613,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         LOG_ID = CPreferenceCache.initLogPreference(this);
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "xx: startSessionManager in 'onStartTutor'");
-        tutorEngine.startSessionManager();
+        CTutorEngine.startSessionManager();
 
         startView.stopTapTutor();
         masterContainer.removeView(startView);
@@ -626,7 +633,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         LOG_ID = CPreferenceCache.initLogPreference(this);
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "xx: startSessionManager in 'onStartTutor'");
-        tutorEngine.quickLaunch(debugTutorVariant, debugTutorId, debugTutorFile);
+        CTutorEngine.quickLaunch(debugTutorVariant, debugTutorId, debugTutorFile);
 
         startView.stopTapTutor();
         masterContainer.removeView(startView);
@@ -646,7 +653,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         logManager.postEvent_V(TAG, "RoboTuTor:onBackPressed");
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r4: killActiveTutor called from onBackPressed()");
-        tutorEngine.killActiveTutor();
+        CTutorEngine.killActiveTutor();
 
         // Allow the screen to sleep when not in a session
         //
@@ -657,12 +664,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         masterContainer.addAndShow(startView);
         startView.startTapTutor();
         setFullScreen();
-
-        if(tutorEngine != null) {
-            if(tutorEngine.onBackButton()) {
-                super.onBackPressed();
-            }
-        }
     }
 
 
@@ -751,7 +752,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         // Need to do this before releasing TTS
         //
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r4: killActiveTutor called from onStop()");
-        tutorEngine.killActiveTutor();
+        CTutorEngine.killActiveTutor();
 
         if(TTS != null && TTS.isReady()) {
 
@@ -779,8 +780,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         super.onPause();
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "rt: onPause");
         logManager.postEvent_V(TAG, "RoboTutor:onPause");
-
-        SharedPreferences.Editor prefs = getPreferences(Context.MODE_PRIVATE).edit();
     }
 
 

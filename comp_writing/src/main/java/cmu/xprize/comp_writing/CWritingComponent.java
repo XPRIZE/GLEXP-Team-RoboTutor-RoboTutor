@@ -1669,7 +1669,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         mActiveWord.rippleReplayWord(type);
         mActiveWord.updatePostReplay();
         if(activityFeature.contains("FTR_SEN_WRD")){
-            evaluateSentenceWordLevel();
+//            evaluateSentenceWordLevel();
         }
         else if(activityFeature.contains("FTR_SEN_SEN")){
             updateSentenceEditSequence();
@@ -1722,7 +1722,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             ArrayList<Integer> correctIndices = correctWord.listIndicesAnswer;
             v = (CGlyphController) mGlyphList.getChildAt(_fieldIndex);
             v.post(WR_CONST.RIPPLE_PROTO);
-            v.setRecognisedChar(v.getExpectedChar()); //the recognised character is set to the expected character (since the animato)
+            v.setRecognisedChar(v.getExpectedChar()); //the recognised character is set to the expected character (since the animation).
             //amogh added to set the valid character in response.
 
             //amogh comment move to the animator graph -> call update letters word response,
@@ -2112,6 +2112,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             //amogh add finish
 
         }
+
+        //currently redundant as all activities have been covered in the cases above
         else {
 
             for(int i1 =0 ; i1 < mAnswer.length() ; i1++)

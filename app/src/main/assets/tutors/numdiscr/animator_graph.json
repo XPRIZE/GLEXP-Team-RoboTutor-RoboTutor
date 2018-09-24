@@ -88,7 +88,7 @@
           "COMMENT": "Intro Clip - we only ever visit this node once",
           "maptype":"moduleMap",
           "mapname": "PLAYINTRO",
-          "preenter": ["SET_VERSION", "SET_DATASOURCE", "SET_WRONG_BEHAVIOR", "SET_RIGHT_BEHAVIOR", "SET_NEXT_BEHAVIOR"],
+          "preenter": ["SET_VERSION", "SET_WRONG_BEHAVIOR", "SET_RIGHT_BEHAVIOR", "SET_NEXT_BEHAVIOR"],
           "preexit": [],
           "edges": [
             {
@@ -294,7 +294,6 @@
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
-        "SET_DATASOURCE":{"type": "COMMAND", "id": "SNumDiscr", "method": "setDataSource", "parms": "LOCAL_FILE:String","features":""},
 
         // this is so unnecessary
         "SET_WRONG_BEHAVIOR": {"type": "COMMAND", "id": "SNumDiscr", "method": "setStickyBehavior", "parms": "ND_WRONG:String|ND_WRONG:String" ,"features":""},

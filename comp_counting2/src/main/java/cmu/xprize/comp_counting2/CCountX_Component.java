@@ -371,6 +371,15 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
     }
 
     /**
+     * Overridden by child class.
+     *
+     * @param v
+     */
+    public void nextWord(View v) {
+
+    }
+
+    /**
      * Point at a view
      */
     public void pointAtCenterOfActivity() {

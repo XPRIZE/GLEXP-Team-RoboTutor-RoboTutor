@@ -87,6 +87,8 @@ public class PerformanceData {
      * @param buttonName
      */
     public void setSelfAssessment(String buttonName) {
+        selfAssessment = null;
+        if (buttonName == null) return;
         switch(buttonName) {
 
             case AS_CONST.SELECT_REPEAT:

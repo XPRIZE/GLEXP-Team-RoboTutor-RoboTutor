@@ -28,4 +28,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile project(path: ':util')
     compile project(':comp_logging')
+    compile project(':comp_debug')
 }

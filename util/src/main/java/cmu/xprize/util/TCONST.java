@@ -32,8 +32,7 @@ public class TCONST {
     // the user wants to select another tutor.
     //
 
-    public static final String FTR_TUTOR_SELECT       = "FTR_TUTOR_SELECT";
-    public static final String FTR_DIFFICULTY_ASSESS  = "FTR_DIFFICULTY_ASSESS";
+    public static final String FTR_TUTOR_SELECT       = "FTR_TUTOR_SELECT"; // these are never read anymore, but are still used as features
     public static final String FTR_DEBUG_SELECT       = "FTR_DEBUG_SELECT";
     public static final String FTR_DEBUG_LAUNCH       = "FTR_DEBUG_LAUNCH";
 
@@ -44,19 +43,8 @@ public class TCONST {
     public static final String SKILL_WRITING    = "letters";
     public static final String SKILL_STORIES    = "stories";
     public static final String SKILL_MATH       = "numbers";
-    public static final String SKILL_SHAPES     = "shapes";
-
-
-    public static final String SKILL_WRITING_PLACEMENT    = "letters_placement";
-    public static final String SKILL_MATH_PLACEMENT       = "numbers_placement";
-
 
     public static final String FINISH           = "FINISH";
-    public static final String SELECTOR_MODE    = "SELECTOR_MODE";
-
-    public static final String TUTOR_SELECTED   = "TUTOR_SELECTED";
-    public static final String SKILL_SELECTED   = "SKILL_SELECTED";
-    public static final String DEBUG_LAYOUT     = "DEBUG_LAYOUT";
 
 
     // RoboTutor Version spec Index meaning 0.1.2.3
@@ -84,6 +72,7 @@ public class TCONST {
     //
     public static final String ROBOTUTOR_ASSET_PATTERN = "rtasset_";
     public static final String CODE_DROP_1_ASSET_PATTERN = "codedrop1_";
+    public static final String CODE_DROP_2_ASSET_PATTERN = "codedrop2_";
     public static final String PROTOTYPE_ASSET_PATTERN = "protoassets_";
     public static final String QA_ASSET_PATTERN = "qa_assets";
 
@@ -305,6 +294,7 @@ public class TCONST {
     public static final String DEFAULT_STUDENT_ID = "DEBUG";
     public static final String STUDENT_ID_VAR = "studentId";
     public static final String SESSION_ID_VAR = "sessionId";
+    public static final String LAST_TUTOR = "LAST_TUTOR_PLAYED";
 
 
     static public HashMap<String, Integer> colorMap = new HashMap<String,Integer>();
@@ -866,7 +856,7 @@ public class TCONST {
 
     // Debugger Thumb key words
     public enum Thumb {
-        AKIRA, BPOP_NUM, GL, MN, BPOP_LTR, CX_1, CX_10, CX_100, MATH, NUMSCALE, STORY_1, STORY_2, STORY_3, STORY_4, STORY_5, SONG, STORY_NONSTORY, WRITE
+        AKIRA, BPOP_NUM, GL, MN, BPOP_LTR, CX_1, CX_10, CX_100, MATH, NUMSCALE, STORY_1, STORY_2, STORY_3, STORY_4, STORY_5, SONG, STORY_NONSTORY, WRITE, SPELLING, PICMATCH, NUMCOMPARE, COMPREHENSION, PLACEVALUE, BIGMATH, NOTHING
     }
 
     // debug vals
@@ -875,7 +865,7 @@ public class TCONST {
     public static final String DEBUG_AUDIO_FILE = "DEBUG_AUDIO";
 
     public static final String PLACEMENT_TAG = "DEBUG_PLACEMENT";
-    public static final String MATH_PLACEMENT = "MATH_PLACEMENT";
+    public static final String MATH_PLACEMENT = "MATH_PLACEMENT"; // TOGGLE_PLACEMENT trace me...
     public static final String MATH_PLACEMENT_INDEX = "MATH_PLACEMENT_INDEX";
     public static final String WRITING_PLACEMENT = "WRITING_PLACEMENT";
     public static final String WRITING_PLACEMENT_INDEX = "WRITING_PLACEMENT_INDEX";

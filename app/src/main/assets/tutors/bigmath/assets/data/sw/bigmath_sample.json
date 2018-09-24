@@ -1,0 +1,26 @@
+{
+  "bootFeatures": "FTR_DEMO_ADD",
+
+  "dataSource": [
+
+    {"type": "CBigMath_Data", "level": "demo", "task": "Count up by 1", "dataset": [14,1,15], "operation": "+"},
+
+    {"type": "CBigMath_Data", "level": "demo", "task": "Count up by 1", "dataset": [38, 43, 81], "operation": "+"},
+
+    {"type": "CBigMath_Data", "level": "demo", "task": "Count up by 1", "dataset": [48, 24, 72], "operation": "+"},
+
+    {"type": "CBigMath_Data", "level": "demo", "task": "Count up by 1", "dataset": [29, 27, 56], "operation": "+"},
+
+    {"type": "CBigMath_Data", "level": "demo", "task": "Count up by 1", "dataset": [19, 27, 46], "operation": "+"},
+
+
+
+    {"type": "CBigMath_Data", "level": "demo", "task": "Count up by 1", "dataset": [15,1,16], "operation": "+"},
+
+    {"type": "CBigMath_Data", "level": "demo", "task": "Count up by 1", "dataset": [16,1,17], "operation": "+"},
+
+    {"type": "CBigMath_Data", "level": "demo", "task": "Count up by 1", "dataset": [17,1,18], "operation": "+"},
+
+    {"type": "CBigMath_Data", "level": "demo", "task": "Count up by 1", "dataset": [18,1,19], "operation": "+"}]
+
+}

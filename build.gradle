@@ -27,7 +27,7 @@ allprojects {
         rtCompileSdkVersion=26          //Integer
         rtBuildToolsVersion="26.0.1"    //String
 
-        rtMinSdkVersion=21
+        rtMinSdkVersion=19
 
         // Note that using target version 22 bypasses the new run-time permissions found
         // in Marshmallow 23
@@ -40,7 +40,7 @@ allprojects {
         // <Milestone release> <Feature Release> <Patch release> <Asset Compatibility INDEX>
 
 
-        rtVersionName="2.1.0.1"
+        rtVersionName="2.3.0.1"
 
     }
 }

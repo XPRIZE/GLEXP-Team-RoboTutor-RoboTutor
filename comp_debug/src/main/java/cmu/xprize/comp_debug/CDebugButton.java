@@ -17,6 +17,7 @@ import static cmu.xprize.comp_debug.CD_CONST.STATE_HARDER;
 import static cmu.xprize.comp_debug.CD_CONST.STATE_NEXT;
 import static cmu.xprize.comp_debug.CD_CONST.STATE_NORMAL;
 import static cmu.xprize.comp_debug.CD_CONST.STATE_NULL;
+import static cmu.xprize.util.TCONST.Thumb.NOTHING;
 
 public class CDebugButton extends ImageButton {
 
@@ -103,6 +104,9 @@ public class CDebugButton extends ImageButton {
                 String tutorType = tutorDesc[0];
                 Log.d("BOJACK", "tutorType = " + tutorType);
 
+                if (thumbnail == null) {
+                    thumbnail = NOTHING;
+                }
                 switch (thumbnail) {
                     case AKIRA:
                         tutor_CONST = CD_CONST.TUTOR_AKIRA;
@@ -176,6 +180,7 @@ public class CDebugButton extends ImageButton {
                         tutor_CONST = CD_CONST.TUTOR_WRITE;
                         break;
 
+                    case NOTHING:
                     default:
                         tutor_CONST = CD_CONST.SKILLS_NORMAL;
                         break;
@@ -193,14 +198,14 @@ public class CDebugButton extends ImageButton {
                 case STATE_NEXT:
                 case STATE_HARDER:
                 case STATE_EASIER:
-                    this.setBackground(getResources().getDrawable(R.drawable.outline_normal, null));
+                    this.setBackground(getResources().getDrawable(R.drawable.outline_normal));
                     this.setAlpha(0.3f); // adjust opacity to make selected tutors stand out
                     break;
 
                     // BOJACK 2 remove these
                 case STATE_CURRENT:
                     isCurrent = true;
-                    this.setBackground(getResources().getDrawable(R.drawable.outline_current, null));
+                    this.setBackground(getResources().getDrawable(R.drawable.outline_current));
                     this.setAlpha(1f); // adjust opacity to make selected tutors stand out
                     //mergeDrawableStates(drawableState, CD_CONST.SKILLS_CURRENT);
                     break;
@@ -233,7 +238,7 @@ public class CDebugButton extends ImageButton {
 
                         // story
                     case "story.echo::story_1":
-                        this.setBackground(getResources().getDrawable(R.drawable.outline_xprize, null));
+                        this.setBackground(getResources().getDrawable(R.drawable.outline_xprize));
                         this.setAlpha(0.5f); // adjust opacity to make selected tutors stand out
 
 
@@ -243,7 +248,7 @@ public class CDebugButton extends ImageButton {
             }
 
             if (isCurrent) {
-                this.setBackground(getResources().getDrawable(R.drawable.outline_current, null));
+                this.setBackground(getResources().getDrawable(R.drawable.outline_current));
                 this.setAlpha(1f); // adjust opacity to make selected tutors stand out
 
             }

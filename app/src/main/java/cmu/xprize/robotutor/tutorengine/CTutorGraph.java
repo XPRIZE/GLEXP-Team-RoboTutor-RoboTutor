@@ -19,6 +19,7 @@
 package cmu.xprize.robotutor.tutorengine;
 
 
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -39,6 +40,9 @@ import cmu.xprize.robotutor.tutorengine.graph.databinding;
 import cmu.xprize.robotutor.tutorengine.graph.defdata_tutor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
+import cmu.xprize.robotutor.tutorengine.util.PromotionMechanism;
+import cmu.xprize.robotutor.tutorengine.util.StudentDataModel;
+import cmu.xprize.robotutor.tutorengine.util.TransitionMatrixModel;
 import cmu.xprize.robotutor.tutorengine.widgets.core.IDataSink;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_logging.CLogManager;
@@ -86,7 +90,6 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
 
 
     final private String       TAG       = "CTutorGraph";
-
 
     /**
      *
@@ -216,6 +219,9 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
                             event.setTimestamp(System.currentTimeMillis());
                             RoboTutor.perfLogManager.postPerformanceLogWithoutContext(event);
 
+                            // assess student performance
+                            CTutorEngine.promotionMechanism.adjustPositionFromPreviousPerformance(mTutor);
+
                             mTutor.post(TCONST.ENDTUTOR);
                         }
                         break;
@@ -237,7 +243,6 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
             }
         }
     }
-
 
     /**
      *  Disable the input queue permenantly in prep for destruction

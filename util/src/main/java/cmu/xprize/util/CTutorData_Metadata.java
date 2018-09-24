@@ -18,7 +18,6 @@ import cmu.xprize.common.R;
 
 public class CTutorData_Metadata {
 
-
     public static TCONST.Thumb getThumbImage(CAt_Data tutor) {
 
 
@@ -26,7 +25,7 @@ public class CTutorData_Metadata {
         // tutortype is first token... e.g. "story.hear" --> "story"
         String[] tutorDesc = tutor.tutor_desc.split("\\.");
         if (tutorDesc.length == 0) {
-            return null;
+            return TCONST.Thumb.NOTHING;
         }
         Log.d("CHUNT", "tutorDesc = " + tutorDesc + ", " + tutorDesc.length);
 
@@ -122,8 +121,26 @@ public class CTutorData_Metadata {
                 return TCONST.Thumb.WRITE;
 
 
+            // Added Tutors Code Drop 2
+            case "picmatch":
+                return TCONST.Thumb.PICMATCH;
+
+            case "placevalue":
+                return TCONST.Thumb.PLACEVALUE;
+
+            case "numcompare":
+                return TCONST.Thumb.NUMCOMPARE;
+
+            case "spelling":
+                return TCONST.Thumb.SPELLING;
+
+            case "bigmath":
+                return TCONST.Thumb.BIGMATH;
+
+
+
             default:
-                return null;
+                return TCONST.Thumb.NOTHING;
 
         }
 

@@ -2,6 +2,7 @@ package cmu.xprize.comp_debug;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.percent.PercentRelativeLayout;
 import android.text.Html;
 import android.util.AttributeSet;
@@ -436,13 +437,12 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
         createCustomMenu(SSpellingMenu, spellingTutors);
 
         String[][] picMatchTutors = {
-                {"picmatch", "picmatch:animals_1", "[file]picmatch_animals_1.json"},
-                {"picmatch", "picmatch:animals_2", "[file]picmatch_animals_2.json"},
-                {"picmatch", "picmatch:food_1", "[file]picmatch_food_1.json"},
-                {"picmatch", "picmatch:food_2", "[file]picmatch_food_2.json"},
-                {"picmatch", "picmatch:objects_1", "[file]picmatch_objects_1.json"},
-                {"picmatch", "picmatch:objects_2", "[file]picmatch_objects_2.json"},
-                {"picmatch", "picmatch:objects_3", "[file]picmatch_objects_3.json"}
+                {"picmatch", "picmatch:animal", "[file]picmatch_animal.json"},
+                {"picmatch", "picmatch:body", "[file]picmatch_body.json"},
+                {"picmatch", "picmatch:food", "[file]picmatch_food.json"},
+                {"picmatch", "picmatch:thing", "[file]picmatch_thing.json"},
+                {"picmatch", "picmatch:people", "[file]picmatch_people.json"},
+                {"picmatch", "picmatch:nature", "[file]picmatch_nature.json"}
         };
         createCustomMenu(SPictureMatchMenu, picMatchTutors);
 
@@ -474,7 +474,11 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
         button.setText(text);
         button.setBackgroundColor(mContext.getResources().getColor(R.color.newCustomButton));
         button.setTextColor(Color.WHITE);
-        button.setBackground(mContext.getDrawable(R.drawable.launchnormal));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            button.setBackground(mContext.getDrawable(R.drawable.launchnormal));
+        } else {
+            button.setBackground(mContext.getResources().getDrawable(R.drawable.launchnormal));
+        }
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(0, 0, 50, 15);
         button.setLayoutParams(layoutParams);
@@ -623,6 +627,16 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
         int thumbId;
 
+        // https://stackoverflow.com/questions/4427608/android-getting-resource-id-from-string
+        thumbId = getThumbId(tutorThumb);
+        ScurrentTutorImage.setImageResource(thumbId);
+        ScurrentTutorImage.setPadding(36, 36, 36, 36);
+        ScurrentTutorImage.setBackground(getResources().getDrawable(R.drawable.outline_current_large, null));
+
+    }
+
+    public static int getThumbId(Thumb tutorThumb) {
+        int thumbId;
         switch(tutorThumb) {
             case AKIRA:
                 thumbId = R.drawable.thumb_akira;
@@ -697,15 +711,33 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
                 thumbId = R.drawable.thumb_write;
                 break;
 
+            case PICMATCH:
+                thumbId = R.drawable.thumb_picmatch_qa;
+                break;
+
+            case PLACEVALUE:
+                thumbId = R.drawable.thumb_placevalue_qa;
+                break;
+
+            case NUMCOMPARE:
+                thumbId = R.drawable.thumb_numcompare_qa;
+                break;
+
+            case SPELLING:
+                thumbId = R.drawable.thumb_spelling_qa;
+                break;
+
+            case BIGMATH:
+                thumbId = R.drawable.thumb_bigmath_qa;
+                break;
+
             default:
                 thumbId = R.drawable.debugnull;
                 break;
 
         }
-        ScurrentTutorImage.setImageResource(thumbId);
-        ScurrentTutorImage.setPadding(36, 36, 36, 36);
-        ScurrentTutorImage.setBackground(getResources().getDrawable(R.drawable.outline_current_large, null));
 
+        return thumbId;
     }
 
 
