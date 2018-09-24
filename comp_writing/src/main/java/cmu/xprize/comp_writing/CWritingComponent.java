@@ -2113,7 +2113,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         }
 
-        //currently redundant as all activities have been covered in the cases above
         else {
 
             for(int i1 =0 ; i1 < mAnswer.length() ; i1++)
