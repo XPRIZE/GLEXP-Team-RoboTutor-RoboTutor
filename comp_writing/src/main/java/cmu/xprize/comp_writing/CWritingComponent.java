@@ -1722,7 +1722,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             ArrayList<Integer> correctIndices = correctWord.listIndicesAnswer;
             v = (CGlyphController) mGlyphList.getChildAt(_fieldIndex);
             v.post(WR_CONST.RIPPLE_PROTO);
-
+            v.setRecognisedChar(v.getExpectedChar()); //the recognised character is set to the expected character (since the animato)
             //amogh added to set the valid character in response.
 
             //amogh comment move to the animator graph -> call update letters word response,
