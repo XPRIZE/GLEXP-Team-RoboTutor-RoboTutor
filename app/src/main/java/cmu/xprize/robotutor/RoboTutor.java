@@ -112,10 +112,11 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     public static final boolean TURN_OFF_PLACEMENT_FOR_QA = true;
     //private static final String debugTutorFile = "[file]math_10..80.SUB-2D-V-S.rand.12.json";
+    public static final String MATRIX_FILE = "dev_data.qa.json"; // "dev_data.json";
 
     private static final String LOG_SEQUENCE_ID = "LOG_SEQUENCE_ID";
 
-    public static final boolean OLD_MENU = true;
+    public static final boolean OLD_MENU = false;
 
     //amogh missing letter
 //    private static final String debugTutorFile = "[file]write.missingLtr_0.1.2.fin.s.json";

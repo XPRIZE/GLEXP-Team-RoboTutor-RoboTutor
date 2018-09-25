@@ -10,12 +10,14 @@ import java.util.Map;
 
 import cmu.xprize.comp_session.AS_CONST;
 import cmu.xprize.robotutor.RoboTutor;
+import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.util.CPlacementTest_Tutor;
 import cmu.xprize.util.TCONST;
 
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_MATH;
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING;
+import static cmu.xprize.util.TCONST.LANG_SW;
 import static cmu.xprize.util.TCONST.LAST_TUTOR;
 import static cmu.xprize.util.TCONST.PLACEMENT_TAG;
 
@@ -72,11 +74,11 @@ public class StudentDataModel {
         _editor.putString(HAS_PLAYED_KEY, String.valueOf(true));
 
         // writing: Placement = true. Placement Index starts at 0
-        _editor.putBoolean(StudentDataModel.WRITING_PLACEMENT_KEY, true);
+        _editor.putBoolean(StudentDataModel.WRITING_PLACEMENT_KEY, CTutorEngine.language.equals(LANG_SW) && !RoboTutor.TURN_OFF_PLACEMENT_FOR_QA);
         _editor.putInt(StudentDataModel.WRITING_PLACEMENT_INDEX_KEY, 0);
 
         // math: Placement = true. Placement Index starts at 0
-        _editor.putBoolean(StudentDataModel.MATH_PLACEMENT_KEY, true);
+        _editor.putBoolean(StudentDataModel.MATH_PLACEMENT_KEY, CTutorEngine.language.equals(LANG_SW) &&  !RoboTutor.TURN_OFF_PLACEMENT_FOR_QA);
         _editor.putInt(StudentDataModel.MATH_PLACEMENT_INDEX_KEY, 0);
 
         if(NEW_WAY) {
@@ -93,7 +95,7 @@ public class StudentDataModel {
     public void initializeTutorPositions(TransitionMatrixModel matrix) {
 
         // initialize math placement
-        boolean useMathPlacement = getMathPlacement();
+        boolean useMathPlacement = getMathPlacement() && CTutorEngine.language.equals(LANG_SW) &&  !RoboTutor.TURN_OFF_PLACEMENT_FOR_QA;
 
         RoboTutor.logManager.postEvent_V(PLACEMENT_TAG, String.format("useMathPlacement = %s", useMathPlacement));
         if(useMathPlacement) {
@@ -103,10 +105,12 @@ public class StudentDataModel {
             String mathTutorID = mathPlacementTutor.tutor; // does this need to happen every time???
             updateMathTutorID(mathTutorID);
             RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("mathTutorID = %s", mathTutorID));
+        } else {
+            updateMathTutorID(matrix.rootSkillMath);
         }
 
         // initialize writing placement
-        boolean useWritingPlacement = getWritingPlacement();
+        boolean useWritingPlacement = getWritingPlacement() && CTutorEngine.language.equals(LANG_SW) &&  !RoboTutor.TURN_OFF_PLACEMENT_FOR_QA;
         RoboTutor.logManager.postEvent_V(PLACEMENT_TAG, String.format("useWritingPlacement = %s", useWritingPlacement));
         if (useWritingPlacement) {
             int writingPlacementIndex = getWritingPlacementIndex();
@@ -115,6 +119,8 @@ public class StudentDataModel {
             String writingTutorID = writePlacementTutor.tutor;
             updateWritingTutorID(writingTutorID);
             RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("writingTutorID = %s", writingTutorID));
+        } else {
+            updateWritingTutorID(matrix.rootSkillWrite);
         }
 
         // stories doesn't have placement testing, so initialize at root

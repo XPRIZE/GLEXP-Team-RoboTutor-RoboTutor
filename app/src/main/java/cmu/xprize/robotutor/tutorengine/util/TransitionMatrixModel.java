@@ -82,6 +82,9 @@ public class TransitionMatrixModel implements ILoadableObject {
 
     }
 
+    /**
+     * TODO this should be done in a test case, jeez
+     */
     public void validateAll() {
         validateRootVectors();
 
@@ -90,8 +93,8 @@ public class TransitionMatrixModel implements ILoadableObject {
         validateTable(storyTransitions,  "storyTransition: ");
         validateTable(mathTransitions ,  "mathTransition: ");
 
-        validatePlacementProgression(writePlacement, writeTransitions);
-        validatePlacementProgression(mathPlacement, mathTransitions);
+//        validatePlacementProgression(writePlacement, writeTransitions);
+//        validatePlacementProgression(mathPlacement, mathTransitions);
     }
 
 

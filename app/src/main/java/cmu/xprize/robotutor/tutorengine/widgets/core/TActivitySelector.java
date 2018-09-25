@@ -181,14 +181,10 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
         Log.wtf("STUDENT_MODEL:TUTOR_SELECT", studentModel.toString());
 
-        // English version still defined in JSON...
-        if (CTutorEngine.language.equals(TCONST.LANG_SW)) {
-            _activeLayout = menu.initializeActiveLayout();
-        }
-
         SaskActivity.setVisibility(VISIBLE);
         SdebugActivity.setVisibility(GONE);
 
+        _activeLayout = menu.initializeActiveLayout();
         CAt_Data[] nextTutors = menu.getTutorsToShow();;
         String layoutName = menu.getLayoutName();
 
