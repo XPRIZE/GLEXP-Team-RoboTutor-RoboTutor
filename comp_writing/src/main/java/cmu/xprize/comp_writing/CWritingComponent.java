@@ -2122,7 +2122,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 resp.setWritingController(this);
             } //amogh comment move this to the animator graph
             activateEditMode();
-
+//            mSentenceAttempts++;
+            updateSentenceAttemptFeature();
             //amogh add finish
 
         }
