@@ -565,6 +565,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 r = (CStimulusController) LayoutInflater.from(getContext())
                         .inflate(R.layout.recog_resp_comp, null, false);
                 mResponseViewList.addView(r, index + inc);
+
                 r.setStimulusChar(" ",false);
                 r.setLinkedScroll(mDrawnScroll);
                 r.setWritingController(this);
@@ -580,9 +581,14 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     v.setIsLast(true);
                 }
 
+                v.setResponseView(mResponseViewList);
+
+                //set the expected character if possible.
 
                 mGlyphList.addView(v, index + inc);
-
+                v.showDeleteSpaceButton(true);
+                v.showInsLftButton(true);
+                v.showInsRgtButton(true);
                 v.setLinkedScroll(mDrawnScroll);
                 v.setWritingController(this);
 
@@ -1969,6 +1975,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         _spaceIndices.clear();
         mRecogList.removeAllViews();
         mResponseViewList.removeAllViews(); //amogh added
+
         // XYZ check if is story
         if(isStory) {
             // mStimulus = getStoryStimulus(storyName, storyLine);
@@ -2059,7 +2066,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         else if(activityFeature.contains("FTR_SEN_CORR")){
             //load glyph input container
             int expectedIndex = 0; //in order to set the expected answer correctly
-            for(int i1 =0 ; i1 < mStimulus.length() ; i1++)
+            int stimulusLength = mStimulus.length();
+            for(int i1 = 0 ; i1 < stimulusLength ; i1++)
             {
                 // create a new view
                 v = (CGlyphController)LayoutInflater.from(getContext())
@@ -2070,7 +2078,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 //amogh comment - needs edits, need a proper computation function to be able to calculate the differences between the
                 //
 
-                String expectedChar = mAnswer.substring(expectedIndex,expectedIndex+1);
+                //amogh comment - see if setting expected character is that important
+                String expectedChar = mStimulus.substring(expectedIndex,expectedIndex+1);
+
                 if(!deleteCorrectionIndices.contains(i1)){
                     expectedIndex++;
                 }
@@ -2127,6 +2137,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 // Last is used for display updates - limits the extent of the baseline
                 v.setIsLast(i1 ==  mAnswer.length()-1);
+
+                //need to set the expected character to something meaningful
                 String expectedChar = mAnswer.substring(i1,i1+1);
 
                 v.setExpectedChar(expectedChar);

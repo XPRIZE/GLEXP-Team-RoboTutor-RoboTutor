@@ -536,7 +536,8 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                         _previousRecognisedChar = _recognisedChar; //saving the current recognised character before removing it.
                         erase();
                         _recognisedChar = "";
-                        CStimulusController resp = (CStimulusController)_responseView.getChildAt(this.getGlyphIndex());
+                        int currentIndex = this.getGlyphIndex();
+                        CStimulusController resp = (CStimulusController)_responseView.getChildAt(currentIndex);
                         resp.setStimulusChar("",false);
                         break;
                     }
