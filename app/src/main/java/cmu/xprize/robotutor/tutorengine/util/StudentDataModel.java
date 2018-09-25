@@ -6,11 +6,16 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
+import java.util.Map;
+
+import cmu.xprize.comp_session.AS_CONST;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.util.CPlacementTest_Tutor;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_MATH;
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;
+import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING;
 import static cmu.xprize.util.TCONST.LAST_TUTOR;
 import static cmu.xprize.util.TCONST.PLACEMENT_TAG;
 
@@ -35,7 +40,20 @@ public class StudentDataModel {
     private final static String MATH_PLACEMENT_INDEX_KEY = "MATH_PLACEMENT_INDEX";
     private final static String WRITING_PLACEMENT_KEY = "WRITING_PLACEMENT";
     private final static String WRITING_PLACEMENT_INDEX_KEY = "WRITING_PLACEMENT_INDEX";
+
+    // new way cycles through skills
+    private static final boolean NEW_WAY = true;
     private static final String SKILL_SELECTED_KEY = "SKILL_SELECTED";
+    // sets to true when student selects repeat
+    private static final String IS_REPEATING_LAST_KEY = "IS_REPEATING_LAST";
+    private static int SKILL_INDEX = 0;
+    private static final String[] SKILL_CYCLE = new String[4];
+    static {
+        SKILL_CYCLE[0] = SELECT_WRITING;
+        SKILL_CYCLE[1] = SELECT_STORIES;
+        SKILL_CYCLE[2] = SELECT_WRITING;
+        SKILL_CYCLE[3] = SELECT_MATH;
+    }
 
     /**
      * Constructor
@@ -61,6 +79,10 @@ public class StudentDataModel {
         _editor.putBoolean(StudentDataModel.MATH_PLACEMENT_KEY, true);
         _editor.putInt(StudentDataModel.MATH_PLACEMENT_INDEX_KEY, 0);
 
+        if(NEW_WAY) {
+            _editor.putString(SKILL_SELECTED_KEY, SELECT_WRITING);
+        }
+
         _editor.apply();
     }
 
@@ -71,7 +93,7 @@ public class StudentDataModel {
     public void initializeTutorPositions(TransitionMatrixModel matrix) {
 
         // initialize math placement
-        boolean useMathPlacement = getMathPlacement(); // NEXT do this thing
+        boolean useMathPlacement = getMathPlacement();
 
         RoboTutor.logManager.postEvent_V(PLACEMENT_TAG, String.format("useMathPlacement = %s", useMathPlacement));
         if(useMathPlacement) {
@@ -142,13 +164,41 @@ public class StudentDataModel {
     }
 
     public String getActiveSkill() {
-        return _preferences.getString(SKILL_SELECTED_KEY, SELECT_STORIES);
+        String activeSkill = _preferences.getString(SKILL_SELECTED_KEY, SELECT_STORIES);
+        Log.wtf("ACTIVE_SKILL", "get=" + activeSkill);
+        return activeSkill;
     }
 
     public void updateActiveSkill(String skill) {
         _editor = _preferences.edit();
         _editor.putString(SKILL_SELECTED_KEY, skill);
         _editor.apply();
+        Log.wtf("ACTIVE_SKILL", "update=" + skill);
+    }
+
+    /**
+     * move on to the next skill in cycle
+     * OH_BEHAVE (0) call after activity has been completed
+     * @return
+     */
+    public String incrementActiveSkill() {
+        SKILL_INDEX = (SKILL_INDEX + 1) % SKILL_CYCLE.length; // 0, 1, 2, 3, 0...
+        updateActiveSkill(SKILL_CYCLE[SKILL_INDEX]);
+
+        return SKILL_CYCLE[SKILL_INDEX];
+    }
+
+    /**
+     * This is needed to perform a repeat.
+     * OH_BEHAVE (3) call when student selects repeat
+     * @return
+     */
+    public String getLastSkill() {
+
+        int index = SKILL_INDEX == 0 ? SKILL_CYCLE.length -1 : SKILL_INDEX - 1;
+
+        Log.d("REPEAT_ME", "SKILL_INDEX=" + SKILL_INDEX + ", new_index=" + index);
+        return SKILL_CYCLE[index];
     }
 
     public boolean getWritingPlacement() {
@@ -247,5 +297,20 @@ public class StudentDataModel {
         Log.d(TAG, "This is what it looks like: " + json);
         _editor.putString("key", json);
         return _editor.commit();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+
+        Map prefsMap = _preferences.getAll();
+        for (Object k : prefsMap.keySet()) {
+            builder.append(k)
+                    .append("=")
+                    .append(prefsMap.get(k))
+                    .append(";\n");
+        }
+
+        return builder.toString();
     }
 }

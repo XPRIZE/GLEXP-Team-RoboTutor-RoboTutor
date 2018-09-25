@@ -59,6 +59,7 @@ import cmu.xprize.robotutor.tutorengine.graph.scene_initializer;
 import cmu.xprize.robotutor.tutorengine.graph.type_action;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
+import static cmu.xprize.robotutor.tutorengine.CTutorEngine.studentModel;
 import static cmu.xprize.util.TCONST.GRAPH_MSG;
 
 
@@ -390,6 +391,17 @@ public class CTutor implements ILoadableObject2, IEventSource {
                     // of some sort of session manager of exit the app completely
                     //
                     case TCONST.ENDTUTOR:
+
+                        // don't do end of tutor assessment when we're ending the default tutor (activity selector)
+                        if (!mTutorName.equals(CTutorEngine.defTutor)) {
+                            if (!RoboTutor.STUDENT_CHOSE_REPEAT) {
+                                studentModel.incrementActiveSkill();
+                            }
+                            // assess student performance after tutor is completed
+                            CTutorEngine.promotionMechanism.adjustPositionFromPreviousPerformance(CTutor.this);
+
+                            Log.wtf("STUDENT_MODEL:AFTER_ASSESSMENT", studentModel.toString());
+                        }
 
                         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "r2: In Queue: " + _command);
                         cleanUpTutor();

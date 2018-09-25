@@ -40,9 +40,6 @@ import cmu.xprize.robotutor.tutorengine.graph.databinding;
 import cmu.xprize.robotutor.tutorengine.graph.defdata_tutor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
-import cmu.xprize.robotutor.tutorengine.util.PromotionMechanism;
-import cmu.xprize.robotutor.tutorengine.util.StudentDataModel;
-import cmu.xprize.robotutor.tutorengine.util.TransitionMatrixModel;
 import cmu.xprize.robotutor.tutorengine.widgets.core.IDataSink;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_logging.CLogManager;
@@ -54,6 +51,7 @@ import cmu.xprize.util.TCONST;
 import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 
+import static cmu.xprize.robotutor.tutorengine.CTutorEngine.studentModel;
 import static cmu.xprize.util.TCONST.GRAPH_MSG;
 
 
@@ -218,9 +216,6 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
                             event.setTaskName("ENDTUTOR");
                             event.setTimestamp(System.currentTimeMillis());
                             RoboTutor.perfLogManager.postPerformanceLogWithoutContext(event);
-
-                            // assess student performance
-                            CTutorEngine.promotionMechanism.adjustPositionFromPreviousPerformance(mTutor);
 
                             mTutor.post(TCONST.ENDTUTOR);
                         }

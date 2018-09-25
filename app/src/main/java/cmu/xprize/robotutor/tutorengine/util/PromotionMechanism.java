@@ -128,8 +128,6 @@ public class PromotionMechanism {
         if (mathTutorID != null) _studentModel.updateMathTutorID(mathTutorID);
 
         _studentModel.updateLastTutor(activeTutorId);
-
-        RoboTutor.MUST_CALCULATE_NEXT_TUTOR = false;
     }
 
 
@@ -329,31 +327,5 @@ public class PromotionMechanism {
 
 
         }
-    }
-
-
-    private String getChildScope(String activeTutorId) {
-        String childScope = null;
-        if(activeTutorId.startsWith("bpop")) {
-            childScope = "bubble_pop";
-
-        } else if (activeTutorId.startsWith("akira")) {
-            childScope = "akira";
-
-        } else if (activeTutorId.startsWith("math")) {
-            childScope = "add_subtract";
-
-        } else if (activeTutorId.startsWith("write")) {
-            childScope = "word_copy";
-
-        } else if (activeTutorId.startsWith("story")) {
-            childScope = "story_reading";
-
-        } else if (activeTutorId.startsWith("countingx")) {
-            childScope = "countingx";
-        } else if (activeTutorId.startsWith("num.scale")) {
-            childScope = "numberscale";
-        }
-        return childScope;
     }
 }

@@ -173,14 +173,14 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
      * call it "initializeButtonsAndSetButtonImages"...
      * @param dataSource
      */
-    public void initializeButtonsAndSetButtonImages(CAsk_Data dataSource, CAt_Data[] nextActivities) {
+    public void initializeButtonsAndSetButtonImages(String layoutName, CAsk_Data dataSource, CAt_Data[] nextActivities) {
 
         // Keep track of the datasource so we can destroy the references when finished.
         //
         mDataSource = dataSource;
 
-        // this will be the same every time...
-        int layoutID = getResources().getIdentifier("ask_activity_selector", "layout", packageName);
+        // here is where layout is set...
+        int layoutID = getResources().getIdentifier(layoutName, "layout", packageName);
 
         removeAllViews();
 
@@ -194,6 +194,7 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
         buttonList = new ArrayList<>();
 
         for(CAskElement element : dataSource.items) {
+            if (element == null) break;
             int viewID = getResources().getIdentifier(element.componentID, "id", packageName);
 
             ImageButton ibView = (ImageButton) findViewById(viewID);
@@ -207,9 +208,9 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
         // here is where button images start...
 
-        Log.wtf("NEW_MENU", nextActivities[0].tutor_id + " " + nextActivities[1].tutor_id + " " + nextActivities[2].tutor_id);
+        Log.wtf("NEW_MENU", nextActivities[0].tutor_id + " " + nextActivities[1].tutor_id );// + " " + nextActivities[2].tutor_id);
 
-        // first three buttons are set...
+        // first two (or three) buttons are set...
         for(int i = 0; i < nextActivities.length; i++) {
             CAskElement element = mDataSource.items[i];
             ImageButton ibView = (ImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));

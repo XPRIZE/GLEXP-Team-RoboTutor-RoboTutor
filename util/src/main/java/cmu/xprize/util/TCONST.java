@@ -389,6 +389,7 @@ public class TCONST {
     static final public String DEFAULT            = "default";
 
     // CTutorNavigator Constants
+    // TODO this is so annoying... different objects use the same ENDTUTOR var
     public static final String ENDTUTOR        = "END_TUTOR";           // Terminate a tutor from within
     public static final String KILLTUTOR       = "KILL_TUTOR";          // Kill a tutor exteranlly
     public static final String CONTINUETUTOR   = "CONTINUE_TUTOR";

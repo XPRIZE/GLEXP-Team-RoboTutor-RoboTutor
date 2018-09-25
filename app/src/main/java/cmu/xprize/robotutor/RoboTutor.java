@@ -115,6 +115,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     private static final String LOG_SEQUENCE_ID = "LOG_SEQUENCE_ID";
 
+    public static final boolean OLD_MENU = true;
+
     //amogh missing letter
 //    private static final String debugTutorFile = "[file]write.missingLtr_0.1.2.fin.s.json";
     //amogh dictation
@@ -160,7 +162,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     private boolean                 engineStarted = false;
     static public boolean           STANDALONE    = false;
     static public String            SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT; // this is only used as a feature, when launching TActivitySelector...
-    static public boolean           MUST_CALCULATE_NEXT_TUTOR = false;
+    static public boolean           STUDENT_CHOSE_REPEAT = false; // FINISH_MENU double-check logic on repeat
 //    static public String        SELECTOR_MODE = TCONST.FTR_DEBUG_SELECT;
 
 
