@@ -149,8 +149,8 @@ public class CTutorEngine implements ILoadableObject2 {
     static public void setDefaultLanguage(String newLang) {
         language = newLang;
         //  any time the language changes, so should the Transition Matrix and the Student Model
-        studentModel = loadStudentModel();
         matrix = loadTransitionMatrixModel();
+        studentModel = loadStudentModel(matrix);
         promotionMechanism = new PromotionMechanism(studentModel, matrix);
     }
 
@@ -612,8 +612,8 @@ public class CTutorEngine implements ILoadableObject2 {
                 }
             }
 
-            studentModel = loadStudentModel();
             matrix = loadTransitionMatrixModel();
+            studentModel = loadStudentModel(matrix);
             promotionMechanism = new PromotionMechanism(studentModel, matrix);
 
         } catch (JSONException e) {
@@ -622,9 +622,13 @@ public class CTutorEngine implements ILoadableObject2 {
     }
 
     /**
-     * DATA_MODEL (0) Initialize the student data model
+     * Loads the student data model. If the student has not played before, initialize with
+     * the default starting positions based on {@code matrix}
+     *
+     * @param matrix what the activity matrix looks like.
+     * @return
      */
-    private static StudentDataModel loadStudentModel() {
+    private static StudentDataModel loadStudentModel(TransitionMatrixModel matrix) {
         // initialize
         String prefsName = "";
         if(RoboTutor.STUDENT_ID != null) {
@@ -637,6 +641,7 @@ public class CTutorEngine implements ILoadableObject2 {
         String firstTime = model.getHasPlayed();
         if (firstTime == null) {
             model.createNewStudent();
+            model.initializeTutorPositions(matrix);
         }
 
         return model;

@@ -6,18 +6,21 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
+import cmu.xprize.robotutor.RoboTutor;
+import cmu.xprize.util.CPlacementTest_Tutor;
 import cmu.xprize.util.TCONST;
 
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;
 import static cmu.xprize.util.TCONST.LAST_TUTOR;
+import static cmu.xprize.util.TCONST.PLACEMENT_TAG;
 
 /**
  * RoboTutor
  * <p>
  * Created by kevindeland on 9/20/18.
  *
- * DATA_MODEL this *may* be too slow... change to a JSON object, and store all at once
- * DATA_MODEL see https://stackoverflow.com/questions/7145606/how-android-sharedpreferences-save-store-object
+ * this *may* be too slow... change to a JSON object, and store all at once
+ * see https://stackoverflow.com/questions/7145606/how-android-sharedpreferences-save-store-object
  */
 
 public class StudentDataModel {
@@ -59,6 +62,43 @@ public class StudentDataModel {
         _editor.putInt(StudentDataModel.MATH_PLACEMENT_INDEX_KEY, 0);
 
         _editor.apply();
+    }
+
+    /**
+     * This sets the tutor IDs
+     * @param matrix
+     */
+    public void initializeTutorPositions(TransitionMatrixModel matrix) {
+
+        // initialize math placement
+        boolean useMathPlacement = getMathPlacement(); // NEXT do this thing
+
+        RoboTutor.logManager.postEvent_V(PLACEMENT_TAG, String.format("useMathPlacement = %s", useMathPlacement));
+        if(useMathPlacement) {
+            int mathPlacementIndex = getMathPlacementIndex();
+            CPlacementTest_Tutor mathPlacementTutor = matrix.mathPlacement[mathPlacementIndex];
+            RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("mathPlacementIndex = %d", mathPlacementIndex));
+            String mathTutorID = mathPlacementTutor.tutor; // does this need to happen every time???
+            updateMathTutorID(mathTutorID);
+            RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("mathTutorID = %s", mathTutorID));
+        }
+
+        // initialize writing placement
+        boolean useWritingPlacement = getWritingPlacement();
+        RoboTutor.logManager.postEvent_V(PLACEMENT_TAG, String.format("useWritingPlacement = %s", useWritingPlacement));
+        if (useWritingPlacement) {
+            int writingPlacementIndex = getWritingPlacementIndex();
+            CPlacementTest_Tutor writePlacementTutor = matrix.writePlacement[writingPlacementIndex];
+            RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("writePlacementIndex = %d", writingPlacementIndex));
+            String writingTutorID = writePlacementTutor.tutor;
+            updateWritingTutorID(writingTutorID);
+            RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("writingTutorID = %s", writingTutorID));
+        }
+
+        // stories doesn't have placement testing, so initialize at root
+        if (getStoryTutorID() == null) {
+            updateStoryTutorID(matrix.rootSkillStories);
+        }
     }
 
     /**
@@ -187,7 +227,7 @@ public class StudentDataModel {
 
 
     /**
-     * DATA_MODEL how to get whole model at once, instead of individual elements...
+     * how to get whole model at once, instead of individual elements...
      * @param key
      */
     private void getWholeModel(String key) {
@@ -197,7 +237,7 @@ public class StudentDataModel {
     }
 
     /**
-     * DATA_MODEL how to save whole model at once, instead of individual elements...
+     * how to save whole model at once, instead of individual elements...
      * @param model
      */
     private boolean saveWholeModel(StudentDataModel model) {

@@ -693,6 +693,11 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         doLaunch(intent, TCONST.TUTOR_NATIVE, TCONST.DEBUG_FILE_PREFIX + file, "DEBUGGER");
     }
 
+
+    //************************************************************************
+    //************************************************************************
+    // Everything demo video related BEGIN
+
     /**
      * A big and cumbersome method that will launch a tutor eventually
      */
@@ -840,8 +845,11 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         }
 
         return PATH_TO_FILE;
-
     }
+
+    // Everything demo video related END
+    //************************************************************************
+    //************************************************************************
 
     /**
      * The session manager set the \<varname\>.intent and intentData scoped variables
@@ -1374,38 +1382,16 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
     }
 
     /**
-     * initializes everything
-     * DATA_MODEL (0) this could/should be moved to the creation sequence...
+     * what does this do??? change the view???
+     * alternatively, instead of waiting til placement is over, we can just show [N, N] during placement,
+     * instead of [N, N+1]...
      */
     private void initializeState() {
 
         boolean useMathPlacement = studentModel.getMathPlacement();
         boolean useWritingPlacement = studentModel.getWritingPlacement();
 
-        RoboTutor.logManager.postEvent_V(PLACEMENT_TAG, String.format("useMathPlacement = %s", useMathPlacement));
-        if(useMathPlacement) {
-            int mathPlacementIndex = studentModel.getMathPlacementIndex();
-            CPlacementTest_Tutor mathPlacementTutor = matrix.mathPlacement[mathPlacementIndex];
-            RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("mathPlacementIndex = %d", mathPlacementIndex));
-            String mathTutorID = mathPlacementTutor.tutor; // does this need to happen every time???
-            studentModel.updateMathTutorID(mathTutorID);
-            RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("mathTutorID = %s", mathTutorID));
-        }
-
-        RoboTutor.logManager.postEvent_V(PLACEMENT_TAG, String.format("useWritingPlacement = %s", useWritingPlacement));
-        if (useWritingPlacement) {
-            int writingPlacementIndex = studentModel.getWritingPlacementIndex();
-            CPlacementTest_Tutor writePlacementTutor = matrix.writePlacement[writingPlacementIndex];
-            RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("writePlacementIndex = %d", writingPlacementIndex));
-            String writingTutorID = writePlacementTutor.tutor;
-            studentModel.updateWritingTutorID(writingTutorID);
-            RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("writingTutorID = %s", writingTutorID));
-        }
-
-        // DATA_MODEL (0) this could be somewhere better...
-        // stories doesn't have placement testing
-        if (studentModel.getStoryTutorID() == null) {
-            studentModel.updateStoryTutorID(matrix.rootSkillStories);
-        }
+        // OH_BEHAVE: display tutors using the old way, until both placements have failed
+        OLD_WAY = useMathPlacement || useWritingPlacement;
     }
 }
