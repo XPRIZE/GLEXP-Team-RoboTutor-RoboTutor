@@ -568,7 +568,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 r.setStimulusChar(" ",false);
                 r.setLinkedScroll(mDrawnScroll);
                 r.setWritingController(this);
-                //amogh added ends
 
                 // create a new view
                 v = (CGlyphController) LayoutInflater.from(getContext())
@@ -592,8 +591,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 updateSentenceEditSequence();
                 mListWordsInput = getUpdatedListWordsInput(mListWordsInput, mAlignedSourceSentence,mAlignedTargetSentence);
 
-                //since the mListWordsInput is now updated, the parameters for mActiveWord have also changed.
+                //since the mListWordsInput is now updated, the parameters for mActiveWord have also changed, so refresh it.
                 mActiveWord = mListWordsInput.get(currentWordIndex);
+
+                //for word level copy
                 if(activityFeature.contains("FTR_SEN_WRD")){
 
                 //might have to change this. works for now.
@@ -607,6 +608,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //                    temporaryOnCorrect();
 //                }
                 }
+
+                // for sentence level
                 else if(activityFeature.contains("FTR_SEN_SEN")){
 
                 }
@@ -1954,14 +1957,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         mWrittenSentence = "";
         mSentenceAttempts = 0;
 
-        //initialise the mListWordsAnswer for sentence writing activities
-        if(activityFeature.contains("FTR_SEN")){
-            mListWordsAnswer = new ArrayList<>();
-            mListWordsAnswer = getListWords(mAnswer);
-            updateSentenceEditSequence();
-            mListWordsInput = getListWordsInputFromAlignedSentences(mAlignedSourceSentence,mAlignedTargetSentence);
-            mActiveWord = mListWordsAnswer.get(0);
-        }
+
 
         //amogh added
         //load the indices for the different corrections
@@ -2080,9 +2076,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 }
 
                 v.setExpectedChar(expectedChar);
-
                 //amogh comment - need to check conditions. eg see the next if else.
                 String stimulusChar = mStimulus.substring(i1,i1+1);
+
+                v.setRecognisedChar(stimulusChar);
+
                 if(!stimulusChar.equals(" ")) {
                     v.setStimuliGlyph(_glyphSet.cloneGlyph(stimulusChar));
                 }
@@ -2155,6 +2153,15 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             }
 //            initialiseCorrectionHashMap(); //amogh added
 //            initialiseWordIndices(); //amogh added
+        }
+
+        //initialise the mListWordsAnswer for sentence writing activities
+        if(activityFeature.contains("FTR_SEN") || activityFeature.contains("FTR_SEN_CORR")){
+            mListWordsAnswer = new ArrayList<>();
+            mListWordsAnswer = getListWords(mAnswer);
+            updateSentenceEditSequence();
+            mListWordsInput = getListWordsInputFromAlignedSentences(mAlignedSourceSentence,mAlignedTargetSentence);
+            mActiveWord = mListWordsAnswer.get(0);
         }
     }
 
