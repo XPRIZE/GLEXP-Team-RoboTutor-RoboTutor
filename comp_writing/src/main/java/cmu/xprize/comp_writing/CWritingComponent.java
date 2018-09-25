@@ -1052,6 +1052,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 //update sentence status
 
                     //check if allowed to write here
+                currentWordIndex = getActiveWordIndex(mActiveIndex);
+
+                if(currentWordIndex != -1){
+                    mActiveWord = mListWordsInput.get(currentWordIndex);
+                }
+
                     boolean canReplace = checkReplace(mEditSequence, mActiveIndex);
 
                     //if allowed to replace at this position
