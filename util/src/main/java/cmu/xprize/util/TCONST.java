@@ -199,6 +199,7 @@ public class TCONST {
     public static final String SONG                = "[song]";
     public static final String SONG_FOLDER         = "?";
     public static final String STORY_PATH          = "cmu/xprize/story_reading/";
+    public static final String WORD_PROBLEMS       = "[wordproblems]";
 
     public static final String LOCAL_FILE          = "[local_file]";
     public static final String DOWNLOAD_PATH       = "/sdcard/Download";
