@@ -166,10 +166,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     //amogh added ends
 
 
-    protected  List<Integer>    deleteCorrectionIndices = new ArrayList<>();
-    protected  List<Integer>    insertCorrectionIndices = new ArrayList<>();
-    protected  List<Integer>    changeCorrectionIndices = new ArrayList<>();
-
     protected String punctuationSymbols = ",.;:-_!?";
     protected Map<String, String> punctuationToString;
     protected Map<String, String> punctuationToFeature;
@@ -2065,7 +2061,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         //add for sentence correction
         else if(activityFeature.contains("FTR_SEN_CORR")){
             //load glyph input container
-            int expectedIndex = 0; //in order to set the expected answer correctly
             int stimulusLength = mStimulus.length();
             for(int i1 = 0 ; i1 < stimulusLength ; i1++)
             {
@@ -2075,17 +2070,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 // Last is used for display updates - limits the extent of the baseline
                 v.setIsLast(i1 ==  mStimulus.length()-1);
-                //amogh comment - needs edits, need a proper computation function to be able to calculate the differences between the
-                //
 
-                //amogh comment - see if setting expected character is that important
-                String expectedChar = mStimulus.substring(expectedIndex,expectedIndex+1);
 
-                if(!deleteCorrectionIndices.contains(i1)){
-                    expectedIndex++;
-                }
-
-                v.setExpectedChar(expectedChar);
                 //amogh comment - need to check conditions. eg see the next if else.
                 String stimulusChar = mStimulus.substring(i1,i1+1);
 
@@ -2095,15 +2081,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     v.setStimuliGlyph(_glyphSet.cloneGlyph(stimulusChar));
                 }
 
-                if(!expectedChar.equals(" ")) {
-                    v.setProtoGlyph(_glyphSet.cloneGlyph(expectedChar));
-                }
-                else{
-                    _spaceIndices.add(i1);
-
-//                    mActiveController.setWordIndex(currentWordIndex);
-//                    currentWordIndex++;
-                }
 
                 v.toggleStimuliGlyph();
                 mGlyphList.addView(v);
@@ -2175,6 +2152,45 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             updateSentenceEditSequence();
             mListWordsInput = getListWordsInputFromAlignedSentences(mAlignedSourceSentence,mAlignedTargetSentence);
             mActiveWord = mListWordsAnswer.get(0);
+        }
+
+        //now that the sentence parameters have been initialised, for correction activities set the expected characters and protoglyphs.
+        if(activityFeature.contains("FTR_SEN_CORR")){
+
+            int expectedCharIndex = 0;
+
+            // for all glyphs in mGlyphList
+            int stimulusLength = mStimulus.length();
+            for(int i1 = 0 ; i1 < stimulusLength ; i1++) {
+
+                //if supposed to insert at the index, increment the expectedCharIndex
+                while(mAlignedSourceSentence.charAt(expectedCharIndex) == '-'){
+                    expectedCharIndex++;
+                }
+
+                v = (CGlyphController) mGlyphList.getChildAt(i1);
+
+                //set the expected character
+                String expectedChar = mAlignedTargetSentence.substring(expectedCharIndex, expectedCharIndex + 1);
+
+                //Make sure that the expected character in places where deletion happens is a space so that during mercy - doesn't play
+                if(expectedChar.equals("-")){
+                    v.setExpectedChar(" ");
+                }
+                else{
+                    v.setExpectedChar(expectedChar);
+                }
+
+                //set the protoglyphs
+                if (!expectedChar.equals(" ")) {
+                    v.setProtoGlyph(_glyphSet.cloneGlyph(expectedChar));
+                } else {
+                    _spaceIndices.add(i1);
+
+                }
+
+                expectedCharIndex++;
+            }
         }
     }
 
