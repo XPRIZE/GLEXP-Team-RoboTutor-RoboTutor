@@ -610,6 +610,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
                 DATASOURCEPATH = TCONST.ROBOTUTOR_ASSETS + "/" + TCONST.STORY_ASSETS + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
                 // "robotutor_assets/assets/story/sw"
+                // MATH_STORY this should be different
                 STORYSOURCEPATH = DATASOURCEPATH + levelFolder + "/" + storyFolder + "/";
                 // "robotutor_assets/assets/story/sw/hello/hello_world"
 
