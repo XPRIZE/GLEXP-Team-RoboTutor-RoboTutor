@@ -102,7 +102,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     private static final boolean QUICK_DEBUG = true;
     private static final String debugTutorVariant = "write.sen.corr.sen";
     private static final String debugTutorId = "write.wrd:story_1_1";
-    private static final String debugTutorFile = "[file]write.sen.copy.wrd.1.json";
+    private static final String debugTutorFile = "[file]write.sen.copy.sen_noerror.1.json";
 
     //amogh missing letter
 //    private static final String debugTutorFile = "[file]write.missingLtr_0.1.2.fin.s.json";
