@@ -61,7 +61,7 @@
       "next": "numcompare:2d.compare.mix",
       "next_next": "numcompare:3d.compare.mix",
       "prev": "story.gen.hear::story_30",
-      "harder": "write.sen.copy.wrd:2",
+      "harder": "write.sen.copy.sen:noerror.2",
       "easier": "story.gen.hear::story_30"
     },
     "numcompare:2d.compare.mix": {
@@ -74,9 +74,9 @@
       "cell_column": "2",
       "same": "numcompare:2d.compare.mix",
       "next": "numcompare:3d.compare.mix",
-      "next_next": "write.sen.copy.wrd:1",
+      "next_next": "write.sen.copy.sen:noerror.1",
       "prev": "numcompare:1d",
-      "harder": "write.sen.copy.wrd:3",
+      "harder": "write.sen.copy.sen:noerror.3",
       "easier": "story.clo.hear::story_30"
     },
     "numcompare:3d.compare.mix": {
@@ -88,70 +88,460 @@
       "cell_row": "2",
       "cell_column": "3",
       "same": "numcompare:3d.compare.mix",
-      "next": "write.sen.copy.wrd:1",
-      "next_next": "write.sen.copy.wrd:2",
+      "next": "write.sen.copy.sen:noerror.1",
+      "next_next": "write.sen.copy.sen:noerror.2",
       "prev": "numcompare:2d.compare.mix",
-      "harder": "write.sen.copy.wrd:4",
+      "harder": "write.sen.copy.sen:punc.1",
       "easier": "story.pic.hear::story_30"
     },
-    "write.sen.copy.wrd:1": {
+    "write.sen.copy.sen:noerror.1": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "write.sen.copy.wrd:1",
-      "tutor_desc": "write.sen.copy.wrd",
-      "tutor_data": "[file]write.sen.copy.wrd_1.json",
+      "tutor_id": "write.sen.copy.sen:noerror.1",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_noerror.1.json",
       "cell_row": "3",
       "cell_column": "1",
-      "same": "write.sen.copy.wrd:1",
-      "next": "write.sen.copy.wrd:2",
-      "next_next": "write.sen.copy.wrd:3",
+      "same": "write.sen.copy.sen:noerror.1",
+      "next": "write.sen.copy.sen:noerror.2",
+      "next_next": "write.sen.copy.sen:noerror.3",
       "prev": "numcompare:3d.compare.mix",
       "harder": "place.value:pv-11..99.2D.diff0.2",
       "easier": "numcompare:3d.compare.mix"
     },
-    "write.sen.copy.wrd:2": {
+    "write.sen.copy.sen:noerror.2": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "write.sen.copy.wrd:2",
-      "tutor_desc": "write.sen.copy.wrd",
-      "tutor_data": "[file]write.sen.copy.wrd_2.json",
+      "tutor_id": "write.sen.copy.sen:noerror.2",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_noerror.2.json",
       "cell_row": "3",
       "cell_column": "2",
-      "same": "write.sen.copy.wrd:2",
-      "next": "write.sen.copy.wrd:3",
-      "next_next": "write.sen.copy.wrd:4",
-      "prev": "write.sen.copy.wrd:1",
+      "same": "write.sen.copy.sen:noerror.2",
+      "next": "write.sen.copy.sen:noerror.3",
+      "next_next": "write.sen.copy.sen:punc.1",
+      "prev": "write.sen.copy.sen:noerror.1",
       "harder": "place.value:pv-11..99.2D.diff0.3",
       "easier": "numcompare:1d"
     },
-    "write.sen.copy.wrd:3": {
+    "write.sen.copy.sen:noerror.3": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "write.sen.copy.wrd:3",
-      "tutor_desc": "write.sen.copy.wrd",
-      "tutor_data": "[file]write.sen.copy.wrd_3.json",
+      "tutor_id": "write.sen.copy.sen:noerror.3",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_noerror.3.json",
       "cell_row": "3",
       "cell_column": "3",
-      "same": "write.sen.copy.wrd:3",
-      "next": "write.sen.copy.wrd:4",
-      "next_next": "place.value:pv-11..99.2D.diff0.1",
-      "prev": "write.sen.copy.wrd:2",
+      "same": "write.sen.copy.sen:noerror.3",
+      "next": "write.sen.copy.sen:punc.1",
+      "next_next": "write.sen.copy.sen:punc.2",
+      "prev": "write.sen.copy.sen:noerror.2",
       "harder": "place.value:pv-11..99.2D.diff0.4",
       "easier": "numcompare:2d.compare.mix"
     },
-    "write.sen.copy.wrd:4": {
+    "write.sen.copy.sen:punc.1": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "write.sen.copy.wrd:4",
-      "tutor_desc": "write.sen.copy.wrd",
-      "tutor_data": "[file]write.sen.copy.wrd_4.json",
+      "tutor_id": "write.sen.copy.sen:punc.1",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_punc.1.json",
       "cell_row": "3",
       "cell_column": "4",
-      "same": "write.sen.copy.wrd:4",
+      "same": "write.sen.copy.sen:punc.1",
+      "next": "write.sen.copy.sen:punc.2",
+      "next_next": "write.sen.copy.sen:punc.3",
+      "prev": "write.sen.copy.sen:noerror.3",
+      "harder": "place.value:pv-11..99.2D.diff0.5",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.sen:punc.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.sen:punc.2",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_punc.2.json",
+      "cell_row": "3",
+      "cell_column": "5",
+      "same": "write.sen.copy.sen:punc.2",
+      "next": "write.sen.copy.sen:punc.3",
+      "next_next": "write.sen.copy.sen:space.1",
+      "prev": "write.sen.copy.sen:punc.1",
+      "harder": "place.value:pv-11..99.2D.diff1.6",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.sen:punc.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.sen:punc.3",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_punc.3.json",
+      "cell_row": "3",
+      "cell_column": "6",
+      "same": "write.sen.copy.sen:punc.3",
+      "next": "write.sen.copy.sen:space.1",
+      "next_next": "write.sen.copy.sen:space.2",
+      "prev": "write.sen.copy.sen:punc.2",
+      "harder": "place.value:pv-11..99.2D.diff1.7",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.sen:space.1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.sen:space.1",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_space.1.json",
+      "cell_row": "3",
+      "cell_column": "7",
+      "same": "write.sen.copy.sen:space.1",
+      "next": "write.sen.copy.sen:space.2",
+      "next_next": "write.sen.copy.sen:space.3",
+      "prev": "write.sen.copy.sen:punc.3",
+      "harder": "place.value:pv-11..99.2D.diff1.8",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.sen:space.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.sen:space.2",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_space.2.json",
+      "cell_row": "3",
+      "cell_column": "8",
+      "same": "write.sen.copy.sen:space.2",
+      "next": "write.sen.copy.sen:space.3",
+      "next_next": "write.sen.copy.wrd:cap.1",
+      "prev": "write.sen.copy.sen:space.1",
+      "harder": "place.value:pv-11..99.2D.diff1.9",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.sen:space.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.sen:space.3",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_space.3.json",
+      "cell_row": "3",
+      "cell_column": "9",
+      "same": "write.sen.copy.sen:space.3",
+      "next": "write.sen.copy.wrd:cap.1",
+      "next_next": "write.sen.copy.wrd:cap.2",
+      "prev": "write.sen.copy.sen:space.2",
+      "harder": "place.value:pv-11..99.2D.diff1.10",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:cap.1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:cap.1",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_cap.1.json",
+      "cell_row": "3",
+      "cell_column": "10",
+      "same": "write.sen.copy.wrd:cap.1",
+      "next": "write.sen.copy.wrd:cap.2",
+      "next_next": "write.sen.copy.wrd:cap.3",
+      "prev": "write.sen.copy.sen:space.3",
+      "harder": "place.value:pv-11..99.2D.diff2.11",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:cap.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:cap.2",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_cap.2.json",
+      "cell_row": "3",
+      "cell_column": "11",
+      "same": "write.sen.copy.wrd:cap.2",
+      "next": "write.sen.copy.wrd:cap.3",
+      "next_next": "write.sen.copy.wrd:noerror.1",
+      "prev": "write.sen.copy.wrd:cap.1",
+      "harder": "place.value:pv-11..99.2D.diff2.12",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:cap.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:cap.3",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_cap.3.json",
+      "cell_row": "3",
+      "cell_column": "12",
+      "same": "write.sen.copy.wrd:cap.3",
+      "next": "write.sen.copy.wrd:noerror.1",
+      "next_next": "write.sen.copy.wrd:noerror.2",
+      "prev": "write.sen.copy.wrd:cap.2",
+      "harder": "place.value:pv-11..99.2D.diff2.13",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:noerror.1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:noerror.1",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_noerror.1.json",
+      "cell_row": "3",
+      "cell_column": "13",
+      "same": "write.sen.copy.wrd:noerror.1",
+      "next": "write.sen.copy.wrd:noerror.2",
+      "next_next": "write.sen.copy.wrd:noerror.3",
+      "prev": "write.sen.copy.wrd:cap.3",
+      "harder": "place.value:pv-11..99.2D.diff2.14",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:noerror.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:noerror.2",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_noerror.2.json",
+      "cell_row": "3",
+      "cell_column": "14",
+      "same": "write.sen.copy.wrd:noerror.2",
+      "next": "write.sen.copy.wrd:noerror.3",
+      "next_next": "write.sen.copy.wrd:punc.1",
+      "prev": "write.sen.copy.wrd:noerror.1",
+      "harder": "place.value:pv-11..99.2D.diff2.15",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:noerror.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:noerror.3",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_noerror.3.json",
+      "cell_row": "3",
+      "cell_column": "15",
+      "same": "write.sen.copy.wrd:noerror.3",
+      "next": "write.sen.copy.wrd:punc.1",
+      "next_next": "write.sen.copy.wrd:punc.2",
+      "prev": "write.sen.copy.wrd:noerror.2",
+      "harder": "place.value:pv-100..499.3D.diff0.16",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:punc.1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:punc.1",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_punc.1.json",
+      "cell_row": "3",
+      "cell_column": "16",
+      "same": "write.sen.copy.wrd:punc.1",
+      "next": "write.sen.copy.wrd:punc.2",
+      "next_next": "write.sen.copy.wrd:punc.3",
+      "prev": "write.sen.copy.wrd:noerror.3",
+      "harder": "place.value:pv-100..499.3D.diff0.17",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:punc.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:punc.2",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_punc.2.json",
+      "cell_row": "3",
+      "cell_column": "17",
+      "same": "write.sen.copy.wrd:punc.2",
+      "next": "write.sen.copy.wrd:punc.3",
+      "next_next": "write.sen.copy.wrd:space.1",
+      "prev": "write.sen.copy.wrd:punc.1",
+      "harder": "place.value:pv-100..499.3D.diff0.18",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:punc.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:punc.3",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_punc.3.json",
+      "cell_row": "3",
+      "cell_column": "18",
+      "same": "write.sen.copy.wrd:punc.3",
+      "next": "write.sen.copy.wrd:space.1",
+      "next_next": "write.sen.copy.wrd:space.2",
+      "prev": "write.sen.copy.wrd:punc.2",
+      "harder": "place.value:pv-100..499.3D.diff0.19",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:space.1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:space.1",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_space.1.json",
+      "cell_row": "3",
+      "cell_column": "19",
+      "same": "write.sen.copy.wrd:space.1",
+      "next": "write.sen.copy.wrd:space.2",
+      "next_next": "write.sen.copy.wrd:space.3",
+      "prev": "write.sen.copy.wrd:punc.3",
+      "harder": "place.value:pv-100..499.3D.diff0.20",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:space.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:space.2",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_space.2.json",
+      "cell_row": "3",
+      "cell_column": "20",
+      "same": "write.sen.copy.wrd:space.2",
+      "next": "write.sen.copy.wrd:space.3",
+      "next_next": "write.sen.corr.sen:cap.1",
+      "prev": "write.sen.copy.wrd:space.1",
+      "harder": "place.value:pv-100..499.3D.diff1.21",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:space.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:space.3",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_space.3.json",
+      "cell_row": "3",
+      "cell_column": "21",
+      "same": "write.sen.copy.wrd:space.3",
+      "next": "write.sen.corr.sen:cap.1",
+      "next_next": "write.sen.corr.sen:cap.2",
+      "prev": "write.sen.copy.wrd:space.2",
+      "harder": "place.value:pv-100..499.3D.diff1.22",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:cap.1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:cap.1",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_cap.1.json",
+      "cell_row": "3",
+      "cell_column": "22",
+      "same": "write.sen.corr.sen:cap.1",
+      "next": "write.sen.corr.sen:cap.2",
+      "next_next": "write.sen.corr.sen:cap.3",
+      "prev": "write.sen.copy.wrd:space.3",
+      "harder": "place.value:pv-100..499.3D.diff1.23",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:cap.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:cap.2",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_cap.2.json",
+      "cell_row": "3",
+      "cell_column": "23",
+      "same": "write.sen.corr.sen:cap.2",
+      "next": "write.sen.corr.sen:cap.3",
+      "next_next": "write.sen.corr.sen:punc.1",
+      "prev": "write.sen.corr.sen:cap.1",
+      "harder": "place.value:pv-100..499.3D.diff1.24",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:cap.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:cap.3",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_cap.3.json",
+      "cell_row": "3",
+      "cell_column": "24",
+      "same": "write.sen.corr.sen:cap.3",
+      "next": "write.sen.corr.sen:punc.1",
+      "next_next": "write.sen.corr.sen:punc.2",
+      "prev": "write.sen.corr.sen:cap.2",
+      "harder": "place.value:pv-100..499.3D.diff1.25",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:punc.1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:punc.1",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_punc.1.json",
+      "cell_row": "3",
+      "cell_column": "25",
+      "same": "write.sen.corr.sen:punc.1",
+      "next": "write.sen.corr.sen:punc.2",
+      "next_next": "write.sen.corr.sen:punc.3",
+      "prev": "write.sen.corr.sen:cap.3",
+      "harder": "place.value:pv-100..499.3D.diff2.26",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:punc.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:punc.2",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_punc.2.json",
+      "cell_row": "3",
+      "cell_column": "26",
+      "same": "write.sen.corr.sen:punc.2",
+      "next": "write.sen.corr.sen:punc.3",
+      "next_next": "write.sen.corr.sen:space.1",
+      "prev": "write.sen.corr.sen:punc.1",
+      "harder": "place.value:pv-100..499.3D.diff2.27",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:punc.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:punc.3",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_punc.3.json",
+      "cell_row": "3",
+      "cell_column": "27",
+      "same": "write.sen.corr.sen:punc.3",
+      "next": "write.sen.corr.sen:space.1",
+      "next_next": "write.sen.corr.sen:space.2",
+      "prev": "write.sen.corr.sen:punc.2",
+      "harder": "place.value:pv-100..499.3D.diff2.28",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:space.1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:space.1",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_space.1.json",
+      "cell_row": "3",
+      "cell_column": "28",
+      "same": "write.sen.corr.sen:space.1",
+      "next": "write.sen.corr.sen:space.2",
+      "next_next": "write.sen.corr.sen:space.3",
+      "prev": "write.sen.corr.sen:punc.3",
+      "harder": "place.value:pv-100..499.3D.diff2.29",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:space.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:space.2",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_space.2.json",
+      "cell_row": "3",
+      "cell_column": "29",
+      "same": "write.sen.corr.sen:space.2",
+      "next": "write.sen.corr.sen:space.3",
+      "next_next": "place.value:pv-11..99.2D.diff0.1",
+      "prev": "write.sen.corr.sen:space.1",
+      "harder": "place.value:pv-100..499.3D.diff2.30",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:space.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:space.3",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_space.3.json",
+      "cell_row": "3",
+      "cell_column": "30",
+      "same": "write.sen.corr.sen:space.3",
       "next": "place.value:pv-11..99.2D.diff0.1",
       "next_next": "place.value:pv-11..99.2D.diff0.2",
-      "prev": "write.sen.copy.wrd:3",
-      "harder": "place.value:pv-11..99.2D.diff0.5",
+      "prev": "write.sen.corr.sen:space.2",
+      "harder": "place.value:pv-100..499.3D.diff2.30",
       "easier": "numcompare:3d.compare.mix"
     },
     "place.value:pv-11..99.2D.diff0.1": {
@@ -165,9 +555,9 @@
       "same": "place.value:pv-11..99.2D.diff0.1",
       "next": "place.value:pv-11..99.2D.diff0.2",
       "next_next": "place.value:pv-11..99.2D.diff0.3",
-      "prev": "write.sen.copy.wrd:4",
+      "prev": "write.sen.corr.sen:space.3",
       "harder": "picmatch:body",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:space.3"
     },
     "place.value:pv-11..99.2D.diff0.2": {
       "type": "TRANSITION",
@@ -182,7 +572,7 @@
       "next_next": "place.value:pv-11..99.2D.diff0.4",
       "prev": "place.value:pv-11..99.2D.diff0.1",
       "harder": "picmatch:food",
-      "easier": "write.sen.copy.wrd:1"
+      "easier": "write.sen.copy.sen:noerror.1"
     },
     "place.value:pv-11..99.2D.diff0.3": {
       "type": "TRANSITION",
@@ -197,7 +587,7 @@
       "next_next": "place.value:pv-11..99.2D.diff0.5",
       "prev": "place.value:pv-11..99.2D.diff0.2",
       "harder": "picmatch:thing",
-      "easier": "write.sen.copy.wrd:2"
+      "easier": "write.sen.copy.sen:noerror.2"
     },
     "place.value:pv-11..99.2D.diff0.4": {
       "type": "TRANSITION",
@@ -212,7 +602,7 @@
       "next_next": "place.value:pv-11..99.2D.diff1.6",
       "prev": "place.value:pv-11..99.2D.diff0.3",
       "harder": "picmatch:people",
-      "easier": "write.sen.copy.wrd:3"
+      "easier": "write.sen.copy.sen:noerror.3"
     },
     "place.value:pv-11..99.2D.diff0.5": {
       "type": "TRANSITION",
@@ -227,7 +617,7 @@
       "next_next": "place.value:pv-11..99.2D.diff1.7",
       "prev": "place.value:pv-11..99.2D.diff0.4",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.sen:punc.1"
     },
     "place.value:pv-11..99.2D.diff1.6": {
       "type": "TRANSITION",
@@ -242,7 +632,7 @@
       "next_next": "place.value:pv-11..99.2D.diff1.8",
       "prev": "place.value:pv-11..99.2D.diff0.5",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.sen:punc.2"
     },
     "place.value:pv-11..99.2D.diff1.7": {
       "type": "TRANSITION",
@@ -257,7 +647,7 @@
       "next_next": "place.value:pv-11..99.2D.diff1.9",
       "prev": "place.value:pv-11..99.2D.diff1.6",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.sen:punc.3"
     },
     "place.value:pv-11..99.2D.diff1.8": {
       "type": "TRANSITION",
@@ -272,7 +662,7 @@
       "next_next": "place.value:pv-11..99.2D.diff1.10",
       "prev": "place.value:pv-11..99.2D.diff1.7",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.sen:space.1"
     },
     "place.value:pv-11..99.2D.diff1.9": {
       "type": "TRANSITION",
@@ -287,7 +677,7 @@
       "next_next": "place.value:pv-11..99.2D.diff2.11",
       "prev": "place.value:pv-11..99.2D.diff1.8",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.sen:space.2"
     },
     "place.value:pv-11..99.2D.diff1.10": {
       "type": "TRANSITION",
@@ -302,7 +692,7 @@
       "next_next": "place.value:pv-11..99.2D.diff2.12",
       "prev": "place.value:pv-11..99.2D.diff1.9",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.sen:space.3"
     },
     "place.value:pv-11..99.2D.diff2.11": {
       "type": "TRANSITION",
@@ -317,7 +707,7 @@
       "next_next": "place.value:pv-11..99.2D.diff2.13",
       "prev": "place.value:pv-11..99.2D.diff1.10",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:cap.1"
     },
     "place.value:pv-11..99.2D.diff2.12": {
       "type": "TRANSITION",
@@ -332,7 +722,7 @@
       "next_next": "place.value:pv-11..99.2D.diff2.14",
       "prev": "place.value:pv-11..99.2D.diff2.11",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:cap.2"
     },
     "place.value:pv-11..99.2D.diff2.13": {
       "type": "TRANSITION",
@@ -347,7 +737,7 @@
       "next_next": "place.value:pv-11..99.2D.diff2.15",
       "prev": "place.value:pv-11..99.2D.diff2.12",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:cap.3"
     },
     "place.value:pv-11..99.2D.diff2.14": {
       "type": "TRANSITION",
@@ -362,7 +752,7 @@
       "next_next": "place.value:pv-100..499.3D.diff0.16",
       "prev": "place.value:pv-11..99.2D.diff2.13",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:noerror.1"
     },
     "place.value:pv-11..99.2D.diff2.15": {
       "type": "TRANSITION",
@@ -377,7 +767,7 @@
       "next_next": "place.value:pv-100..499.3D.diff0.17",
       "prev": "place.value:pv-11..99.2D.diff2.14",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:noerror.2"
     },
     "place.value:pv-100..499.3D.diff0.16": {
       "type": "TRANSITION",
@@ -392,7 +782,7 @@
       "next_next": "place.value:pv-100..499.3D.diff0.18",
       "prev": "place.value:pv-11..99.2D.diff2.15",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:noerror.3"
     },
     "place.value:pv-100..499.3D.diff0.17": {
       "type": "TRANSITION",
@@ -407,7 +797,7 @@
       "next_next": "place.value:pv-100..499.3D.diff0.19",
       "prev": "place.value:pv-100..499.3D.diff0.16",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:punc.1"
     },
     "place.value:pv-100..499.3D.diff0.18": {
       "type": "TRANSITION",
@@ -422,7 +812,7 @@
       "next_next": "place.value:pv-100..499.3D.diff0.20",
       "prev": "place.value:pv-100..499.3D.diff0.17",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:punc.2"
     },
     "place.value:pv-100..499.3D.diff0.19": {
       "type": "TRANSITION",
@@ -437,7 +827,7 @@
       "next_next": "place.value:pv-100..499.3D.diff1.21",
       "prev": "place.value:pv-100..499.3D.diff0.18",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:punc.3"
     },
     "place.value:pv-100..499.3D.diff0.20": {
       "type": "TRANSITION",
@@ -452,7 +842,7 @@
       "next_next": "place.value:pv-100..499.3D.diff1.22",
       "prev": "place.value:pv-100..499.3D.diff0.19",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:space.1"
     },
     "place.value:pv-100..499.3D.diff1.21": {
       "type": "TRANSITION",
@@ -467,7 +857,7 @@
       "next_next": "place.value:pv-100..499.3D.diff1.23",
       "prev": "place.value:pv-100..499.3D.diff0.20",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:space.2"
     },
     "place.value:pv-100..499.3D.diff1.22": {
       "type": "TRANSITION",
@@ -482,7 +872,7 @@
       "next_next": "place.value:pv-100..499.3D.diff1.24",
       "prev": "place.value:pv-100..499.3D.diff1.21",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:space.3"
     },
     "place.value:pv-100..499.3D.diff1.23": {
       "type": "TRANSITION",
@@ -497,7 +887,7 @@
       "next_next": "place.value:pv-100..499.3D.diff1.25",
       "prev": "place.value:pv-100..499.3D.diff1.22",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:cap.1"
     },
     "place.value:pv-100..499.3D.diff1.24": {
       "type": "TRANSITION",
@@ -512,7 +902,7 @@
       "next_next": "place.value:pv-100..499.3D.diff2.26",
       "prev": "place.value:pv-100..499.3D.diff1.23",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:cap.2"
     },
     "place.value:pv-100..499.3D.diff1.25": {
       "type": "TRANSITION",
@@ -527,7 +917,7 @@
       "next_next": "place.value:pv-100..499.3D.diff2.27",
       "prev": "place.value:pv-100..499.3D.diff1.24",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:cap.3"
     },
     "place.value:pv-100..499.3D.diff2.26": {
       "type": "TRANSITION",
@@ -542,7 +932,7 @@
       "next_next": "place.value:pv-100..499.3D.diff2.28",
       "prev": "place.value:pv-100..499.3D.diff1.25",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:punc.1"
     },
     "place.value:pv-100..499.3D.diff2.27": {
       "type": "TRANSITION",
@@ -557,7 +947,7 @@
       "next_next": "place.value:pv-100..499.3D.diff2.29",
       "prev": "place.value:pv-100..499.3D.diff2.26",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:punc.2"
     },
     "place.value:pv-100..499.3D.diff2.28": {
       "type": "TRANSITION",
@@ -572,7 +962,7 @@
       "next_next": "place.value:pv-100..499.3D.diff2.30",
       "prev": "place.value:pv-100..499.3D.diff2.27",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:punc.3"
     },
     "place.value:pv-100..499.3D.diff2.29": {
       "type": "TRANSITION",
@@ -587,7 +977,7 @@
       "next_next": "picmatch:animal",
       "prev": "place.value:pv-100..499.3D.diff2.28",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:space.1"
     },
     "place.value:pv-100..499.3D.diff2.30": {
       "type": "TRANSITION",
@@ -602,7 +992,7 @@
       "next_next": "picmatch:body",
       "prev": "place.value:pv-100..499.3D.diff2.29",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:space.2"
     },
     "picmatch:animal": {
       "type": "TRANSITION",
@@ -954,7 +1344,7 @@
       "skill": "numbers",
       "tutor_id": "story.read::math.egma_word_problems",
       "tutor_desc": "story.read",
-      "tutor_data": "[sharedmath]math.egma_word_problems", // MATH_STORY this should be different?
+      "tutor_data": "[sharedmath]math.egma_word_problems",
       "cell_row": "8",
       "cell_column": "1",
       "same": "story.read::math.egma_word_problems",
@@ -1068,7 +1458,7 @@
       "next": "numcompare:2d.compare.mix",
       "next_next": "numcompare:3d.compare.mix",
       "prev": "story.gen.hear::story_30",
-      "harder": "write.sen.copy.wrd:2",
+      "harder": "write.sen.copy.sen:noerror.2",
       "easier": "story.gen.hear::story_30"
     },
     "numcompare:2d.compare.mix": {
@@ -1081,9 +1471,9 @@
       "cell_column": "2",
       "same": "numcompare:2d.compare.mix",
       "next": "numcompare:3d.compare.mix",
-      "next_next": "write.sen.copy.wrd:1",
+      "next_next": "write.sen.copy.sen:noerror.1",
       "prev": "numcompare:1d",
-      "harder": "write.sen.copy.wrd:3",
+      "harder": "write.sen.copy.sen:noerror.3",
       "easier": "story.clo.hear::story_30"
     },
     "numcompare:3d.compare.mix": {
@@ -1095,70 +1485,460 @@
       "cell_row": "2",
       "cell_column": "3",
       "same": "numcompare:3d.compare.mix",
-      "next": "write.sen.copy.wrd:1",
-      "next_next": "write.sen.copy.wrd:2",
+      "next": "write.sen.copy.sen:noerror.1",
+      "next_next": "write.sen.copy.sen:noerror.2",
       "prev": "numcompare:2d.compare.mix",
-      "harder": "write.sen.copy.wrd:4",
+      "harder": "write.sen.copy.sen:punc.1",
       "easier": "story.pic.hear::story_30"
     },
-    "write.sen.copy.wrd:1": {
+    "write.sen.copy.sen:noerror.1": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "write.sen.copy.wrd:1",
-      "tutor_desc": "write.sen.copy.wrd",
-      "tutor_data": "[file]write.sen.copy.wrd_1.json",
+      "tutor_id": "write.sen.copy.sen:noerror.1",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_noerror.1.json",
       "cell_row": "3",
       "cell_column": "1",
-      "same": "write.sen.copy.wrd:1",
-      "next": "write.sen.copy.wrd:2",
-      "next_next": "write.sen.copy.wrd:3",
+      "same": "write.sen.copy.sen:noerror.1",
+      "next": "write.sen.copy.sen:noerror.2",
+      "next_next": "write.sen.copy.sen:noerror.3",
       "prev": "numcompare:3d.compare.mix",
       "harder": "place.value:pv-11..99.2D.diff0.2",
       "easier": "numcompare:3d.compare.mix"
     },
-    "write.sen.copy.wrd:2": {
+    "write.sen.copy.sen:noerror.2": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "write.sen.copy.wrd:2",
-      "tutor_desc": "write.sen.copy.wrd",
-      "tutor_data": "[file]write.sen.copy.wrd_2.json",
+      "tutor_id": "write.sen.copy.sen:noerror.2",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_noerror.2.json",
       "cell_row": "3",
       "cell_column": "2",
-      "same": "write.sen.copy.wrd:2",
-      "next": "write.sen.copy.wrd:3",
-      "next_next": "write.sen.copy.wrd:4",
-      "prev": "write.sen.copy.wrd:1",
+      "same": "write.sen.copy.sen:noerror.2",
+      "next": "write.sen.copy.sen:noerror.3",
+      "next_next": "write.sen.copy.sen:punc.1",
+      "prev": "write.sen.copy.sen:noerror.1",
       "harder": "place.value:pv-11..99.2D.diff0.3",
       "easier": "numcompare:1d"
     },
-    "write.sen.copy.wrd:3": {
+    "write.sen.copy.sen:noerror.3": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "write.sen.copy.wrd:3",
-      "tutor_desc": "write.sen.copy.wrd",
-      "tutor_data": "[file]write.sen.copy.wrd_3.json",
+      "tutor_id": "write.sen.copy.sen:noerror.3",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_noerror.3.json",
       "cell_row": "3",
       "cell_column": "3",
-      "same": "write.sen.copy.wrd:3",
-      "next": "write.sen.copy.wrd:4",
-      "next_next": "place.value:pv-11..99.2D.diff0.1",
-      "prev": "write.sen.copy.wrd:2",
+      "same": "write.sen.copy.sen:noerror.3",
+      "next": "write.sen.copy.sen:punc.1",
+      "next_next": "write.sen.copy.sen:punc.2",
+      "prev": "write.sen.copy.sen:noerror.2",
       "harder": "place.value:pv-11..99.2D.diff0.4",
       "easier": "numcompare:2d.compare.mix"
     },
-    "write.sen.copy.wrd:4": {
+    "write.sen.copy.sen:punc.1": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "write.sen.copy.wrd:4",
-      "tutor_desc": "write.sen.copy.wrd",
-      "tutor_data": "[file]write.sen.copy.wrd_4.json",
+      "tutor_id": "write.sen.copy.sen:punc.1",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_punc.1.json",
       "cell_row": "3",
       "cell_column": "4",
-      "same": "write.sen.copy.wrd:4",
+      "same": "write.sen.copy.sen:punc.1",
+      "next": "write.sen.copy.sen:punc.2",
+      "next_next": "write.sen.copy.sen:punc.3",
+      "prev": "write.sen.copy.sen:noerror.3",
+      "harder": "place.value:pv-11..99.2D.diff0.5",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.sen:punc.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.sen:punc.2",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_punc.2.json",
+      "cell_row": "3",
+      "cell_column": "5",
+      "same": "write.sen.copy.sen:punc.2",
+      "next": "write.sen.copy.sen:punc.3",
+      "next_next": "write.sen.copy.sen:space.1",
+      "prev": "write.sen.copy.sen:punc.1",
+      "harder": "place.value:pv-11..99.2D.diff1.6",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.sen:punc.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.sen:punc.3",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_punc.3.json",
+      "cell_row": "3",
+      "cell_column": "6",
+      "same": "write.sen.copy.sen:punc.3",
+      "next": "write.sen.copy.sen:space.1",
+      "next_next": "write.sen.copy.sen:space.2",
+      "prev": "write.sen.copy.sen:punc.2",
+      "harder": "place.value:pv-11..99.2D.diff1.7",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.sen:space.1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.sen:space.1",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_space.1.json",
+      "cell_row": "3",
+      "cell_column": "7",
+      "same": "write.sen.copy.sen:space.1",
+      "next": "write.sen.copy.sen:space.2",
+      "next_next": "write.sen.copy.sen:space.3",
+      "prev": "write.sen.copy.sen:punc.3",
+      "harder": "place.value:pv-11..99.2D.diff1.8",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.sen:space.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.sen:space.2",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_space.2.json",
+      "cell_row": "3",
+      "cell_column": "8",
+      "same": "write.sen.copy.sen:space.2",
+      "next": "write.sen.copy.sen:space.3",
+      "next_next": "write.sen.copy.wrd:cap.1",
+      "prev": "write.sen.copy.sen:space.1",
+      "harder": "place.value:pv-11..99.2D.diff1.9",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.sen:space.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.sen:space.3",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_space.3.json",
+      "cell_row": "3",
+      "cell_column": "9",
+      "same": "write.sen.copy.sen:space.3",
+      "next": "write.sen.copy.wrd:cap.1",
+      "next_next": "write.sen.copy.wrd:cap.2",
+      "prev": "write.sen.copy.sen:space.2",
+      "harder": "place.value:pv-11..99.2D.diff1.10",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:cap.1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:cap.1",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_cap.1.json",
+      "cell_row": "3",
+      "cell_column": "10",
+      "same": "write.sen.copy.wrd:cap.1",
+      "next": "write.sen.copy.wrd:cap.2",
+      "next_next": "write.sen.copy.wrd:cap.3",
+      "prev": "write.sen.copy.sen:space.3",
+      "harder": "place.value:pv-11..99.2D.diff2.11",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:cap.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:cap.2",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_cap.2.json",
+      "cell_row": "3",
+      "cell_column": "11",
+      "same": "write.sen.copy.wrd:cap.2",
+      "next": "write.sen.copy.wrd:cap.3",
+      "next_next": "write.sen.copy.wrd:noerror.1",
+      "prev": "write.sen.copy.wrd:cap.1",
+      "harder": "place.value:pv-11..99.2D.diff2.12",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:cap.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:cap.3",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_cap.3.json",
+      "cell_row": "3",
+      "cell_column": "12",
+      "same": "write.sen.copy.wrd:cap.3",
+      "next": "write.sen.copy.wrd:noerror.1",
+      "next_next": "write.sen.copy.wrd:noerror.2",
+      "prev": "write.sen.copy.wrd:cap.2",
+      "harder": "place.value:pv-11..99.2D.diff2.13",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:noerror.1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:noerror.1",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_noerror.1.json",
+      "cell_row": "3",
+      "cell_column": "13",
+      "same": "write.sen.copy.wrd:noerror.1",
+      "next": "write.sen.copy.wrd:noerror.2",
+      "next_next": "write.sen.copy.wrd:noerror.3",
+      "prev": "write.sen.copy.wrd:cap.3",
+      "harder": "place.value:pv-11..99.2D.diff2.14",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:noerror.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:noerror.2",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_noerror.2.json",
+      "cell_row": "3",
+      "cell_column": "14",
+      "same": "write.sen.copy.wrd:noerror.2",
+      "next": "write.sen.copy.wrd:noerror.3",
+      "next_next": "write.sen.copy.wrd:punc.1",
+      "prev": "write.sen.copy.wrd:noerror.1",
+      "harder": "place.value:pv-11..99.2D.diff2.15",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:noerror.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:noerror.3",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_noerror.3.json",
+      "cell_row": "3",
+      "cell_column": "15",
+      "same": "write.sen.copy.wrd:noerror.3",
+      "next": "write.sen.copy.wrd:punc.1",
+      "next_next": "write.sen.copy.wrd:punc.2",
+      "prev": "write.sen.copy.wrd:noerror.2",
+      "harder": "place.value:pv-100..499.3D.diff0.16",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:punc.1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:punc.1",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_punc.1.json",
+      "cell_row": "3",
+      "cell_column": "16",
+      "same": "write.sen.copy.wrd:punc.1",
+      "next": "write.sen.copy.wrd:punc.2",
+      "next_next": "write.sen.copy.wrd:punc.3",
+      "prev": "write.sen.copy.wrd:noerror.3",
+      "harder": "place.value:pv-100..499.3D.diff0.17",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:punc.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:punc.2",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_punc.2.json",
+      "cell_row": "3",
+      "cell_column": "17",
+      "same": "write.sen.copy.wrd:punc.2",
+      "next": "write.sen.copy.wrd:punc.3",
+      "next_next": "write.sen.copy.wrd:space.1",
+      "prev": "write.sen.copy.wrd:punc.1",
+      "harder": "place.value:pv-100..499.3D.diff0.18",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:punc.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:punc.3",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_punc.3.json",
+      "cell_row": "3",
+      "cell_column": "18",
+      "same": "write.sen.copy.wrd:punc.3",
+      "next": "write.sen.copy.wrd:space.1",
+      "next_next": "write.sen.copy.wrd:space.2",
+      "prev": "write.sen.copy.wrd:punc.2",
+      "harder": "place.value:pv-100..499.3D.diff0.19",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:space.1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:space.1",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_space.1.json",
+      "cell_row": "3",
+      "cell_column": "19",
+      "same": "write.sen.copy.wrd:space.1",
+      "next": "write.sen.copy.wrd:space.2",
+      "next_next": "write.sen.copy.wrd:space.3",
+      "prev": "write.sen.copy.wrd:punc.3",
+      "harder": "place.value:pv-100..499.3D.diff0.20",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:space.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:space.2",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_space.2.json",
+      "cell_row": "3",
+      "cell_column": "20",
+      "same": "write.sen.copy.wrd:space.2",
+      "next": "write.sen.copy.wrd:space.3",
+      "next_next": "write.sen.corr.sen:cap.1",
+      "prev": "write.sen.copy.wrd:space.1",
+      "harder": "place.value:pv-100..499.3D.diff1.21",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:space.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:space.3",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_space.3.json",
+      "cell_row": "3",
+      "cell_column": "21",
+      "same": "write.sen.copy.wrd:space.3",
+      "next": "write.sen.corr.sen:cap.1",
+      "next_next": "write.sen.corr.sen:cap.2",
+      "prev": "write.sen.copy.wrd:space.2",
+      "harder": "place.value:pv-100..499.3D.diff1.22",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:cap.1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:cap.1",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_cap.1.json",
+      "cell_row": "3",
+      "cell_column": "22",
+      "same": "write.sen.corr.sen:cap.1",
+      "next": "write.sen.corr.sen:cap.2",
+      "next_next": "write.sen.corr.sen:cap.3",
+      "prev": "write.sen.copy.wrd:space.3",
+      "harder": "place.value:pv-100..499.3D.diff1.23",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:cap.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:cap.2",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_cap.2.json",
+      "cell_row": "3",
+      "cell_column": "23",
+      "same": "write.sen.corr.sen:cap.2",
+      "next": "write.sen.corr.sen:cap.3",
+      "next_next": "write.sen.corr.sen:punc.1",
+      "prev": "write.sen.corr.sen:cap.1",
+      "harder": "place.value:pv-100..499.3D.diff1.24",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:cap.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:cap.3",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_cap.3.json",
+      "cell_row": "3",
+      "cell_column": "24",
+      "same": "write.sen.corr.sen:cap.3",
+      "next": "write.sen.corr.sen:punc.1",
+      "next_next": "write.sen.corr.sen:punc.2",
+      "prev": "write.sen.corr.sen:cap.2",
+      "harder": "place.value:pv-100..499.3D.diff1.25",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:punc.1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:punc.1",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_punc.1.json",
+      "cell_row": "3",
+      "cell_column": "25",
+      "same": "write.sen.corr.sen:punc.1",
+      "next": "write.sen.corr.sen:punc.2",
+      "next_next": "write.sen.corr.sen:punc.3",
+      "prev": "write.sen.corr.sen:cap.3",
+      "harder": "place.value:pv-100..499.3D.diff2.26",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:punc.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:punc.2",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_punc.2.json",
+      "cell_row": "3",
+      "cell_column": "26",
+      "same": "write.sen.corr.sen:punc.2",
+      "next": "write.sen.corr.sen:punc.3",
+      "next_next": "write.sen.corr.sen:space.1",
+      "prev": "write.sen.corr.sen:punc.1",
+      "harder": "place.value:pv-100..499.3D.diff2.27",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:punc.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:punc.3",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_punc.3.json",
+      "cell_row": "3",
+      "cell_column": "27",
+      "same": "write.sen.corr.sen:punc.3",
+      "next": "write.sen.corr.sen:space.1",
+      "next_next": "write.sen.corr.sen:space.2",
+      "prev": "write.sen.corr.sen:punc.2",
+      "harder": "place.value:pv-100..499.3D.diff2.28",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:space.1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:space.1",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_space.1.json",
+      "cell_row": "3",
+      "cell_column": "28",
+      "same": "write.sen.corr.sen:space.1",
+      "next": "write.sen.corr.sen:space.2",
+      "next_next": "write.sen.corr.sen:space.3",
+      "prev": "write.sen.corr.sen:punc.3",
+      "harder": "place.value:pv-100..499.3D.diff2.29",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:space.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:space.2",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_space.2.json",
+      "cell_row": "3",
+      "cell_column": "29",
+      "same": "write.sen.corr.sen:space.2",
+      "next": "write.sen.corr.sen:space.3",
+      "next_next": "place.value:pv-11..99.2D.diff0.1",
+      "prev": "write.sen.corr.sen:space.1",
+      "harder": "place.value:pv-100..499.3D.diff2.30",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:space.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:space.3",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_space.3.json",
+      "cell_row": "3",
+      "cell_column": "30",
+      "same": "write.sen.corr.sen:space.3",
       "next": "place.value:pv-11..99.2D.diff0.1",
       "next_next": "place.value:pv-11..99.2D.diff0.2",
-      "prev": "write.sen.copy.wrd:3",
-      "harder": "place.value:pv-11..99.2D.diff0.5",
+      "prev": "write.sen.corr.sen:space.2",
+      "harder": "place.value:pv-100..499.3D.diff2.30",
       "easier": "numcompare:3d.compare.mix"
     },
     "place.value:pv-11..99.2D.diff0.1": {
@@ -1172,9 +1952,9 @@
       "same": "place.value:pv-11..99.2D.diff0.1",
       "next": "place.value:pv-11..99.2D.diff0.2",
       "next_next": "place.value:pv-11..99.2D.diff0.3",
-      "prev": "write.sen.copy.wrd:4",
+      "prev": "write.sen.corr.sen:space.3",
       "harder": "picmatch:body",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:space.3"
     },
     "place.value:pv-11..99.2D.diff0.2": {
       "type": "TRANSITION",
@@ -1189,7 +1969,7 @@
       "next_next": "place.value:pv-11..99.2D.diff0.4",
       "prev": "place.value:pv-11..99.2D.diff0.1",
       "harder": "picmatch:food",
-      "easier": "write.sen.copy.wrd:1"
+      "easier": "write.sen.copy.sen:noerror.1"
     },
     "place.value:pv-11..99.2D.diff0.3": {
       "type": "TRANSITION",
@@ -1204,7 +1984,7 @@
       "next_next": "place.value:pv-11..99.2D.diff0.5",
       "prev": "place.value:pv-11..99.2D.diff0.2",
       "harder": "picmatch:thing",
-      "easier": "write.sen.copy.wrd:2"
+      "easier": "write.sen.copy.sen:noerror.2"
     },
     "place.value:pv-11..99.2D.diff0.4": {
       "type": "TRANSITION",
@@ -1219,7 +1999,7 @@
       "next_next": "place.value:pv-11..99.2D.diff1.6",
       "prev": "place.value:pv-11..99.2D.diff0.3",
       "harder": "picmatch:people",
-      "easier": "write.sen.copy.wrd:3"
+      "easier": "write.sen.copy.sen:noerror.3"
     },
     "place.value:pv-11..99.2D.diff0.5": {
       "type": "TRANSITION",
@@ -1234,7 +2014,7 @@
       "next_next": "place.value:pv-11..99.2D.diff1.7",
       "prev": "place.value:pv-11..99.2D.diff0.4",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.sen:punc.1"
     },
     "place.value:pv-11..99.2D.diff1.6": {
       "type": "TRANSITION",
@@ -1249,7 +2029,7 @@
       "next_next": "place.value:pv-11..99.2D.diff1.8",
       "prev": "place.value:pv-11..99.2D.diff0.5",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.sen:punc.2"
     },
     "place.value:pv-11..99.2D.diff1.7": {
       "type": "TRANSITION",
@@ -1264,7 +2044,7 @@
       "next_next": "place.value:pv-11..99.2D.diff1.9",
       "prev": "place.value:pv-11..99.2D.diff1.6",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.sen:punc.3"
     },
     "place.value:pv-11..99.2D.diff1.8": {
       "type": "TRANSITION",
@@ -1279,7 +2059,7 @@
       "next_next": "place.value:pv-11..99.2D.diff1.10",
       "prev": "place.value:pv-11..99.2D.diff1.7",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.sen:space.1"
     },
     "place.value:pv-11..99.2D.diff1.9": {
       "type": "TRANSITION",
@@ -1294,7 +2074,7 @@
       "next_next": "place.value:pv-11..99.2D.diff2.11",
       "prev": "place.value:pv-11..99.2D.diff1.8",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.sen:space.2"
     },
     "place.value:pv-11..99.2D.diff1.10": {
       "type": "TRANSITION",
@@ -1309,7 +2089,7 @@
       "next_next": "place.value:pv-11..99.2D.diff2.12",
       "prev": "place.value:pv-11..99.2D.diff1.9",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.sen:space.3"
     },
     "place.value:pv-11..99.2D.diff2.11": {
       "type": "TRANSITION",
@@ -1324,7 +2104,7 @@
       "next_next": "place.value:pv-11..99.2D.diff2.13",
       "prev": "place.value:pv-11..99.2D.diff1.10",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:cap.1"
     },
     "place.value:pv-11..99.2D.diff2.12": {
       "type": "TRANSITION",
@@ -1339,7 +2119,7 @@
       "next_next": "place.value:pv-11..99.2D.diff2.14",
       "prev": "place.value:pv-11..99.2D.diff2.11",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:cap.2"
     },
     "place.value:pv-11..99.2D.diff2.13": {
       "type": "TRANSITION",
@@ -1354,7 +2134,7 @@
       "next_next": "place.value:pv-11..99.2D.diff2.15",
       "prev": "place.value:pv-11..99.2D.diff2.12",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:cap.3"
     },
     "place.value:pv-11..99.2D.diff2.14": {
       "type": "TRANSITION",
@@ -1369,7 +2149,7 @@
       "next_next": "place.value:pv-100..499.3D.diff0.16",
       "prev": "place.value:pv-11..99.2D.diff2.13",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:noerror.1"
     },
     "place.value:pv-11..99.2D.diff2.15": {
       "type": "TRANSITION",
@@ -1384,7 +2164,7 @@
       "next_next": "place.value:pv-100..499.3D.diff0.17",
       "prev": "place.value:pv-11..99.2D.diff2.14",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:noerror.2"
     },
     "place.value:pv-100..499.3D.diff0.16": {
       "type": "TRANSITION",
@@ -1399,7 +2179,7 @@
       "next_next": "place.value:pv-100..499.3D.diff0.18",
       "prev": "place.value:pv-11..99.2D.diff2.15",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:noerror.3"
     },
     "place.value:pv-100..499.3D.diff0.17": {
       "type": "TRANSITION",
@@ -1414,7 +2194,7 @@
       "next_next": "place.value:pv-100..499.3D.diff0.19",
       "prev": "place.value:pv-100..499.3D.diff0.16",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:punc.1"
     },
     "place.value:pv-100..499.3D.diff0.18": {
       "type": "TRANSITION",
@@ -1429,7 +2209,7 @@
       "next_next": "place.value:pv-100..499.3D.diff0.20",
       "prev": "place.value:pv-100..499.3D.diff0.17",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:punc.2"
     },
     "place.value:pv-100..499.3D.diff0.19": {
       "type": "TRANSITION",
@@ -1444,7 +2224,7 @@
       "next_next": "place.value:pv-100..499.3D.diff1.21",
       "prev": "place.value:pv-100..499.3D.diff0.18",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:punc.3"
     },
     "place.value:pv-100..499.3D.diff0.20": {
       "type": "TRANSITION",
@@ -1459,7 +2239,7 @@
       "next_next": "place.value:pv-100..499.3D.diff1.22",
       "prev": "place.value:pv-100..499.3D.diff0.19",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:space.1"
     },
     "place.value:pv-100..499.3D.diff1.21": {
       "type": "TRANSITION",
@@ -1474,7 +2254,7 @@
       "next_next": "place.value:pv-100..499.3D.diff1.23",
       "prev": "place.value:pv-100..499.3D.diff0.20",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:space.2"
     },
     "place.value:pv-100..499.3D.diff1.22": {
       "type": "TRANSITION",
@@ -1489,7 +2269,7 @@
       "next_next": "place.value:pv-100..499.3D.diff1.24",
       "prev": "place.value:pv-100..499.3D.diff1.21",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:space.3"
     },
     "place.value:pv-100..499.3D.diff1.23": {
       "type": "TRANSITION",
@@ -1504,7 +2284,7 @@
       "next_next": "place.value:pv-100..499.3D.diff1.25",
       "prev": "place.value:pv-100..499.3D.diff1.22",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:cap.1"
     },
     "place.value:pv-100..499.3D.diff1.24": {
       "type": "TRANSITION",
@@ -1519,7 +2299,7 @@
       "next_next": "place.value:pv-100..499.3D.diff2.26",
       "prev": "place.value:pv-100..499.3D.diff1.23",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:cap.2"
     },
     "place.value:pv-100..499.3D.diff1.25": {
       "type": "TRANSITION",
@@ -1534,7 +2314,7 @@
       "next_next": "place.value:pv-100..499.3D.diff2.27",
       "prev": "place.value:pv-100..499.3D.diff1.24",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:cap.3"
     },
     "place.value:pv-100..499.3D.diff2.26": {
       "type": "TRANSITION",
@@ -1549,7 +2329,7 @@
       "next_next": "place.value:pv-100..499.3D.diff2.28",
       "prev": "place.value:pv-100..499.3D.diff1.25",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:punc.1"
     },
     "place.value:pv-100..499.3D.diff2.27": {
       "type": "TRANSITION",
@@ -1564,7 +2344,7 @@
       "next_next": "place.value:pv-100..499.3D.diff2.29",
       "prev": "place.value:pv-100..499.3D.diff2.26",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:punc.2"
     },
     "place.value:pv-100..499.3D.diff2.28": {
       "type": "TRANSITION",
@@ -1579,7 +2359,7 @@
       "next_next": "place.value:pv-100..499.3D.diff2.30",
       "prev": "place.value:pv-100..499.3D.diff2.27",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:punc.3"
     },
     "place.value:pv-100..499.3D.diff2.29": {
       "type": "TRANSITION",
@@ -1594,7 +2374,7 @@
       "next_next": "picmatch:animal",
       "prev": "place.value:pv-100..499.3D.diff2.28",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:space.1"
     },
     "place.value:pv-100..499.3D.diff2.30": {
       "type": "TRANSITION",
@@ -1609,7 +2389,7 @@
       "next_next": "picmatch:body",
       "prev": "place.value:pv-100..499.3D.diff2.29",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:space.2"
     },
     "picmatch:animal": {
       "type": "TRANSITION",
@@ -2075,7 +2855,7 @@
       "next": "numcompare:2d.compare.mix",
       "next_next": "numcompare:3d.compare.mix",
       "prev": "story.gen.hear::story_30",
-      "harder": "write.sen.copy.wrd:2",
+      "harder": "write.sen.copy.sen:noerror.2",
       "easier": "story.gen.hear::story_30"
     },
     "numcompare:2d.compare.mix": {
@@ -2088,9 +2868,9 @@
       "cell_column": "2",
       "same": "numcompare:2d.compare.mix",
       "next": "numcompare:3d.compare.mix",
-      "next_next": "write.sen.copy.wrd:1",
+      "next_next": "write.sen.copy.sen:noerror.1",
       "prev": "numcompare:1d",
-      "harder": "write.sen.copy.wrd:3",
+      "harder": "write.sen.copy.sen:noerror.3",
       "easier": "story.clo.hear::story_30"
     },
     "numcompare:3d.compare.mix": {
@@ -2102,70 +2882,460 @@
       "cell_row": "2",
       "cell_column": "3",
       "same": "numcompare:3d.compare.mix",
-      "next": "write.sen.copy.wrd:1",
-      "next_next": "write.sen.copy.wrd:2",
+      "next": "write.sen.copy.sen:noerror.1",
+      "next_next": "write.sen.copy.sen:noerror.2",
       "prev": "numcompare:2d.compare.mix",
-      "harder": "write.sen.copy.wrd:4",
+      "harder": "write.sen.copy.sen:punc.1",
       "easier": "story.pic.hear::story_30"
     },
-    "write.sen.copy.wrd:1": {
+    "write.sen.copy.sen:noerror.1": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "write.sen.copy.wrd:1",
-      "tutor_desc": "write.sen.copy.wrd",
-      "tutor_data": "[file]write.sen.copy.wrd_1.json",
+      "tutor_id": "write.sen.copy.sen:noerror.1",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_noerror.1.json",
       "cell_row": "3",
       "cell_column": "1",
-      "same": "write.sen.copy.wrd:1",
-      "next": "write.sen.copy.wrd:2",
-      "next_next": "write.sen.copy.wrd:3",
+      "same": "write.sen.copy.sen:noerror.1",
+      "next": "write.sen.copy.sen:noerror.2",
+      "next_next": "write.sen.copy.sen:noerror.3",
       "prev": "numcompare:3d.compare.mix",
       "harder": "place.value:pv-11..99.2D.diff0.2",
       "easier": "numcompare:3d.compare.mix"
     },
-    "write.sen.copy.wrd:2": {
+    "write.sen.copy.sen:noerror.2": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "write.sen.copy.wrd:2",
-      "tutor_desc": "write.sen.copy.wrd",
-      "tutor_data": "[file]write.sen.copy.wrd_2.json",
+      "tutor_id": "write.sen.copy.sen:noerror.2",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_noerror.2.json",
       "cell_row": "3",
       "cell_column": "2",
-      "same": "write.sen.copy.wrd:2",
-      "next": "write.sen.copy.wrd:3",
-      "next_next": "write.sen.copy.wrd:4",
-      "prev": "write.sen.copy.wrd:1",
+      "same": "write.sen.copy.sen:noerror.2",
+      "next": "write.sen.copy.sen:noerror.3",
+      "next_next": "write.sen.copy.sen:punc.1",
+      "prev": "write.sen.copy.sen:noerror.1",
       "harder": "place.value:pv-11..99.2D.diff0.3",
       "easier": "numcompare:1d"
     },
-    "write.sen.copy.wrd:3": {
+    "write.sen.copy.sen:noerror.3": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "write.sen.copy.wrd:3",
-      "tutor_desc": "write.sen.copy.wrd",
-      "tutor_data": "[file]write.sen.copy.wrd_3.json",
+      "tutor_id": "write.sen.copy.sen:noerror.3",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_noerror.3.json",
       "cell_row": "3",
       "cell_column": "3",
-      "same": "write.sen.copy.wrd:3",
-      "next": "write.sen.copy.wrd:4",
-      "next_next": "place.value:pv-11..99.2D.diff0.1",
-      "prev": "write.sen.copy.wrd:2",
+      "same": "write.sen.copy.sen:noerror.3",
+      "next": "write.sen.copy.sen:punc.1",
+      "next_next": "write.sen.copy.sen:punc.2",
+      "prev": "write.sen.copy.sen:noerror.2",
       "harder": "place.value:pv-11..99.2D.diff0.4",
       "easier": "numcompare:2d.compare.mix"
     },
-    "write.sen.copy.wrd:4": {
+    "write.sen.copy.sen:punc.1": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "write.sen.copy.wrd:4",
-      "tutor_desc": "write.sen.copy.wrd",
-      "tutor_data": "[file]write.sen.copy.wrd_4.json",
+      "tutor_id": "write.sen.copy.sen:punc.1",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_punc.1.json",
       "cell_row": "3",
       "cell_column": "4",
-      "same": "write.sen.copy.wrd:4",
+      "same": "write.sen.copy.sen:punc.1",
+      "next": "write.sen.copy.sen:punc.2",
+      "next_next": "write.sen.copy.sen:punc.3",
+      "prev": "write.sen.copy.sen:noerror.3",
+      "harder": "place.value:pv-11..99.2D.diff0.5",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.sen:punc.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.sen:punc.2",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_punc.2.json",
+      "cell_row": "3",
+      "cell_column": "5",
+      "same": "write.sen.copy.sen:punc.2",
+      "next": "write.sen.copy.sen:punc.3",
+      "next_next": "write.sen.copy.sen:space.1",
+      "prev": "write.sen.copy.sen:punc.1",
+      "harder": "place.value:pv-11..99.2D.diff1.6",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.sen:punc.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.sen:punc.3",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_punc.3.json",
+      "cell_row": "3",
+      "cell_column": "6",
+      "same": "write.sen.copy.sen:punc.3",
+      "next": "write.sen.copy.sen:space.1",
+      "next_next": "write.sen.copy.sen:space.2",
+      "prev": "write.sen.copy.sen:punc.2",
+      "harder": "place.value:pv-11..99.2D.diff1.7",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.sen:space.1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.sen:space.1",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_space.1.json",
+      "cell_row": "3",
+      "cell_column": "7",
+      "same": "write.sen.copy.sen:space.1",
+      "next": "write.sen.copy.sen:space.2",
+      "next_next": "write.sen.copy.sen:space.3",
+      "prev": "write.sen.copy.sen:punc.3",
+      "harder": "place.value:pv-11..99.2D.diff1.8",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.sen:space.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.sen:space.2",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_space.2.json",
+      "cell_row": "3",
+      "cell_column": "8",
+      "same": "write.sen.copy.sen:space.2",
+      "next": "write.sen.copy.sen:space.3",
+      "next_next": "write.sen.copy.wrd:cap.1",
+      "prev": "write.sen.copy.sen:space.1",
+      "harder": "place.value:pv-11..99.2D.diff1.9",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.sen:space.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.sen:space.3",
+      "tutor_desc": "write.sen.copy.sen",
+      "tutor_data": "[file]write.sen.copy.sen_space.3.json",
+      "cell_row": "3",
+      "cell_column": "9",
+      "same": "write.sen.copy.sen:space.3",
+      "next": "write.sen.copy.wrd:cap.1",
+      "next_next": "write.sen.copy.wrd:cap.2",
+      "prev": "write.sen.copy.sen:space.2",
+      "harder": "place.value:pv-11..99.2D.diff1.10",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:cap.1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:cap.1",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_cap.1.json",
+      "cell_row": "3",
+      "cell_column": "10",
+      "same": "write.sen.copy.wrd:cap.1",
+      "next": "write.sen.copy.wrd:cap.2",
+      "next_next": "write.sen.copy.wrd:cap.3",
+      "prev": "write.sen.copy.sen:space.3",
+      "harder": "place.value:pv-11..99.2D.diff2.11",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:cap.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:cap.2",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_cap.2.json",
+      "cell_row": "3",
+      "cell_column": "11",
+      "same": "write.sen.copy.wrd:cap.2",
+      "next": "write.sen.copy.wrd:cap.3",
+      "next_next": "write.sen.copy.wrd:noerror.1",
+      "prev": "write.sen.copy.wrd:cap.1",
+      "harder": "place.value:pv-11..99.2D.diff2.12",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:cap.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:cap.3",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_cap.3.json",
+      "cell_row": "3",
+      "cell_column": "12",
+      "same": "write.sen.copy.wrd:cap.3",
+      "next": "write.sen.copy.wrd:noerror.1",
+      "next_next": "write.sen.copy.wrd:noerror.2",
+      "prev": "write.sen.copy.wrd:cap.2",
+      "harder": "place.value:pv-11..99.2D.diff2.13",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:noerror.1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:noerror.1",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_noerror.1.json",
+      "cell_row": "3",
+      "cell_column": "13",
+      "same": "write.sen.copy.wrd:noerror.1",
+      "next": "write.sen.copy.wrd:noerror.2",
+      "next_next": "write.sen.copy.wrd:noerror.3",
+      "prev": "write.sen.copy.wrd:cap.3",
+      "harder": "place.value:pv-11..99.2D.diff2.14",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:noerror.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:noerror.2",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_noerror.2.json",
+      "cell_row": "3",
+      "cell_column": "14",
+      "same": "write.sen.copy.wrd:noerror.2",
+      "next": "write.sen.copy.wrd:noerror.3",
+      "next_next": "write.sen.copy.wrd:punc.1",
+      "prev": "write.sen.copy.wrd:noerror.1",
+      "harder": "place.value:pv-11..99.2D.diff2.15",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:noerror.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:noerror.3",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_noerror.3.json",
+      "cell_row": "3",
+      "cell_column": "15",
+      "same": "write.sen.copy.wrd:noerror.3",
+      "next": "write.sen.copy.wrd:punc.1",
+      "next_next": "write.sen.copy.wrd:punc.2",
+      "prev": "write.sen.copy.wrd:noerror.2",
+      "harder": "place.value:pv-100..499.3D.diff0.16",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:punc.1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:punc.1",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_punc.1.json",
+      "cell_row": "3",
+      "cell_column": "16",
+      "same": "write.sen.copy.wrd:punc.1",
+      "next": "write.sen.copy.wrd:punc.2",
+      "next_next": "write.sen.copy.wrd:punc.3",
+      "prev": "write.sen.copy.wrd:noerror.3",
+      "harder": "place.value:pv-100..499.3D.diff0.17",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:punc.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:punc.2",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_punc.2.json",
+      "cell_row": "3",
+      "cell_column": "17",
+      "same": "write.sen.copy.wrd:punc.2",
+      "next": "write.sen.copy.wrd:punc.3",
+      "next_next": "write.sen.copy.wrd:space.1",
+      "prev": "write.sen.copy.wrd:punc.1",
+      "harder": "place.value:pv-100..499.3D.diff0.18",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:punc.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:punc.3",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_punc.3.json",
+      "cell_row": "3",
+      "cell_column": "18",
+      "same": "write.sen.copy.wrd:punc.3",
+      "next": "write.sen.copy.wrd:space.1",
+      "next_next": "write.sen.copy.wrd:space.2",
+      "prev": "write.sen.copy.wrd:punc.2",
+      "harder": "place.value:pv-100..499.3D.diff0.19",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:space.1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:space.1",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_space.1.json",
+      "cell_row": "3",
+      "cell_column": "19",
+      "same": "write.sen.copy.wrd:space.1",
+      "next": "write.sen.copy.wrd:space.2",
+      "next_next": "write.sen.copy.wrd:space.3",
+      "prev": "write.sen.copy.wrd:punc.3",
+      "harder": "place.value:pv-100..499.3D.diff0.20",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:space.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:space.2",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_space.2.json",
+      "cell_row": "3",
+      "cell_column": "20",
+      "same": "write.sen.copy.wrd:space.2",
+      "next": "write.sen.copy.wrd:space.3",
+      "next_next": "write.sen.corr.sen:cap.1",
+      "prev": "write.sen.copy.wrd:space.1",
+      "harder": "place.value:pv-100..499.3D.diff1.21",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.copy.wrd:space.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.copy.wrd:space.3",
+      "tutor_desc": "write.sen.copy.wrd",
+      "tutor_data": "[file]write.sen.copy.wrd_space.3.json",
+      "cell_row": "3",
+      "cell_column": "21",
+      "same": "write.sen.copy.wrd:space.3",
+      "next": "write.sen.corr.sen:cap.1",
+      "next_next": "write.sen.corr.sen:cap.2",
+      "prev": "write.sen.copy.wrd:space.2",
+      "harder": "place.value:pv-100..499.3D.diff1.22",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:cap.1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:cap.1",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_cap.1.json",
+      "cell_row": "3",
+      "cell_column": "22",
+      "same": "write.sen.corr.sen:cap.1",
+      "next": "write.sen.corr.sen:cap.2",
+      "next_next": "write.sen.corr.sen:cap.3",
+      "prev": "write.sen.copy.wrd:space.3",
+      "harder": "place.value:pv-100..499.3D.diff1.23",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:cap.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:cap.2",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_cap.2.json",
+      "cell_row": "3",
+      "cell_column": "23",
+      "same": "write.sen.corr.sen:cap.2",
+      "next": "write.sen.corr.sen:cap.3",
+      "next_next": "write.sen.corr.sen:punc.1",
+      "prev": "write.sen.corr.sen:cap.1",
+      "harder": "place.value:pv-100..499.3D.diff1.24",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:cap.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:cap.3",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_cap.3.json",
+      "cell_row": "3",
+      "cell_column": "24",
+      "same": "write.sen.corr.sen:cap.3",
+      "next": "write.sen.corr.sen:punc.1",
+      "next_next": "write.sen.corr.sen:punc.2",
+      "prev": "write.sen.corr.sen:cap.2",
+      "harder": "place.value:pv-100..499.3D.diff1.25",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:punc.1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:punc.1",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_punc.1.json",
+      "cell_row": "3",
+      "cell_column": "25",
+      "same": "write.sen.corr.sen:punc.1",
+      "next": "write.sen.corr.sen:punc.2",
+      "next_next": "write.sen.corr.sen:punc.3",
+      "prev": "write.sen.corr.sen:cap.3",
+      "harder": "place.value:pv-100..499.3D.diff2.26",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:punc.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:punc.2",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_punc.2.json",
+      "cell_row": "3",
+      "cell_column": "26",
+      "same": "write.sen.corr.sen:punc.2",
+      "next": "write.sen.corr.sen:punc.3",
+      "next_next": "write.sen.corr.sen:space.1",
+      "prev": "write.sen.corr.sen:punc.1",
+      "harder": "place.value:pv-100..499.3D.diff2.27",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:punc.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:punc.3",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_punc.3.json",
+      "cell_row": "3",
+      "cell_column": "27",
+      "same": "write.sen.corr.sen:punc.3",
+      "next": "write.sen.corr.sen:space.1",
+      "next_next": "write.sen.corr.sen:space.2",
+      "prev": "write.sen.corr.sen:punc.2",
+      "harder": "place.value:pv-100..499.3D.diff2.28",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:space.1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:space.1",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_space.1.json",
+      "cell_row": "3",
+      "cell_column": "28",
+      "same": "write.sen.corr.sen:space.1",
+      "next": "write.sen.corr.sen:space.2",
+      "next_next": "write.sen.corr.sen:space.3",
+      "prev": "write.sen.corr.sen:punc.3",
+      "harder": "place.value:pv-100..499.3D.diff2.29",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:space.2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:space.2",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_space.2.json",
+      "cell_row": "3",
+      "cell_column": "29",
+      "same": "write.sen.corr.sen:space.2",
+      "next": "write.sen.corr.sen:space.3",
+      "next_next": "place.value:pv-11..99.2D.diff0.1",
+      "prev": "write.sen.corr.sen:space.1",
+      "harder": "place.value:pv-100..499.3D.diff2.30",
+      "easier": "numcompare:3d.compare.mix"
+    },
+    "write.sen.corr.sen:space.3": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "write.sen.corr.sen:space.3",
+      "tutor_desc": "write.sen.corr.sen",
+      "tutor_data": "[file]write.sen.corr.sen_space.3.json",
+      "cell_row": "3",
+      "cell_column": "30",
+      "same": "write.sen.corr.sen:space.3",
       "next": "place.value:pv-11..99.2D.diff0.1",
       "next_next": "place.value:pv-11..99.2D.diff0.2",
-      "prev": "write.sen.copy.wrd:3",
-      "harder": "place.value:pv-11..99.2D.diff0.5",
+      "prev": "write.sen.corr.sen:space.2",
+      "harder": "place.value:pv-100..499.3D.diff2.30",
       "easier": "numcompare:3d.compare.mix"
     },
     "place.value:pv-11..99.2D.diff0.1": {
@@ -2179,9 +3349,9 @@
       "same": "place.value:pv-11..99.2D.diff0.1",
       "next": "place.value:pv-11..99.2D.diff0.2",
       "next_next": "place.value:pv-11..99.2D.diff0.3",
-      "prev": "write.sen.copy.wrd:4",
+      "prev": "write.sen.corr.sen:space.3",
       "harder": "picmatch:body",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:space.3"
     },
     "place.value:pv-11..99.2D.diff0.2": {
       "type": "TRANSITION",
@@ -2196,7 +3366,7 @@
       "next_next": "place.value:pv-11..99.2D.diff0.4",
       "prev": "place.value:pv-11..99.2D.diff0.1",
       "harder": "picmatch:food",
-      "easier": "write.sen.copy.wrd:1"
+      "easier": "write.sen.copy.sen:noerror.1"
     },
     "place.value:pv-11..99.2D.diff0.3": {
       "type": "TRANSITION",
@@ -2211,7 +3381,7 @@
       "next_next": "place.value:pv-11..99.2D.diff0.5",
       "prev": "place.value:pv-11..99.2D.diff0.2",
       "harder": "picmatch:thing",
-      "easier": "write.sen.copy.wrd:2"
+      "easier": "write.sen.copy.sen:noerror.2"
     },
     "place.value:pv-11..99.2D.diff0.4": {
       "type": "TRANSITION",
@@ -2226,7 +3396,7 @@
       "next_next": "place.value:pv-11..99.2D.diff1.6",
       "prev": "place.value:pv-11..99.2D.diff0.3",
       "harder": "picmatch:people",
-      "easier": "write.sen.copy.wrd:3"
+      "easier": "write.sen.copy.sen:noerror.3"
     },
     "place.value:pv-11..99.2D.diff0.5": {
       "type": "TRANSITION",
@@ -2241,7 +3411,7 @@
       "next_next": "place.value:pv-11..99.2D.diff1.7",
       "prev": "place.value:pv-11..99.2D.diff0.4",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.sen:punc.1"
     },
     "place.value:pv-11..99.2D.diff1.6": {
       "type": "TRANSITION",
@@ -2256,7 +3426,7 @@
       "next_next": "place.value:pv-11..99.2D.diff1.8",
       "prev": "place.value:pv-11..99.2D.diff0.5",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.sen:punc.2"
     },
     "place.value:pv-11..99.2D.diff1.7": {
       "type": "TRANSITION",
@@ -2271,7 +3441,7 @@
       "next_next": "place.value:pv-11..99.2D.diff1.9",
       "prev": "place.value:pv-11..99.2D.diff1.6",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.sen:punc.3"
     },
     "place.value:pv-11..99.2D.diff1.8": {
       "type": "TRANSITION",
@@ -2286,7 +3456,7 @@
       "next_next": "place.value:pv-11..99.2D.diff1.10",
       "prev": "place.value:pv-11..99.2D.diff1.7",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.sen:space.1"
     },
     "place.value:pv-11..99.2D.diff1.9": {
       "type": "TRANSITION",
@@ -2301,7 +3471,7 @@
       "next_next": "place.value:pv-11..99.2D.diff2.11",
       "prev": "place.value:pv-11..99.2D.diff1.8",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.sen:space.2"
     },
     "place.value:pv-11..99.2D.diff1.10": {
       "type": "TRANSITION",
@@ -2316,7 +3486,7 @@
       "next_next": "place.value:pv-11..99.2D.diff2.12",
       "prev": "place.value:pv-11..99.2D.diff1.9",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.sen:space.3"
     },
     "place.value:pv-11..99.2D.diff2.11": {
       "type": "TRANSITION",
@@ -2331,7 +3501,7 @@
       "next_next": "place.value:pv-11..99.2D.diff2.13",
       "prev": "place.value:pv-11..99.2D.diff1.10",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:cap.1"
     },
     "place.value:pv-11..99.2D.diff2.12": {
       "type": "TRANSITION",
@@ -2346,7 +3516,7 @@
       "next_next": "place.value:pv-11..99.2D.diff2.14",
       "prev": "place.value:pv-11..99.2D.diff2.11",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:cap.2"
     },
     "place.value:pv-11..99.2D.diff2.13": {
       "type": "TRANSITION",
@@ -2361,7 +3531,7 @@
       "next_next": "place.value:pv-11..99.2D.diff2.15",
       "prev": "place.value:pv-11..99.2D.diff2.12",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:cap.3"
     },
     "place.value:pv-11..99.2D.diff2.14": {
       "type": "TRANSITION",
@@ -2376,7 +3546,7 @@
       "next_next": "place.value:pv-100..499.3D.diff0.16",
       "prev": "place.value:pv-11..99.2D.diff2.13",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:noerror.1"
     },
     "place.value:pv-11..99.2D.diff2.15": {
       "type": "TRANSITION",
@@ -2391,7 +3561,7 @@
       "next_next": "place.value:pv-100..499.3D.diff0.17",
       "prev": "place.value:pv-11..99.2D.diff2.14",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:noerror.2"
     },
     "place.value:pv-100..499.3D.diff0.16": {
       "type": "TRANSITION",
@@ -2406,7 +3576,7 @@
       "next_next": "place.value:pv-100..499.3D.diff0.18",
       "prev": "place.value:pv-11..99.2D.diff2.15",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:noerror.3"
     },
     "place.value:pv-100..499.3D.diff0.17": {
       "type": "TRANSITION",
@@ -2421,7 +3591,7 @@
       "next_next": "place.value:pv-100..499.3D.diff0.19",
       "prev": "place.value:pv-100..499.3D.diff0.16",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:punc.1"
     },
     "place.value:pv-100..499.3D.diff0.18": {
       "type": "TRANSITION",
@@ -2436,7 +3606,7 @@
       "next_next": "place.value:pv-100..499.3D.diff0.20",
       "prev": "place.value:pv-100..499.3D.diff0.17",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:punc.2"
     },
     "place.value:pv-100..499.3D.diff0.19": {
       "type": "TRANSITION",
@@ -2451,7 +3621,7 @@
       "next_next": "place.value:pv-100..499.3D.diff1.21",
       "prev": "place.value:pv-100..499.3D.diff0.18",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:punc.3"
     },
     "place.value:pv-100..499.3D.diff0.20": {
       "type": "TRANSITION",
@@ -2466,7 +3636,7 @@
       "next_next": "place.value:pv-100..499.3D.diff1.22",
       "prev": "place.value:pv-100..499.3D.diff0.19",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:space.1"
     },
     "place.value:pv-100..499.3D.diff1.21": {
       "type": "TRANSITION",
@@ -2481,7 +3651,7 @@
       "next_next": "place.value:pv-100..499.3D.diff1.23",
       "prev": "place.value:pv-100..499.3D.diff0.20",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:space.2"
     },
     "place.value:pv-100..499.3D.diff1.22": {
       "type": "TRANSITION",
@@ -2496,7 +3666,7 @@
       "next_next": "place.value:pv-100..499.3D.diff1.24",
       "prev": "place.value:pv-100..499.3D.diff1.21",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.copy.wrd:space.3"
     },
     "place.value:pv-100..499.3D.diff1.23": {
       "type": "TRANSITION",
@@ -2511,7 +3681,7 @@
       "next_next": "place.value:pv-100..499.3D.diff1.25",
       "prev": "place.value:pv-100..499.3D.diff1.22",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:cap.1"
     },
     "place.value:pv-100..499.3D.diff1.24": {
       "type": "TRANSITION",
@@ -2526,7 +3696,7 @@
       "next_next": "place.value:pv-100..499.3D.diff2.26",
       "prev": "place.value:pv-100..499.3D.diff1.23",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:cap.2"
     },
     "place.value:pv-100..499.3D.diff1.25": {
       "type": "TRANSITION",
@@ -2541,7 +3711,7 @@
       "next_next": "place.value:pv-100..499.3D.diff2.27",
       "prev": "place.value:pv-100..499.3D.diff1.24",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:cap.3"
     },
     "place.value:pv-100..499.3D.diff2.26": {
       "type": "TRANSITION",
@@ -2556,7 +3726,7 @@
       "next_next": "place.value:pv-100..499.3D.diff2.28",
       "prev": "place.value:pv-100..499.3D.diff1.25",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:punc.1"
     },
     "place.value:pv-100..499.3D.diff2.27": {
       "type": "TRANSITION",
@@ -2571,7 +3741,7 @@
       "next_next": "place.value:pv-100..499.3D.diff2.29",
       "prev": "place.value:pv-100..499.3D.diff2.26",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:punc.2"
     },
     "place.value:pv-100..499.3D.diff2.28": {
       "type": "TRANSITION",
@@ -2586,7 +3756,7 @@
       "next_next": "place.value:pv-100..499.3D.diff2.30",
       "prev": "place.value:pv-100..499.3D.diff2.27",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:punc.3"
     },
     "place.value:pv-100..499.3D.diff2.29": {
       "type": "TRANSITION",
@@ -2601,7 +3771,7 @@
       "next_next": "picmatch:animal",
       "prev": "place.value:pv-100..499.3D.diff2.28",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:space.1"
     },
     "place.value:pv-100..499.3D.diff2.30": {
       "type": "TRANSITION",
@@ -2616,7 +3786,7 @@
       "next_next": "picmatch:body",
       "prev": "place.value:pv-100..499.3D.diff2.29",
       "harder": "picmatch:nature",
-      "easier": "write.sen.copy.wrd:4"
+      "easier": "write.sen.corr.sen:space.2"
     },
     "picmatch:animal": {
       "type": "TRANSITION",
