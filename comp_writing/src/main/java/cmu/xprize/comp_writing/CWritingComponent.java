@@ -2178,55 +2178,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
     }
 
-    //amogh added (not used currently)
-    public void updateResponseView(String a)
-    {
-        mResponseViewList.removeAllViews();
-        CStimulusController resp;
-        resp = (CStimulusController)LayoutInflater.from(getContext()).inflate(R.layout.recog_resp_comp, null, false);
-        resp.setStimulusChar(a,false);
-        mResponseViewList.addView(resp);
-        resp.setLinkedScroll(mDrawnScroll);
-        resp.setWritingController(this);
-    }
 
-    private void incrementCorrectionLists(int index){
-        for (int i=0; i<deleteCorrectionIndices.size(); i++)
-        {
-            if (deleteCorrectionIndices.get(i) > index){
-                deleteCorrectionIndices.set(i, deleteCorrectionIndices.get(i).intValue() + 1);
-            }
-
-            if (changeCorrectionIndices.get(i) > index){
-                changeCorrectionIndices.set(i, changeCorrectionIndices.get(i).intValue() + 1);
-            }
-
-            if (insertCorrectionIndices.get(i) > index){
-                changeCorrectionIndices.set(i, changeCorrectionIndices.get(i).intValue() + 1);
-            }
-
-        }
-    }
-
-    private void decrementCorrectionLists(int index){
-        for (int i=0; i<deleteCorrectionIndices.size(); i++)
-        {
-            if (deleteCorrectionIndices.get(i) > index){
-                deleteCorrectionIndices.set(i, deleteCorrectionIndices.get(i).intValue() - 1);
-            }
-
-            if (changeCorrectionIndices.get(i) > index){
-                changeCorrectionIndices.set(i, changeCorrectionIndices.get(i).intValue() - 1);
-            }
-
-            if (insertCorrectionIndices.get(i) > index){
-                changeCorrectionIndices.set(i, changeCorrectionIndices.get(i).intValue() - 1);
-            }
-
-        }
-    }
-
-    //amogh added ends
 
     public void setConstraint(String constraint) {
 
