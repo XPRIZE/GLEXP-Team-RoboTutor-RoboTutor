@@ -34,10 +34,19 @@ public class WR_CONST {
     public static final String FTR_ATTEMPT_4            = "FTR_ATTEMPT_4";
 
     //amogh added
+    public static final String FTR_SEN_ATTEMPT_1        = "FTR_SEN_ATTEMPT_1";
+    public static final String FTR_SEN_ATTEMPT_2        = "FTR_SEN_ATTEMPT_2";
+    public static final String FTR_SEN_ATTEMPT_3        = "FTR_SEN_ATTEMPT_3";
+    public static final String FTR_SEN_ATTEMPT_4        = "FTR_SEN_ATTEMPT_4";
+
     public static final String FTR_HESITATION_1            = "FTR_HESITATION_1";
     public static final String FTR_HESITATION_2            = "FTR_HESITATION_2";
     public static final String FTR_HESITATION_3            = "FTR_HESITATION_3";
     public static final String FTR_HESITATION_4            = "FTR_HESITATION_4";
+    public static final String FTR_HESITATION_5            = "FTR_HESITATION_5";
+
+    public static final String FTR_WORD_CORRECT            = "FTR_WORD_CORRECT";
+    public static final String FTR_SEN_EVAL                = "FTR_SEN_EVAL";
     //amogh add finish
 
 
@@ -122,6 +131,10 @@ public class WR_CONST {
     public static final String FTR_INSERT = "FTR_INSERT";
     public static final String FTR_DELETE = "FTR_DELETE";
     public static final String FTR_REPLACE = "FTR_REPLACE";
+    public static final String FTR_PERIOD = "FTR_PERIOD";
+    public static final String FTR_EXCLAIM = "FTR_EXCLAIM";
+    public static final String FTR_QUESTION = "FTR_QUESTION";
+    public static final String FTR_COMMA = "FTR_COMMA";
 //    public static final String FTR_INSERT = "FTR_INSERT";
 //    public static final String FTR_INSERT = "";
 //    public static final String FTR_INSERT = "";

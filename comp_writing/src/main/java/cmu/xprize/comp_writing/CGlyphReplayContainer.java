@@ -288,6 +288,7 @@ public class CGlyphReplayContainer extends View implements Animator.AnimatorList
 
     @Override
     public void onAnimationStart(Animator animation) {
+        mWritingComponent.applyBehavior(WR_CONST.ON_START_WRITING); //amogh added for hesitation.
         invalidate();
     }
 
@@ -310,6 +311,7 @@ public class CGlyphReplayContainer extends View implements Animator.AnimatorList
             //
             if(_callback != null) {
                 _callback.applyEvent(WR_CONST.FIELD_REPLAY_COMPLETE);
+                mWritingComponent.applyBehavior(WR_CONST.ON_STOP_WRITING); //amogh added for hesitation.
             }
 
             // update the persona and Pointer
