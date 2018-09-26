@@ -151,7 +151,6 @@ public class CycleMatrixActivityMenu implements IActivityMenu {
 
         Log.d("OH_BEHAVE", "some behavior here should be different...");
 
-        // FINISH_MENU repeat still not working. Double-check the logic
         if (buttonBehavior.equals(SELECT_REPEAT)) {
             Log.d("REPEAT_ME", "repeating behavior");
             RoboTutor.STUDENT_CHOSE_REPEAT = true;
@@ -178,7 +177,7 @@ public class CycleMatrixActivityMenu implements IActivityMenu {
                 Log.d("REPEAT_ME", "mathTutor=" + activeTutorId);
                 break;
         }
-        // FINISH_MENU (r) there's a repeat bug in here
+
         Log.d("REPEAT_ME", "activeSkill = " + activeSkill);
         Log.d("REPEAT_ME", "activeTutorId = " + activeTutorId);
         transitionMap = _matrix.getTransitionMapByContentArea(activeSkill);
@@ -187,7 +186,6 @@ public class CycleMatrixActivityMenu implements IActivityMenu {
         //nextTutors[0] = ((CAt_Data) transitionMap.get(activeTutor.easier)).tutor_id; // next hardest tutor!!!
         nextTutors[1] = ((CAt_Data) transitionMap.get(activeTutor.next)).tutor_id; // next hardest tutor!!!
 
-        // FINISH_MENU (x) should only be two options
         switch(buttonBehavior.toUpperCase()) {
 
             case SELECT_OPTION_0:

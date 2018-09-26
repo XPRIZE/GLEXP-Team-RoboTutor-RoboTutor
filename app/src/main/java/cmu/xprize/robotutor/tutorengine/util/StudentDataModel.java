@@ -184,7 +184,6 @@ public class StudentDataModel {
 
     /**
      * move on to the next skill in cycle
-     * OH_BEHAVE (0) call after activity has been completed
      * @return
      */
     public String incrementActiveSkill() {
@@ -196,7 +195,6 @@ public class StudentDataModel {
 
     /**
      * This is needed to perform a repeat.
-     * OH_BEHAVE (3) call when student selects repeat
      * @return
      */
     public String getLastSkill() {
