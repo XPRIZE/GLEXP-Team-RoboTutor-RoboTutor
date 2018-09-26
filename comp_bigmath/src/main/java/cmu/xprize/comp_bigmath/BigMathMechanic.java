@@ -65,7 +65,7 @@ public class BigMathMechanic {
     private int _numDigits;
 
     //
-    private boolean EXPAND_HIT_BOX = true;
+    private boolean EXPAND_HIT_BOX = false;
     private boolean ALL_AT_ONCE = true;
 
     // used to track UI state
@@ -232,12 +232,15 @@ public class BigMathMechanic {
                 // addition move to result row
                 // subtraction move to operand row
                 View.OnClickListener listener;
-                if (ALL_AT_ONCE) {
+                if (ALL_AT_ONCE && _numDigits >= 2) {
                     listener  = new BaseTenOnClickAnimateWaterfall(numLoc, ONE_DIGIT);
+                } else if (!ALL_AT_ONCE && _numDigits >= 2) {
+                    listener = new BaseTenOnClickAnimateMe(ONE_DIGIT);
+                } else {
+                    listener = new BaseTenOnClickAnimateMe(ONE_DIGIT);
                 }
 
-
-                oneView.setOnClickListener(ALL_AT_ONCE ? new BaseTenOnClickAnimateWaterfall(numLoc, ONE_DIGIT) : new BaseTenOnClickAnimateMe(ONE_DIGIT)); // BUG_605 this should vary depending on whether it's for subtraction, and 1-digit
+                oneView.setOnClickListener(listener); // BUG_605 this should vary depending on whether it's for subtraction, and 1-digit
             }
 
             // add listeners to Tens
@@ -245,7 +248,7 @@ public class BigMathMechanic {
                 for (int i=1; i <= 10; i++) {
 
                     MovableImageView tenView = _layout.getBaseTenConcreteUnitView(numLoc, TEN_DIGIT, i);
-                    tenView.setOnClickListener(ALL_AT_ONCE ? new BaseTenOnClickAnimateWaterfall(numLoc, TEN_DIGIT) : new BaseTenOnClickAnimateMe(TEN_DIGIT));
+                    tenView.setOnClickListener(ALL_AT_ONCE ? new BaseTenOnClickAnimateWaterfall(numLoc, TEN_DIGIT) : new BaseTenOnClickAnimateMe(TEN_DIGIT)); // BUG_605 this ain't workin some times
                 }
 
             // add listeners to Hundreds

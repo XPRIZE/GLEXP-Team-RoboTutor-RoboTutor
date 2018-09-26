@@ -152,7 +152,7 @@
         android:clipToPadding="false"
         app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_3"
         app:layout_constraintTop_toBottomOf="@+id/guideline_top_of_top"
-        android:background="@drawable/inner_rectangle"
+        android:background="@null"
         android:visibility="visible"
         android:tag="opA">
 
@@ -199,7 +199,7 @@
         android:clipToPadding="false"
         app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_3"
         app:layout_constraintTop_toBottomOf="@+id/guideline_top_of_mid"
-        android:background="@drawable/inner_rectangle"
+        android:background="@null"
         android:visibility="visible"
         android:tag="opB">
 
@@ -340,7 +340,7 @@
         android:clipToPadding="false"
         app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_3"
         app:layout_constraintTop_toBottomOf="@+id/guideline_top_of_bottom"
-        android:background="@drawable/inner_rectangle"
+        android:background="@null"
         android:visibility="visible">
 
         <!-- https://developer.android.com/topic/libraries/data-binding/#includes -->

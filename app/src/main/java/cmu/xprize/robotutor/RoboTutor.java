@@ -100,9 +100,9 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     // VARIABLES FOR QUICK DEBUG LAUNCH
     private static final boolean QUICK_DEBUG = false;
-    private static final String debugTutorVariant = "picmatch";
-    private static final String debugTutorId = "picmatch::animal";
-    private static final String debugTutorFile = "[file]picmatch_food.json";
+    private static final String debugTutorVariant = "bigmath";
+    private static final String debugTutorId = "bigmath:add.by.1.0..8.NoCarryBorrow.lev1";
+    private static final String debugTutorFile = "[file]bigmath_sub.by.1.1..9.NoCarryBorrow.lev3.json";
     //private static final String debugTutorVariant = "numdiscr";
     //private static final String debugTutorVariant = "math";
     //private static final String debugTutorId = "numdiscr:sample";
@@ -163,7 +163,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     private boolean                 engineStarted = false;
     static public boolean           STANDALONE    = false;
     static public String            SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT; // this is only used as a feature, when launching TActivitySelector...
-    static public boolean           STUDENT_CHOSE_REPEAT = false; // FINISH_MENU double-check logic on repeat
+    static public boolean           STUDENT_CHOSE_REPEAT = false;
 //    static public String        SELECTOR_MODE = TCONST.FTR_DEBUG_SELECT;
 
 
