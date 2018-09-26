@@ -99,7 +99,7 @@ import static cmu.xprize.util.TCONST.WRITING_PLACEMENT;
 public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     // VARIABLES FOR QUICK DEBUG LAUNCH
-    private static final boolean QUICK_DEBUG = false;
+
     // private static final String debugTutorVariant = "bigmath";
     // private static final String debugTutorId = "bigmath:add.by.1.0..8.NoCarryBorrow.lev1";
     // private static final String debugTutorFile = "[file]bigmath_sub.by.rand.20..90.NoCarryBorrow.lev8.json";     // 2d subtract
@@ -107,9 +107,33 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     //private static final String debugTutorFile = "[file]bigmath_sub.by.1.1..9.NoCarryBorrow.lev3.json";             // 1d sub
     // private static final String debugTutorFile = "[file]bigmath_add.by.1.0..8.NoCarryBorrow.lev1.json";           // 1d add
 
-    private static final String debugTutorVariant = "placevalue";
-    private static final String debugTutorId = "place.value:1";
-    private static final String debugTutorFile = "[file]place.value__pv-11..99.2D.diff0.3.json";
+//    private static final String debugTutorVariant = "placevalue";
+//    private static final String debugTutorId = "place.value:1";
+//    private static final String debugTutorFile = "[file]place.value__pv-11..99.2D.diff0.3.json";
+    private static final boolean QUICK_DEBUG = false;
+    private static final String debugTutorVariant = "write.sen.copy.sen";
+    private static final String debugTutorId = "write.wrd:story_1_1";
+    private static final String debugTutorFile = "[file]write.sen.copy.sen_noerror.1.json";
+
+    //amogh missing letter
+//    private static final String debugTutorFile = "[file]write.missingLtr_0.1.2.fin.s.json";
+    //amogh dictation
+//    private static final String debugTutorFile = "[file]write.wrd.dic_lc.begin.ha.18.json";
+
+//    private static final String debugTutorVariant = "write.ltr.uc.trc";
+//    private static final String debugTutorId = "write.wrd:story_1_1";
+//    private static final String debugTutorFile = "[file]write.ltr.uc.trc_vow.asc.A..Z.1.json";
+
+//    private static final boolean QUICK_DEBUG = false;
+//    private static final String debugTutorVariant = "picmatch";
+//    private static final String debugTutorId = "picmatch::animal";
+//    private static final String debugTutorFile = "[file]picmatch_food.json";
+    //private static final String debugTutorVariant = "numdiscr";
+    //private static final String debugTutorVariant = "math";
+    //private static final String debugTutorId = "numdiscr:sample";
+    //private static final String debugTutorId = "math:0..8.ADD-1D-V-S.rand.3";
+    //private static final String debugTutorFile = "[file]numdiscr_sample.json";
+    // private static final String debugTutorFile = "[file]math_0..800.ADD-100-V-S.incr.13.json";
 
     public static final boolean TURN_OFF_PLACEMENT_FOR_QA = true;
     //private static final String debugTutorFile = "[file]math_10..80.SUB-2D-V-S.rand.12.json";
