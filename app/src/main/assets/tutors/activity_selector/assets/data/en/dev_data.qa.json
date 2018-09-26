@@ -1,8 +1,8 @@
 {
 
-  "rootSkillWrite": "write.sen.copy.sen:noerror.1",
-  "rootSkillStories": "story.hear::story_1",
-  "rootSkillMath": "numcompare:1d",
+  "rootSkillWrite": "story.clo.hear::story_30",
+  "rootSkillStories": "story.clo.hear::story_30",
+  "rootSkillMath": "story.clo.hear::story_30",
   "writeTransitions": {
     "write.sen.copy.sen:noerror.1": {
       "type": "TRANSITION",
