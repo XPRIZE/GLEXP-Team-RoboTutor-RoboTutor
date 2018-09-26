@@ -102,13 +102,10 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     private static final boolean QUICK_DEBUG = false;
     private static final String debugTutorVariant = "bigmath";
     private static final String debugTutorId = "bigmath:add.by.1.0..8.NoCarryBorrow.lev1";
-    private static final String debugTutorFile = "[file]bigmath_sub.by.1.1..9.NoCarryBorrow.lev3.json";
-    //private static final String debugTutorVariant = "numdiscr";
-    //private static final String debugTutorVariant = "math";
-    //private static final String debugTutorId = "numdiscr:sample";
-    //private static final String debugTutorId = "math:0..8.ADD-1D-V-S.rand.3";
-    //private static final String debugTutorFile = "[file]numdiscr_sample.json";
-    // private static final String debugTutorFile = "[file]math_0..800.ADD-100-V-S.incr.13.json";
+    // private static final String debugTutorFile = "[file]bigmath_sub.by.rand.20..90.NoCarryBorrow.lev8.json";     // 2d subtract
+    //private static final String debugTutorFile = "[file]bigmath_add.by.rand.10..80.NoCarryBorrow.lev6.json";      // 2d add
+    //private static final String debugTutorFile = "[file]bigmath_sub.by.1.1..9.NoCarryBorrow.lev3.json";             // 1d sub
+    private static final String debugTutorFile = "[file]bigmath_add.by.1.0..8.NoCarryBorrow.lev1.json";           // 1d add
 
     public static final boolean TURN_OFF_PLACEMENT_FOR_QA = true;
     //private static final String debugTutorFile = "[file]math_10..80.SUB-2D-V-S.rand.12.json";

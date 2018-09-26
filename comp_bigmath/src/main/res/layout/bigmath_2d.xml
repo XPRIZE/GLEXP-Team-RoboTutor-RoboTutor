@@ -322,7 +322,7 @@
         android:clipChildren="false"
         app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_2"
         app:layout_constraintTop_toBottomOf="@+id/guideline_top_of_top"
-        android:background="@drawable/inner_rectangle"
+        android:background="@null"
         android:visibility="visible"
         android:tag="opA">
 
@@ -338,7 +338,7 @@
         android:id="@+id/one_opA_box"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:background="@drawable/inner_rectangle"
+        android:background="@null"
         android:padding="8dp"
         android:clipChildren="false"
         android:tag="opA"
@@ -415,7 +415,7 @@
         android:clipToPadding="false"
         app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_2"
         app:layout_constraintTop_toBottomOf="@+id/guideline_top_of_mid"
-        android:background="@drawable/inner_rectangle"
+        android:background="@null"
         android:visibility="visible"
         android:tag="opB">
 
@@ -424,6 +424,12 @@
             android:layout_height="wrap_content"
             android:clipChildren="false"
             android:clipToPadding="false"/>
+
+        <include android:id="@+id/opB_tens_helpers" layout="@layout/concrete_ten_vertical_helpers_2d"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false" />
 
     </RelativeLayout>
 
@@ -437,7 +443,7 @@
         app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_3"
         app:layout_constraintTop_toTopOf="@+id/ten_opB_box"
         app:layout_constraintBottom_toBottomOf="@+id/ten_opB_box"
-        android:background="@drawable/inner_rectangle"
+        android:background="@null"
         android:visibility="visible"
         android:tag="opB">
 
@@ -637,7 +643,7 @@
         android:clipToPadding="false"
         app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_2"
         app:layout_constraintTop_toBottomOf="@+id/guideline_top_of_bottom"
-        android:background="@drawable/inner_rectangle"
+        android:background="@null"
         android:visibility="visible">
 
         <include android:id="@+id/result_tens" layout="@layout/concrete_ten_vertical_2d"
@@ -664,7 +670,7 @@
         app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical_3"
         app:layout_constraintTop_toTopOf="@+id/ten_result_box"
         app:layout_constraintBottom_toBottomOf="@+id/ten_result_box"
-        android:background="@drawable/inner_rectangle"
+        android:background="@null"
         android:visibility="visible">
 
         <!-- Result Ones -->
@@ -748,13 +754,7 @@
     <!-- Mid Tens -->
 
 
-    <include android:id="@+id/opB_tens_helpers" layout="@layout/concrete_ten_vertical_helpers_2d"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        app:layout_constraintLeft_toLeftOf="@+id/ten_opB_box"
-        app:layout_constraintTop_toTopOf="@+id/ten_opB_box"/>
+
 
     <!-- Result Tens -->
 
@@ -834,7 +834,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/debug_buttons"
-        android:text="start"/>
+        android:text="start"
+        android:visibility="gone"/>
 
     <!-- there are two writing controllers, for when writing a double digit number -->
     <LinearLayout

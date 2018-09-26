@@ -220,35 +220,34 @@ public class BigMathMechanic {
 
         for (String numLoc : locations) {
 
+            // BUG_605 waterfall not ready for subtraction
+            View.OnClickListener oneListener;
+            boolean useWaterfallForOnesDigit = ALL_AT_ONCE && _numDigits >= 2 && _data.operation.equals("+");
+            if (useWaterfallForOnesDigit) {
+                oneListener  = new BaseTenOnClickAnimateWaterfall(numLoc, ONE_DIGIT);
+            } else if (!ALL_AT_ONCE && _numDigits >= 2) {
+                oneListener = new BaseTenOnClickAnimateMe(ONE_DIGIT);
+            } else {
+                oneListener = new BaseTenOnClickAnimateMe(ONE_DIGIT);
+            }
+
             // add listeners to Ones
             for (int i=1; i <= 10; i++) {
 
                 MovableImageView oneView = _layout.getBaseTenConcreteUnitView(numLoc, ONE_DIGIT, i);
 
-                // BUG_605 table of cases:
-                // 1-digit... animate one at a time
-                // 2- or above digit... animate all at once
-                // X
-                // addition move to result row
-                // subtraction move to operand row
-                View.OnClickListener listener;
-                if (ALL_AT_ONCE && _numDigits >= 2) {
-                    listener  = new BaseTenOnClickAnimateWaterfall(numLoc, ONE_DIGIT);
-                } else if (!ALL_AT_ONCE && _numDigits >= 2) {
-                    listener = new BaseTenOnClickAnimateMe(ONE_DIGIT);
-                } else {
-                    listener = new BaseTenOnClickAnimateMe(ONE_DIGIT);
-                }
-
-                oneView.setOnClickListener(listener); // BUG_605 this should vary depending on whether it's for subtraction, and 1-digit
+                oneView.setOnClickListener(oneListener);
             }
+
+            // BUG_605 waterfall not ready for subtraction
+            boolean useWaterfallForMultiDigit = ALL_AT_ONCE && _data.operation.equals("+");
 
             // add listeners to Tens
             if (_numDigits >= 2)
                 for (int i=1; i <= 10; i++) {
 
                     MovableImageView tenView = _layout.getBaseTenConcreteUnitView(numLoc, TEN_DIGIT, i);
-                    tenView.setOnClickListener(ALL_AT_ONCE ? new BaseTenOnClickAnimateWaterfall(numLoc, TEN_DIGIT) : new BaseTenOnClickAnimateMe(TEN_DIGIT)); // BUG_605 this ain't workin some times
+                    tenView.setOnClickListener(useWaterfallForMultiDigit ? new BaseTenOnClickAnimateWaterfall(numLoc, TEN_DIGIT) : new BaseTenOnClickAnimateMe(TEN_DIGIT));
                 }
 
             // add listeners to Hundreds
@@ -256,18 +255,17 @@ public class BigMathMechanic {
                 for (int i=1; i <= 5; i++) {
 
                     MovableImageView hunView = _layout.getBaseTenConcreteUnitView(numLoc, HUN_DIGIT, i);
-                    hunView.setOnClickListener(ALL_AT_ONCE ? new BaseTenOnClickAnimateWaterfall(numLoc, HUN_DIGIT) : new BaseTenOnClickAnimateMe(HUN_DIGIT));
+                    hunView.setOnClickListener(useWaterfallForMultiDigit ? new BaseTenOnClickAnimateWaterfall(numLoc, HUN_DIGIT) : new BaseTenOnClickAnimateMe(HUN_DIGIT));
                 }
 
-
             // PART 2 (BOX) for (one, ten, hun) will move sequential ones. These may or may not (but probably will) be used.
-            _layout.getContainingBox(numLoc, ONE_DIGIT).setOnClickListener(ALL_AT_ONCE ? new BaseTenOnClickAnimateWaterfall(numLoc, ONE_DIGIT) : new BaseTenOnClickAnimateSequential(ONE_DIGIT));
+            _layout.getContainingBox(numLoc, ONE_DIGIT).setOnClickListener(useWaterfallForOnesDigit ? new BaseTenOnClickAnimateWaterfall(numLoc, ONE_DIGIT) : new BaseTenOnClickAnimateSequential(ONE_DIGIT));
 
             if (_numDigits >= 2)
-                _layout.getContainingBox(numLoc, TEN_DIGIT).setOnClickListener(ALL_AT_ONCE ? new BaseTenOnClickAnimateWaterfall(numLoc, TEN_DIGIT) :  new BaseTenOnClickAnimateSequential(TEN_DIGIT));
+                _layout.getContainingBox(numLoc, TEN_DIGIT).setOnClickListener(useWaterfallForMultiDigit ? new BaseTenOnClickAnimateWaterfall(numLoc, TEN_DIGIT) :  new BaseTenOnClickAnimateSequential(TEN_DIGIT));
 
             if (_numDigits >= 3)
-                _layout.getContainingBox(numLoc, HUN_DIGIT).setOnClickListener(ALL_AT_ONCE ? new BaseTenOnClickAnimateWaterfall(numLoc, HUN_DIGIT) : new BaseTenOnClickAnimateSequential(HUN_DIGIT));
+                _layout.getContainingBox(numLoc, HUN_DIGIT).setOnClickListener(useWaterfallForMultiDigit ? new BaseTenOnClickAnimateWaterfall(numLoc, HUN_DIGIT) : new BaseTenOnClickAnimateSequential(HUN_DIGIT));
 
         }
 
@@ -926,12 +924,15 @@ public class BigMathMechanic {
         if (!EXPAND_HIT_BOX) return; // might be redundant?
 
         String numberLoc = v.getTag().toString();
-        moveSequential(numberLoc, digit);
+        moveSequential(numberLoc, digit, _data.operation.equals("-"));
     }
 
 
     /**
      * this animation is lit
+     *
+     * BUG_605... waterfall subtract
+     * BUG_605... waterfall should not happen if digit is not highlighted
      * @param digit
      */
     private void waterfall(final String numLoc, final String digit) {
@@ -941,7 +942,7 @@ public class BigMathMechanic {
             (new Handler(Looper.getMainLooper())).postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    moveSequential(numLoc, digit);
+                    moveSequential(numLoc, digit, _data.operation.equals("-"));
                 }
             }, WATERFALL_DELAY * i);
     }
@@ -1263,7 +1264,7 @@ public class BigMathMechanic {
      * @param numberLoc
      * @param digit
      */
-    private void moveSequential(final String numberLoc, final String digit) {
+    private void moveSequential(final String numberLoc, final String digit, boolean subtract) {
 
         if (isCarrying) {
             return;
