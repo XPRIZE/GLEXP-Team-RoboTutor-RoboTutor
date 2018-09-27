@@ -464,25 +464,6 @@
           ]
         },
 
-        //amogh added
-        "NEW_GENERAL_CORRECT_BEHAVIOR": {
-          "type": "QUEUE",
-          "COMMENT": "Do this when they get a character correct",
-          "preenter": [],
-          "reuse": true,
-          "tracks": [
-            //{"name": "Count correct", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "countCorrect", "parms": "", "features":""},
-            //amogh added
-                        {"name": "Disable Replay", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox", "parms": "", "features":""}
-            //amogh added ends
-          ],
-          "preexit": [
-          ],
-          "edges": [
-          ]
-        },
-        //amogh added ends
-
         "GENERAL_CORRECT_BEHAVIOR": {
           "type": "QUEUE",
           "COMMENT": "Do this when they get a character correct",
@@ -1610,7 +1591,6 @@
             {"name":"SetSticky - ",  "type": "COMMAND", "id": "SWordCopy", "method": "setStickyBehavior", "parms": "ON_ERROR:String|GENERAL_ERROR_BEHAVIOR:String" ,    "features":""},
             {"name":"SetSticky - ",  "type": "COMMAND", "id": "SWordCopy", "method": "setStickyBehavior", "parms": "ON_CORRECT:String|GENERAL_CORRECT_BEHAVIOR:String", "features":""},
             {"name":"SetSticky - ",  "type": "COMMAND", "id": "SWordCopy", "method": "setStickyBehavior", "parms": "MERCY_RULE:String|MERCY_RULE_BEHAVIOR:String" ,     "features":""},
-//            {"name":"SetSticky - ",  "type": "COMMAND", "id": "SWordCopy", "method": "setStickyBehavior", "parms": "ON_CORRECT:String|NEW_GENERAL_CORRECT_BEHAVIOR:String", "features":""}, // amogh added for debug
 
             // NOTE: Due to a limitation in the queue architecture you should only enable one of ON_ERROR | ON_METRIC_ERROR | ON_CHAR_ERROR
 

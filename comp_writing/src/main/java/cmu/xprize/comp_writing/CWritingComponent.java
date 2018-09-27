@@ -700,7 +700,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         //amogh add ends
 
         // when not a word or sentence level feedback activity
-        if (!(activityFeature.contains("FTR_SEN_WRD") || activityFeature.contains("FTR_SEN_SEN"))){
+        if (!(activityFeature.contains("FTR_SEN"))){
 
             //update the controller's correct status
             mActiveController.updateAndDisplayCorrectStatus(_isValid);
@@ -759,8 +759,62 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             //update the controller's correct status
             mActiveController.updateCorrectStatus(_isValid);
 
+            if(activityFeature.contains("FTR_SEN_LTR") && activityFeature.contains("FTR_SEN_COPY")){
+
+                //update the controller's correct status
+                mActiveController.updateAndDisplayCorrectStatus(_isValid);
+
+                // Update the controller feedback colors
+                if (!singleStimulus) {
+                    stimController.updateStimulusState(_isValid);
+                }
+
+                // Depending upon the result we allow the controller to disable other fields if it is working
+                // in Immediate feedback mode
+                // TODO: check if we need to constrain this to immediate feedback mode
+                //
+                inhibitInput(mActiveController, !_isValid);
+                mActiveController.inhibitInput(_isValid);
+                // Publish the state features.
+                //
+                publishState();
+
+                // Fire the appropriate behavior
+                //
+                if (isComplete()) {
+
+                    applyBehavior(WR_CONST.DATA_ITEM_COMPLETE); // goto node "ITEM_COMPLETE_BEHAVIOR" -- run when item is complete...
+                }
+                else {
+
+                    if (!_isValid) {
+
+                        // lots of fun feature updating here
+                        publishFeature(WR_CONST.FTR_HAD_ERRORS);
+
+                        int attempt = updateAttemptFeature();
+
+                        if (attempt > 4) {
+                            applyBehavior(WR_CONST.MERCY_RULE); // goto node "MERCY_RULE_BEHAVIOR"
+                        } else {
+                            applyBehavior(WR_CONST.ON_ERROR); // goto node "GENERAL_ERROR_BEHAVIOR"
+                        }
+
+                        if (!_charValid)
+                            applyBehavior(WR_CONST.ON_CHAR_ERROR);
+                        else if (!_metricValid)
+                            applyBehavior(WR_CONST.ON_METRIC_ERROR);
+                    } else {
+                        updateStalledStatus();
+
+                        applyBehavior(WR_CONST.ON_CORRECT); //goto node "GENERAL_CORRECT_BEHAVIOR"
+                    }
+                }
+            }
+
+
             //for word level feedback
-            if(activityFeature.contains("FTR_SEN_WRD")){
+            else if(activityFeature.contains("FTR_SEN_WRD")){
 
                 mActiveWord = mListWordsInput.get(currentWordIndex);
 //                mActiveWord = mListWordsInput.get(currentWordIndex);

@@ -212,7 +212,7 @@
     "write.sen.copy.ltr": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
-      "features": "FTR_SEN:FTR_SEN_LTR" //immediate letter level feedback
+      "features": "FTR_SEN:FTR_SEN_COPY:FTR_SEN_LTR" //immediate letter level feedback
     },
     "write.sen.copy.wrd": {
       "type": "TUTORVAR_MAP",
