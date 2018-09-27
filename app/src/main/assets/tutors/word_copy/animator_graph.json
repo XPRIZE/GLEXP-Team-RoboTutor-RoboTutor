@@ -46,7 +46,7 @@
 //            {"name": "Highlight Stimulus", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "RIPPLE_HIGHLIGHT:String|1000:Integer", "features":"!FTR_DICTATION"},
 
             // Zoom and highlight Stimulus
-            {"name": "Zoom Sstimulus",     "type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1250:Long","features":"!FTR_DICTATION"},
+            {"name": "Zoom Sstimulus",     "type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1250:Long","features":"!FTR_DICTATION&!FTR_SEN"},
             {"name": "Highlight Stimulus", "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "STIMULUS_HIGHLIGHT:String|1250:Integer", "features":"!FTR_DICTATION&!FTR_WORDS&!FTR_SEN"},
 
             // Hightlight all glyphs and point at first glyph
@@ -136,9 +136,6 @@
 
               //hesitation 3, attempt 1 2 3, sen_attempt_1,2,3
             {"name": "show box on first edit", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBoxOnFirstEdit", "parms": "", "features":"FTR_SEN_SEN&FTR_HESITATION_3&FTR_SEN_ATTEMPT_1|FTR_SEN_SEN&FTR_HESITATION_3&FTR_SEN_ATTEMPT_2|FTR_SEN_SEN&FTR_HESITATION_3&FTR_SEN_ATTEMPT_3"},
-
-
-
 
 
             //Letter
@@ -1442,7 +1439,7 @@
             // Disable the writing controllers while the demo is in progress - must follow next
             {"name":"SWordCopy - inhibitInput",  "type": "COMMAND", "id": "SWordCopy", "method": "inhibitInput", "parms": "TRUE:Boolean","features":""},
 
-            {"name":"Zoom Sstimulus",  "type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1000:Long","features":""},
+            {"name":"Zoom Sstimulus",  "type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1000:Long","features":"!FTR_SEN"},
             {"name":"Highlight Stimulus",  "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "STIMULUS_HIGHLIGHT:String|1000:Integer", "features":"!FTR_WORDS"},
 
             // Show trace line for write.trc

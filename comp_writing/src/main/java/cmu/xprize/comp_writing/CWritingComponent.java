@@ -681,25 +681,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         resp.setStimulusChar(mResponse, false);
 //            updateResponseView(mResponse);
 
-        //amogh added to handle spacing.
-        //currently -> when the next letter is valid and the previous glyph is supposed to be space. Needs to change.
-        if (_isValid) {
-            // when the next letter is valid and the previous glyph is supposed to be space. Needs to change.
-            if (_spaceIndices.contains(mActiveIndex - 1)) {
-//                CGlyphController gControllerSpace = (CGlyphController) mGlyphList.getChildAt(mActiveIndex - 1);
-//                CStimulusController respSpace = (CStimulusController) mResponseViewList.getChildAt(mActiveIndex - 1);
-//                respSpace.setStimulusChar("", false);
-//                gControllerSpace.setIsStimulus("");
-//                gControllerSpace.updateCorrectStatus(_isValid);
-            }
-        }
-
-        else {
-//            mActiveController.
-        }
-        //amogh add ends
-
-        // when not a word or sentence level feedback activity
+        // when not a sentence writing activity
         if (!(activityFeature.contains("FTR_SEN"))){
 
             //update the controller's correct status
@@ -730,7 +712,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 if (!_isValid) {
 
-                    // lots of fun feature updating here
                     publishFeature(WR_CONST.FTR_HAD_ERRORS);
 
                     int attempt = updateAttemptFeature();
@@ -765,9 +746,19 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 mActiveController.updateAndDisplayCorrectStatus(_isValid);
 
                 // Update the controller feedback colors
-                if (!singleStimulus) {
-                    stimController.updateStimulusState(_isValid);
-                }
+                resp.updateStimulusState(_isValid);
+
+                //currently -> when the next letter is valid and the previous glyph is supposed to be space. Needs to change.
+                    // when the previous glyph is supposed to be space, accept it and inhibit space
+                    if (mActiveIndex > 0 && (mAnswer.substring(mActiveIndex - 1, mActiveIndex).equals(" "))) {
+                CGlyphController gControllerSpace = (CGlyphController) mGlyphList.getChildAt(mActiveIndex - 1);
+                CStimulusController respSpace = (CStimulusController) mResponseViewList.getChildAt(mActiveIndex - 1);
+                respSpace.setStimulusChar("", false);
+                gControllerSpace.setIsStimulus("");
+                gControllerSpace.updateCorrectStatus(_isValid);
+                gControllerSpace.inhibitInput(true);
+                    }
+
 
                 // Depending upon the result we allow the controller to disable other fields if it is working
                 // in Immediate feedback mode
@@ -1504,7 +1495,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         for(int i1 = 0 ; i1 < mGlyphList.getChildCount() ; i1++) {
 
-            if(!((CGlyphController)mGlyphList.getChildAt(i1)).isCorrect()) {
+            if(!((CGlyphController) mGlyphList.getChildAt(i1)).isCorrect()) {
                 result = false;
                 break;
             }
