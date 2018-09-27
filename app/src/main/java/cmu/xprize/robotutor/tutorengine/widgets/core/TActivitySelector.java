@@ -207,8 +207,9 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         HashMap transitionMap = null;
         String rootTutor = "";
 
+        // MENU_REPEAT this should be different for new skill type... make new thing?
         // look up activeSkill every time?
-        String activeSkill = studentModel.getActiveSkill();
+        String activeSkill = menu.getDebugMenuSkill();
         switch (activeSkill) { // √
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
@@ -236,15 +237,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
         SdebugActivity.initGrid(activeSkill, activeTutorId, transitionMap, rootTutor); // √
     }
-
-    /**
-     * moving this from JSON... because we need to make it more dynamic...
-     * how will this affect the English version???
-     */
-    private void initializeActiveLayout() {
-
-    }
-
 
     /**
      * Replaces animator graph so we can trace variables

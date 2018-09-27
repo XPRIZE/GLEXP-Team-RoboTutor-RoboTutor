@@ -221,4 +221,9 @@ public class CycleMatrixActivityMenu implements IActivityMenu {
         }
         return tutorToLaunch;
     }
+
+    @Override
+    public String getDebugMenuSkill() {
+        return RoboTutor.STUDENT_CHOSE_REPEAT ? _student.getLastSkill() : _student.getActiveSkill();
+    }
 }

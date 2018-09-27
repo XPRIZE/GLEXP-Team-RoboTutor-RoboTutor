@@ -163,4 +163,9 @@ public class StudentChooseMatrixActivityMenu implements IActivityMenu {
         }
         return tutorToLaunch;
     }
+
+    @Override
+    public String getDebugMenuSkill() {
+        return _student.getActiveSkill();
+    }
 }

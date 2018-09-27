@@ -96,7 +96,7 @@ public class TBanner extends CBanner implements ITutorObject, View.OnClickListen
         event.setLanguage(CTutorEngine.language);
         event.setTaskName("BACKBUTTON:PRESSED");
         event.setTimestamp(System.currentTimeMillis());
-        RoboTutor.perfLogManager.postPerformanceLogWithoutContext(event);
+        RoboTutor.perfLogManager.postPerformanceLogWithoutContext(event); // EVELYN_BUG_9_27 can we get the last tutor?
 
         mBackButton.setOnClickListener(null);
         mSceneObject.endTutor();
