@@ -2500,7 +2500,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
     public void updateSentenceResponse(Boolean sentenceStatus) {
-        ;
         // change the color for all letters according to the state of the sentence.
         for (int j = 0; j < mListWordsInput.size(); j++) {
             Word word = mListWordsInput.get(j);
