@@ -379,6 +379,7 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
 
     // (5) prevent user
+    // FIX_COMPARE (6) (test) (don't lock user input
     public void lockUserInput() {
         _layoutManager.enableChooseNumber(false);
     }

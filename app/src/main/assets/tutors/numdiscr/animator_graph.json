@@ -17,7 +17,9 @@
           "type": "QUEUE",
           "COMMENT": "highlight the hundreds column and explain how to compare numbers",
           "tracks": [
-            {"name": "DISABLE TAPPING", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "lockUserInput"},
+            // FIX_COMPARE (6) (test) don't lock user input
+            // FIX_COMPARE (6) (test) what are consequences of not locking user input??? possibly see "cancel hesitation feedback"?
+            // {"name": "DISABLE TAPPING", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "lockUserInput"},
             {"name": "first compare hundreds", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "first compare the hundreds.mp3", "soundpackage": "nd", "volume": 1.0, "mode":"flow"},
             {"name": "HIGHLIGHT_UNITS", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "highlightHunsColumn"},
             // // COMPARE_AUDIO (0)     Both numbers have the same number of hundreds.mp3
@@ -226,7 +228,7 @@
         "ND_PLAYCORRECT": {
           "type": "MODULE",
           "COMMENT": "Feedback for Correct",
-          "preenter": [],
+          "preenter": ["CANCEL_HIGHLIGHT_HUNS", "CANCEL_HIGHLIGHT_TENS", "CANCEL_HIGHLIGHT_ONES"], // FIX_COMPARE (6) (test) does this work?
           "reuse": true,
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#ND_PLAYCORRECT:String", "features":""},
@@ -300,6 +302,12 @@
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
+
+        // FIX_COMPARE (6) (test) can we call these???
+        "CANCEL_HIGHLIGHT_HUNS":  {"type": "COMMAND", "id": "HIGHLIGHT_HUNS", "method": "cancelNode", "parms": "", "features":""},
+        "CANCEL_HIGHLIGHT_TENS":  {"type": "COMMAND", "id": "HIGHLIGHT_TENS", "method": "cancelNode", "parms": "", "features":""},
+        "CANCEL_HIGHLIGHT_ONES":  {"type": "COMMAND", "id": "HIGHLIGHT_ONES", "method": "cancelNode", "parms": "", "features":""},
+
 
         // this is so unnecessary
         "SET_WRONG_BEHAVIOR": {"type": "COMMAND", "id": "SNumDiscr", "method": "setStickyBehavior", "parms": "ND_WRONG:String|ND_WRONG:String" ,"features":""},
