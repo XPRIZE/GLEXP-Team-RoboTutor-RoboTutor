@@ -244,7 +244,8 @@ public class TNdComponent extends CNd_Component implements ITutorObject, IDataSi
         event.setPromotionMode(RoboTutor.getPromotionMode(event.getMatrixName()));
         event.setProblemName(problemName);
         event.setProblemNumber(_dataIndex);
-        event.setTotalProblemsCount(mTutor.getTotalQuestions());
+
+        event.setTotalProblemsCount(random ? questionCount : dataSource.length);
         event.setTotalSubsteps(1);
         event.setSubstepNumber(1);
         event.setSubstepProblem(1);
@@ -328,6 +329,11 @@ public class TNdComponent extends CNd_Component implements ITutorObject, IDataSi
     public void retractFeature(String feature) {
         _FeatureMap.put(feature, false);
         mTutor.delFeature(feature);
+    }
+
+    @Override
+    public void publishOrRetractFeature(String feature, boolean p) {
+        if (p) publishFeature(feature); else retractFeature(feature);
     }
 
     @Override
