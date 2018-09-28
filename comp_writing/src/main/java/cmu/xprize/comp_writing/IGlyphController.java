@@ -31,6 +31,7 @@ public interface IGlyphController {
     public CGlyph getGlyph();
 
     public void pointAtEraseButton();
+    public void pointAtGlyph();
 
     public void post(String command);
     public void post(String command, long delay);

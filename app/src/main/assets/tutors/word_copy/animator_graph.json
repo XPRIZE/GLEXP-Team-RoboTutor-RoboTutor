@@ -109,6 +109,17 @@
             // when to release? when the sentence has been evaluated atleast once (ie one of the FTR_SEN_ATTEMPT is enabled)
             {"name": "release the audio features for the first edit", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "releaseFirstEditAudioFeatures", "parms": "", "features":"FTR_SEN&FTR_SEN_WRD|FTR_SEN&FTR_SEN_SEN&FTR_SEN_ATTEMPT_1|FTR_SEN&FTR_SEN_SEN&FTR_SEN_ATTEMPT_2|FTR_SEN&FTR_SEN_SEN&FTR_SEN_ATTEMPT_3|FTR_SEN&FTR_SEN_SEN&FTR_SEN_ATTEMPT_4"},
 
+
+            //pointing behaviors for sentence level
+
+
+            //letter level feedback
+            {"name": "point to the next glyph", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "pointAtNextGlyph", "parms": "", "features":"FTR_SEN_LTR&FTR_HESITATION_2"},
+
+            //word level feedback
+            {"name": "point on the first letter of the word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "pointAtActiveWord", "parms": "", "features":"!FTR_AUDIO_SPACE&!FTR_AUDIO_PUNC&FTR_SEN_WRD&FTR_HESITATION_2"},
+
+
             //showing the highlight boxes
               //1. word level feedback
               //show highlight box when hesitation 1 or 2 and attempt 1 or 2.
@@ -391,13 +402,6 @@
 //            {"name": "show box", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox", "parms": "2:Integer", "features":"FTR_SEN&FTR_HESITATION_2"},
 //            {"name": "show box", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox", "parms": "3:Integer", "features":"FTR_SEN&FTR_HESITATION_3"},
 //            {"name": "show box", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBox", "parms": "4:Integer", "features":"FTR_SEN&FTR_HESITATION_4"},
-
-            //pointing behaviors for sentence level
-            {"name": "point on the first letter of the word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "pointAtActiveWord", "parms": "", "features":"!FTR_AUDIO_SPACE&!FTR_AUDIO_PUNC&FTR_SEN_WRD&FTR_HESITATION_2"},
-
-
-
-
 
             //mercy behavior for the word that is not written.
 //            {"name":"post APPLY_BEHAVIOR - MERCY_RULE_BEHAVIOR", "type": "COMMAND", "id": "SWordCopy", "method": "post",           "parms": "APPLY_BEHAVIOR:String|MERCY_RULE_BEHAVIOR:String", "features":"FTR_SEN&FTR_HESITATION_4"},

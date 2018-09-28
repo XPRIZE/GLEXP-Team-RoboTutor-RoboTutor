@@ -1674,6 +1674,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     }
 
+    //this points at the first glyph only
     public void pointAtGlyph() {
         _fieldIndex = 0;
 
@@ -2284,6 +2285,18 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     //points at the first letter of active word
     public void pointAtActiveWord(){
         mActiveWord.pointAtFirstGlyph();
+    }
+
+    public void pointAtNextGlyph() {
+
+        CGlyphController g;
+        for (int i = 0; i < mGlyphList.getChildCount(); i++){
+            g = (CGlyphController) mGlyphList.getChildAt(i);
+            if(!g.isCorrect()) {
+                g.pointAtGlyph();
+                break;
+            }
+        }
     }
 
     //amogh added ends
