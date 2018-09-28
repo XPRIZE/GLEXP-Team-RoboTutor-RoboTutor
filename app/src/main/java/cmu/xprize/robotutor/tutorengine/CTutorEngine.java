@@ -36,25 +36,25 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import cmu.xprize.robotutor.BuildConfig;
+import cmu.xprize.comp_logging.CLogManager;
+import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.robotutor.R;
+import cmu.xprize.robotutor.RoboTutor;
+import cmu.xprize.robotutor.startup.configuration.Configuration;
 import cmu.xprize.robotutor.tutorengine.graph.databinding;
 import cmu.xprize.robotutor.tutorengine.graph.defdata_scenes;
 import cmu.xprize.robotutor.tutorengine.graph.defdata_tutor;
 import cmu.xprize.robotutor.tutorengine.graph.defvar_tutor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScope2;
+import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.robotutor.tutorengine.util.CClassMap2;
 import cmu.xprize.robotutor.tutorengine.util.PromotionMechanism;
 import cmu.xprize.robotutor.tutorengine.util.StudentDataModel;
 import cmu.xprize.robotutor.tutorengine.util.TransitionMatrixModel;
 import cmu.xprize.robotutor.tutorengine.widgets.core.TSceneAnimatorLayout;
-import cmu.xprize.comp_logging.CLogManager;
-import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
-import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
-import cmu.xprize.robotutor.RoboTutor;
 
 /**
  * The tutor engine provides top-levelFolder control over the tutor lifecycle and can support multiple
@@ -602,11 +602,11 @@ public class CTutorEngine implements ILoadableObject2 {
 
             // TODO : Use build Variant to ensure release configurations
             //
-            if(BuildConfig.LANGUAGE_OVERRIDE) {
-                language = BuildConfig.LANGUAGE_FEATURE_ID;
+            if(Configuration.languageOverride(getActivity())) {
+                language = Configuration.getLanguageFeatureID(getActivity());
                 //  any time the language changes, so should the Transition Matrix and the Student Model
             } else {
-                language = BuildConfig.LANGUAGE_FEATURE_ID;
+                language = Configuration.getLanguageFeatureID(getActivity());
                 if (language.equals("LANG_NULL")) {
                     language = TCONST.LANG_SW;
                 }

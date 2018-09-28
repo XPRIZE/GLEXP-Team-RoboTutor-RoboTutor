@@ -18,26 +18,26 @@
 
         package cmu.xprize.robotutor.tutorengine.widgets.core;
 
-        import android.content.Context;
-        import android.util.AttributeSet;
-        import android.util.Log;
-        import android.view.View;
-        import android.widget.ToggleButton;
+import android.content.Context;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
+import android.widget.ToggleButton;
 
-        import cmu.xprize.robotutor.BuildConfig;
-        import cmu.xprize.robotutor.RoboTutor;
-        import cmu.xprize.robotutor.tutorengine.CMediaController;
-        import cmu.xprize.robotutor.tutorengine.CMediaManager;
-        import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
-        import cmu.xprize.robotutor.tutorengine.CTutor;
-        import cmu.xprize.robotutor.tutorengine.CTutorEngine;
-        import cmu.xprize.robotutor.tutorengine.ITutorGraph;
-        import cmu.xprize.robotutor.tutorengine.ITutorObject;
-        import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
-        import cmu.xprize.comp_logging.ILogManager;
-        import cmu.xprize.util.TCONST;
+import cmu.xprize.comp_logging.ILogManager;
+import cmu.xprize.robotutor.RoboTutor;
+import cmu.xprize.robotutor.startup.configuration.Configuration;
+import cmu.xprize.robotutor.tutorengine.CMediaController;
+import cmu.xprize.robotutor.tutorengine.CMediaManager;
+import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
+import cmu.xprize.robotutor.tutorengine.CTutor;
+import cmu.xprize.robotutor.tutorengine.CTutorEngine;
+import cmu.xprize.robotutor.tutorengine.ITutorGraph;
+import cmu.xprize.robotutor.tutorengine.ITutorObject;
+import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
+import cmu.xprize.util.TCONST;
 
-        import static cmu.xprize.util.TCONST.QGRAPH_MSG;
+import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
 public class TLangToggle extends ToggleButton implements ITutorObject, View.OnClickListener {
 
@@ -81,7 +81,7 @@ public class TLangToggle extends ToggleButton implements ITutorObject, View.OnCl
     public void onClick(View v) {
 
         // if the LangToggle button remains showing for some reason, and is clicked, don't actually change the language.
-        if(!BuildConfig.LANGUAGE_OVERRIDE) {
+        if (!Configuration.languageOverride(getContext())) {
             mLangState    = !mLangState;
 
             Log.v(QGRAPH_MSG, "event.click: " + " TLangToggle: " + mLangState);

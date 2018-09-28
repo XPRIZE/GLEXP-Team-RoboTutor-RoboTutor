@@ -34,40 +34,39 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
+import cmu.xprize.comp_logging.CAudioLogThread;
+import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.comp_logging.CLogManager;
+import cmu.xprize.comp_logging.CPerfLogManager;
+import cmu.xprize.comp_logging.CPreferenceCache;
+import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.comp_logging.IPerfLogManager;
 import cmu.xprize.ltkplus.CRecognizerPlus;
 import cmu.xprize.ltkplus.GCONST;
 import cmu.xprize.ltkplus.IGlyphSink;
+import cmu.xprize.robotutor.startup.CStartView;
+import cmu.xprize.robotutor.startup.configuration.Configuration;
+import cmu.xprize.robotutor.startup.configuration.ConfigurationItems;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
-import cmu.xprize.robotutor.tutorengine.CTutor;
-import cmu.xprize.robotutor.tutorengine.util.CAssetObject;
-import cmu.xprize.robotutor.tutorengine.util.CrashHandler;
-import cmu.xprize.util.CDisplayMetrics;
-import cmu.xprize.util.CLoaderView;
-import cmu.xprize.comp_logging.CLogManager;
-import cmu.xprize.comp_logging.CPerfLogManager;
-import cmu.xprize.comp_logging.CAudioLogThread;
+import cmu.xprize.robotutor.tutorengine.CTutorAssetManager;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorManager;
+import cmu.xprize.robotutor.tutorengine.util.CAssetObject;
+import cmu.xprize.robotutor.tutorengine.util.CrashHandler;
 import cmu.xprize.robotutor.tutorengine.widgets.core.IGuidView;
-import cmu.xprize.comp_logging.CErrorManager;
-import cmu.xprize.comp_logging.CPreferenceCache;
-import cmu.xprize.robotutor.startup.CStartView;
-import cmu.xprize.comp_logging.ILogManager;
+import cmu.xprize.util.CDisplayMetrics;
+import cmu.xprize.util.CLoaderView;
 import cmu.xprize.util.IReadyListener;
 import cmu.xprize.util.IRoboTutor;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
-import cmu.xprize.robotutor.tutorengine.CTutorAssetManager;
 import cmu.xprize.util.TTSsynthesizer;
 import edu.cmu.xprize.listener.ListenerBase;
 
@@ -188,11 +187,23 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         hotLogPathPerf = Environment.getExternalStorageDirectory() + TCONST.HOT_LOG_FOLDER_PERF;
         readyLogPathPerf = Environment.getExternalStorageDirectory() + TCONST.READY_LOG_FOLDER_PERF;
 
+        APP_PRIVATE_FILES = getApplicationContext().getExternalFilesDir("").getPath();
+
+        // Initialize the JSON Helper STATICS - just throw away the object.
+        //
+        new JSON_Helper(getAssets(), CacheSource, RoboTutor.APP_PRIVATE_FILES);
+
+        // TODO: load configuration items here
+        ConfigurationItems configurationItems = new ConfigurationItems();
+        Configuration.saveConfigurationItems(this, configurationItems);
+
         Calendar calendar = Calendar.getInstance(Locale.US);
         String initTime     = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss", Locale.US).format(calendar.getTime());
         String sequenceIdString = String.format(Locale.US, "%06d", getNextLogSequenceId());
         // NOTE: Need to include the configuration name when that is fully merged
-        String logFilename  = "RoboTutor_" + BuildConfig.BUILD_TYPE + "." + BuildConfig.VERSION_NAME + "_" + sequenceIdString + "_" + initTime + "_" + Build.SERIAL;
+        String logFilename  = "RoboTutor_" + BuildConfig.BUILD_TYPE + "." +
+                Configuration.configVersion(this) + "_" + sequenceIdString +
+                "_" + initTime + "_" + Build.SERIAL;
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "rt: onCreate");
         // Catch all errors and cause a clean exit -
@@ -215,7 +226,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         //
         tutorAssetManager = new CTutorAssetManager(getApplicationContext());
 
-        VERSION_RT   = BuildConfig.VERSION_NAME;
+        VERSION_RT   = Configuration.configVersion(this);
         VERSION_SPEC = CAssetObject.parseVersionSpec(VERSION_RT);
 
         Log.w("LOG_DEBUG", "Beginning new session with LOG_FILENAME = " + logFilename);
@@ -255,12 +266,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         // This initializes the static object
         //
         displayMetrics = CDisplayMetrics.getInstance(this);
-
-        APP_PRIVATE_FILES = getApplicationContext().getExternalFilesDir("").getPath();
-
-        // Initialize the JSON Helper STATICS - just throw away the object.
-        //
-        new JSON_Helper(getAssets(), CacheSource, RoboTutor.APP_PRIVATE_FILES);
 
         // Initialize the media manager singleton - it needs access to the App assets.
         //
@@ -848,7 +853,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         return logSequenceId;
     }
-
 
     /**
      * gets the stored data for each student based on STUDENT_ID.
