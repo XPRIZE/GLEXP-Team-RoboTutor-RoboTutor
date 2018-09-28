@@ -750,10 +750,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             if(activityFeature.contains("FTR_SEN_LTR") && activityFeature.contains("FTR_SEN_COPY")){
 
                 //update the controller's correct status
-                mActiveController.updateAndDisplayCorrectStatus(_isValid);
+//                mActiveController.updateAndDisplayCorrectStatus(_isValid);
 
                 // Update the controller feedback colors
-                resp.updateStimulusState(_isValid);
+                resp.updateResponseState(_isValid);
 
                 //currently -> when the next letter is valid and the previous glyph is supposed to be space. Needs to change.
                     // when the previous glyph is supposed to be space, accept it and inhibit space
@@ -761,6 +761,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 CGlyphController gControllerSpace = (CGlyphController) mGlyphList.getChildAt(mActiveIndex - 1);
                 CStimulusController respSpace = (CStimulusController) mResponseViewList.getChildAt(mActiveIndex - 1);
                 respSpace.setStimulusChar("", false);
+                respSpace.updateResponseState(true);
                 gControllerSpace.setIsStimulus("");
                 gControllerSpace.updateCorrectStatus(_isValid);
                 gControllerSpace.inhibitInput(true);
@@ -1840,6 +1841,19 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             }
         }
     }
+
+    public void replayActiveGlyph() {
+
+        CGlyphController g;
+        for (int i = 0; i < mGlyphList.getChildCount(); i++){
+            g = (CGlyphController) mGlyphList.getChildAt(i);
+            if(!g.isCorrect()) {
+                g.pointAtGlyph();
+                break;
+            }
+        }
+    }
+
 
 
     private void showTraceLine() {
@@ -3146,6 +3160,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 firstGlyph.pointAtGlyph();
             }
         }
+
 
         //add a new function to word class here
 
