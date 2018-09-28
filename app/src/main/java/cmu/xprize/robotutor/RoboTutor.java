@@ -110,10 +110,37 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 //    private static final String debugTutorVariant = "placevalue";
 //    private static final String debugTutorId = "place.value:1";
 //    private static final String debugTutorFile = "[file]place.value__pv-11..99.2D.diff0.3.json";
-    private static final boolean QUICK_DEBUG = false;
-    private static final String debugTutorVariant = "write.sen.copy.sen";
-    private static final String debugTutorId = "write.wrd:story_1_1";
-    private static final String debugTutorFile = "[file]write.sen.copy.sen_noerror.1.json";
+    private static final boolean QUICK_DEBUG = true;
+    private static final String debugTutorVariant = "bigmath";
+    private static final String debugTutorId = "WHO CARES";
+    private static final String debugTutorFile = "[file]bigmath_add.by.1.0..8.NoCarryBorrow.lev1.json";
+
+    // see https://docs.google.com/document/u/1/d/15dlRmVbnfNjMtTXniZHLg7IckfjTRLrfd2l5b2S_hAo/edit#
+    // Levels 1-24 for testing...
+//    bigmath_add.by.1.0..8.NoCarryBorrow.lev1.json
+//    bigmath_add.by.rand.0..8.NoCarryBorrow.lev2.json
+//    bigmath_sub.by.1.1..9.NoCarryBorrow.lev3.json
+//    bigmath_sub.by.rand.1..9.NoCarryBorrow.lev4.json
+//    bigmath_add.by.10.0..80.NoCarryBorrow.lev5.json
+//    bigmath_add.by.rand.10..80.NoCarryBorrow.lev6.json
+//    bigmath_sub.by.10.20..90.NoCarryBorrow.lev7.json
+//    bigmath_sub.by.rand.20..90.NoCarryBorrow.lev8.json
+//    bigmath_add.by.rand.0..9.AllCarryBorrow.lev9.json
+//    bigmath_add.by.rand.0..9.SomeCarryBorrow.lev10.json
+//    bigmath_add.by.rand.10..99.AllCarryBorrow.lev11.json
+//    bigmath_add.by.rand.10..99.SomeCarryBorrow.lev12.json
+//    bigmath_sub.by.rand.10..98.AllCarryBorrow.lev13.json
+//    bigmath_sub.by.rand.10..98.SomeCarryBorrow.lev14.json
+//    bigmath_add.by.100.100..800.NoCarryBorrow.lev15.json
+//    bigmath_add.by.rand.100..800.NoCarryBorrow.lev16.json
+//    bigmath_add.by.rand.100..800.NoCarryBorrow.lev17.json
+//    bigmath_sub.by.100.100..900.NoCarryBorrow.lev18.json
+//    bigmath_sub.by.rand.100..900.NoCarryBorrow.lev19.json
+//    bigmath_sub.by.rand.100..900.NoCarryBorrow.lev20.json
+//    bigmath_add.by.rand.100..800.AllCarryBorrow.lev21.json
+//    bigmath_add.by.rand.100..800.SomeCarryBorrow.lev22.json
+//    bigmath_sub.by.rand.100..980.AllCarryBorrow.lev23.json
+//    bigmath_sub.by.rand.100..980.SomeCarryBorrow.lev24.json
 
     //amogh missing letter
 //    private static final String debugTutorFile = "[file]write.missingLtr_0.1.2.fin.s.json";
