@@ -1,5 +1,5 @@
 {
-	"dataSource":
+	"dataSource": [
 		{"dataset": [400, 700], "isWorkedExample": "true", "task": "triple.by.hun", "type": "CNd_Data", "level": "triple.by.hun"},
 		{"dataset": [800, 400], "isWorkedExample": "false", "task": "triple.by.hun", "type": "CNd_Data", "level": "triple.by.hun"},
 		{"dataset": [700, 500], "isWorkedExample": "false", "task": "triple.by.hun", "type": "CNd_Data", "level": "triple.by.hun"},
@@ -41,4 +41,5 @@
 		{"dataset": [700, 600], "isWorkedExample": "false", "task": "triple.by.hun", "type": "CNd_Data", "level": "triple.by.hun"},
 		{"dataset": [700, 500], "isWorkedExample": "false", "task": "triple.by.hun", "type": "CNd_Data", "level": "triple.by.hun"},
 		{"dataset": [800, 100], "isWorkedExample": "false", "task": "triple.by.hun", "type": "CNd_Data", "level": "triple.by.hun"}
+	]
 }

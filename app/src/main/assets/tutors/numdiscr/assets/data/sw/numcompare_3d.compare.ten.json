@@ -1,5 +1,5 @@
 {
-	"dataSource":
+	"dataSource": [
 		{"dataset": [856, 868], "isWorkedExample": "true", "task": "triple.compare.ten", "type": "CNd_Data", "level": "triple.compare.ten"},
 		{"dataset": [264, 227], "isWorkedExample": "false", "task": "triple.compare.ten", "type": "CNd_Data", "level": "triple.compare.ten"},
 		{"dataset": [997, 948], "isWorkedExample": "false", "task": "triple.compare.ten", "type": "CNd_Data", "level": "triple.compare.ten"},
@@ -41,4 +41,5 @@
 		{"dataset": [271, 242], "isWorkedExample": "false", "task": "triple.compare.ten", "type": "CNd_Data", "level": "triple.compare.ten"},
 		{"dataset": [811, 854], "isWorkedExample": "false", "task": "triple.compare.ten", "type": "CNd_Data", "level": "triple.compare.ten"},
 		{"dataset": [484, 410], "isWorkedExample": "false", "task": "triple.compare.ten", "type": "CNd_Data", "level": "triple.compare.ten"}
+	]
 }
