@@ -666,6 +666,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         // Check answer
         mResponse = candidate.getRecChar();
+
+        //when the recognised character is not accurate
+        if(candidate.getVisualConfidence() < 0.1){
+            gController.eraseGlyph();
+            gController.post(TCONST.HIGHLIGHT);
+            return false;
+        }
         gController.setRecognisedChar(mResponse);
         _charValid = gController.checkAnswer(mResponse, isAnswerCaseSensitive);
 
