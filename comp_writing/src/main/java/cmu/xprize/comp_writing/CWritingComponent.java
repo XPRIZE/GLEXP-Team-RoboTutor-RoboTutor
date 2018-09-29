@@ -1527,12 +1527,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
      *
      * @param controller
      */
-    public void stimulusClicked(CStimulusController controller) {
+    public void stimulusClicked(int touchIndex) {
 
         CGlyphController   v;
-        int index = mResponseViewList.indexOfChild(controller); //amogh edited
-
-        v = (CGlyphController) mGlyphList.getChildAt(index);
+        if(touchIndex >= mGlyphList.getChildCount()){
+            touchIndex = mGlyphList.getChildCount() - 1;
+        }
+        v = (CGlyphController) mGlyphList.getChildAt(touchIndex);
 
         // Capture the initiator status to force the tracker to update in the stimulus field
         //

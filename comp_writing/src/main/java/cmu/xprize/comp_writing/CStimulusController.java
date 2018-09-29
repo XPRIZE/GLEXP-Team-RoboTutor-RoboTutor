@@ -35,6 +35,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
@@ -618,7 +619,8 @@ public class CStimulusController extends RelativeLayout implements IEventListene
             case MotionEvent.ACTION_UP:
 
                 if(!_scrollChanged) {
-                    mWritingController.stimulusClicked(this);
+                    int currentIndex = ((LinearLayout) this.getParent()).indexOfChild(this); //amogh changed
+                    mWritingController.stimulusClicked(currentIndex);
                 }
                 break;
         }

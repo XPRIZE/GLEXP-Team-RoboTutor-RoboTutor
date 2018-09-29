@@ -13,7 +13,7 @@ public interface IWritingComponent {
     public void addItemAt(View child, int inc);
     public void autoScroll(IGlyphController glyph);
 
-    public void stimulusClicked(CStimulusController controller);
+    public void stimulusClicked(int touchIndex);
     public boolean scanForPendingRecognition(IGlyphController source);
     public void inhibitInput(IGlyphController source, boolean inhibit);
 
