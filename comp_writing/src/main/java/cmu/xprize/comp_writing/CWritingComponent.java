@@ -1523,13 +1523,14 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
 
     /**
-     * If the user taps the stimulus we try and scroll the tapped char onscreen
+     * If the user taps the stimulus or the response we try and scroll the tapped char onscreen
      *
-     * @param controller
+     *
      */
     public void stimulusClicked(int touchIndex) {
 
         CGlyphController   v;
+        //check if the touched index is within the range of mGlyphList.
         if(touchIndex >= mGlyphList.getChildCount()){
             touchIndex = mGlyphList.getChildCount() - 1;
         }

@@ -194,31 +194,37 @@
       "tutorName": "word_copy",
       "features": "FTR_MISSING_LTR"
     },
-    "write.sen.corr.ltr": {
+    //no stimulus, buggy response, preloaded writing boxes
+    "write.sen.corr.nostim": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
-      "features": "FTR_SEN:FTR_SEN_CORR:FTR_SEN_LTR" //immediate letter level feedback
+      "features": "FTR_NO_STIM:FTR_SEN:FTR_SEN_SEN:FTR_SEN_CORR" //immediate letter level feedback
     },
-    "write.sen.corr.wrd": {
+    //correct stimulus, buggy response, preloaded boxes
+    "write.sen.corr.stim": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
-      "features": "FTR_SEN:FTR_SEN_CORR:FTR_SEN_WRD" //word level feedback
+      "features": "FTR_SEN:FTR_SEN_SEN:FTR_SEN_CORR" //word level feedback
     },
+    //empty for now.
     "write.sen.corr.sen": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
       "features": "FTR_SEN:FTR_SEN_CORR:FTR_SEN_SEN" //sentence level feedback
     },
+    //correct stimulus, empty response, empty writing boxes, letter level feedback
     "write.sen.copy.ltr": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
       "features": "FTR_SEN:FTR_SEN_COPY:FTR_SEN_LTR" //immediate letter level feedback
     },
+    //correct stimulus, empty response, empty writing boxes, word level feedback
     "write.sen.copy.wrd": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
       "features": "FTR_SEN:FTR_SEN_COPY:FTR_SEN_WRD" //word level feedback
     },
+    //correct stimulus, empty response, empty writing boxes, sentence level feedback
     "write.sen.copy.sen": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
