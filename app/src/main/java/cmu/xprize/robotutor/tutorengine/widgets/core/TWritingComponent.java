@@ -188,7 +188,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
             Runnable mAction = new Runnable() {
                 @Override
                 public void run() {
-                    mDrawnScroll.scrollTo((int) mDrawnScroll.getScrollX() + 30, (int) mDrawnScroll.getScrollY());
+                    mDrawnScroll.scrollTo((int) mDrawnScroll.getScrollX() + 20, (int) mDrawnScroll.getScrollY());
                     mHandler.postDelayed(mAction, mRepeatDelay);
                 }
             };
@@ -222,7 +222,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
             Runnable mAction = new Runnable() {
                 @Override
                 public void run() {
-                    mDrawnScroll.scrollTo((int) mDrawnScroll.getScrollX() - 30, (int) mDrawnScroll.getScrollY());
+                    mDrawnScroll.scrollTo((int) mDrawnScroll.getScrollX() - 20, (int) mDrawnScroll.getScrollY());
                     mHandler.postDelayed(mAction, mRepeatDelay);
                 }
             };
