@@ -193,7 +193,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         //
         new JSON_Helper(getAssets(), CacheSource, RoboTutor.APP_PRIVATE_FILES);
 
-        // TODO: load configuration items here
         ConfigurationItems configurationItems = new ConfigurationItems();
         Configuration.saveConfigurationItems(this, configurationItems);
 
@@ -226,7 +225,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         //
         tutorAssetManager = new CTutorAssetManager(getApplicationContext());
 
-        VERSION_RT   = Configuration.configVersion(this);
+        VERSION_RT   = BuildConfig.VERSION_NAME;
         VERSION_SPEC = CAssetObject.parseVersionSpec(VERSION_RT);
 
         Log.w("LOG_DEBUG", "Beginning new session with LOG_FILENAME = " + logFilename);

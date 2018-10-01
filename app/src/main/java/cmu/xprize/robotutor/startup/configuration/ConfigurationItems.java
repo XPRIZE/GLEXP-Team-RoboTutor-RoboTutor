@@ -1,12 +1,18 @@
 package cmu.xprize.robotutor.startup.configuration;
 
+import android.util.Log;
+
 import org.json.JSONObject;
 
+import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
+import cmu.xprize.util.TCONST;
 
 public class ConfigurationItems implements ILoadableObject {
+
+    private static final String TAG = "ConfigurationItems";
 
     public static final String CONFIG_VERSION = "CONFIG_VERSION";
     public static final String LANGUAGE_OVERRIDE = "LANGUAGE_OVERRIDE";
@@ -25,6 +31,30 @@ public class ConfigurationItems implements ILoadableObject {
     public boolean no_asr_apps;
     public String language_feature_id;
     public boolean show_demo_vids;
+
+    public ConfigurationItems() {
+        String dataPath = TCONST.DOWNLOAD_RT_PATH + "/config.json";
+        String jsonData = JSON_Helper.cacheDataByName(dataPath);
+
+        try {
+            loadJSON(new JSONObject(jsonData), null);
+        } catch (Exception e) {
+            Log.e(TAG, "Invalid Data Source for : " + dataPath, e);
+            setDefaults();
+        }
+    }
+
+    public void setDefaults() {
+        // use the swahili versions as default
+        config_version = "release_sw";
+        language_override = true;
+        show_tutorversion = true;
+        show_debug_launcher = false;
+        language_switcher = false;
+        no_asr_apps = false;
+        language_feature_id = "\"LANG_SW\"";
+        show_demo_vids = true;
+    }
 
     @Override
     public void loadJSON(JSONObject jsonObj, IScope scope) {
