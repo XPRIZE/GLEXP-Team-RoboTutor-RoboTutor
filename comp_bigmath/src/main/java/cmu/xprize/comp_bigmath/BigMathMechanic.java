@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -96,6 +97,11 @@ public class BigMathMechanic {
     private boolean isBorrowing = false; // prevent other things from happening during animation
     private boolean hasBorrowedHun = false;
     private boolean hasBorrowedTen = false;
+
+    // more state values...
+    boolean canTapOnes; // MATH_MISC (1)
+    boolean canTapTens;
+    boolean canTapHuns;
 
 
     private static final String BASE_TEN_TAG = "BaseTen";
@@ -224,7 +230,7 @@ public class BigMathMechanic {
             View.OnClickListener oneListener;
             boolean useWaterfallForOnesDigit = ALL_AT_ONCE && _numDigits >= 2 && _data.operation.equals("+");
             if (useWaterfallForOnesDigit) {
-                oneListener  = new BaseTenOnClickAnimateWaterfall(numLoc, ONE_DIGIT);
+                oneListener  = new BaseTenOnClickAnimateWaterfall(numLoc, ONE_DIGIT); // MATH_MISC (1) don't allow ghost dots to move
             } else if (!ALL_AT_ONCE && _numDigits >= 2) {
                 oneListener = new BaseTenOnClickAnimateMe(ONE_DIGIT);
             } else {
@@ -371,7 +377,10 @@ public class BigMathMechanic {
         }
         @Override
         public void onClick(View v) {
-            Log.wtf("YELLOW", "y u no move?");
+            Log.wtf("YELLOW", "moving " + _digit);
+            Log.wtf("YELLOW", "moving parent =" + v.getResources().getResourceEntryName(((LinearLayout) v.getParent()).getId()));
+            Log.wtf("YELLOW", "moving id ==\t" + v.getResources().getResourceEntryName(v.getId()));
+            Log.wtf("YELLOW", "movable? ==\t" + ((MovableImageView) v).isMovable);
             animateMe(this._digit, (MovableImageView) v);
         }
     }
@@ -388,10 +397,23 @@ public class BigMathMechanic {
         }
         @Override
         public void onClick(View v) {
-            animateNextSequential(this._digit, v);
+            if (!EXPAND_HIT_BOX) return; // might be redundant?
+
+            if (_digit.equals(ONE_DIGIT) && !canTapOnes) return;
+            if (_digit.equals(TEN_DIGIT) && !canTapTens) return;
+            if (_digit.equals(HUN_DIGIT) && !canTapHuns) return;
+
+            String numberLoc = v.getTag().toString();
+            moveSequential(numberLoc, _digit, _data.operation.equals("-")); // MATH_MISC (1) should be an overall conditional that prevents bad dots from moving
         }
     }
 
+    /**
+     * this animation is lit
+     *
+     * BUG_605... waterfall subtract
+     * BUG_605... waterfall should not happen if digit is not highlighted
+     */
     class BaseTenOnClickAnimateWaterfall implements View.OnClickListener {
 
         private final String _numLoc;
@@ -404,8 +426,48 @@ public class BigMathMechanic {
 
         @Override
         public void onClick(View view) {
-            waterfall(_numLoc, _digit);
+
+            if (_digit.equals(ONE_DIGIT) && !canTapOnes) return;
+            if (_digit.equals(TEN_DIGIT) && !canTapTens) return;
+            if (_digit.equals(HUN_DIGIT) && !canTapHuns) return;
+
+            int numUnits = getDigitValue(_numLoc, _digit);
+
+            // for each digit to animate, do the waterfall thing
+            for (int i = 0; i < numUnits; i++)
+                (new Handler(Looper.getMainLooper())).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        moveSequential(_numLoc, _digit, _data.operation.equals("-"));
+                    }
+                }, WATERFALL_DELAY * i);
         }
+    }
+
+    private int getDigitValue(String numLoc, String digit) {
+
+        int number = 0;
+        switch(numLoc) {
+            case OPA_LOCATION:
+                number = _data.dataset[0];
+                break;
+            case OPB_LOCATION:
+                number = _data.dataset[1];
+                break;
+        }
+
+        switch(digit) {
+            case ONE_DIGIT:
+                return getOnesDigit(number);
+
+            case TEN_DIGIT:
+                return getTensDigit(number);
+
+            case HUN_DIGIT:
+                return getHunsDigit(number);
+        }
+
+        return 0;
     }
 
     /**
@@ -760,7 +822,7 @@ public class BigMathMechanic {
                 hun = _layout.getBaseTenConcreteUnitView(numberLoc, HUN_DIGIT, i);
                 //hun.setVisibility( i <= hunsDigit ? View.VISIBLE : View.INVISIBLE);
                 hun.setImageDrawable(getDrawable(i <= hunsDigit ? (ghost ? R.drawable.blue_ghost_100 : R.drawable.blue_100 ): R.drawable.empty_100));
-                hun.isMovable = i <= hunsDigit;
+                hun.isMovable = i <= hunsDigit; // MATH_MISC (tap)
             }
         }
 
@@ -770,7 +832,7 @@ public class BigMathMechanic {
             for (int i = 1; i <= 10; i++) {
                 ten = _layout.getBaseTenConcreteUnitView(numberLoc, TEN_DIGIT, i);
                 ten.setImageDrawable(getDrawable(i <= tensDigit ? (ghost ? R.drawable.blue_ghost_10_h : R.drawable.blue_10_h ) : R.drawable.empty_10_h));
-                ten.isMovable = i <= tensDigit;
+                ten.isMovable = i <= tensDigit;  // MATH_MISC (tap)
             }
         }
 
@@ -778,7 +840,12 @@ public class BigMathMechanic {
         for (int i = 1; i <= 10; i++) {
             one = _layout.getBaseTenConcreteUnitView(numberLoc, ONE_DIGIT, i);
             one.setImageDrawable(getDrawable(i <= onesDigit ? (ghost ? R.drawable.blue_ghost_1 : R.drawable.blue_1 ) : R.drawable.empty_1));
-            one.isMovable = i <= onesDigit;
+            one.isMovable = i <= onesDigit;  // MATH_MISC (tap) (next... why are ghost ones tapping??)
+
+            Log.wtf("YELLOW", "setting childOf=" + one.getResources().getResourceEntryName(((LinearLayout) one.getParent()).getId()));
+            Log.wtf("YELLOW", "setting id ==\t" + one.getResources().getResourceEntryName(one.getId()));
+            Log.wtf("YELLOW", "movable? ==\t" + ((MovableImageView) one).isMovable);
+            Log.wtf("YELLOW", "one:" + i + " isMovable=" + one.isMovable);
         }
 
 
@@ -788,21 +855,21 @@ public class BigMathMechanic {
             //one.setVisibility(View.INVISIBLE); // only gets revealed by student action
             one.setVisibility(View.VISIBLE);
             one.setImageDrawable(getDrawable(R.drawable.empty_1));
-            one.isMovable = false;
+            one.isMovable = false;  // MATH_MISC (tap)
 
             if (_numDigits >= 2) {
                 ten = _layout.getBaseTenConcreteUnitView(numberLoc, TEN_DIGIT, 10);
                 //ten.setVisibility(View.INVISIBLE); // only gets revealed by student action
                 ten.setVisibility(View.VISIBLE);
                 ten.setImageDrawable(getDrawable(R.drawable.empty_10_h));
-                ten.isMovable = false;
+                ten.isMovable = false;  // MATH_MISC (tap)
             }
 
             if (_numDigits >= 3) {
                 hun = _layout.getBaseTenConcreteUnitView(numberLoc, HUN_DIGIT, 10);
                 hun.setVisibility(View.VISIBLE);
                 hun.setImageDrawable(getDrawable(R.drawable.empty_100));
-                hun.isMovable = false;
+                hun.isMovable = false;  // MATH_MISC (tap)
             }
         }
 
@@ -858,6 +925,27 @@ public class BigMathMechanic {
      */
     public void disableConcreteUnitTappingForOtherRows(String digit) {
 
+
+        // MATH_MISC (tap)
+        switch (digit) {
+            case ONE_DIGIT:
+                canTapOnes = true;
+                canTapTens = false;
+                canTapHuns = false;
+                break;
+            case TEN_DIGIT:
+                canTapOnes = false;
+                canTapTens = true;
+                canTapHuns = false;
+                break;
+            case HUN_DIGIT:
+                canTapOnes = false;
+                canTapTens = false;
+                canTapHuns = true;
+                break;
+        }
+
+
         String[] numberLocations = {OPA_LOCATION, OPB_LOCATION, RESULT_LOCATION};
 
         String[] digitColumns = {ONE_DIGIT, TEN_DIGIT, HUN_DIGIT};
@@ -875,10 +963,9 @@ public class BigMathMechanic {
                 int numUnits = column.equals(HUN_DIGIT) ? (numberLoc.equals(RESULT_LOCATION) ? 10 : 5) : 10;
 
                 for (int i=1; i <=numUnits; i++) {
-                    _layout.getBaseTenConcreteUnitView(numberLoc, column, i).isMovable = enableThisColumn;
+                    MovableImageView unit = _layout.getBaseTenConcreteUnitView(numberLoc, column, i);
+                    unit.isMovable = unit.isMovable && enableThisColumn; // TODO this may break individual behavior for tens... but since it's in waterfall mode, it will work
                 }
-
-                //_layout.getBaseTenDigitView(numberLoc, column);
             }
 
         }
@@ -897,13 +984,11 @@ public class BigMathMechanic {
      */
     public void animateMe(String digit, MovableImageView v) {
 
-        Log.wtf("YELLOW", "y u no move?");
+
         if (EXPAND_HIT_BOX) return; // might be redundant?
 
-        Log.wtf("YELLOW", "y u no move?");
-        if (v.isMoving || !v.isMovable) return;
+        if (v.isMoving || !v.isMovable) return;  // MATH_MISC (tap)
 
-        Log.wtf("YELLOW", "y u no move?");
         switch(_data.operation) {
             case "+":
                 moveForAddition(v, digit);
@@ -914,38 +999,6 @@ public class BigMathMechanic {
         }
     }
 
-    /**
-     *
-     * @param digit
-     * @param v
-     */
-    public void animateNextSequential(String digit, View v) {
-
-        if (!EXPAND_HIT_BOX) return; // might be redundant?
-
-        String numberLoc = v.getTag().toString();
-        moveSequential(numberLoc, digit, _data.operation.equals("-"));
-    }
-
-
-    /**
-     * this animation is lit
-     *
-     * BUG_605... waterfall subtract
-     * BUG_605... waterfall should not happen if digit is not highlighted
-     * @param digit
-     */
-    private void waterfall(final String numLoc, final String digit) {
-
-        // try this???
-        for (int i = 0; i < getOnesDigit(_data.dataset[0]); i++)
-            (new Handler(Looper.getMainLooper())).postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    moveSequential(numLoc, digit, _data.operation.equals("-"));
-                }
-            }, WATERFALL_DELAY * i);
-    }
 
     /**
      *
@@ -1002,6 +1055,8 @@ public class BigMathMechanic {
     /**
      * UI-details
      * Moves a BaseTen ImageView of the type digitPlace.
+     * MATH_HESITATE we need to know when we've got nothing left to move!
+     * can we clean up some animation???
      *
      * TODO make separate types for one, ten, hun
      * @param v the view to move

@@ -37,6 +37,9 @@ public class BM_CONST {
         static final String FTR_ON_DIGIT_ONE = "FTR_ON_DIGIT_ONE";
         static final String FTR_ON_DIGIT_TEN = "FTR_ON_DIGIT_TEN";
         static final String FTR_ON_DIGIT_HUN = "FTR_ON_DIGIT_HUN";
+        // for which step to perform for the digit
+        static final String FTR_TAP_CONCRETE = "FTR_TAP_CONCRETE"; // MATH_HESITATE (1) first tap concrete, then write digit
+        static final String FTR_WRITE_DIGIT = "FTR_WRITE_DIGIT";
 
         // for correct vs wrong answers
         public static final String FTR_CORRECT = "FTR_CORRECT";

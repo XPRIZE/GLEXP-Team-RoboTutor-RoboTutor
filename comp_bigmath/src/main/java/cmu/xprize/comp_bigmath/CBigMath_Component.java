@@ -6,11 +6,16 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PointF;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -19,6 +24,7 @@ import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.ltkplus.CRecognizerPlus;
 import cmu.xprize.ltkplus.GCONST;
 import cmu.xprize.util.IBehaviorManager;
+import cmu.xprize.util.IHesitationManager;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IPublisher;
 import cmu.xprize.util.IScope;
@@ -29,15 +35,23 @@ import static cmu.xprize.comp_bigmath.BM_CONST.ALL_DIGITS;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_ON_DIGIT_HUN;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_ON_DIGIT_ONE;
 import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_ON_DIGIT_TEN;
+import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_TAP_CONCRETE;
+import static cmu.xprize.comp_bigmath.BM_CONST.FEATURES.FTR_WRITE_DIGIT;
 import static cmu.xprize.comp_bigmath.BM_CONST.HUN_DIGIT;
+import static cmu.xprize.util.MathUtil.getHunsDigit;
+import static cmu.xprize.util.MathUtil.getOnesDigit;
+import static cmu.xprize.util.MathUtil.getTensDigit;
 
 /**
  * Generated automatically w/ code written by Kevin DeLand
  */
 
-public class CBigMath_Component extends RelativeLayout implements ILoadableObject, IBehaviorManager, IPublisher {
+public class CBigMath_Component extends RelativeLayout implements ILoadableObject, IBehaviorManager, IPublisher, IHesitationManager {
 
-    protected RelativeLayout Scontent;
+    protected final Handler mainHandler  = new Handler(Looper.getMainLooper());
+    protected HashMap           queueMap     = new HashMap();
+    protected HashMap           nameMap      = new HashMap();
+    protected boolean           _qDisabled   = false;
 
     protected BigMathMechanic _mechanic;
     private BigMathLayoutHelper _layout;
@@ -102,12 +116,11 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
         // force write input to a digit
         CRecognizerPlus.getInstance().setClassBoost(GCONST.FORCE_DIGIT);
 
-        // inflate(getContext(), R.layout.bigmath_layout, this);
-
-        Scontent = (RelativeLayout) findViewById(R.id.Scontent);
+        bManager = LocalBroadcastManager.getInstance(getContext());
 
         // initialize mechanic
         _mechanic = new BigMathMechanic(getContext(), this, this, this);
+        _layout = new BigMathLayoutHelper(getContext(), this);
     }
 
     public void next() {
@@ -164,28 +177,40 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
     public void nextDigit() {
 
         _mechanic.highlightDigitColumn(_mechanic._currentDigit);
-        _mechanic.disableConcreteUnitTappingForOtherRows(_mechanic._currentDigit);
+        _mechanic.disableConcreteUnitTappingForOtherRows(_mechanic._currentDigit); // MATH_MISC (1) don't allow tapping of other ghost dots
 
         // publish the right features!!! to play audio!!!
+        boolean hasUnitsToTap = false;
         switch( _mechanic._currentDigit) {
             case ONE_DIGIT:
+                hasUnitsToTap = getOnesDigit(dataset[0]) > 0 && getOnesDigit(dataset[1]) > 0;
                 publishFeature(FTR_ON_DIGIT_ONE);
                 retractFeature(FTR_ON_DIGIT_TEN);
                 retractFeature(FTR_ON_DIGIT_HUN);
                 break;
 
             case TEN_DIGIT:
+                hasUnitsToTap = getTensDigit(dataset[0]) > 0 && getTensDigit(dataset[1]) > 0;
                 retractFeature(FTR_ON_DIGIT_ONE);
                 publishFeature(FTR_ON_DIGIT_TEN);
                 retractFeature(FTR_ON_DIGIT_HUN);
                 break;
 
             case HUN_DIGIT:
+                hasUnitsToTap = getHunsDigit(dataset[0]) > 0 && getHunsDigit(dataset[1]) > 0;
                 retractFeature(FTR_ON_DIGIT_ONE);
                 retractFeature(FTR_ON_DIGIT_TEN);
                 publishFeature(FTR_ON_DIGIT_HUN);
                 break;
+        }
 
+        // MATH_HESITATE if there are concrete units to tap, indicate that we should be tapping
+        if (hasUnitsToTap) {
+            publishFeature(FTR_TAP_CONCRETE);
+            retractFeature(FTR_WRITE_DIGIT);
+        } else {
+            retractFeature(FTR_TAP_CONCRETE);
+            publishFeature(FTR_WRITE_DIGIT);
         }
 
     }
@@ -198,16 +223,34 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
     }
 
     /**
-     * Point at a view
+     * Point at Dot Container
+     * @param numLoc
+     * @param digit
      */
-    public void pointAtSomething() {
-        View v = findViewById(R.id.hello);
+    public void pointAtDotContainer(String numLoc, String digit) {
+        View container = _layout.getContainingBox(numLoc, digit);
+        pointAtView(container);
+    }
 
-        int[] screenCoord = new int[2];
+    public void pointAtDigitInput(String numLoc, String digit) {
+        TextView view = _layout.getBaseTenDigitView(numLoc, digit);
+        pointAtView(view);
+    }
 
+
+    /**
+     * Use RoboFinger to point at the center of the view passed.
+     * @param v
+     */
+    private void pointAtView(View v) {
+        int[] screenCoord = {0, 0};
+        // findViewById(R.id.baseten_layout).getLocationOnScreen(screenCoord); // reference from the parent container
+
+        v.getLocationOnScreen(screenCoord);
         PointF targetPoint = new PointF(screenCoord[0] + v.getWidth()/2,
                 screenCoord[1] + v.getHeight()/2);
         Intent msg = new Intent(TCONST.POINTAT);
+        Log.wtf("POINTING", "" + targetPoint.x + ", " + targetPoint.y);
         msg.putExtra(TCONST.SCREENPOINT, new float[]{targetPoint.x, targetPoint.y});
 
         bManager.sendBroadcast(msg);
@@ -224,6 +267,118 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
         inflate(getContext(), layoutId, this);
 
 
+    }
+
+    /**
+     * Trigger the hesitation prompt. This will play the map "INPUT_HESITATION_FEEDBACK" after 5 seconds.
+     */
+    public void triggerHesitationTimer() {
+
+        // MATH_HESITATE
+        // MATH_HESITATE (1) how do we know when the step can move forward?
+        // COL = which column are we on?
+        // DOT = are there dots left?
+
+        // IF (COL==1, DOT_A) => {tap on the opA one dots}
+        // IF (COL==1, !DOT_A, DOT_B) => {tap on the opB one dots}
+        // IF (COL==1, !DOT_A, !DOT_B) => {write in the one box}
+
+        // ON (write ONE) ==> (cancel hesitation)
+
+        // IF (COL==10, DOT_A) => {tap on the ten dots}
+        // IF (COL==10, !DOT_A, DOB_B) => {tap on the opb ten dots}
+        // IF (COL==10, !DOT_A, !DOT_B) => {write in the ten box}
+
+        // ON (write TEN) ==> (cancel hesitation)
+
+
+        postNamed("HESITATION_PROMPT", "APPLY_BEHAVIOR", "INPUT_HESITATION_FEEDBACK", (long)5000);
+    }
+
+    public void postNamed(String name, String command, String target, Long delay) {
+        enQueue(new Queue(name, command, target), delay);
+    }
+
+    private void enQueue(Queue qCommand, long delay) {
+
+        if(!_qDisabled) {
+            queueMap.put(qCommand, qCommand);
+
+            if(delay > 0) {
+                mainHandler.postDelayed(qCommand, delay);
+            }
+            else {
+                mainHandler.post(qCommand);
+            }
+        }
+    }
+
+    public void cancelHesitationTimer() {
+        cancelPost("HESITATION_PROMPT");
+    }
+
+    public void cancelPost(String name) {
+
+        Log.d(TAG, "Cancel Post Requested: " + name);
+
+        while(nameMap.containsKey(name)) {
+
+            Log.d(TAG, "Post Cancelled: " + name);
+
+            mainHandler.removeCallbacks((Queue) (nameMap.get(name)));
+            nameMap.remove(name);
+        }
+    }
+
+    public class Queue implements Runnable {
+
+        protected String _name;
+        protected String _command;
+        protected String _target;
+        protected String _item;
+
+        public Queue(String name, String command) {
+
+            _name = name;
+            _command = command;
+
+            if (name != null) {
+                nameMap.put(name, this);
+            }
+        }
+
+        public Queue(String name, String command, String target) {
+
+            this(name, command);
+            _target = target;
+        }
+
+        @Override
+        public void run() {
+
+            try {
+                if (_name != null) {
+                    nameMap.remove(_name);
+                }
+
+                queueMap.remove(this);
+
+                switch (_command) {
+
+                    case TCONST.APPLY_BEHAVIOR:
+
+                        applyBehaviorNode(_target);
+                        break;
+
+                    default:
+                        break;
+                }
+
+
+            } catch (Exception e) {
+                CErrorManager.logEvent(TAG, "Run Error:", e, true);
+            }
+        }
     }
 
     // Must override in TClass
@@ -258,10 +413,6 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
 
         JSON_Helper.parseSelf(jsonData, this, CClassMap.classMap, scope);
         _dataIndex = 0;
-    }
-
-    public RelativeLayout getContainer() {
-        return Scontent;
     }
 
 
