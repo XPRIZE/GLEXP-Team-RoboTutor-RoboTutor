@@ -453,7 +453,7 @@
 
             {"name":"SetVolatile - WRITE_BEHAVIOR - CANCEL_INPUT_HESITATION_POSTING",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_INPUT_HESITATION_POSTING:String" ,"features":"!FTR_SEN"},
             {"name":"SetVolatile - WRITE_BEHAVIOR - RESET_HESITATION_NUMBER",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_AND_RESET_INPUT_HESITATION_POSTING:String" ,"features":"FTR_SEN"}, //amogh added
-            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|6000:Long", "features":""},
+            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|4000:Long", "features":""},
 
             {"name": "Enable Input",  "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput",       "parms": "FALSE:Boolean", "features":""}
           ],
@@ -582,7 +582,7 @@
             //setting the behaviors for hesitation cancelling and
 //            {"name":"SetVolatile - WRITE_BEHAVIOR - CANCEL_INPUT_HESITATION_POSTING",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_INPUT_HESITATION_POSTING:String" ,"features":"!FTR_SEN"},
 //            {"name":"SetVolatile - WRITE_BEHAVIOR - RESET_HESITATION_NUMBER",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_AND_RESET_INPUT_HESITATION_POSTING:String" ,"features":"FTR_SEN"}, //amogh added
-//            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|6000:Long", "features":""}
+//            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|4000:Long", "features":""}
 
 
           ],
@@ -1117,7 +1117,7 @@
 
 //            {"name":"SetVolatile - WRITE_BEHAVIOR - CANCEL_INPUT_HESITATION_POSTING",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_INPUT_HESITATION_POSTING:String" ,"features":"!FTR_SEN"},
 //            {"name":"SetVolatile - WRITE_BEHAVIOR - RESET_HESITATION_NUMBER",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_AND_RESET_INPUT_HESITATION_POSTING:String" ,"features":"FTR_SEN"}, //amogh added
-//            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|6000:Long", "features":""}
+//            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|4000:Long", "features":""}
           ],
           "preexit": [
           ],
@@ -1162,6 +1162,7 @@
 //            {"name": "evaluate and update the sentence",          "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "evaluateSentenceWordLevel",  "parms": "",    "features":"FTR_SEN_WRD"},
 
             {"name": "increment the current word index.", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "incrementCurrentWordIndex", "parms": "", "features":"FTR_SEN&!FTR_SEN_LTR"},
+            {"name": "increment the current letter index(letter level feedback).", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "incrementActiveIndex", "parms": "", "features":"FTR_SEN&FTR_SEN_LTR"},
 
 
             //starting animation for non sentence activities.
@@ -1233,7 +1234,7 @@
               "reuse": true,
               "tracks": [
                 {"name":"SetVolatile - WRITE_BEHAVIOR - CANCEL_AND_RESET_HESITATION_POSTING",             "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_AND_RESET_INPUT_HESITATION_POSTING:String" ,"features":"FTR_SEN"}, //amogh added
-                {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|6000:Long", "features":"FTR_SEN"}
+                {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|4000:Long", "features":"FTR_SEN"}
             ]
           }
 
@@ -1647,7 +1648,7 @@
 
             {"name":"SetVolatile - WRITE_BEHAVIOR - CANCEL_INPUT_HESITATION_POSTING",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_INPUT_HESITATION_POSTING:String" ,"features":"!FTR_SEN"}, //posted at the start, sets behavior that as soon as the user starts writing, input hesitation is cancelled
             {"name":"SetVolatile - WRITE_BEHAVIOR - RESET_HESITATION_NUMBER",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_AND_RESET_INPUT_HESITATION_POSTING:String" ,"features":"FTR_SEN"}, //posted at the start, sets behavior that as soon as the user starts writing, input hesitation is cancelled, hesitation number is set to 0.
-            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|6000:Long", "features":""} //starts timer to start INPUT_HESITATION_FEEDBACK
+            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|4000:Long", "features":""} //starts timer to start INPUT_HESITATION_FEEDBACK
           ]
         },
 

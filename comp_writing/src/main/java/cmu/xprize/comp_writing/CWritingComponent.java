@@ -2685,6 +2685,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         return currentWordIndex;
     }
 
+    public int incrementActiveIndex(){
+        mActiveIndex++;
+        return mActiveIndex;
+    }
+
     public void updateSentenceResponse(Boolean sentenceStatus) {
         // change the color for all letters according to the state of the sentence.
         for (int j = 0; j < mListWordsInput.size(); j++) {
