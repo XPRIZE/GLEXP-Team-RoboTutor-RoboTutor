@@ -49,6 +49,12 @@ public final class ND_CONST {
     public static final String HIGHLIGHT_ONES = "HIGHLIGHT_ONES";
     public static final String INDICATE_CORRECT = "INDICATE_CORRECT";
 
+    // actionMap entries
+    // cancellation nodes
+    public static final String CANCEL_HIGHLIGHT_HUNS = "CANCEL_HIGHLIGHT_HUNS";
+    public static final String CANCEL_HIGHLIGHT_TENS = "CANCEL_HIGHLIGHT_TENS";
+    public static final String CANCEL_HIGHLIGHT_ONES = "CANCEL_HIGHLIGHT_ONES";
+    public static final String CANCEL_INDICATE_CORRECT = "CANCEL_INDICATE_CORRECT";
 
     // for Logging
     static final String LOG_SCAFFOLD = "ND_SCAFFOLD";

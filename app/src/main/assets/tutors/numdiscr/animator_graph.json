@@ -228,7 +228,6 @@
         "ND_PLAYCORRECT": {
           "type": "MODULE",
           "COMMENT": "Feedback for Correct",
-          "preenter": ["CANCEL_HIGHLIGHT_HUNS", "CANCEL_HIGHLIGHT_TENS", "CANCEL_HIGHLIGHT_ONES"], // FIX_COMPARE (6) (test) does this work?
           "reuse": true,
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#ND_PLAYCORRECT:String", "features":""},
@@ -307,6 +306,7 @@
         "CANCEL_HIGHLIGHT_HUNS":  {"type": "COMMAND", "id": "HIGHLIGHT_HUNS", "method": "cancelNode", "parms": "", "features":""},
         "CANCEL_HIGHLIGHT_TENS":  {"type": "COMMAND", "id": "HIGHLIGHT_TENS", "method": "cancelNode", "parms": "", "features":""},
         "CANCEL_HIGHLIGHT_ONES":  {"type": "COMMAND", "id": "HIGHLIGHT_ONES", "method": "cancelNode", "parms": "", "features":""},
+        "CANCEL_INDICATE_CORRECT":{"type": "COMMAND", "id": "INDICATE_CORRECT", "method": "cancelNode", "parms": "", "features":""},
 
 
         // this is so unnecessary

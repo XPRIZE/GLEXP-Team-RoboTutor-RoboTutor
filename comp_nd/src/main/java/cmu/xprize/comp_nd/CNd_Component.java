@@ -23,6 +23,10 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.comp_nd.ND_CONST.CANCEL_HIGHLIGHT_HUNS;
+import static cmu.xprize.comp_nd.ND_CONST.CANCEL_HIGHLIGHT_ONES;
+import static cmu.xprize.comp_nd.ND_CONST.CANCEL_HIGHLIGHT_TENS;
+import static cmu.xprize.comp_nd.ND_CONST.CANCEL_INDICATE_CORRECT;
 import static cmu.xprize.comp_nd.ND_CONST.FTR_ONE_FIRST;
 import static cmu.xprize.comp_nd.ND_CONST.FTR_SAY_HUNS;
 import static cmu.xprize.comp_nd.ND_CONST.FTR_SAY_NA_ONES;
@@ -528,8 +532,20 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
     public void doTheWrongThing() {
         Log.d(TAG, "Doing the wrong thing");
 
+
+        // Cancel all the scaffolding queue Maps.
+        applyBehaviorNode(CANCEL_HIGHLIGHT_HUNS);
+        applyBehaviorNode(CANCEL_HIGHLIGHT_TENS);
+        applyBehaviorNode(CANCEL_HIGHLIGHT_ONES);
+        applyBehaviorNode(CANCEL_INDICATE_CORRECT);
+
+        // Reset the highlight.
+        _layoutManager.highlightDigit(NO_DIGIT);
+
+        // Restart the scaffolding process.
         applyBehaviorNode(getStartingHighlightByNumDigits());
 
+        // Continue to next part of nodeMap.
         applyBehaviorNode(ND_CONST.NEXTNODE);
 
 
@@ -540,6 +556,17 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
      */
     public void doTheRightThing() {
         Log.d(TAG, "Doing the right thing");
+
+        // Cancel all the scaffolding queue Maps.
+        applyBehaviorNode(CANCEL_HIGHLIGHT_HUNS);
+        applyBehaviorNode(CANCEL_HIGHLIGHT_TENS);
+        applyBehaviorNode(CANCEL_HIGHLIGHT_ONES);
+        applyBehaviorNode(CANCEL_INDICATE_CORRECT);
+
+        // Reset the highlight.
+        _layoutManager.highlightDigit(NO_DIGIT);
+
+        // Continue to next part of nodeMap.
         applyBehaviorNode(ND_CONST.NEXTNODE);
     }
 
