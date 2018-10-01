@@ -549,58 +549,60 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
      * @param child
      */
     public void addItemAt(View child, int inc) {
-
+        //add a view, update the response and sentence parameters, update expected characters for all the activities.
         CGlyphController v;
         CStimulusController r;
 
         int index = mGlyphList.indexOfChild(child);
 
-            boolean canInsert = checkInsert(mEditSequence, index + inc);
+        //add new stimulus controller in the response
+            r = (CStimulusController) LayoutInflater.from(getContext())
+                    .inflate(R.layout.recog_resp_comp, null, false);
+            mResponseViewList.addView(r, index + inc);
 
-            if (canInsert){
-                r = (CStimulusController) LayoutInflater.from(getContext())
-                        .inflate(R.layout.recog_resp_comp, null, false);
-                mResponseViewList.addView(r, index + inc);
+            r.setStimulusChar(" ",false);
+            r.setLinkedScroll(mDrawnScroll);
+            r.setWritingController(this);
 
-                r.setStimulusChar(" ",false);
-                r.setLinkedScroll(mDrawnScroll);
-                r.setWritingController(this);
+        // add a new view
+            v = (CGlyphController) LayoutInflater.from(getContext())
+                    .inflate(R.layout.drawn_input_comp, null, false);
 
-                // create a new view
-                v = (CGlyphController) LayoutInflater.from(getContext())
-                        .inflate(R.layout.drawn_input_comp, null, false);
+            if (index == mGlyphList.getChildCount() - 1) {
+                ((CGlyphController) child).setIsLast(false);
+                v.setIsLast(true);
+            }
 
-                // Update the last child flag
-                //
-                if (index == mGlyphList.getChildCount() - 1) {
-                    ((CGlyphController) child).setIsLast(false);
-                    v.setIsLast(true);
-                }
+            v.setResponseView(mResponseViewList);
+            mGlyphList.addView(v, index + inc);
 
-                v.setResponseView(mResponseViewList);
+            //enable the required buttons for this view
+//            v.showDeleteSpaceButton(true);
+//            v.showInsLftButton(true);
+//            v.showInsRgtButton(true);
+            v.setLinkedScroll(mDrawnScroll);
+            v.setWritingController(this);
 
-                //set the expected character if possible.
+            //if supposed to be a space here, inhibit input
+            //update the sentence parameters
+            updateSentenceEditSequence(); //updates mWrittenSentence, mEditSequence, mAlignedSourceSentence, mAlignedTargetSentence
+            mListWordsInput = getUpdatedListWordsInput(mListWordsInput, mAlignedSourceSentence,mAlignedTargetSentence); //sets the list of written word objects using mAlignedSourceSentence, mAlignedTargetSentence and then gets the number of attempts from the previous list.
 
-                mGlyphList.addView(v, index + inc);
-                v.showDeleteSpaceButton(true);
-                v.showInsLftButton(true);
-                v.showInsRgtButton(true);
-                v.setLinkedScroll(mDrawnScroll);
-                v.setWritingController(this);
+            //update the expected characters
+            updateExpectedCharacters();
 
-                //if supposed to be a space here, inhibit input
+            if(activityFeature.contains("FTR_SEN_CORR")){
 
-                updateSentenceEditSequence();
-                mListWordsInput = getUpdatedListWordsInput(mListWordsInput, mAlignedSourceSentence,mAlignedTargetSentence);
+            }
 
+            //for word level copy
+            else if(activityFeature.contains("FTR_SEN_WRD")){
                 //since the mListWordsInput is now updated, the parameters for mActiveWord have also changed, so refresh it.
-                mActiveWord = mListWordsInput.get(currentWordIndex);
+//                mActiveWord = mListWordsInput.get(currentWordIndex);
 
-                //for word level copy
-                if(activityFeature.contains("FTR_SEN_WRD")){
+            //might have to change this. works for now.
+//                evaluateSentenceWordLevel();
 
-                //might have to change this. works for now.
-                evaluateSentenceWordLevel();
 //                //if the word is complete, release the ON_CORRECT feature.
 //                String writtenActiveWord = mActiveWord.getWrittenWordString();
 //                String writtenAnswerWord = mActiveWord.getWordAnswer();
@@ -609,19 +611,18 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //                    applyBehavior(WR_CONST.ON_CORRECT); //should increment the current word index and the mActiveWord also thus changes.
 //                    temporaryOnCorrect();
 //                }
-                }
-
-                // for sentence level
-                else if(activityFeature.contains("FTR_SEN_SEN")){
-
-                }
             }
 
-            //if cannot insert
-            else {
+            // for sentence level
+            else if(activityFeature.contains("FTR_SEN_SEN")){
+
+            }
+//            }
+
+//            if cannot insert
+//            else {
                 //increase attempt number for the word or the sentence!
-            }
-
+//            }
     }
 
 
@@ -1253,6 +1254,21 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
     }
 
+    public void updateExpectedCharacters(){
+        int targetIndex = 0;
+        for(int i = 0; i < mGlyphList.getChildCount(); i++){
+
+            CGlyphController c = (CGlyphController) mGlyphList.getChildAt(i);
+
+            while(mAlignedSourceSentence.charAt(targetIndex) == '-'){
+                targetIndex++;
+            }
+
+            char targetChar = mAlignedTargetSentence.charAt(targetIndex);
+            c.setExpectedChar(Character.toString(targetChar));
+            targetIndex++;
+        }
+    }
 
 
 
@@ -3578,7 +3594,7 @@ public class EditOperation {
 //                char a = string2.charAt(predecessor.x);
                 topLineBuilder.append("-");
                 bottomLineBuilder.append(string2.charAt(predecessor.x));
-                EditOperation e = new EditOperation("I", string2.charAt(current.y),predecessor.y - 1);
+                EditOperation e = new EditOperation("I", string2.charAt(predecessor.x),predecessor.y - 1); //previously current.y
                 listOperations.add(e);
             }
 
