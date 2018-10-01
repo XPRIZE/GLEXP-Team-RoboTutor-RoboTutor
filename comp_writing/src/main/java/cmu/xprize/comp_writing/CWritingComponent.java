@@ -669,9 +669,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         //when the recognised character is not accurate
         if(candidate.getVisualConfidence() < 0.1){
-            gController.eraseGlyph();
-            gController.post(TCONST.HIGHLIGHT);
-            return false;
+//            gController.eraseGlyph();
+//            gController.post(TCONST.HIGHLIGHT);
+//            return false;
         }
         gController.setRecognisedChar(mResponse);
         _charValid = gController.checkAnswer(mResponse, isAnswerCaseSensitive);
@@ -908,11 +908,15 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     else{
                         gController.setPreviousGlyph();
                         //lets increase the attempt for this word, this will also release the corresponding feature which can then be used in the animator graph to call the functions that we want.
-                        int attempt = updateAttemptFeature();
-                        if (attempt > 4) {
-                            applyBehavior(WR_CONST.MERCY_RULE); // goto node "MERCY_RULE_BEHAVIOR"
-                        } else {
-                            applyBehavior(WR_CONST.ON_ERROR); // goto node "GENERAL_ERROR_BEHAVIOR"
+
+                        //if the glyph drawn again is the same as the previous one, don't increase the attempt.
+                        if(!mResponse.equals(mWrittenSentence.substring(mActiveIndex,mActiveIndex + 1))) {
+                            int attempt = updateAttemptFeature();
+                            if (attempt > 4) {
+                                applyBehavior(WR_CONST.MERCY_RULE); // goto node "MERCY_RULE_BEHAVIOR"
+                            } else {
+                                applyBehavior(WR_CONST.ON_ERROR); // goto node "GENERAL_ERROR_BEHAVIOR"
+                            }
                         }
                     }
 
@@ -1036,11 +1040,15 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     else{
                         gController.setPreviousGlyph();
                         //lets increase the attempt for this word, this will also release the corresponding feature which can then be used in the animator graph to call the functions that we want.
-                        int attempt = updateAttemptFeature();
-                        if (attempt > 4) {
-                            applyBehavior(WR_CONST.MERCY_RULE); // goto node "MERCY_RULE_BEHAVIOR"
-                        } else {
-                            applyBehavior(WR_CONST.ON_ERROR); // goto node "GENERAL_ERROR_BEHAVIOR"
+
+                        //if the glyph drawn again is the same as the previous one, don't increase the attempt.
+                        if(!mResponse.equals(mWrittenSentence.substring(mActiveIndex,mActiveIndex + 1))) {
+                            int attempt = updateAttemptFeature();
+                            if (attempt > 4) {
+                                applyBehavior(WR_CONST.MERCY_RULE); // goto node "MERCY_RULE_BEHAVIOR"
+                            } else {
+                                applyBehavior(WR_CONST.ON_ERROR); // goto node "GENERAL_ERROR_BEHAVIOR"
+                            }
                         }
                     }
                 }
@@ -1189,15 +1197,21 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                         }
                     }
 
-                    //when the glyph drawn is at the wrong place, increase the attempt and replace the old glyph that was there.
+                    //when the glyph drawn is at the wrong place(!canReplace), increase the attempt and replace the old glyph that was there.
                     else{
+
+                        //if the letter drawn is the same as the previous one,
                         gController.setPreviousGlyph();
                         //lets increase the attempt for this word, this will also release the corresponding feature which can then be used in the animator graph to call the functions that we want.
-                        int attempt = updateAttemptFeature();
-                        if (attempt > 4) {
-                            applyBehavior(WR_CONST.MERCY_RULE); // goto node "MERCY_RULE_BEHAVIOR"
-                        } else {
-                            applyBehavior(WR_CONST.ON_ERROR); // goto node "GENERAL_ERROR_BEHAVIOR"
+
+                        //if the glyph drawn again is the same as the previous one, don't increase the attempt.
+                        if(!mResponse.equals(mWrittenSentence.substring(mActiveIndex,mActiveIndex + 1))) {
+                            int attempt = updateAttemptFeature();
+                            if (attempt > 4) {
+                                applyBehavior(WR_CONST.MERCY_RULE); // goto node "MERCY_RULE_BEHAVIOR"
+                            } else {
+                                applyBehavior(WR_CONST.ON_ERROR); // goto node "GENERAL_ERROR_BEHAVIOR"
+                            }
                         }
                     }
 
@@ -1218,6 +1232,25 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             controller.showInsRgtButton(true);
         }
 
+    }
+
+    public void activateEditModeValidOnly(){
+        //make the buttons visible
+        for (int i = 0; i < mGlyphList.getChildCount(); i++) {
+            CGlyphController controller = (CGlyphController) mGlyphList.getChildAt(i);
+
+            if(checkDelete(mEditSequence, i)) {
+                controller.showDeleteSpaceButton(true);
+            }
+
+            if(checkInsert(mEditSequence, i )) {
+                controller.showInsRgtButton(true);
+            }
+
+            if(checkInsert(mEditSequence, i + 1)) {
+                controller.showInsLftButton(true);
+            }
+        }
     }
 
 
@@ -2052,18 +2085,37 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //        try = (View) LayoutInflater.from(getContext()).inflate((R.drawable.highlight_error,null,false));
 
         if(!singleStimulus) {
-            for(int i1 =0 ; i1 < mStimulus.length() ; i1++)
-            {
-                // create a new view
-                r = (CStimulusController)LayoutInflater.from(getContext())
-                        .inflate(R.layout.recog_resp_comp, null, false);
 
-                r.setStimulusChar(mStimulus.substring(i1, i1 + 1), singleStimulus);
+            //for sentence level activities, the stimulus should always be correct
+            if(activityFeature.contains("FTR_SEN")){
+                for (int i1 = 0; i1 < mAnswer.length(); i1++) {
+                    // create a new view
+                    r = (CStimulusController) LayoutInflater.from(getContext())
+                            .inflate(R.layout.recog_resp_comp, null, false);
 
-                mRecogList.addView(r);
+                    r.setStimulusChar(mAnswer.substring(i1, i1 + 1), singleStimulus);
 
-                r.setLinkedScroll(mDrawnScroll);
-                r.setWritingController(this);
+                    mRecogList.addView(r);
+
+                    r.setLinkedScroll(mDrawnScroll);
+                    r.setWritingController(this);
+                }
+            }
+
+            //when not a sentence level activity
+            else {
+                for (int i1 = 0; i1 < mStimulus.length(); i1++) {
+                    // create a new view
+                    r = (CStimulusController) LayoutInflater.from(getContext())
+                            .inflate(R.layout.recog_resp_comp, null, false);
+
+                    r.setStimulusChar(mStimulus.substring(i1, i1 + 1), singleStimulus);
+
+                    mRecogList.addView(r);
+
+                    r.setLinkedScroll(mDrawnScroll);
+                    r.setWritingController(this);
+                }
             }
         } else {
             // create a new view
@@ -2144,6 +2196,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 //amogh comment - need to check conditions. eg see the next if else.
                 String stimulusChar = mStimulus.substring(i1,i1+1);
 
+                //set the stimulus character as the recognised character
                 v.setRecognisedChar(stimulusChar);
 
                 if(!stimulusChar.equals(" ")) {
@@ -2166,12 +2219,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 mResponseViewList.addView(resp);
                 resp.setLinkedScroll(mDrawnScroll);
                 resp.setWritingController(this);
-            } //amogh comment move this to the animator graph
-            activateEditMode();
-//            mSentenceAttempts++;
+            }
+
+            //mSentenceAttempts++;
             updateSentenceAttemptFeature();
             //amogh add finish
-
         }
 
         else {
@@ -2223,7 +2275,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             mActiveWord = mListWordsAnswer.get(0);
         }
 
-        //now that the sentence parameters have been initialised, for correction activities set the expected characters and protoglyphs.
+        //now that the sentence parameters have been initialised, for correction activities set the expected characters and protoglyphs, also show buttons
         if(activityFeature.contains("FTR_SEN_CORR")){
 
             int expectedCharIndex = 0;
@@ -2260,6 +2312,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 expectedCharIndex++;
             }
+
+            //amogh comment move this to the animator graph
+            //shows all buttons.
+            activateEditModeValidOnly();
         }
     }
 
@@ -2728,51 +2784,46 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
     public boolean checkDelete (StringBuilder editSequence, int index){
+
+        //skipping over I only as that is where "-" appears in the source string.
         for (int i = 0; i <= index; i++){
             char c = editSequence.charAt(i);
             if (c == 'I'){
                 index++;
             }
         }
-        if(editSequence.charAt(index) == 'D'){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
 
-    public boolean checkInsert (StringBuilder editSequence, int index){
-        for (int i = 0; i < index; i++){
-            char c = editSequence.charAt(i);
-            if (c == 'I'){
-                index++;
-            }
-        }
-        if(editSequence.charAt(index) == 'I'){
-            return true;
-        }
-        else{
-            return false;
-        }
+        boolean isDelete= editSequence.charAt(index) == 'D';
+        return isDelete;
     }
 
     public boolean checkReplace(StringBuilder editSequence, int index){
+
+        //skipping over I only as that is where "-" appears in the source string.
         for (int i = 0; i <= index; i++) {
             char c = editSequence.charAt(i);
             if (c == 'I') {
                 index++;
             }
         }
-        if(editSequence.charAt(index) == 'R'){
-            return true;
-        }
-        else{
-            return false;
-        }
+
+        boolean isReplace = editSequence.charAt(index) == 'R';
+        return isReplace;
     }
 
+    public boolean checkInsert (StringBuilder editSequence, int index){
 
+        //skipping over I only as that is where "-" appears in the source string.
+        for (int i = 0; i < index; i++){
+            char c = editSequence.charAt(i);
+            if (c == 'I'){
+                index++;
+            }
+        }
+
+        boolean isInsert = editSequence.charAt(index) == 'I';
+        return isInsert;
+    }
     //amogh add ends
 
 

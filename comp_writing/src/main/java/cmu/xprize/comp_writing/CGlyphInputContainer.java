@@ -1274,6 +1274,11 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             return true;
         }
         else {
+            erase();
+            _recognisedChar = "";
+            int currentIndex = this.getGlyphIndex();
+            CStimulusController resp = (CStimulusController)_responseView.getChildAt(currentIndex);
+            resp.setStimulusChar("",false);
             return false;
         }
     }

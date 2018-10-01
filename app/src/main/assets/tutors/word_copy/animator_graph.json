@@ -1576,7 +1576,7 @@
             //amogh comment sep 5
             {"name":"SetSticky - STOP_WRITE_BEHAVIOR - CANCEL_INPUT_HESITATION_POSTING",             "type": "COMMAND", "id": "SWordCopy", "method": "setStickyBehavior", "parms": "ON_STOP_WRITING:String|START_HESITATION_ON_STOP_WRITING:String" ,"features":"FTR_SEN"},
 
-            {"name": "Activate the edit mode for the sentence", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "activateEditMode", "parms": "", "features":"FTR_SEN"}, //only play when initially evaluated not everytime.
+//            {"name": "Activate the edit mode for the sentence", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "activateEditMode", "parms": "", "features":"FTR_SEN"}, //only play when initially evaluated not everytime.
 
 
 
