@@ -125,7 +125,7 @@ public class CGlyphReplayContainer extends View implements Animator.AnimatorList
         //
         mPaint = new Paint();
 
-        mPaint.setColor(Color.BLUE);
+        mPaint.setColor(Color.BLACK);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
