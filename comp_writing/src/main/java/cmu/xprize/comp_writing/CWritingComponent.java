@@ -488,17 +488,36 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
      */
     //amogh edited
     public void deleteItem(View child) {
+
         int index = mGlyphList.indexOfChild(child);
         boolean canDelete = checkDelete(mEditSequence, index);
 
-        if(canDelete){
-            mGlyphList.removeViewAt(index);
-            mResponseViewList.removeViewAt(index);
-            updateSentenceEditSequence();
-            mListWordsInput = getUpdatedListWordsInput(mListWordsInput, mAlignedSourceSentence,mAlignedTargetSentence);
-            mActiveWord = mListWordsInput.get(currentWordIndex);
+//        if(canDelete){
+        //remove from mGlyphList
+        mGlyphList.removeViewAt(index);
+        //remove from response
+        mResponseViewList.removeViewAt(index);
 
-            evaluateSentenceWordLevel();
+        //update sentence parameters
+        updateSentenceEditSequence();
+        mListWordsInput = getUpdatedListWordsInput(mListWordsInput, mAlignedSourceSentence,mAlignedTargetSentence);
+        mActiveWord = mListWordsInput.get(currentWordIndex);
+
+        //update the expected characters
+        updateExpectedCharacters();
+
+        if(activityFeature.contains("FTR_SEN_CORR")){
+
+        }
+        else if(activityFeature.contains("FTR_SEN_WRD")){
+//                    evaluateSentenceWordLevel();
+        }
+        else if (activityFeature.contains("FTR_SEN_SEN")){
+
+        }
+        else{
+
+        }
 //            //if the word is complete, release the ON_CORRECT feature.
 //            String writtenActiveWord = mActiveWord.getWrittenWordString();
 //            String writtenAnswerWord = mActiveWord.getWordAnswer();
@@ -506,40 +525,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //            if(writtenWordIsCorrect){
 //                applyBehavior(WR_CONST.ON_CORRECT);
 //            }
-        }
+//        }
 
-        //when cannot delete
-        else
-        {
-            //code to increase attempt for a word or universally.
-        }
-//        if (! deleteCorrectionIndices.contains(index)) {
-//            mGlyphList.removeViewAt(index);
-//            mResponseViewList.removeViewAt(index);
-//        }
-//        else{
-////            correctionAttempts++;
-////            if (correctionAttempts > 2){
-//                mHighlightErrorBoxView = new View (getContext());
-//                int wid = mResponseViewList.getChildAt(index+3).getLeft() - mResponseViewList.getChildAt(index+2).getLeft();
-//                mHighlightErrorBoxView.setLayoutParams(new LayoutParams(wid,90));
-////        mHighlightErrorBoxView.setId();
-//                mHighlightErrorBoxView.setBackgroundResource(R.drawable.highlight_error);
-////        MarginLayoutParams mp = (MarginLayoutParams) mHighlightErrorBoxView.getLayoutParams();
-////        mp.setMargins(100,00,0,100);
-////                mHighlightErrorBoxView.setX((float)300.00);
-//                int pos = mResponseViewList.getChildAt(index+2).getLeft();
-//                mHighlightErrorBoxView.setX((float)pos);
-////        mHighlightErrorBoxView.setLeft(1000);
-//                mResponseScrollLayout.addView(mHighlightErrorBoxView);
-//                mHighlightErrorBoxView.postDelayed(new Runnable() {
-//                    public void run() {
-//                        mHighlightErrorBoxView.setVisibility(View.GONE);
-//                    }
-//                }, 2000);
-////            }
-//        }
-////        mRecogList.removeViewAt(index); //amogh commented to avoid removal from stimulus
     }
 
 
