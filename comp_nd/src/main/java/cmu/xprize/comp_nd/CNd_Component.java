@@ -3,6 +3,8 @@ package cmu.xprize.comp_nd;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PointF;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -12,7 +14,10 @@ import android.widget.RelativeLayout;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 
 import cmu.xprize.comp_logging.CErrorManager;
@@ -34,11 +39,13 @@ import static cmu.xprize.comp_nd.ND_CONST.FTR_SAY_NA_TENS;
 import static cmu.xprize.comp_nd.ND_CONST.FTR_SAY_ONES;
 import static cmu.xprize.comp_nd.ND_CONST.FTR_SAY_TENS;
 import static cmu.xprize.comp_nd.ND_CONST.FTR_TEN_FIRST;
+import static cmu.xprize.comp_nd.ND_CONST.HESITATION_PROMPT;
 import static cmu.xprize.comp_nd.ND_CONST.HIGHLIGHT_HUNS;
 import static cmu.xprize.comp_nd.ND_CONST.HIGHLIGHT_ONES;
 import static cmu.xprize.comp_nd.ND_CONST.HIGHLIGHT_TENS;
 import static cmu.xprize.comp_nd.ND_CONST.HUN_DIGIT;
 import static cmu.xprize.comp_nd.ND_CONST.INDICATE_CORRECT;
+import static cmu.xprize.comp_nd.ND_CONST.INPUT_HESITATION_FEEDBACK;
 import static cmu.xprize.comp_nd.ND_CONST.NO_DIGIT;
 import static cmu.xprize.comp_nd.ND_CONST.ONE_DIGIT;
 import static cmu.xprize.comp_nd.ND_CONST.TEN_DIGIT;
@@ -51,6 +58,7 @@ import static cmu.xprize.comp_nd.ND_CONST.VALUE_TEN;
 import static cmu.xprize.util.MathUtil.getHunsDigit;
 import static cmu.xprize.util.MathUtil.getOnesDigit;
 import static cmu.xprize.util.MathUtil.getTensDigit;
+import static cmu.xprize.util.TCONST.DEBUG_HESITATE;
 
 /**
  * Generated automatically w/ code written by Kevin DeLand
@@ -99,6 +107,11 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
     // "now say this number"
     //
 
+    // Queue Things
+    protected final Handler mainHandler  = new Handler(Looper.getMainLooper());
+    protected HashMap           queueMap     = new HashMap();
+    protected HashMap nameMap      = new HashMap();
+    protected boolean           _qDisabled   = false;
     //
 
     // DataSource Variables
@@ -164,6 +177,40 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
         _layoutManager.initialize();
         _layoutManager.resetView();
 
+    }
+
+    public void onDestroy() {
+
+        terminateQueue();
+    }
+
+    /**
+     *  Disable the input queues permenantly in prep for destruction
+     *  walks the queue chain to diaable scene queue
+     *
+     */
+    private void terminateQueue() {
+
+        // disable the input queue permenantly in prep for destruction
+        //
+        _qDisabled = true;
+        flushQueue();
+    }
+
+
+    /**
+     * Remove any pending scenegraph commands.
+     *
+     */
+    private void flushQueue() {
+
+        Iterator<?> tObjects = queueMap.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            mainHandler.removeCallbacks((Queue)(entry.getValue()));
+        }
     }
 
     /**
@@ -361,14 +408,19 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
     }
 
     /**
-     * if it's a worked example, do the scaffolding
+     * if it's a worked example, do the scaffolding. Otherwise, set the hesitation feedback.
      */
-    public void playWorkedExample() {
+    public void playWorkedExampleOrSetHesitation() {
         // begin with example
         if(isWorkedExample) {
-
             applyBehaviorNode(getStartingHighlightByNumDigits()); // only highlight the necessary digits!!!
+        } else {
+            triggerHesitationFeedback();
         }
+    }
+
+    public void triggerHesitationFeedback() {
+        postNamed(HESITATION_PROMPT, TCONST.APPLY_BEHAVIOR, INPUT_HESITATION_FEEDBACK, (long) 2500);
     }
 
     /**
@@ -383,7 +435,7 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
 
     // (5) prevent user
-    // FIX_COMPARE (6) (test) (don't lock user input
+    // deprecated -- don't lock user input anymore
     public void lockUserInput() {
         _layoutManager.enableChooseNumber(false);
     }
@@ -466,6 +518,8 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
         if (_currentHighlightDigit == null) return;
 
+        cancelPost(HESITATION_PROMPT); // prevent hesitation prompt
+
         switch(_currentHighlightDigit) {
             case HUN_DIGIT:
                 if (getHunsDigit(dataset[0]) == getHunsDigit(dataset[1])) {
@@ -542,6 +596,9 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
         // Reset the highlight.
         _layoutManager.highlightDigit(NO_DIGIT);
 
+        // Prevent hesitation prompt.
+        cancelPost(HESITATION_PROMPT);
+
         // Restart the scaffolding process.
         applyBehaviorNode(getStartingHighlightByNumDigits());
 
@@ -562,6 +619,9 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
         applyBehaviorNode(CANCEL_HIGHLIGHT_TENS);
         applyBehaviorNode(CANCEL_HIGHLIGHT_ONES);
         applyBehaviorNode(CANCEL_INDICATE_CORRECT);
+
+        // Prevent hesitation prompt.
+        cancelPost(HESITATION_PROMPT); // prevent hesitation prompt
 
         // Reset the highlight.
         _layoutManager.highlightDigit(NO_DIGIT);
@@ -610,5 +670,92 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
         JSON_Helper.parseSelf(jsonData, this, CClassMap.classMap, scope);
         _dataIndex = 0;
+    }
+
+    /**
+     * Remove named posts
+     */
+    public void cancelPost(String name) {
+
+        Log.d(TAG, "Cancel Post Requested: " + name);
+
+        while(nameMap.containsKey(name)) {
+
+            Log.d(TAG, "Post Cancelled: " + name);
+
+            mainHandler.removeCallbacks((Queue) (nameMap.get(name)));
+            nameMap.remove(name);
+        }
+    }
+
+    public void postNamed(String name, String command, String target, Long delay) {
+        enQueue(new Queue(name, command, target), delay);
+    }
+
+    private void enQueue(Queue qCommand, long delay) {
+
+        if(!_qDisabled) {
+            queueMap.put(qCommand, qCommand);
+
+            if(delay > 0) {
+                mainHandler.postDelayed(qCommand, delay);
+            }
+            else {
+                mainHandler.post(qCommand);
+            }
+        }
+    }
+
+    public class Queue implements  Runnable {
+
+        protected String _name;
+        protected String _command;
+        protected String _target;
+        protected String _item;
+
+        public Queue(String name, String command) {
+
+            _name    = name;
+            _command = command;
+
+            if(name != null) {
+                nameMap.put(name, this);
+            }
+        }
+
+        public Queue(String name, String command, String target) {
+
+            this(name, command);
+            _target  = target;
+        }
+
+        @Override
+        public void run() {
+
+            try {
+                if (_name != null) {
+                    nameMap.remove(_name);
+                }
+
+                queueMap.remove(this);
+
+                switch (_command) {
+
+                    case TCONST.APPLY_BEHAVIOR:
+
+                        Log.wtf(DEBUG_HESITATE, "applybehavior: " + _target);
+
+                        applyBehaviorNode(_target);
+                        break;
+
+                    default:
+                        break;
+                }
+
+
+            } catch (Exception e) {
+                CErrorManager.logEvent(TAG, "Run Error:", e, true);
+            }
+        }
     }
 }

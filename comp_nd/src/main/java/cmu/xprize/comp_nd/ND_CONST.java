@@ -43,7 +43,12 @@ public final class ND_CONST {
     static final String NEXTNODE = "NEXTNODE";
 
 
+    // Named Posts.
+    public static final String HESITATION_PROMPT = "HESITATION_PROMPT";
+
+
     // queueMap entries
+    public static final String INPUT_HESITATION_FEEDBACK = "INPUT_HESITATION_FEEDBACK";
     public static final String HIGHLIGHT_HUNS = "HIGHLIGHT_HUNS";
     public static final String HIGHLIGHT_TENS = "HIGHLIGHT_TENS";
     public static final String HIGHLIGHT_ONES = "HIGHLIGHT_ONES";

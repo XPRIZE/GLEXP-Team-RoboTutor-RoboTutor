@@ -12,13 +12,23 @@
 
       "queueMap": {
 
+        "INPUT_HESITATION_FEEDBACK": {
+          "type": "QUEUE",
+          "COMMENT": "provide prompt after student hesitates",
+          "tracks": [
+
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "tap the larger number.mp3",            "soundpackage":"nd",        "volume": 1.0, "mode":"flow"},
+
+            {"name": "RESET TIMED HESITATION PROMPT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "triggerHesitationFeedback", "parms": "", "features": ""}
+          ]
+        },
+
         // scaffold highlighting
         "HIGHLIGHT_HUNS": {
           "type": "QUEUE",
           "COMMENT": "highlight the hundreds column and explain how to compare numbers",
           "tracks": [
-            // FIX_COMPARE (6) (test) don't lock user input
-            // FIX_COMPARE (6) (test) what are consequences of not locking user input??? possibly see "cancel hesitation feedback"?
+            // deprecated -- don't lock user input anymore
             // {"name": "DISABLE TAPPING", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "lockUserInput"},
             {"name": "first compare hundreds", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "first compare the hundreds.mp3", "soundpackage": "nd", "volume": 1.0, "mode":"flow"},
             {"name": "HIGHLIGHT_UNITS", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "highlightHunsColumn"},
@@ -82,7 +92,8 @@
             {"name": "wunny boi", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.one}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow", "features":"FTR_SAY_ONES"},
             {"name": "point at this number", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "is the bigger number.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"},
             {"name": "CLEAR HIGHLIGHT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "clearHighlight"},
-            {"name": "DISABLE TAPPING", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "enableUserInput"}
+            {"name": "DISABLE TAPPING", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "enableUserInput"},
+            {"name": "SET TIMED HESITATION PROMPT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "triggerHesitationFeedback", "parms": "", "features": ""}
           ]
         }
 
@@ -209,7 +220,8 @@
               
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""},
             {"name": "UPDATE_STIMULUS", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "updateStimulus"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "tap the larger number.mp3",            "soundpackage":"nd",        "volume": 1.0, "mode":"flow"}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "tap the larger number.mp3",            "soundpackage":"nd",        "volume": 1.0, "mode":"flow"},
+            {"type": "COMMAND", "id": "SNumDiscr", "method": "playWorkedExampleOrSetHesitation", "parms": "" ,"features":""}
     
           ]
         },
@@ -277,7 +289,6 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#WAIT_FOR_INPUT:String", "features":""},
 
             {"type": "COMMAND", "id": "SNumDiscr", "method": "setVolatileBehavior", "parms": "SELECT_ANSWER_EVENT:String|NEXTNODE:String" ,"features":""},
-            {"type": "COMMAND", "id": "SNumDiscr", "method": "playWorkedExample", "parms": "" ,"features":""},
 
 
             {"type": "COMMAND", "cmd": "WAIT"}
@@ -302,12 +313,11 @@
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
 
-        // FIX_COMPARE (6) (test) can we call these???
+        // these are applied directly (see ND_CONST)
         "CANCEL_HIGHLIGHT_HUNS":  {"type": "COMMAND", "id": "HIGHLIGHT_HUNS", "method": "cancelNode", "parms": "", "features":""},
         "CANCEL_HIGHLIGHT_TENS":  {"type": "COMMAND", "id": "HIGHLIGHT_TENS", "method": "cancelNode", "parms": "", "features":""},
         "CANCEL_HIGHLIGHT_ONES":  {"type": "COMMAND", "id": "HIGHLIGHT_ONES", "method": "cancelNode", "parms": "", "features":""},
         "CANCEL_INDICATE_CORRECT":{"type": "COMMAND", "id": "INDICATE_CORRECT", "method": "cancelNode", "parms": "", "features":""},
-
 
         // this is so unnecessary
         "SET_WRONG_BEHAVIOR": {"type": "COMMAND", "id": "SNumDiscr", "method": "setStickyBehavior", "parms": "ND_WRONG:String|ND_WRONG:String" ,"features":""},

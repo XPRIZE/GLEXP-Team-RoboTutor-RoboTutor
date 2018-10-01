@@ -90,6 +90,7 @@ public class TNdComponent extends CNd_Component implements ITutorObject, IDataSi
     @Override
     public void onDestroy() {
 
+        super.onDestroy();
     }
 
     @Override

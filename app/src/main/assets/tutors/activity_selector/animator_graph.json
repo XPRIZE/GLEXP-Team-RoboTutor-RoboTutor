@@ -190,7 +190,6 @@
         "CLEAR_HESITATION_BEHAVIOR":  {"type": "COMMAND", "id": "activity_selector", "method": "cancelPost", "parms": "HESITATION_PROMPT:String", "features":"" },
         "CLEAR_DESCRIBENEXT_BEHAVIOR":  {"type": "COMMAND", "id": "activity_selector", "method": "cancelPost", "parms": "DESCRIBE_NEXT:String", "features":"" },
 
-        // FIX_COMPARE (6) (test) can we just call "cancelNode" ???
         "CANCEL_BUTTON_DESCRIPTION":  {"type": "COMMAND", "id": "BUTTON_DESCRIPTION", "method": "cancelNode", "parms": "", "features":""},
         "CANCEL_INTRO_STATEMENT":  {"type": "COMMAND", "id": "INTRO_STATEMENT_BEHAVIOR", "method": "cancelNode", "parms": "", "features":""},
 
