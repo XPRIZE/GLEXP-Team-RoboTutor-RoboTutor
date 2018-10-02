@@ -60,6 +60,14 @@ public class BigMathAnimationHelper {
         this._problemState = problemState;
     }
 
+    public View.OnClickListener generateWaterfallClickListener(String numLoc, String digit, String operation) {
+        if (operation.equals("+")) {
+            return new BaseTenOnClickAnimateWaterfall(numLoc, digit);
+        } else {
+            return new BaseTenOnClickAnimateWaterfallSubtract(digit);
+        }
+    }
+
     public View.OnClickListener generateWaterfallClickListener(String numLoc, String digit) {
         return new BaseTenOnClickAnimateWaterfall(numLoc, digit);
     }
@@ -279,22 +287,7 @@ public class BigMathAnimationHelper {
         final MovableImageView newView = determineNextResultView(digit, false);
         final MovableImageView helperView = determineNextResultView(digit, true);
 
-        int[] oldLocation = new int[2], newLocation = new int[2];
-        oldView.getLocationOnScreen(oldLocation);
-        newView.getLocationOnScreen(newLocation);
-        float dy = newLocation[1] - oldLocation[1];
-        Log.d("YELLOW X translation\t", "" + oldLocation[0] + " --> " + newLocation[0]);
-        float dx = newLocation[0] - oldLocation[0];
-        Log.d("YELLOW Y translation\t", "" + oldLocation[1] + " --> " + newLocation[1]);
-
-        newView.setTranslationX(-dx);
-        newView.setTranslationY(-dy);
-
-        ObjectAnimator animX = ObjectAnimator.ofFloat(newView, "translationX", 0);
-        ObjectAnimator animY = ObjectAnimator.ofFloat(newView, "translationY", 0);
-        AnimatorSet animSet = new AnimatorSet();
-        animSet.playTogether(animX, animY);
-        animSet.setDuration(1000);
+        AnimatorSet animSet = generateViewToViewAnimatorSet(oldView, newView, 1000);
 
         animSet.addListener(new Animator.AnimatorListener() {
 
@@ -470,24 +463,7 @@ public class BigMathAnimationHelper {
         // an animation helper
         final MovableImageView helperView = determineNextResultView(digitPlace, true);
 
-        int[] oldLocation = new int[2], newLocation = new int[2];
-
-        oldView.getLocationOnScreen(oldLocation);
-        newView.getLocationOnScreen(newLocation);
-        float dy = newLocation[1] - oldLocation[1];
-        Log.d("YELLOW X translation\t", "" + oldLocation[0] + " --> " + newLocation[0]);
-        float dx = newLocation[0] - oldLocation[0];
-        Log.d("YELLOW Y translation\t", "" + oldLocation[1] + " --> " + newLocation[1]);
-
-        newView.setTranslationX(-dx);
-        newView.setTranslationY(-dy);
-
-
-        ObjectAnimator animX = ObjectAnimator.ofFloat(newView, "translationX", 0);
-        ObjectAnimator animY = ObjectAnimator.ofFloat(newView, "translationY", 0);
-        AnimatorSet animSet = new AnimatorSet();
-        animSet.playTogether(animX, animY);
-        animSet.setDuration(1000);
+        AnimatorSet animSet = generateViewToViewAnimatorSet(oldView, newView, 1000);
 
         animSet.addListener(new Animator.AnimatorListener() {
 
@@ -710,23 +686,7 @@ public class BigMathAnimationHelper {
                 break;
         }
 
-        int[] oldLocation = new int[2], newLocation = new int[2];
-        oldView.getLocationOnScreen(oldLocation);
-        newView.getLocationOnScreen(newLocation);
-        float dy = newLocation[1] - oldLocation[1];
-        Log.d("YELLOW X translation\t", "" + oldLocation[0] + " --> " + newLocation[0]);
-        float dx = newLocation[0] - oldLocation[0];
-        Log.d("YELLOW Y translation\t", "" + oldLocation[1] + " --> " + newLocation[1]);
-
-        newView.setTranslationX(-dx);
-        newView.setTranslationY(-dy);
-
-
-        ObjectAnimator animX = ObjectAnimator.ofFloat(newView, "translationX", 0);
-        ObjectAnimator animY = ObjectAnimator.ofFloat(newView, "translationY", 0);
-        AnimatorSet animSet = new AnimatorSet();
-        animSet.playTogether(animX, animY);
-        animSet.setDuration(1500);
+        AnimatorSet animSet = generateViewToViewAnimatorSet(oldView, newView, 1500);
 
         animSet.addListener(new Animator.AnimatorListener() {
             @Override
@@ -781,41 +741,167 @@ public class BigMathAnimationHelper {
         animSet.start();
     }
 
-    /**
-     * UI-details
-     * Moves a BaseTen ImageView of the type digitPlace.
-     *
-     * @param v
-     * @param digitPlace hun, ten, or one
-     */
-    private void moveForSubtraction(View v, final String digitPlace) {
+    public View.OnClickListener generateWaterfallSubtractClickListener(String digit) {
+        return new BaseTenOnClickAnimateWaterfallSubtract(digit);
+    }
 
-        // this statement checks if we have already tapped enough to fill the subtrahend
-        // for example, if the subtrahend is 304 and we have already filled 3 hundreds spaces, return.
-        switch(digitPlace) {
+    class BaseTenOnClickAnimateWaterfallSubtract implements View.OnClickListener {
+
+
+        private final String _digit;
+
+        public BaseTenOnClickAnimateWaterfallSubtract(String _digit) {
+            this._digit = _digit;
+        }
+
+        @Override
+        public void onClick(View view) {
+
+            if (_digit.equals(ONE_DIGIT) && !_problemState.isCanTapOnes()) return;
+            if (_digit.equals(TEN_DIGIT) && !_problemState.isCanTapTens()) return;
+            if (_digit.equals(HUN_DIGIT) && !_problemState.isCanTapHuns()) return;
+
+            int numUnits = getDigitValue(OPB_LOCATION, _digit); // gets how many in opB...
+
+            // if we're moving to result, move whatever is left in the OPA row
+            final boolean hasDotsLeft = hasDotsLeftToSubtract(_digit);
+            if (!hasDotsLeft) {
+                if (_digit.equals(ONE_DIGIT)) numUnits = _problemState.getCurrentOpAOne();
+                else if (_digit.equals(TEN_DIGIT)) numUnits = _problemState.getCurrentOpATen();
+                else if (_digit.equals(HUN_DIGIT)) numUnits = _problemState.getCurrentOpAHun();
+            }
+
+            // for each digit to animate, do the waterfall thing
+            for (int i = 0; i < numUnits; i++)
+                (new Handler(Looper.getMainLooper())).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        moveSequentialSubtraction(_digit, !hasDotsLeft);
+                    }
+                }, WATERFALL_DELAY * i);
+        }
+    }
+
+    /**
+     * Check if we have already subtracted the dots
+     * @param digit
+     * @return
+     */
+    private boolean hasDotsLeftToSubtract(String digit) {
+        // check that subtract has things l
+        switch(digit) {
             case HUN_DIGIT:
                 if (_problemState.getSubtrahendHun() == getHunsDigit(_problemState.getData().dataset[1])) {
-                    return;
+                    return false;
                 }
                 break;
 
             case TEN_DIGIT:
                 if (_problemState.getSubtrahendTen() == getTensDigit(_problemState.getData().dataset[1])) {
-                    return;
+                    return false ;
                 }
                 break;
 
             case ONE_DIGIT:
                 if (_problemState.getSubtrahendOne() == getOnesDigit(_problemState.getData().dataset[1])) {
-                    return;
+                    return false;
                 }
         }
 
-        final MovableImageView oldView = (MovableImageView) v;
-        final MovableImageView newView = determineNextSubtrahendView(digitPlace, false);
-        // helper for better animation
-        final MovableImageView helperView = determineNextSubtrahendView(digitPlace, true);
+        return true;
+    }
 
+
+    /**
+     * Move the next subtraction in line. Will only move up to OPB number...
+     * @param digitPlace
+     */
+    private void moveSequentialSubtraction(final String digitPlace, final boolean toResult) {
+        // BUG_605 NEXT NEXT NEXT
+        final MovableImageView oldView = determineNextTopView(OPA_LOCATION, digitPlace);
+        // if we're at zero, this will return null
+        if (oldView == null) return;
+
+        final MovableImageView newView = toResult ? determineNextResultView(digitPlace, false) : determineNextSubtrahendView(digitPlace, false);
+        final MovableImageView helperView = toResult ? determineNextResultView(digitPlace, true) : determineNextSubtrahendView(digitPlace, true);
+
+        AnimatorSet animSet = generateViewToViewAnimatorSet(oldView, newView, 1000);
+
+        animSet.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+                // BUG_605 (***) awfully alike
+                // once moved, it can't move again
+                oldView.isMovable = false;
+                // show both newView (destination) and helperView (temporary placeholder)
+                newView.setVisibility(View.VISIBLE);
+                helperView.setVisibility(View.VISIBLE);
+
+                switch(digitPlace)  {
+                    case HUN_DIGIT:
+                        helperView.setImageDrawable(getDrawable(!toResult ? R.drawable.blue_ghost_100 : R.drawable.empty_100));
+                        oldView.setImageDrawable(getDrawable(R.drawable.empty_100));
+                        newView.setImageDrawable(getDrawable(R.drawable.blue_100));
+
+                        _problemState.decrementCurrentOpAHun();
+                        // either increment subrahend or result, depending on where we're moving the dot
+                        if (!toResult) _problemState.incrementSubtrahendHun();
+                        else _problemState.incrementResultHun();
+
+                        break;
+
+                    case TEN_DIGIT:
+                        helperView.setImageDrawable(getDrawable(!toResult ? R.drawable.blue_ghost_10_h : R.drawable.empty_10_h));
+                        oldView.setImageDrawable(getDrawable(R.drawable.empty_10_h));
+                        newView.setImageDrawable(getDrawable(R.drawable.blue_10_h));
+
+                        _problemState.decrementCurrentOpATen();
+                        // either increment subrahend or result, depending on where we're moving the dot
+                        if (!toResult) _problemState.incrementSubtrahendTen();
+                        else _problemState.incrementResultTen();
+                        break;
+
+                    case ONE_DIGIT:
+                        helperView.setImageDrawable(getDrawable(!toResult ? R.drawable.blue_ghost_1 : R.drawable.empty_1));
+                        oldView.setImageDrawable(getDrawable(R.drawable.empty_1));
+                        newView.setImageDrawable(getDrawable(R.drawable.blue_1));
+
+                        _problemState.decrementCurrentOpAOne();
+                        // either increment subrahend or result, depending on where we're moving the dot
+                        if (!toResult) _problemState.incrementSubtrahendOne();
+                        else _problemState.incrementResultOne();
+                        break;
+                }
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+
+        animSet.start();
+    }
+
+    /**
+     * Generate an animation that moves from oldView to newView, for duration.
+     * @param oldView
+     * @param newView
+     * @param duration
+     * @return
+     */
+    private AnimatorSet generateViewToViewAnimatorSet(View oldView, View newView, long duration) {
 
         int[] oldLocation = new int[2], newLocation = new int[2];
         oldView.getLocationOnScreen(oldLocation);
@@ -828,21 +914,43 @@ public class BigMathAnimationHelper {
         newView.setTranslationX(-dx);
         newView.setTranslationY(-dy);
 
-
         ObjectAnimator animX = ObjectAnimator.ofFloat(newView, "translationX", 0);
         ObjectAnimator animY = ObjectAnimator.ofFloat(newView, "translationY", 0);
         AnimatorSet animSet = new AnimatorSet();
         animSet.playTogether(animX, animY);
-        animSet.setDuration(1000);
+        animSet.setDuration(duration);
+
+        return animSet;
+    }
+
+    /**
+     * UI-details
+     * Moves a BaseTen ImageView of the type digitPlace.
+     *
+     * @param v
+     * @param digitPlace hun, ten, or one
+     */
+    private void moveForSubtraction(View v, final String digitPlace) {
+
+        // this statement checks if we have already tapped enough to fill the subtrahend
+        // for example, if the subtrahend is 304 and we have already filled 3 hundreds spaces, return.
+        if(!hasDotsLeftToSubtract(digitPlace)) return;
+
+        final MovableImageView oldView = (MovableImageView) v;
+        final MovableImageView newView = determineNextSubtrahendView(digitPlace, false);
+        // helper for better animation
+        final MovableImageView helperView = determineNextSubtrahendView(digitPlace, true);
+
+
+        AnimatorSet animSet = generateViewToViewAnimatorSet(oldView, newView, 1000);
 
         animSet.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
 
-
+                // BUG_605 (***) awfully alike
                 // once moved, it can't move again
                 oldView.isMovable = false;
-
                 // show both newView (destination) and helperView (temporary placeholder)
                 newView.setVisibility(View.VISIBLE);
                 helperView.setVisibility(View.VISIBLE);
@@ -1003,23 +1111,7 @@ public class BigMathAnimationHelper {
             return;
         }
 
-        int[] oldLocation = new int[2], newLocation = new int[2];
-        oldView.getLocationOnScreen(oldLocation);
-        newView.getLocationOnScreen(newLocation);
-        float dy = newLocation[1] - oldLocation[1];
-        Log.d("YELLOW X translation\t", "" + oldLocation[0] + " --> " + newLocation[0]);
-        float dx = newLocation[0] - oldLocation[0];
-        Log.d("YELLOW Y translation\t", "" + oldLocation[1] + " --> " + newLocation[1]);
-
-        newView.setTranslationX(-dx);
-        newView.setTranslationY(-dy);
-
-
-        ObjectAnimator animX = ObjectAnimator.ofFloat(newView, "translationX", 0);
-        ObjectAnimator animY = ObjectAnimator.ofFloat(newView, "translationY", 0);
-        AnimatorSet animSet = new AnimatorSet();
-        animSet.playTogether(animX, animY);
-        animSet.setDuration(1000);
+        AnimatorSet animSet = generateViewToViewAnimatorSet(oldView, newView, 1000);
 
         animSet.addListener(new Animator.AnimatorListener() {
             @Override
@@ -1077,23 +1169,7 @@ public class BigMathAnimationHelper {
         }
         final MovableImageView newView = (MovableImageView) findViewById(R.id.borrow_ten_helper);
 
-        int[] oldLocation = new int[2], newLocation = new int[2];
-        oldView.getLocationOnScreen(oldLocation);
-        newView.getLocationOnScreen(newLocation);
-        float dy = newLocation[1] - oldLocation[1];
-        Log.d("YELLOW X translation\t", "" + oldLocation[0] + " --> " + newLocation[0]);
-        float dx = newLocation[0] - oldLocation[0];
-        Log.d("YELLOW Y translation\t", "" + oldLocation[1] + " --> " + newLocation[1]);
-
-        newView.setTranslationX(-dx);
-        newView.setTranslationY(-dy);
-
-
-        ObjectAnimator animX = ObjectAnimator.ofFloat(newView, "translationX", 0);
-        ObjectAnimator animY = ObjectAnimator.ofFloat(newView, "translationY", 0);
-        AnimatorSet animSet = new AnimatorSet();
-        animSet.playTogether(animX, animY);
-        animSet.setDuration(1000);
+        AnimatorSet animSet = generateViewToViewAnimatorSet(oldView, newView, 1000);
 
         animSet.addListener(new Animator.AnimatorListener() {
             @Override

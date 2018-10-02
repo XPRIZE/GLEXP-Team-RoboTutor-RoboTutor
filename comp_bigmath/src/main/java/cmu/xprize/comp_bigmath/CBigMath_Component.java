@@ -45,7 +45,7 @@ import static cmu.xprize.util.MathUtil.getTensDigit;
  * Generated automatically w/ code written by Kevin DeLand
  */
 
-public class CBigMath_Component extends RelativeLayout implements ILoadableObject, IBehaviorManager, IPublisher {
+public class CBigMath_Component extends RelativeLayout implements ILoadableObject, IBehaviorManager, IPublisher, IHesitationManager {
 
     protected final Handler mainHandler  = new Handler(Looper.getMainLooper());
     protected HashMap           queueMap     = new HashMap();
@@ -54,6 +54,7 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
 
     protected BigMathMechanic _mechanic;
     private BigMathLayoutHelper _layout;
+    private BigMathProblemState _problemState;
 
     // DataSource Variables
     protected   int                   _dataIndex = 0;
@@ -61,6 +62,7 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
     protected String task;
     protected String layout;
     protected int[] dataset;
+    protected String operation;
 
     protected  int _numDigits;
 
@@ -118,7 +120,7 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
         bManager = LocalBroadcastManager.getInstance(getContext());
 
         // initialize mechanic
-        _mechanic = new BigMathMechanic(getContext(), this, this, this);
+        _mechanic = new BigMathMechanic(getContext(), this, this, this, this);
         _layout = new BigMathLayoutHelper(getContext(), this);
     }
 
@@ -149,6 +151,7 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
 
         // features are published inside setData() {... _sal.setData() }
         _mechanic.setData(data);
+        _problemState = _mechanic.getProblemState();
         _mechanic.doAllTheThings();
     }
 
@@ -162,6 +165,7 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
         task = data.task;
         layout = data.layout;
         dataset = data.dataset;
+        operation = data.operation;
     }
 
     /**
@@ -179,29 +183,30 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
         _mechanic.disableConcreteUnitTappingForOtherRows(_mechanic._currentDigit); // MATH_MISC (1) don't allow tapping of other ghost dots
 
         // publish the right features!!! to play audio!!!
-        boolean hasUnitsToTap = false;
         switch( _mechanic._currentDigit) {
             case ONE_DIGIT:
-                hasUnitsToTap = getOnesDigit(dataset[0]) > 0 && getOnesDigit(dataset[1]) > 0;
+                //hasUnitsToTap = getOnesDigit(dataset[0]) > 0 && getOnesDigit(dataset[1]) > 0;
                 publishFeature(FTR_ON_DIGIT_ONE);
                 retractFeature(FTR_ON_DIGIT_TEN);
                 retractFeature(FTR_ON_DIGIT_HUN);
                 break;
 
             case TEN_DIGIT:
-                hasUnitsToTap = getTensDigit(dataset[0]) > 0 && getTensDigit(dataset[1]) > 0;
+                //hasUnitsToTap = getTensDigit(dataset[0]) > 0 && getTensDigit(dataset[1]) > 0;
                 retractFeature(FTR_ON_DIGIT_ONE);
                 publishFeature(FTR_ON_DIGIT_TEN);
                 retractFeature(FTR_ON_DIGIT_HUN);
                 break;
 
             case HUN_DIGIT:
-                hasUnitsToTap = getHunsDigit(dataset[0]) > 0 && getHunsDigit(dataset[1]) > 0;
+                //hasUnitsToTap = getHunsDigit(dataset[0]) > 0 && getHunsDigit(dataset[1]) > 0;
                 retractFeature(FTR_ON_DIGIT_ONE);
                 retractFeature(FTR_ON_DIGIT_TEN);
                 publishFeature(FTR_ON_DIGIT_HUN);
                 break;
         }
+
+        boolean hasUnitsToTap = checkIfHasUnitsToTap();
 
         // MATH_HESITATE if there are concrete units to tap, indicate that we should be tapping
         if (hasUnitsToTap) {
@@ -212,6 +217,64 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
             publishFeature(FTR_WRITE_DIGIT);
         }
 
+    }
+
+    private boolean checkIfHasUnitsToTap() {
+
+        Log.d(TAG, "checkIfHasUnitsToTap: Checking has units");
+        // if addition
+        // check digit ANZ, BNZ
+        if (operation.equals("+") &&
+                _mechanic._currentDigit.equals(ONE_DIGIT) &&
+                _problemState.getCurrentOpAOne() > 0 &&
+                _problemState.getCurrentOpBOne() > 0) {
+            Log.d(TAG, "checkIfHasUnitsToTap: Still has + one units left to tap");
+            return true;
+        }
+
+        if (operation.equals("+") &&
+                _mechanic._currentDigit.equals(TEN_DIGIT) &&
+                _problemState.getCurrentOpATen() > 0 &&
+                _problemState.getCurrentOpBTen() > 0) {
+            Log.d(TAG, "checkIfHasUnitsToTap: Still has + ten units left to tap");
+            return true;
+        }
+
+        if (operation.equals("+") &&
+                _mechanic._currentDigit.equals(HUN_DIGIT) &&
+                _problemState.getCurrentOpAHun() > 0 &&
+                _problemState.getCurrentOpBHun() > 0) {
+            Log.d(TAG, "checkIfHasUnitsToTap: Still has + hun units left to tap");
+            return true;
+        }
+
+
+        // if subtraction
+        // check ANZ, BNE
+
+        if (operation.equals("-") &&
+                _mechanic._currentDigit.equals(ONE_DIGIT) &&
+                _problemState.getSubtrahendOne() < getOnesDigit(_problemState.getData().dataset[1]) ) {
+            Log.d(TAG, "checkIfHasUnitsToTap: Still has - one units left to tap");
+            return true;
+        }
+
+        if (operation.equals("-") &&
+                _mechanic._currentDigit.equals(TEN_DIGIT) &&
+                _problemState.getSubtrahendTen() < getTensDigit(_problemState.getData().dataset[1]) ) {
+            Log.d(TAG, "checkIfHasUnitsToTap: Still has - ten units left to tap");
+            return true;
+        }
+
+        if (operation.equals("-") &&
+                _mechanic._currentDigit.equals(HUN_DIGIT) &&
+                _problemState.getSubtrahendTen() < getHunsDigit(_problemState.getData().dataset[1]) ) {
+            Log.d(TAG, "checkIfHasUnitsToTap: Still has - hun units left to tap");
+            return true;
+        }
+
+
+        return false;
     }
 
     /**
@@ -278,6 +341,7 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
         // COL = which column are we on?
         // DOT = are there dots left?
 
+        // MATH_HESITATE (next)
         // IF (COL==1, DOT_A) => {tap on the opA one dots}
         // IF (COL==1, !DOT_A, DOT_B) => {tap on the opB one dots}
         // IF (COL==1, !DOT_A, !DOT_B) => {write in the one box}
@@ -291,6 +355,14 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
         // ON (write TEN) ==> (cancel hesitation)
 
 
+        // MATH_HESITATE if there are concrete units to tap, indicate that we should be tapping
+        if (checkIfHasUnitsToTap()) {
+            publishFeature(FTR_TAP_CONCRETE);
+            retractFeature(FTR_WRITE_DIGIT);
+        } else {
+            retractFeature(FTR_TAP_CONCRETE);
+            publishFeature(FTR_WRITE_DIGIT);
+        }
         postNamed("HESITATION_PROMPT", "APPLY_BEHAVIOR", "INPUT_HESITATION_FEEDBACK", (long)5000);
     }
 
@@ -327,6 +399,17 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
             mainHandler.removeCallbacks((Queue) (nameMap.get(name)));
             nameMap.remove(name);
         }
+    }
+
+    @Override
+    public void triggerHesitation() {
+        postNamed("HESITATION_PROMPT", "APPLY_BEHAVIOR", "INPUT_HESITATION_FEEDBACK", (long)5000);
+    }
+
+    @Override
+    public void cancelHesitation() {
+
+        cancelHesitationTimer();
     }
 
     public class Queue implements Runnable {

@@ -1,22 +1,16 @@
 package cmu.xprize.comp_bigmath;
 
-import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import cmu.xprize.comp_writebox.CGlyphController_Simple;
 import cmu.xprize.comp_writebox.CGlyphInputContainer_Simple;
@@ -35,7 +29,6 @@ import static cmu.xprize.comp_bigmath.BM_CONST.OPB_LOCATION;
 import static cmu.xprize.comp_bigmath.BM_CONST.RESULT_LOCATION;
 import static cmu.xprize.comp_bigmath.BM_CONST.TEN_CARRY_DIGIT;
 import static cmu.xprize.comp_bigmath.BM_CONST.TEN_DIGIT;
-import static cmu.xprize.comp_bigmath.BM_CONST.WATERFALL_DELAY;
 import static cmu.xprize.util.MathUtil.getHunsDigit;
 import static cmu.xprize.util.MathUtil.getOnesDigit;
 import static cmu.xprize.util.MathUtil.getTensDigit;
@@ -60,6 +53,8 @@ public class BigMathMechanic {
     private BigMathAnimationHelper _animator;
     private BigMathProblemState _problemState;
 
+    private IHesitationManager _hManager;
+
     // MATH_BEHAVIOR (1) add case for each digit into SAI receiver
     public String _currentDigit;
 
@@ -79,15 +74,20 @@ public class BigMathMechanic {
 
     private StudentActionListener _studentActionListener;
 
-    public BigMathMechanic(Context activity, IBehaviorManager behaviorManager, IPublisher publisher, ViewGroup viewGroup) {
+    public BigMathMechanic(Context activity, IBehaviorManager behaviorManager, IPublisher publisher, IHesitationManager hesitationManager, ViewGroup viewGroup) {
         _behaviorManager = behaviorManager;
         _publisher = publisher;
         _activity = activity;
         _viewGroup = viewGroup;
         _layout = new BigMathLayoutHelper(activity, viewGroup);
+        _hManager = hesitationManager;
 
         _studentActionListener = new StudentActionListenerImpl(_behaviorManager, _publisher, this); // won't always work...
         _animator = new BigMathAnimationHelper(_activity, _layout, _viewGroup);
+    }
+
+    public BigMathProblemState getProblemState() {
+        return _problemState;
     }
 
 
@@ -168,9 +168,13 @@ public class BigMathMechanic {
 
             // BUG_605 waterfall not ready for subtraction
             View.OnClickListener oneListener;
-            boolean useWaterfallForOnesDigit = ALL_AT_ONCE && _numDigits >= 2 && _data.operation.equals("+");
+            boolean useWaterfallForOnesDigit = ALL_AT_ONCE && _numDigits >= 2;
             if (useWaterfallForOnesDigit) {
-                oneListener  = _animator.generateWaterfallClickListener(numLoc, ONE_DIGIT); // MATH_MISC (1) don't allow ghost dots to move
+                if (_data.operation.equals("+")) {
+                    oneListener = _animator.generateWaterfallClickListener(numLoc, ONE_DIGIT); // MATH_MISC (1) don't allow ghost dots to move
+                } else {
+                    oneListener = _animator.generateWaterfallSubtractClickListener(ONE_DIGIT);
+                }
             } else if (!ALL_AT_ONCE && _numDigits >= 2) {
                 oneListener = _animator.generateSingleClickListener(ONE_DIGIT);
             } else {
@@ -185,7 +189,7 @@ public class BigMathMechanic {
                 oneView.setOnClickListener(oneListener);
             }
 
-            // BUG_605 waterfall not ready for subtraction
+            // BUG_605 next: can we make waterfall not ready for subtraction?
             boolean useWaterfallForMultiDigit = ALL_AT_ONCE && _data.operation.equals("+");
 
             // add listeners to Tens
@@ -193,7 +197,7 @@ public class BigMathMechanic {
                 for (int i=1; i <= 10; i++) {
 
                     MovableImageView tenView = _layout.getBaseTenConcreteUnitView(numLoc, TEN_DIGIT, i);
-                    tenView.setOnClickListener(useWaterfallForMultiDigit ? _animator.generateWaterfallClickListener(numLoc, TEN_DIGIT) : _animator.generateSingleClickListener(TEN_DIGIT));
+                    tenView.setOnClickListener(ALL_AT_ONCE ? _animator.generateWaterfallClickListener(numLoc, TEN_DIGIT, _data.operation) : _animator.generateSingleClickListener(TEN_DIGIT));
                 }
 
             // add listeners to Hundreds
@@ -201,17 +205,17 @@ public class BigMathMechanic {
                 for (int i=1; i <= 5; i++) {
 
                     MovableImageView hunView = _layout.getBaseTenConcreteUnitView(numLoc, HUN_DIGIT, i);
-                    hunView.setOnClickListener(useWaterfallForMultiDigit ? _animator.generateWaterfallClickListener(numLoc, HUN_DIGIT) : _animator.generateSingleClickListener(HUN_DIGIT));
+                    hunView.setOnClickListener(ALL_AT_ONCE ? _animator.generateWaterfallClickListener(numLoc, HUN_DIGIT, _data.operation) : _animator.generateSingleClickListener(HUN_DIGIT));
                 }
 
             // PART 2 (BOX) for (one, ten, hun) will move sequential ones. These may or may not (but probably will) be used.
-            _layout.getContainingBox(numLoc, ONE_DIGIT).setOnClickListener(useWaterfallForOnesDigit ? _animator.generateWaterfallClickListener(numLoc, ONE_DIGIT) : _animator.generateSequentialClickListener(ONE_DIGIT));
+            _layout.getContainingBox(numLoc, ONE_DIGIT).setOnClickListener(ALL_AT_ONCE ? _animator.generateWaterfallClickListener(numLoc, ONE_DIGIT, _data.operation) : _animator.generateSequentialClickListener(ONE_DIGIT));
 
             if (_numDigits >= 2)
-                _layout.getContainingBox(numLoc, TEN_DIGIT).setOnClickListener(useWaterfallForMultiDigit ? _animator.generateWaterfallClickListener(numLoc, TEN_DIGIT) :  _animator.generateSequentialClickListener(TEN_DIGIT));
+                _layout.getContainingBox(numLoc, TEN_DIGIT).setOnClickListener(ALL_AT_ONCE ? _animator.generateWaterfallClickListener(numLoc, TEN_DIGIT, _data.operation) :  _animator.generateSequentialClickListener(TEN_DIGIT));
 
             if (_numDigits >= 3)
-                _layout.getContainingBox(numLoc, HUN_DIGIT).setOnClickListener(useWaterfallForMultiDigit ? _animator.generateWaterfallClickListener(numLoc, HUN_DIGIT) : _animator.generateSequentialClickListener(HUN_DIGIT));
+                _layout.getContainingBox(numLoc, HUN_DIGIT).setOnClickListener(ALL_AT_ONCE ? _animator.generateWaterfallClickListener(numLoc, HUN_DIGIT, _data.operation) : _animator.generateSequentialClickListener(HUN_DIGIT));
 
         }
 
@@ -407,6 +411,7 @@ public class BigMathMechanic {
                 public void onClick(View v) {
                     _controller_master.setWritingController(new OnCharacterRecognizedListener(_controller_master, carryHun)); // ROBO_MATH (5-WAIT)
                     _controller_master.setVisibility(View.VISIBLE);
+                    _hManager.cancelHesitation();
                     carryHun.setText(""); // erase text
                 }
             });
@@ -421,6 +426,7 @@ public class BigMathMechanic {
                 public void onClick(View v) {
                     _controller_master.setVisibility(View.VISIBLE);
                     _controller_master.setWritingController(new OnCharacterRecognizedListener(_controller_master, carryTen)); // ROBO_MATH (5-WAIT)
+                    _hManager.cancelHesitation();
                     carryTen.setText("");
                 }
             });
@@ -447,6 +453,7 @@ public class BigMathMechanic {
                 public void onClick(View v) {
                     _controller_master.setVisibility(View.VISIBLE);
                     _controller_master.setWritingController(new OnCharacterRecognizedListener(_controller_master, hunsResult)); // ROBO_MATH (5-WAIT)
+                    _hManager.cancelHesitation();
                     hunsResult.setText("");
                 }
             });
@@ -461,6 +468,7 @@ public class BigMathMechanic {
                 public void onClick(View v) {
                     _controller_master.setVisibility(View.VISIBLE);
                     _controller_master.setWritingController(new OnCharacterRecognizedListener(_controller_master, tensResult)); // ROBO_MATH (5-WAIT)
+                    _hManager.cancelHesitation();
                     tensResult.setText("");
                 }
             });
@@ -475,6 +483,7 @@ public class BigMathMechanic {
                 public void onClick(View v) {
                     _controller_master.setVisibility(View.VISIBLE);
                     _controller_master.setWritingController(new OnCharacterRecognizedListener(_controller_master, onesResult)); // ROBO_MATH (5-WAIT)
+                    _hManager.cancelHesitation();
                     onesResult.setText("");
                 }
             });
