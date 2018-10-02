@@ -923,6 +923,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                     case TCONST.STROKE_ORIGINAL:
 
                         mReplayComp.replayGlyph(_animGlyph, _baseLine, CGlyphReplayContainer.ALIGN_ORIGVIEW | CGlyphReplayContainer.SCALE_TIME, _viewBnds, this);
+                        setHasGlyph(true);
                         break;
 
                     case TCONST.STROKE_OVERLAY:
