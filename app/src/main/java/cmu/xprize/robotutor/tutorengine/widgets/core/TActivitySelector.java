@@ -689,7 +689,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
             String QA_MATRIX_TAG = "QA_MATRIX";
             Log.wtf(QA_MATRIX_TAG, "key=" + entry.getKey().toString());
             String key   = entry.getKey().toString();
-            String value = "#" + entry.getValue().toString();
+            String value = "#" + entry.getValue() != null ? entry.getValue().toString() : "null";
 
             builder.append(key);
             builder.append(value);

@@ -331,6 +331,7 @@
         app:layout_constraintBottom_toBottomOf="@id/numberBaseLine"
         android:background="@drawable/nd_number_button"
         >
+        <!-- // FIX_COMPARE (1) make tapping on dotbag an option? -->
 
         <TextView
             android:id="@+id/symbol_right_hun"
