@@ -45,6 +45,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
     private boolean showTenFrame = false;
     protected boolean[] reachTarget = new boolean[] {false,false,false,false};
     protected int pickedBox = 0;
+    protected boolean startWrite = false;
     protected boolean tapped = false;
     protected int[] sides = new int[]{0,0,0,0};
     protected int highlight = -1;
@@ -404,7 +405,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
         if (_component.canWrite && _component.writeNumbersTappbale[writePosition]){
             _component.write_numbers[writePosition] = number;
             if (_component.targetNumbers[writePosition] == _component.write_numbers[writePosition]){
-                _component.trackAndLogPerformance(Integer.toString(_component.targetNumbers[writePosition]),Integer.toString(_component.write_numbers[writePosition]),"write");
+                _component.trackAndLogPerformance(Integer.toString(_component.targetNumbers[writePosition]),Integer.toString(_component.write_numbers[writePosition]),"write","CORRECT");
                 _component.writeNumbersTappbale[writePosition] = false;
                 _component.playCount(_component.write_numbers[writePosition]);
                 new java.util.Timer().schedule(
@@ -420,7 +421,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
                 }
                 redraw();
             } else {
-                _component.trackAndLogPerformance(Integer.toString(_component.targetNumbers[writePosition]),Integer.toString(_component.write_numbers[writePosition]),"write");
+                _component.trackAndLogPerformance(Integer.toString(_component.targetNumbers[writePosition]),Integer.toString(_component.write_numbers[writePosition]),"write","INCORRECT");
                 redraw();
                 _component.playCount(_component.write_numbers[writePosition]);
                 new java.util.Timer().schedule(
@@ -754,6 +755,11 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
 
     }
 
+    protected void startWrite(){
+        startWrite = true;
+        redraw();
+    }
+
 
 
 
@@ -968,7 +974,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
                         float x = position[i];
 
                         float boxWidth = resultfont;
-                        if(i==pickedBox){
+                        if(i==pickedBox && startWrite){
                             canvas.drawRect(x-boxWidth/2,y-boxWidth, x+boxWidth/2,y,pickedFill);
                             canvas.drawRect(x-boxWidth/2,y-boxWidth, x+boxWidth/2,y,picked);
 
@@ -1009,7 +1015,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
                         float x = positionX[i];
                         float y = positionY[i];
                         float boxWidth = resultfont;
-                        if(i==pickedBox){
+                        if(i==pickedBox && startWrite){
                             canvas.drawRect(x-boxWidth/2,y-boxWidth, x+boxWidth/2,y,pickedFill);
                             canvas.drawRect(x-boxWidth/2,y-boxWidth, x+boxWidth/2,y,picked);
                         } else{
@@ -1302,6 +1308,7 @@ public class CCountX_SurfaceView extends SurfaceView implements SurfaceHolder.Ca
 
             showTenFrame = false;
             pickedBox = 0;
+            startWrite = false;
         }
 
 
