@@ -46,7 +46,7 @@ public class PerformanceLogItem {
 
     // iterative way to print fields in the desired order
     private static final String[] orderedFieldsToPrint = {"timestamp", "userId", "sessionId", "gameId", "language", "tutorName", "tutorId", "matrixName", "levelName", "taskName",
-            "problemName", "problemNumber", "substepNumber", "substepProblem", "attemptNumber", "expectedAnswer", "userResponse", "correctness", "feedbackType", "totalProblemsCount"};
+            "problemName", "problemNumber", "substepNumber", "substepProblem", "attemptNumber", "expectedAnswer", "userResponse", "correctness", "feedbackType", "totalProblemsCount","scaffolding"};
 
     public PerformanceLogItem() {
     }
@@ -239,7 +239,8 @@ public class PerformanceLogItem {
     private boolean isAlwaysMathTutor(String tutorName) {
         return tutorName.startsWith("num.scale")
                 || tutorName.startsWith("math")
-                || tutorName.startsWith("countingx");
+                || tutorName.startsWith("countingx")
+                || tutorName.startsWith("place.value");
     }
 
     public String getUserId() {
