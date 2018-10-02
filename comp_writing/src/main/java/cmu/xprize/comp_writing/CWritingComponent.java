@@ -1931,52 +1931,59 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         CGlyphController v = (CGlyphController) mGlyphList.getChildAt(mActiveIndex);
 
         //if already correct move to the next one
-
         if(v.isCorrect()){
-            //if complete, pass behavior
+
+            //if complete, pass item complete behavior and return
             if (isComplete()) {
                 applyBehavior(WR_CONST.DATA_ITEM_COMPLETE); // goto node "ITEM_COMPLETE_BEHAVIOR" -- run when item is complete...
+                return;
             }
-            //else increment mActiveIndex
+
+            //else increment mActiveIndex and refresh to set the new controller
             else if(mActiveIndex < mGlyphList.getChildCount() - 1){
                 mActiveIndex++;
+                v = (CGlyphController) mGlyphList.getChildAt(mActiveIndex);
             }
-            //if reached end, set active index to the first incorrect glyph
+
+            //if reached end, set active index to the first incorrect glyph and break from the loop after refreshing the controller
             else{
                 for (int i = 0; i < mGlyphList.getChildCount(); i++)
                 {
                     CGlyphController c = (CGlyphController) mGlyphList.getChildAt(i);
                     if (!c.isCorrect()){
                         mActiveIndex = i;
+                        v = (CGlyphController) mGlyphList.getChildAt(mActiveIndex);
+                        break;
                     }
                 }
             }
         }
-        //if not correct, play replay unless its a space.
-        v.eraseGlyph();
-        String expectedCharString = v.getExpectedChar();
-        boolean isSpaceExpected = expectedCharString.equals(" ");
-        if(!isSpaceExpected) {
-            v.post(WR_CONST.RIPPLE_PROTO);
-        }
-        else{
-            applyBehavior(WR_CONST.REPLAY_COMPLETE);
-        }
 
-        //set the recognised character and set the response color.
-        v.setRecognisedChar(expectedCharString);
-        CStimulusController resp = (CStimulusController) mResponseViewList.getChildAt(mActiveIndex);
-        resp.setStimulusChar(expectedCharString, false);
-        resp.updateResponseState(true);
-        v.inhibitInput(true);
-        v.updateCorrectStatus(true);
+        //if not correct, play replay unless its a space, and update the response, the sentence parameters and the correct status of the glyph
+        else {
+            v.eraseGlyph();
+            String expectedCharString = v.getExpectedChar();
+            boolean isSpaceExpected = expectedCharString.equals(" ");
 
-        //update the sentence parameters
-        updateSentenceEditSequence();
+            if (!isSpaceExpected) {
+                v.post(WR_CONST.RIPPLE_PROTO);
+            }
+
+            //set the recognised character and set the response color.
+            v.setRecognisedChar(expectedCharString);
+            CStimulusController resp = (CStimulusController) mResponseViewList.getChildAt(mActiveIndex);
+            resp.setStimulusChar(expectedCharString, false);
+            resp.updateResponseState(true);
+            v.inhibitInput(true);
+            v.updateCorrectStatus(true);
+
+            //update the sentence parameters
+            updateSentenceEditSequence();
 //        mListWordsInput = getUpdatedListWordsInput(mListWordsInput, mAlignedSourceSentence,mAlignedTargetSentence);
 
-        //end replay
-        applyBehavior(WR_CONST.REPLAY_COMPLETE);
+            //end replay
+            applyBehavior(WR_CONST.REPLAY_COMPLETE);
+        }
     }
 
     public void rippleReplayWordContinued(){
