@@ -16,6 +16,11 @@ public class AS_CONST {
         public static final String EXIT_BUTTON_BEHAVIOR = "EXIT_BUTTON_BEHAVIOR";
     }
 
+    public static final class ACTIONMAP_KEYS {
+        public static final String SET_HESITATION_FEEDBACK = "SET_HESITATION_FEEDBACK";
+        public static final String CLEAR_HESITATION_BEHAVIOR = "CLEAR_HESITATION_BEHAVIOR";
+    }
+
     public static final class BEHAVIOR_KEYS {
         public static final String DESCRIBE_BEHAVIOR = "DESCRIBE_BEHAVIOR"; // Behavior Key --> BUTTON_DESCRIPTION (queueMap)
         public static final String SELECT_BEHAVIOR   = "SELECT_BEHAVIOR";   // Behavior Key --> CLEAR_HESITATION_FEEDBACK (actionMap)

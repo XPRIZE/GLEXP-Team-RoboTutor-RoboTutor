@@ -743,7 +743,7 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
                     case TCONST.APPLY_BEHAVIOR:
 
-                        Log.wtf(DEBUG_HESITATE, "applybehavior: " + _target);
+                        Log.d(DEBUG_HESITATE, "applybehavior: " + _target);
 
                         applyBehaviorNode(_target);
                         break;

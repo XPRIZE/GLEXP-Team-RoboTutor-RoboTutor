@@ -32,6 +32,7 @@ import cmu.xprize.robotutor.tutorengine.ILoadableObject2;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.util.TCONST.DEBUG_HESITATE;
 
 
 /**
@@ -172,6 +173,8 @@ public class scene_graph extends scene_node implements ILoadableObject2 {
     public String cancelNode() {
 
         // TODO: Watch for feature reactivity and preenter when this is implemented.
+
+        Log.d(DEBUG_HESITATE, "scene_graph.cancelNode" + _currNode.name);
 
         if ((_currNode != null) && (_currNode != this)) {
 

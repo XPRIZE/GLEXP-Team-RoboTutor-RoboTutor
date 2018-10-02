@@ -18,6 +18,7 @@ import cmu.xprize.util.IEvent;
 import cmu.xprize.util.TCONST;
 
 import static cmu.xprize.util.TCONST.AUDIO_EVENT;
+import static cmu.xprize.util.TCONST.DEBUG_HESITATE;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 import static cmu.xprize.util.TCONST.TYPE_AUDIO;
 
@@ -53,6 +54,8 @@ public class scene_queuedgraph extends scene_module {
     @Override
     public String cancelNode() {
 
+        // MATH_HESITATE (mimic). -1 is there a thing that happens here???
+        Log.d(DEBUG_HESITATE, "scene_queuedgraph.cancelNode" + name);
         // If queue is in progress cancel operations.
         //
         RoboTutor.logManager.postEvent_V(_logType, "target:node.queuedgraph,action:cancelnode,name:" + name );

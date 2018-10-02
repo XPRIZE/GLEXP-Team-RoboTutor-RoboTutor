@@ -409,6 +409,7 @@ public class TCONST {
     public static final String DEFINED         = "DEFINED";
 
     public static final String DEBUG_STORY_TAG = "GENERAL_TSO";
+    public static final String DEBUG_HESITATE = "MATH_HESITATE";
 
     // Navigator types
     final static public String SIMPLENAV       = "SIMPLE_NAVIGATOR";

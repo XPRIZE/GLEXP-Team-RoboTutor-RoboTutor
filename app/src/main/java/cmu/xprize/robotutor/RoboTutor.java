@@ -113,7 +113,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     private static final boolean QUICK_DEBUG = true;
     private static final String debugTutorVariant = "bigmath";
     private static final String debugTutorId = "WHO CARES";
-    private static final String debugTutorFile = "[file]bigmath_add.by.1.0..8.NoCarryBorrow.lev1.json";
+    private static final String debugTutorFile = "[file]bigmath_sub.by.rand.20..90.NoCarryBorrow.lev8.json";//bigmath_sub.by.rand.1..9.NoCarryBorrow.lev4.json";
+    // MATH_MISC (2)... make subtract behavior correct. bigmath_sub.by.rand.20..90.NoCarryBorrow.lev8.json
 
     // see https://docs.google.com/document/u/1/d/15dlRmVbnfNjMtTXniZHLg7IckfjTRLrfd2l5b2S_hAo/edit#
     // Levels 1-24 for testing...
