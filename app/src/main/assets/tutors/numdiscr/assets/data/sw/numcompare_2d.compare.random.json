@@ -1,5 +1,5 @@
 {
-	"dataSource":
+	"dataSource": [
 		{"dataset": [98, 64], "isWorkedExample": "true", "task": "double.compare.random", "type": "CNd_Data", "level": "double.compare.random"},
 		{"dataset": [14, 55], "isWorkedExample": "false", "task": "double.compare.random", "type": "CNd_Data", "level": "double.compare.random"},
 		{"dataset": [64, 26], "isWorkedExample": "false", "task": "double.compare.random", "type": "CNd_Data", "level": "double.compare.random"},
@@ -41,4 +41,5 @@
 		{"dataset": [79, 41], "isWorkedExample": "false", "task": "double.compare.random", "type": "CNd_Data", "level": "double.compare.random"},
 		{"dataset": [31, 49], "isWorkedExample": "false", "task": "double.compare.random", "type": "CNd_Data", "level": "double.compare.random"},
 		{"dataset": [83, 39], "isWorkedExample": "false", "task": "double.compare.random", "type": "CNd_Data", "level": "double.compare.random"}
+	]
 }
