@@ -746,14 +746,15 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         //when the recognised character is not accurate
         if(candidate.getVisualConfidence() < 0.1){
-//            gController.eraseGlyph();
-//            gController.post(TCONST.HIGHLIGHT);
-//            return false;
+            gController.eraseGlyph();
+            gController.post(TCONST.HIGHLIGHT);
+            return false;
         }
-        gController.setRecognisedChar(mResponse);
-        _charValid = gController.checkAnswer(mResponse, isAnswerCaseSensitive);
 
-        _metricValid = _metric.testConstraint(candidate.getGlyph(), this);
+        gController.setRecognisedChar(mResponse);
+        _charValid = gController.checkAnswer(mResponse, isAnswerCaseSensitive); //checks the expected string against the drawn response string (note that glyph is not used, just the string)
+
+        _metricValid = _metric.testConstraint(candidate.getGlyph(), this); //measures hor, vert position, height width wrt the drawing box
         _isValid = _charValid && _metricValid; // _isValid essentially means "is a correct drawing"
 
 
@@ -779,15 +780,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             // Depending upon the result we allow the controller to disable other fields if it is working
             // in Immediate feedback mode
             // TODO: check if we need to constrain this to immediate feedback mode
-            //
             inhibitInput(mActiveController, !_isValid);
             mActiveController.inhibitInput(_isValid);
             // Publish the state features.
-            //
             publishState();
 
             // Fire the appropriate behavior
-            //
             if (isComplete()) {
 
                 applyBehavior(WR_CONST.DATA_ITEM_COMPLETE); // goto node "ITEM_COMPLETE_BEHAVIOR" -- run when item is complete...
@@ -1933,6 +1931,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         CGlyphController v = (CGlyphController) mGlyphList.getChildAt(mActiveIndex);
 
         //if already correct move to the next one
+
         if(v.isCorrect()){
             //if complete, pass behavior
             if (isComplete()) {
@@ -1965,9 +1964,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
 
         //set the recognised character and set the response color.
-        v.setRecognisedChar(v.getExpectedChar());
+        v.setRecognisedChar(expectedCharString);
         CStimulusController resp = (CStimulusController) mResponseViewList.getChildAt(mActiveIndex);
-        resp.setStimulusChar(mAnswer.substring(mActiveIndex, mActiveIndex + 1), false);
+        resp.setStimulusChar(expectedCharString, false);
         resp.updateResponseState(true);
         v.inhibitInput(true);
         v.updateCorrectStatus(true);
@@ -3406,6 +3405,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             char c = editSeq.charAt(i);
             // return the first non "N" operation
             if (c == 'I'){
+                val = alignedTarget.charAt(i);
                 val = alignedTarget.charAt(i);
                 e = new EditOperation("I", val, i);
                 break;

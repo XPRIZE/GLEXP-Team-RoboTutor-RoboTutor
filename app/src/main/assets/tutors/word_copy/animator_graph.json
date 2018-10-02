@@ -102,12 +102,12 @@
             // HESITATION AUDIO
 
             //First release the right audio features
-            {"name": "hesitationdebugaudio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "1.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_HESITATION_1"},
-            {"name": "hesitationdebugaudio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "2.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_HESITATION_2"},
-            {"name": "hesitationdebugaudio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "3.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_HESITATION_3"},
-            {"name": "hesitationdebugaudio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "4.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_HESITATION_4"},
+//            {"name": "hesitationdebugaudio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "1.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_HESITATION_1"},
+//            {"name": "hesitationdebugaudio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "2.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_HESITATION_2"},
+//            {"name": "hesitationdebugaudio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "3.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_HESITATION_3"},
+//            {"name": "hesitationdebugaudio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "4.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_HESITATION_4"},
 //             when to release? when the sentence has been evaluated atleast once (ie one of the FTR_SEN_ATTEMPT is enabled)
-            {"name": "release the audio features for the first edit", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "releaseFirstEditAudioFeatures", "parms": "", "features":"FTR_SEN&FTR_SEN_WRD|FTR_SEN&FTR_SEN_SEN&FTR_SEN_ATTEMPT_1|FTR_SEN&FTR_SEN_SEN&FTR_SEN_ATTEMPT_2|FTR_SEN&FTR_SEN_SEN&FTR_SEN_ATTEMPT_3|FTR_SEN&FTR_SEN_SEN&FTR_SEN_ATTEMPT_4"},
+            {"name": "release the audio features for the first edit", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "releaseFirstEditAudioFeatures", "parms": "", "features":"FTR_SEN&FTR_SEN_LTR||FTR_SEN&FTR_SEN_WRD|FTR_SEN&FTR_SEN_SEN&FTR_SEN_ATTEMPT_1|FTR_SEN&FTR_SEN_SEN&FTR_SEN_ATTEMPT_2|FTR_SEN&FTR_SEN_SEN&FTR_SEN_ATTEMPT_3|FTR_SEN&FTR_SEN_SEN&FTR_SEN_ATTEMPT_4"},
 
 
             //pointing behaviors for sentence level
@@ -163,7 +163,7 @@
             //prompts for sentence copying letter level feedback
               //hesitation 2 (when the first edit group is highlighted)
                   //Words may be missing incorrect or unnecessary
-                  {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Words may be missing incorrect or unnecessary.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_HESITATION_2&!FTR_AUDIO_NO_ERROR"},
+//                  {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Words may be missing incorrect or unnecessary.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_HESITATION_2&!FTR_AUDIO_NO_ERROR"},
               //hesitation 3 play the normal rules as below.
 
 
@@ -657,7 +657,7 @@
             // TODO: find a way to manage multiple contingencies. e.g. here we need to wait until the word is spoken and the replay is complete.
             // TODO: Note that this problem goes away when using a game engine to drive the interactions.
             //
-            {"name": "WAIT on Error", "type": "QUEUEDCOMMAND", "cmd": "WAIT", "features":"FTR_HAD_ERRORS"},
+            {"name": "WAIT on Error", "type": "QUEUEDCOMMAND", "cmd": "WAIT", "features":"!FTR_SEN&FTR_HAD_ERRORS"},
 
             {"name": "DELAY - Next Node",    "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "APPLY_BEHAVIOR:String|NEXT_NODE:String|600:Integer", "features":""}
           ],
