@@ -1486,7 +1486,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     public void temporaryOnCorrect(){
         //when transferring to the animator graph,remember to pass the word completed feature and then retract it.
-        deactivateEditModeInActiveWord();
+//        deactivateEditModeInActiveWord();  //edit buttons removed for code drop 2 in tanzania
         inhibitWordInput();
         updateLettersWordResponse();
         incrementCurrentWordIndex();
@@ -1561,7 +1561,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                     //mark the word as wrong only when it was incorrectly written, and not in continuation.
                     if (!writingIsContinued) {
-                        mActiveWord.activateEditMode(); //put in animator graph
+//                        mActiveWord.activateEditMode(); //put in animator graph //edit buttons removed for code drop 2 in tanzania
                         updateAttemptFeature();
                         applyBehavior(WR_CONST.ON_ERROR);
                     }
@@ -2490,12 +2490,12 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
             //amogh comment move this to the animator graph
             //shows all buttons.
-            activateEditModeValidOnly();
+//            activateEditModeValidOnly(); //edit buttons removed for code drop 2 in tanzania
         }
 
-        else if (activityFeature.contains("FTR_SEN")){
-            activateEditMode();
-        }
+//        else if (activityFeature.contains("FTR_SEN")){
+////            activateEditMode(); //edit buttons removed for code drop 2 in tanzania
+//        }
     }
 
 
