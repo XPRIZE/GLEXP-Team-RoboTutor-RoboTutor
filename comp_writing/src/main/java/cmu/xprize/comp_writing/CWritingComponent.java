@@ -215,7 +215,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         _hesitationFTR.add(WR_CONST.FTR_HESITATION_2);
         _hesitationFTR.add(WR_CONST.FTR_HESITATION_3);
         _hesitationFTR.add(WR_CONST.FTR_HESITATION_4);
-        _hesitationFTR.add(WR_CONST.FTR_HESITATION_5);
+//        _hesitationFTR.add(WR_CONST.FTR_HESITATION_5);
 
         //amogh added to initialise the list for audio features:
             _audioFTR.add(WR_CONST.FTR_AUDIO_CAP);
@@ -1481,7 +1481,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     public void cancelAndResetHesitation(String promptName){
         cancelPost(promptName);
-        resetHesitationFeature();
+        resetHesitationFeature(); //clears hesitation features and resets hesitation number to 0
     }
 
     public void temporaryOnCorrect(){
@@ -1939,23 +1939,16 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 return;
             }
 
-            //else increment mActiveIndex and refresh to set the new controller
+            //else increment mActiveIndex and call the fn again
             else if(mActiveIndex < mGlyphList.getChildCount() - 1){
                 mActiveIndex++;
-                v = (CGlyphController) mGlyphList.getChildAt(mActiveIndex);
+                rippleReplayActiveIndex();
             }
 
-            //if reached end, set active index to the first incorrect glyph and break from the loop after refreshing the controller
+            //if reached end, set active index to the first incorrect glyph and call fn again
             else{
-                for (int i = 0; i < mGlyphList.getChildCount(); i++)
-                {
-                    CGlyphController c = (CGlyphController) mGlyphList.getChildAt(i);
-                    if (!c.isCorrect()){
-                        mActiveIndex = i;
-                        v = (CGlyphController) mGlyphList.getChildAt(mActiveIndex);
-                        break;
-                    }
-                }
+                mActiveIndex = 0;
+                rippleReplayActiveIndex();
             }
         }
 
@@ -1982,7 +1975,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //        mListWordsInput = getUpdatedListWordsInput(mListWordsInput, mAlignedSourceSentence,mAlignedTargetSentence);
 
             //end replay
+            //check in the end if the sentence is correct now.
+            if(isComplete()){
+                applyBehavior(WR_CONST.DATA_ITEM_COMPLETE); // goto node "ITEM_COMPLETE_BEHAVIOR" -- run when item is complete...
+            }
+
             applyBehavior(WR_CONST.REPLAY_COMPLETE);
+
         }
     }
 
@@ -2021,9 +2020,17 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
     private void replayNext() {
 
+        //in case of sentence level and word level feedback in the sentence writing activities, just replay the word.
         if(activityFeature.contains("FTR_SEN_WRD") || activityFeature.contains("FTR_SEN_SEN")){
             rippleReplayWordContinued();
         }
+
+        //in case of sentence writing letter level feedback, it plays for just one letter
+        else if(activityFeature.contains("FTR_SEN_LTR")){
+            return;
+        }
+
+        //mainly for non sentence writing activities, when it plays the whole stimulus
         else {
             CStimulusController r;
             CGlyphController v;

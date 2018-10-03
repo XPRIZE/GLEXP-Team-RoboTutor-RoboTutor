@@ -50,7 +50,7 @@
             {"name": "Highlight Stimulus", "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "STIMULUS_HIGHLIGHT:String|1250:Integer", "features":"!FTR_DICTATION&!FTR_WORDS&!FTR_SEN"},
 
             // Hightlight all glyphs and point at first glyph
-            {"name":"Highlight glyphs", "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "GLYPH_HIGHLIGHT:String|2500:Integer", "features":"!FTR_DICTATION&!FTR_SEN"},
+            {"name":"Highlight glyphs", "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "GLYPH_HIGHLIGHT:String|25000:Integer", "features":"!FTR_DICTATION&!FTR_SEN"},
             {"name":"Point at Glyph",   "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "POINT_AT_GLYPH:String|2000:Integer",  "features":"!FTR_DICTATION&!FTR_SEN"},
 
             {"name": "Write Prompt", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "How many things are here.mp3", "soundpackage":"arithmetic", "mode":"flow", "features": "FTR_DOTCOUNT"},
@@ -449,11 +449,11 @@
 //            {"name":"post APPLY_BEHAVIOR - MERCY_RULE_BEHAVIOR", "type": "COMMAND", "id": "SWordCopy", "method": "post",           "parms": "APPLY_BEHAVIOR:String|MERCY_RULE_BEHAVIOR:String", "features":"FTR_SEN&FTR_HESITATION_4"},
 
 
-
+            //need to reset hesitation each time that a new
 
             {"name":"SetVolatile - WRITE_BEHAVIOR - CANCEL_INPUT_HESITATION_POSTING",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_INPUT_HESITATION_POSTING:String" ,"features":"!FTR_SEN"},
             {"name":"SetVolatile - WRITE_BEHAVIOR - RESET_HESITATION_NUMBER",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_AND_RESET_INPUT_HESITATION_POSTING:String" ,"features":"FTR_SEN"}, //amogh added
-            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|4000:Long", "features":""},
+            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|5000:Long", "features":""},
 
             {"name": "Enable Input",  "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput",       "parms": "FALSE:Boolean", "features":""}
           ],
@@ -477,7 +477,7 @@
 
             // Hightlight all glyphs and point at first glyph
             {"name":"Highlight glyphs", "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "GLYPH_HIGHLIGHT:String|2000:Integer", "features":"!FTR_WORDS"},
-            {"name":"Point at Glyph",   "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "POINT_AT_GLYPH:String|1500:Integer",  "features":""},
+            {"name":"Point at Glyph",   "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "POINT_AT_GLYPH:String|15000:Integer",  "features":""},
 
             {"name": "Write Prompt", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3","soundpackage": "default","mode": "flow", "features": "FTR_NUMBERS"},
             {"name": "Write Prompt", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please write the letter.mp3","soundpackage": "default","mode": "flow", "features": "FTR_LETTERS"},
@@ -584,7 +584,7 @@
             //setting the behaviors for hesitation cancelling and
 //            {"name":"SetVolatile - WRITE_BEHAVIOR - CANCEL_INPUT_HESITATION_POSTING",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_INPUT_HESITATION_POSTING:String" ,"features":"!FTR_SEN"},
 //            {"name":"SetVolatile - WRITE_BEHAVIOR - RESET_HESITATION_NUMBER",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_AND_RESET_INPUT_HESITATION_POSTING:String" ,"features":"FTR_SEN"}, //amogh added
-//            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|4000:Long", "features":""}
+//            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|5000:Long", "features":""}
 
 
           ],
@@ -1121,7 +1121,7 @@
 
 //            {"name":"SetVolatile - WRITE_BEHAVIOR - CANCEL_INPUT_HESITATION_POSTING",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_INPUT_HESITATION_POSTING:String" ,"features":"!FTR_SEN"},
 //            {"name":"SetVolatile - WRITE_BEHAVIOR - RESET_HESITATION_NUMBER",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_AND_RESET_INPUT_HESITATION_POSTING:String" ,"features":"FTR_SEN"}, //amogh added
-//            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|4000:Long", "features":""}
+//            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|5000:Long", "features":""}
           ],
           "preexit": [
           ],
@@ -1167,6 +1167,7 @@
             {"name": "increment the current word index.", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "incrementCurrentWordIndex", "parms": "", "features":"FTR_SEN&!FTR_SEN_LTR"},
             {"name": "increment the current letter index(letter level feedback).", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "incrementActiveIndex", "parms": "", "features":"FTR_SEN&FTR_SEN_LTR"},
 
+                        {"name": "debug audio"    , "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Continue.mp3",     "soundpackage": "sentence", "mode":"flow", "features": "FTR_SEN"},
 
             {"name": "Replay Complete behavior", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "REPLAY_COMPLETE:String|DELAYED_NEXT_2:String" ,"features":"!FTR_SEN"},
 
@@ -1207,6 +1208,8 @@
 
             {"name": "WAIT", "type": "QUEUEDCOMMAND", "cmd": "WAIT", "features":"!FTR_SEN"},
             {"name": "DELAY - Next Node", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "APPLY_BEHAVIOR:String|NEXT_NODE:String|600:Integer", "features":"!FTR_SEN"}
+//            {"name": "debug audio"    , "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Continue.mp3",     "soundpackage": "sentence", "mode":"flow", "features": "FTR_SEN"}
+
 
           ]
         },
@@ -1245,7 +1248,7 @@
               "reuse": true,
               "tracks": [
                 {"name":"SetVolatile - WRITE_BEHAVIOR - CANCEL_AND_RESET_HESITATION_POSTING",             "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_AND_RESET_INPUT_HESITATION_POSTING:String" ,"features":"FTR_SEN"}, //amogh added
-                {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|4000:Long", "features":"FTR_SEN"}
+                {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|5000:Long", "features":"FTR_SEN"}
             ]
           },
 
@@ -1259,7 +1262,7 @@
 //            {"name": "Clear hesitation features",    "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "clearHesitationFeatures", "parms": "",  "features":"FTR_SEN"},
             {"name":"",  "type": "COMMAND", "id": "SWordCopy", "method": "cancelAndResetHesitation", "parms": "HESITATION_PROMPT:String",    "features":""},
             {"name":"SetVolatile - WRITE_BEHAVIOR - CANCEL_AND_RESET_HESITATION_POSTING",             "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_AND_RESET_INPUT_HESITATION_POSTING:String" ,"features":"FTR_SEN"}, //amogh added
-            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|4000:Long", "features":"FTR_SEN"}
+            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|5000:Long", "features":"FTR_SEN"}
           ]
         }
 
@@ -1559,13 +1562,13 @@
             {"name":"Play - .audiostimulus concat Tens"    , "type": "AUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioStimThreeConcatTens}}.mp3",     "soundpackage": "numbers", "mode":"flow", "features": "FTR_ARITH&FTR_STIM_3_CONCAT"},
 
             {"name":"Highlight glyph", "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "GLYPH_HIGHLIGHT:String|2000:Integer", "features":"FTR_ARITH"},
-            {"name":"Point at Glyph",             "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "POINT_AT_GLYPH:String|1500:Integer", "features":"FTR_ARITH"},
+            {"name":"Point at Glyph",             "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "POINT_AT_GLYPH:String|15000:Integer", "features":"FTR_ARITH"},
             {"name":"PLAY - and write the result here",  "type": "AUDIO", "command": "PLAY", "soundsource": "and write the result here.mp3", "soundpackage":"arithmetic", "volume": 1.0, "mode":"flow", "features": "FTR_ARITH"},
 
             // For dotCount activity
             {"name":"PLAY - how many things ...", "type": "AUDIO",   "command": "PLAY", "soundsource": "How many things are here.mp3", "soundpackage":"arithmetic", "volume": 1.0, "mode":"flow", "features": "FTR_DOTCOUNT"},
             {"name":"Highlight glyphs",           "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "GLYPH_HIGHLIGHT:String|2000:Integer", "features":"FTR_DOTCOUNT"},
-            {"name":"Point at Glyph",             "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "POINT_AT_GLYPH:String|1500:Integer", "features":"FTR_DOTCOUNT"},
+            {"name":"Point at Glyph",             "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "POINT_AT_GLYPH:String|15000:Integer", "features":"FTR_DOTCOUNT"},
             {"name":"PLAY - and write the ...",   "type": "AUDIO",   "command": "PLAY", "soundsource": "and write the result here.mp3", "soundpackage":"arithmetic", "volume": 1.0, "mode":"flow", "features": "FTR_DOTCOUNT"},
 
             // For missingLtr activity
@@ -1574,7 +1577,7 @@
 
             // Animate glyph drawing - when the character/word replay is complete move to the next node
             {"name":"setVolatileBehavior - REPLAY_COMPLETE - DELAYED_NEXT", "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "REPLAY_COMPLETE:String|DELAYED_DEMO_NEXT:String" ,"features":""},
-            {"name":"postEvent - RIPPLE_DEMO - 500",                        "type": "COMMAND", "id": "SWordCopy", "method": "postEvent",           "parms": "RIPPLE_DEMO:String|500:Integer",                  "features":""},
+            {"name":"postEvent - RIPPLE_DEMO - 5000",                        "type": "COMMAND", "id": "SWordCopy", "method": "postEvent",           "parms": "RIPPLE_DEMO:String|5000:Integer",                  "features":""},
             {"name":"WAIT",                                                 "type": "COMMAND", "cmd": "WAIT" },
 
             // Next will fire when replay completes
@@ -1669,12 +1672,11 @@
 
 //            {"name": "Activate the edit mode for the sentence", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "activateEditMode", "parms": "", "features":"FTR_SEN"}, //only play when initially evaluated not everytime.
 
-            {"name": "Clear hesitation features",    "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "clearHesitationFeatures", "parms": "",  "features":"FTR_SEN"},
 
 
             {"name":"SetVolatile - WRITE_BEHAVIOR - CANCEL_INPUT_HESITATION_POSTING",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_INPUT_HESITATION_POSTING:String" ,"features":"!FTR_SEN"}, //posted at the start, sets behavior that as soon as the user starts writing, input hesitation is cancelled
             {"name":"SetVolatile - WRITE_BEHAVIOR - RESET_HESITATION_NUMBER",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_AND_RESET_INPUT_HESITATION_POSTING:String" ,"features":"FTR_SEN"}, //posted at the start, sets behavior that as soon as the user starts writing, input hesitation is cancelled, hesitation number is set to 0.
-            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|4000:Long", "features":""} //starts timer to start INPUT_HESITATION_FEEDBACK
+            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|5000:Long", "features":""} //starts timer to start INPUT_HESITATION_FEEDBACK
           ]
         },
 
@@ -1701,6 +1703,8 @@
 //            {"name":"",  "type": "COMMAND", "id": "SWordCopy", "method": "setStickyBehavior", "parms": "ON_CHAR_ERROR:String|CHAR_ERROR_BEHAVIOR:String" ,"features":""},
 
             {"name":"SetVolatile - DATA_ITEM_COMPLETE - ITEM_COMPLETE_BEHAVIOR",  "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "DATA_ITEM_COMPLETE:String|ITEM_COMPLETE_BEHAVIOR:String" ,"features":""},
+
+            {"name":"",  "type": "COMMAND", "id": "SWordCopy", "method": "cancelAndResetHesitation", "parms": "HESITATION_PROMPT:String",    "features":"FTR_SEN"},
 
             {"name":"next",  "type": "COMMAND", "id": "SWordCopy", "method": "next" ,"features":""},
 
