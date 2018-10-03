@@ -3562,7 +3562,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     //amogh added ends
 
-//amogh added class to handle string computations
+//amogh added class to handle string computation
+    //Some changes to https://codereview.stackexchange.com/questions/126236/levenshtein-distance-with-edit-sequence-and-alignment-in-java
 public class EditOperation {
 
     private  String  operation;

@@ -475,7 +475,7 @@
             {"name": "Disable Replay", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "enableReplayButton", "parms": "FALSE:Boolean", "features":""},
             {"name": "Disable Input",  "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput",       "parms": "TRUE:Boolean",  "features":"" },
 
-            // Hightlight all glyphs and point at first glyph
+            // Highlight all glyphs and point at first glyph
             {"name":"Highlight glyphs", "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "GLYPH_HIGHLIGHT:String|2000:Integer", "features":"!FTR_WORDS"},
             {"name":"Point at Glyph",   "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "POINT_AT_GLYPH:String|15000:Integer",  "features":""},
 

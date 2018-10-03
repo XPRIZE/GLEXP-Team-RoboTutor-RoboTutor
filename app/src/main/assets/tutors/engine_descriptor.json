@@ -194,6 +194,12 @@
       "tutorName": "word_copy",
       "features": "FTR_MISSING_LTR"
     },
+    //correct stimulus, empty response, empty writing boxes, letter level feedback
+    "write.sen.dic.ltr": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_SEN:FTR_SEN_COPY:FTR_SEN_LTR:FTR_DICTATION" //immediate letter level feedback
+    },
     //no stimulus, buggy response, preloaded writing boxes
     "write.sen.corr.nostim": {
       "type": "TUTORVAR_MAP",
