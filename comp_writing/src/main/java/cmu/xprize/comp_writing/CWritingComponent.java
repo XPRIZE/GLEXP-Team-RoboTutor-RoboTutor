@@ -437,6 +437,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             firstEditWord.showHighlightBox();
         }
     }
+
+    public void onErase(int eraseIndex){
+
+    }
     //
 
     //to be called by the animator graph
@@ -1333,8 +1337,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         for(int i = 0; i < mGlyphList.getChildCount(); i++){
 
             CGlyphController c = (CGlyphController) mGlyphList.getChildAt(i);
-
-            while(mAlignedSourceSentence.charAt(targetIndex) == '-'){
+            boolean isInsert = mAlignedSourceSentence.charAt(targetIndex) == '-' && !mResponse.equals("-");
+            while(isInsert){
                 targetIndex++;
             }
 
@@ -1500,6 +1504,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
     //goes over the unverified words and releases apt features.
+    public void evaluateSentenceLetterLevel(){
+
+    }
+
     public void evaluateSentenceWordLevel(){
         //the main structure is that, it updates the sentence parameters, checks if sentence complete, else, checks if all the words not evaluated before are complete, stops at the first incorrect one, takes a call on whether to call error behavior on the incorrect one depending on whether it was being written at the time of evaluation or not.
 
@@ -2223,8 +2231,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
      * XYZ
      */
     public void updateText(CWr_Data data) {
-//        ArrayList a = computeEditsAndAlignedStrings("mr prresident",
-//                                                  "Mr. President");
         CStimulusController r;
         CGlyphController    v;
         CStimulusController resp; //amogh added
@@ -2248,10 +2254,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         _spaceIndices.clear();
         mRecogList.removeAllViews();
         mResponseViewList.removeAllViews(); //amogh added
-
-
-        //amogh added to debug
-//        try = (View) LayoutInflater.from(getContext()).inflate((R.drawable.highlight_error,null,false));
 
         //LOADING THE STIMULUS
         if(!singleStimulus) {
@@ -2348,8 +2350,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             }
         }
 
-        //amogh added
-        //add for sentence correction
         else if(activityFeature.contains("FTR_SEN_CORR")){
             //load glyph input container
             int stimulusLength = mStimulus.length();
@@ -2375,8 +2375,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 v.toggleStimuliGlyph();
                 mGlyphList.addView(v);
-//                v.toggleProtoGlyph(); //can help to debug and see the expected character
-//                v.toggleSampleChar();
                 v.setLinkedScroll(mDrawnScroll);
                 v.setWritingController(this);
 

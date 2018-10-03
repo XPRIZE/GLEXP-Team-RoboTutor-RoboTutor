@@ -14,6 +14,7 @@ public interface IWritingComponent {
     public void autoScroll(IGlyphController glyph);
 
     public void stimulusClicked(int touchIndex);
+    public void onErase(int eraseIndex);
     public boolean scanForPendingRecognition(IGlyphController source);
     public void inhibitInput(IGlyphController source, boolean inhibit);
 
