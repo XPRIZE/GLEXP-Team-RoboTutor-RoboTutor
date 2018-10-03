@@ -250,8 +250,15 @@ public class CStimulusController extends RelativeLayout implements IEventListene
             mUnderlineDrawable.setStroke(TCONST.STROKE_STIM_UNDERLINE, charColor);
         }
         else {
-            charColor = TCONST.colorMap.get(TCONST.COLORRIGHT);
-            mUnderline.setVisibility(View.INVISIBLE);
+            if(mStimulusString.equals(" ") || mStimulusString.equals(" ")){
+                charColor = TCONST.colorMap.get(TCONST.COLORRIGHT);
+                mUnderline.setVisibility(View.VISIBLE);
+                mUnderlineDrawable.setStroke(TCONST.STROKE_STIM_UNDERLINE, TCONST.colorMap.get(TCONST.COLORNORMAL));
+            }
+            else {
+                charColor = TCONST.colorMap.get(TCONST.COLORRIGHT);
+                mUnderline.setVisibility(View.INVISIBLE);
+            }
         }
 
         mRecogChar.setTextColor(charColor);

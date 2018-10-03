@@ -539,6 +539,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                         int currentIndex = this.getGlyphIndex();
                         CStimulusController resp = (CStimulusController)_responseView.getChildAt(currentIndex);
                         resp.setStimulusChar(" ",false);
+                        resp.updateResponseState(true);
                         mWritingComponent.onErase(currentIndex);
                         break;
                     }

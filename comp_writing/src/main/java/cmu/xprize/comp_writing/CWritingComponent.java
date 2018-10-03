@@ -439,7 +439,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
 
     public void onErase(int eraseIndex){
-
+            updateSentenceEditSequence();
+            updateExpectedCharacters();
     }
     //
 
@@ -759,15 +760,29 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         _charValid = gController.checkAnswer(mResponse, isAnswerCaseSensitive); //checks the expected string against the drawn response string (note that glyph is not used, just the string)
 
         _metricValid = _metric.testConstraint(candidate.getGlyph(), this); //measures hor, vert position, height width wrt the drawing box
+
+
+        //amogh add begins
+            //changing _charValid for sentence writing activities
+            if(activityFeature.contains("FTR_SEN_LTR")){
+                String correctString = mStimulus.substring(mActiveIndex,mActiveIndex + 1);
+                boolean isCorrect = mResponse.equals(correctString);
+                if(isCorrect) //amogh comment, this will change when insert and delete buttons will be there(then comparison has to be done using the aligned strings.).
+                {
+                    _charValid = true;
+                }
+                else{
+                    _charValid = false;
+                }
+            }
+
+        //amogh ends
+
         _isValid = _charValid && _metricValid; // _isValid essentially means "is a correct drawing"
 
 
 
 
-        //amogh added to set the valid character in response.
-        CStimulusController resp = (CStimulusController) mResponseViewList.getChildAt(mActiveIndex);
-        String charExpected = gController.getExpectedChar();
-        resp.setStimulusChar(mResponse, false);
 //            updateResponseView(mResponse);
 
         // when not a sentence writing activity
@@ -823,6 +838,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         // for sentence activities (word level and sentence level feedback)
         else{
 
+            //amogh added to set the valid character in response.
+            CStimulusController resp = (CStimulusController) mResponseViewList.getChildAt(mActiveIndex);
+            String charExpected = gController.getExpectedChar();
+            resp.setStimulusChar(mResponse, false);
+
             //update the controller's correct status
             mActiveController.updateCorrectStatus(_isValid);
 
@@ -848,7 +868,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //                    }
 
                 //update the expected characters according to string edit distance.
-                updateExpectedCharacters();
+
+                if(!mResponse.equals(charExpected)) {
+                    updateExpectedCharacters();
+                }
 
                 inhibitInput(mActiveController, !_isValid);
                 mActiveController.inhibitInput(_isValid);
@@ -1340,16 +1363,24 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             boolean isInsert = mAlignedSourceSentence.charAt(targetIndex) == '-' && !mResponse.equals("-");
             while(isInsert){
                 targetIndex++;
+                isInsert = mAlignedSourceSentence.charAt(targetIndex) == '-' && !mResponse.equals("-");
             }
 
             char targetChar = mAlignedTargetSentence.charAt(targetIndex);
             String expectedChar = Character.toString(targetChar);
-            c.setExpectedChar(expectedChar);
+
+            if(expectedChar.equals("-")){
+                c.setExpectedChar(" ");
+            }
+
+            else {
+                c.setExpectedChar(expectedChar);
+            }
 
             //set the protoglyph
             //set the protoglyphs
             if (!expectedChar.equals(" ")) {
-                c.setProtoGlyph(_glyphSet.cloneGlyph(expectedChar));
+//                c.setProtoGlyph(_glyphSet.cloneGlyph(expectedChar)); //amogh comment uncomment when insert and delete.
             }
 
             targetIndex++;
@@ -1963,7 +1994,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         //if not correct, play replay unless its a space, and update the response, the sentence parameters and the correct status of the glyph
         else {
             v.eraseGlyph();
-            String expectedCharString = v.getExpectedChar();
+//            String expectedCharString = v.getExpectedChar(); //amogh comment, this needs to change when insert and delete buttons come in, as then the expected character dynamically changing would also mean changing the protoglyph dynamically, but here expected character is just to enable easy writing.
+            String expectedCharString = mAnswer.substring(mActiveIndex,mActiveIndex + 1);
+
             boolean isSpaceExpected = expectedCharString.equals(" ");
 
             if (!isSpaceExpected) {
