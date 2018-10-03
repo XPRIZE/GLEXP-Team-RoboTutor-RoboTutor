@@ -47,6 +47,7 @@
 
             // Zoom and highlight Stimulus
             {"name": "Zoom Sstimulus",     "type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1250:Long","features":"!FTR_DICTATION&!FTR_SEN"},
+            {"name": "Zoom Sstimulus",     "type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "1.2:Float:1250:Long","features":"!FTR_DICTATION&FTR_SEN"},
             {"name": "Highlight Stimulus", "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "STIMULUS_HIGHLIGHT:String|1250:Integer", "features":"!FTR_DICTATION&!FTR_WORDS&!FTR_SEN"},
 
             // Hightlight all glyphs and point at first glyph
@@ -124,7 +125,7 @@
 
             // letter level feedback
                   //HESITATION 2, all ATTEMPTS
-            {"name": "show box on first edit group", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBoxOnFirstEditGroup", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_LTR&FTR_HESITATION_1"},
+            {"name": "show box on first edit group", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBoxOnFirstEditGroup", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_LTR&FTR_HESITATION_2"},
                   //HESITATION 3, all ATTEMPTS
             {"name": "show box on first edit", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBoxOnFirstEdit", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_LTR&FTR_HESITATION_3"},
                   //HESITATION 4, MERCY
@@ -588,7 +589,7 @@
             //setting the behaviors for hesitation cancelling and
 //            {"name":"SetVolatile - WRITE_BEHAVIOR - CANCEL_INPUT_HESITATION_POSTING",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_INPUT_HESITATION_POSTING:String" ,"features":"!FTR_SEN"},
 //            {"name":"SetVolatile - WRITE_BEHAVIOR - RESET_HESITATION_NUMBER",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_AND_RESET_INPUT_HESITATION_POSTING:String" ,"features":"FTR_SEN"}, //amogh added
-//            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|5000:Long", "features":""}
+//            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|6000:Long", "features":""}
 
 
           ],
@@ -1125,7 +1126,7 @@
 
 //            {"name":"SetVolatile - WRITE_BEHAVIOR - CANCEL_INPUT_HESITATION_POSTING",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_INPUT_HESITATION_POSTING:String" ,"features":"!FTR_SEN"},
 //            {"name":"SetVolatile - WRITE_BEHAVIOR - RESET_HESITATION_NUMBER",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_AND_RESET_INPUT_HESITATION_POSTING:String" ,"features":"FTR_SEN"}, //amogh added
-//            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|5000:Long", "features":""}
+//            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|6000:Long", "features":""}
           ],
           "preexit": [
           ],
@@ -1146,9 +1147,6 @@
             {"name": "DO BETTER NEXT TIME - Feedback", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Next time you can do better.mp3","soundpackage": "xprize","mode": "flow", "features": "!FTR_SEN"}, //add !FTR_SEN for word level mercy later.
             {"name": "Hide Glyphs",    "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "HIDE_GLYPHS:String", "features":"!FTR_SEN"}, //add !FTR_SEN for word level mercy later.
 
-            //amogh added for sentence writing
-            {"name": "audio - please write", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please write.mp3","soundpackage": "sentence", "mode":"flow", "features": "FTR_SEN"},
-            {"name": "audio - like this", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "like this.mp3","soundpackage": "sentence", "mode":"flow", "features": "FTR_SEN"},
 
             //letter level
             {"name": "Hide Current Letter sample",   "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "HIDE_SAMPLE_ACTIVE_INDEX:String",  "features":"FTR_SEN&FTR_SEN_LTR"},
@@ -1171,9 +1169,17 @@
             {"name": "increment the current word index.", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "incrementCurrentWordIndex", "parms": "", "features":"FTR_SEN&!FTR_SEN_LTR"},
             {"name": "increment the current letter index(letter level feedback).", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "incrementActiveIndex", "parms": "", "features":"FTR_SEN&FTR_SEN_LTR"},
 
-//                        {"name": "debug audio"    , "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Continue.mp3",     "soundpackage": "sentence", "mode":"flow", "features": "FTR_SEN"},
+            //amogh added for sentence writing
+            {"name": "audio - please write", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please write.mp3","soundpackage": "sentence", "mode":"flow", "features": "FTR_SEN&!FTR_SPACE_REPLAY"},
+            {"name": "audio - like this", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "like this.mp3","soundpackage": "sentence", "mode":"flow", "features": "FTR_SEN&!FTR_SPACE_REPLAY"},
+
+            //                        {"name": "debug audio"    , "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Continue.mp3",     "soundpackage": "sentence", "mode":"flow", "features": "FTR_SEN"},
 
             {"name": "Replay Complete behavior", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "REPLAY_COMPLETE:String|DELAYED_NEXT_2:String" ,"features":"!FTR_SEN"},
+
+            //retract features
+            {"name": "Clear space feature",    "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "retractFeature", "parms": "FTR_SPACE_REPLAY:String",  "features":"FTR_SEN"},
+
 
             {"name": "end mercy behavior on complete.", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "REPLAY_COMPLETE:String|START_HESITATION_ON_MERCY_COMPLETE:String" ,"features":"FTR_SEN"},
 //            {"name": "evaluate and update the sentence",          "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "evaluateSentenceWordLevel",  "parms": "",    "features":"FTR_SEN_WRD"},
@@ -1252,7 +1258,7 @@
               "reuse": true,
               "tracks": [
                 {"name":"SetVolatile - WRITE_BEHAVIOR - CANCEL_AND_RESET_HESITATION_POSTING",             "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_AND_RESET_INPUT_HESITATION_POSTING:String" ,"features":"FTR_SEN"}, //amogh added
-                {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|5000:Long", "features":"FTR_SEN"}
+                {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|6000:Long", "features":"FTR_SEN"}
             ]
           },
 
@@ -1266,7 +1272,7 @@
 //            {"name": "Clear hesitation features",    "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "clearHesitationFeatures", "parms": "",  "features":"FTR_SEN"},
             {"name":"",  "type": "COMMAND", "id": "SWordCopy", "method": "cancelAndResetHesitation", "parms": "HESITATION_PROMPT:String",    "features":""},
             {"name":"SetVolatile - WRITE_BEHAVIOR - CANCEL_AND_RESET_HESITATION_POSTING",             "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_AND_RESET_INPUT_HESITATION_POSTING:String" ,"features":"FTR_SEN"}, //amogh added
-            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|5000:Long", "features":"FTR_SEN"}
+            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|6000:Long", "features":"FTR_SEN"}
           ]
         }
 
@@ -1548,7 +1554,7 @@
             // Disable the writing controllers while the demo is in progress - must follow next
             {"name":"SWordCopy - inhibitInput",  "type": "COMMAND", "id": "SWordCopy", "method": "inhibitInput", "parms": "TRUE:Boolean","features":""},
 
-            {"name":"Zoom Sstimulus",  "type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1000:Long","features":"!FTR_SEN"},
+            {"name":"Zoom Sstimulus",  "type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "1.2:Float:1000:Long","features":"!FTR_SEN"},
             {"name":"Highlight Stimulus",  "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "STIMULUS_HIGHLIGHT:String|1000:Integer", "features":"!FTR_WORDS"},
 
             // Show trace line for write.trc
@@ -1623,7 +1629,7 @@
 
             {"name": "Disable Input",   "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput",       "parms": "TRUE:Boolean",  "features":""},
 
-            {"name":"Zoom Sstimulus",  "type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1000:Long","features":"!FTR_DICTATION"},
+            {"name":"Zoom Sstimulus",  "type": "COMMAND", "id": "Sstimulus", "method": "zoomInOut", "parms": "2.0:Float:1000:Long","features":"!FTR_DICTATION&!FTR_SEN"},
             {"name":"Highlight Stimulus",         "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "STIMULUS_HIGHLIGHT:String|1000:Integer", "features":"!FTR_DICTATION&!FTR_WORDS&!FTR_SEN"},
 
             // Show trace line for write.trc
@@ -1686,7 +1692,7 @@
 
             {"name":"SetVolatile - WRITE_BEHAVIOR - CANCEL_INPUT_HESITATION_POSTING",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_INPUT_HESITATION_POSTING:String" ,"features":"!FTR_SEN"}, //posted at the start, sets behavior that as soon as the user starts writing, input hesitation is cancelled
             {"name":"SetVolatile - WRITE_BEHAVIOR - RESET_HESITATION_NUMBER",             "type": "COMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "WRITE_BEHAVIOR:String|CANCEL_AND_RESET_INPUT_HESITATION_POSTING:String" ,"features":"FTR_SEN"}, //posted at the start, sets behavior that as soon as the user starts writing, input hesitation is cancelled, hesitation number is set to 0.
-            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|5000:Long", "features":""} //starts timer to start INPUT_HESITATION_FEEDBACK
+            {"name":"postNamed - HESITATION_PROMPT - APPLY_BEHAVIOR - INPUT_HESITATION_FEEDBACK", "type": "COMMAND", "id": "SWordCopy", "method": "postNamed",           "parms": "HESITATION_PROMPT:String|APPLY_BEHAVIOR:String|INPUT_HESITATION_FEEDBACK:String|6000:Long", "features":""} //starts timer to start INPUT_HESITATION_FEEDBACK
           ]
         },
 

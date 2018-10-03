@@ -401,7 +401,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         //when atleast one of the glyphs was written and was wrong
         else {
-            int wid = mResponseViewList.getChildAt(startIndex).getWidth() * (1 + endIndex - startIndex);
+            int wid = mResponseViewList.getChildAt(startIndex).getWidth() * (endIndex - startIndex);
             int left = mResponseViewList.getChildAt(startIndex).getLeft();
             int height = mResponseViewList.getChildAt(0).getHeight();
 
@@ -414,7 +414,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 public void run() {
                     mHighlightErrorBoxView.setVisibility(View.GONE);
                 }
-            }, 2000);
+            }, 4000);
         }
     }
 
@@ -491,7 +491,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //            public void run() {
 //                mHighlightErrorBoxView.setVisibility(View.GONE);
 //            }
-//        }, 2000);
+//        }, 4000);
 //    }
 
     //to be called by the animator graph
@@ -2002,6 +2002,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             if (!isSpaceExpected) {
                 v.post(WR_CONST.RIPPLE_PROTO);
             }
+            else{
+//                applyBehavior(WR_CONST.FIELD_REPLAY_COMPLETE);
+                publishFeature("FTR_SPACE_REPLAY");
+                applyBehavior(WR_CONST.ON_STOP_WRITING); //amogh added for hesitation.
+            }
 
             //set the recognised character and set the response color.
             v.setRecognisedChar(expectedCharString);
@@ -3383,7 +3388,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 public void run() {
                     mHighlightErrorBoxView.setVisibility(View.GONE);
                 }
-            }, 2000);
+            }, 4000);
         }
 
         public void activateEditMode(){
@@ -3689,7 +3694,7 @@ public class EditOperation {
             public void run() {
                 mHighlightErrorBoxView.setVisibility(View.GONE);
             }
-        }, 2000);
+        }, 4000);
     }
 
 }
