@@ -498,6 +498,9 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
     }
 
+    /**
+     * * FIX_CLOZE updateClozeQuestions
+     */
     private void updateClozeButtons(){
         Log.d(TAG, "updateClozeButtons: ");
         disableClozeButtons();
@@ -659,7 +662,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         this.oldClozePageText = this.oldClozePageText.replace("#AAAAAA", "#000000");
         this.oldClozePageText = this.oldClozePageText.replace("#00B600", "#000000");
         Log.d(TAG, "showClozeWordInBlank: oldClozePageText = "+this.oldClozePageText);
-        String pageTextHTML = this.oldClozePageText.replace("____________", newWord);
+        String pageTextHTML = this.oldClozePageText.replace("____________", newWord); // FIX_CLOZE
         mParent.updateTextviewHTML(mPageText, pageTextHTML);
     }
 
@@ -1411,6 +1414,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         // these are reconstructed by the highlight logic without adding spaces which it otherwise inserts
         // automatically.
         //
+        // FIX_CLOZE (3) this is different. Don't show (wordsToDisplay) or speak (wordsToSpeak) last word
         wordsToDisplay = splitRawSentence(rawSentence);
 
 
@@ -1442,6 +1446,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                 rawSentence = data[currPage].text[currPara][lineIndex].sentence;
                 otherWordsToSpeak = rawSentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
 
+                // FIX_CLOZE (2) this is different. (otherWordsToSpeak) is different
                 // Add the previous line to the list of spoken words used to build the
                 // language model - so it allows all on screen words to be spoken
                 //
@@ -1459,6 +1464,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                 //
                 futureSentences += "<br><br>";
 
+                // FIX_CLOZE (1) this is different
                 for (CASB_Content rawSentence : data[currPage].text[paraIndex]) {
 
                     otherWordsToSpeak = rawSentence.sentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
@@ -1586,6 +1592,8 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         // these are reconstructed by the highlight logic without adding spaces which it otherwise inserts
         // automatically.
         //
+
+        // FIX_CLOZE (3) this is different. Don't show (wordsToDisplay) or speak (wordsToSpeak) last word
         if (currLine == mLineCount){
             String[] wordsToDisplayTemp = splitRawSentence(rawSentence);
             String res1 = "";
@@ -1635,6 +1643,8 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
                 rawSentence = data[currPage].text[currPara][lineIndex].sentence;
                 otherWordsToSpeak = rawSentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
+
+                // FIX_CLOZE (2) this is different. (otherWordsToSpeak) is different
                 if (lineIndex == mLineCount-1) {
                     String[] wordsToSpeakTemp = new String[otherWordsToSpeak.length - 1];
                     for (int i = 0; i < otherWordsToSpeak.length - 2; i++) {
@@ -1658,6 +1668,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                 //
                 futureSentences += "<br><br>";
 
+                // FIX_CLOZE (1) this is different
                 for (CASB_Content rawSentence : data[currPage].text[paraIndex]) {
                     otherWordsToSpeak = rawSentence.sentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
                     if (rawSentence.sentence == data[currPage].text[mParaCount-1][mLineCount-1].sentence) {
@@ -1667,6 +1678,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                         }
                         otherWordsToSpeak = wordsToSpeakTemp;
 
+                        // FIX_CLOZE here is where the blank is replaced
                         if (!rawSentence.sentence.contains(" ____________") &&
                                 rawSentence.sentence == data[currPage].text[mParaCount-1][mLineCount-1].sentence){
                             int len = rawSentence.sentence.length();
@@ -2141,7 +2153,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         // are defined
         // NOTE: we reset mCurrPara, mCurrLine and mCurrWord
         //
-        seekToClozeStoryPosition(mCurrPage, TCONST.ZERO, TCONST.ZERO, TCONST.ZERO);
+        seekToClozeStoryPosition(mCurrPage, TCONST.ZERO, TCONST.ZERO, TCONST.ZERO);  // FIX_CLOZE seekToClozeStoryPosition
     }
 
 
@@ -2213,7 +2225,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
         // Update the state vars
         //
-        seekToClozeStoryPosition(mCurrPage, mCurrPara, TCONST.ZERO, TCONST.ZERO);
+        seekToClozeStoryPosition(mCurrPage, mCurrPara, TCONST.ZERO, TCONST.ZERO);  // FIX_CLOZE seekToClozeStoryPosition
     }
 
 
@@ -2303,7 +2315,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
             mCurrLine += incr;
             // Update the state vars
             //
-            seekToClozeStoryPosition(mCurrPage, mCurrPara, mCurrLine, TCONST.ZERO);
+            seekToClozeStoryPosition(mCurrPage, mCurrPara, mCurrLine, TCONST.ZERO);  // FIX_CLOZE seekToClozeStoryPosition
         }
     }
 
@@ -2358,7 +2370,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         //
         if (cloze_page_mode){
             if (this.isClozePage){
-                seekToClozeStoryPosition(mCurrPage, mCurrPara, mCurrLine, wordIndex);
+                seekToClozeStoryPosition(mCurrPage, mCurrPara, mCurrLine, wordIndex); // FIX_CLOZE seekToClozeStoryPosition
 
             } else {
                 seekToStoryPosition(mCurrPage, mCurrPara, mCurrLine, wordIndex);
@@ -2567,6 +2579,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
     /**
      * Finds the last sentence of the current page, which will be used as a cloze question
+     * FIX_CLOZE set cloze questions
      */
     @Override
     public void setClozeQuestion(){
