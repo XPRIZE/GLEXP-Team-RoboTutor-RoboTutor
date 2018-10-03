@@ -836,8 +836,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
                 //
                 setDataSource(dataSource);
 
-            } else if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE) ||
-                    dataNameDescriptor.startsWith(TCONST.ENCODED_FOLDER)) {
+            } else if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
 
                 // XYZ add a sound package... mimic behavior from XYZ-1
 
@@ -856,29 +855,48 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
                 //
                 loadJSON(new JSONObject(jsonData), mTutor.getScope() );
 
-                // XYZ extra function to add a story sound package
-                if(dataNameDescriptor.startsWith(TCONST.ENCODED_FOLDER)) {
-
-                    String storyFolder = dataNameDescriptor.substring(TCONST.ENCODED_FOLDER.length()).toLowerCase();
-
-                    String[] levelval   = storyFolder.split("_");
-                    // "0..10.SD", "OFF1", "DES.34"
-                    // "3", "2"
-
-                    String levelFolder = levelval[0];
-
-                    AUDIOSOURCEPATH = TCONST.STORY_PATH + levelFolder + "/" + storyFolder;
-                    mMediaManager.addSoundPackage(mTutor, MEDIA_STORY, new CMediaPackage(LANG_AUTO, AUDIOSOURCEPATH));
-
-
-                }
-
-
                 // Pass the loaded json dataSource array
                 //
                 setDataSource(dataSource);
 
-            } else if (dataNameDescriptor.startsWith("db|")) {
+            }
+            else if(dataNameDescriptor.startsWith(TCONST.ENCODED_FOLDER)) {
+
+                String dataFile = dataNameDescriptor.substring(TCONST.ENCODED_FOLDER.length());
+
+                // Generate a langauage specific path to the data source -
+                // i.e. tutors/word_copy/assets/data/<iana2_language_id>/
+                // e.g. tutors/word_copy/assets/data/sw/
+                //
+                String dataPath = TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS;
+                dataPath += "/" +  TCONST.DATA_PATH + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
+
+                String jsonData = JSON_Helper.cacheData(dataPath + dataFile);
+
+                // Load the datasource in the component module - i.e. the superclass
+                //
+
+                loadJSON(new JSONObject(jsonData), mTutor.getScope() );
+                // Pass the loaded json dataSource array
+                //
+                setDataSource(dataSource);
+
+                //audio loading
+                //storyFolder should be of the form 2_1, rest will be done automatically
+                String dataSourceRawFileName = dataNameDescriptor.split("_",2)[1];
+                String storyFolder = dataSourceRawFileName.split("\\.",2)[0].toLowerCase();
+
+                String[] levelval   = storyFolder.split("_");
+                // "0..10.SD", "OFF1", "DES.34"
+                // "3", "2"
+
+                String levelFolder = levelval[0];
+
+                AUDIOSOURCEPATH = TCONST.STORY_PATH + levelFolder + "/" + storyFolder;
+                mMediaManager.addSoundPackage(mTutor, MEDIA_STORY, new CMediaPackage(LANG_AUTO, AUDIOSOURCEPATH));
+
+
+            }else if (dataNameDescriptor.startsWith("db|")) {
                 dataNameDescriptor = dataNameDescriptor.substring(3);
 
             } else if (dataNameDescriptor.startsWith("[")) {

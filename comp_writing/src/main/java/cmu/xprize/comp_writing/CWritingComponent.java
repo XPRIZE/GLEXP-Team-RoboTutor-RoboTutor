@@ -2249,12 +2249,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         mRecogList.removeAllViews();
         mResponseViewList.removeAllViews(); //amogh added
 
-        // XYZ check if is story
-        if(isStory) {
-//             mStimulus = getStoryStimulus(storyName, storyLine);
-//             mAudioStimulus = getStoryAudio(storyName, storyLine);
-//             mAnswer = mStimulus;
-        }
 
         //amogh added to debug
 //        try = (View) LayoutInflater.from(getContext()).inflate((R.drawable.highlight_error,null,false));

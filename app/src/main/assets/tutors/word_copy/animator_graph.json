@@ -496,6 +496,10 @@
             {"name":"PLAY - Write the missing letter in", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim1}}.mp3", "soundpackage":"missingLtr", "volume": 1.0, "mode":"flow", "features": "FTR_MISSING_LTR"},
             {"name":"Play - .audiostimulus", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim2}}.mp3","soundpackage": "words","mode":"flow", "features": "FTR_MISSING_LTR"},
 
+            //For sentence writing activity
+            {"name":"Play - .audiostimulus", "type": "AUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim1}}.mp3","soundpackage": "story","mode":"flow", "features": "FTR_SEN&FTR_DICTATION"},
+
+
             {"name": "Highlight Stimulus", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent",           "parms": "RIPPLE_HIGHLIGHT:String", "features":""},
 
             {"name": "Enable Input",  "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput",       "parms": "FALSE:Boolean", "features":""},
@@ -1167,7 +1171,7 @@
             {"name": "increment the current word index.", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "incrementCurrentWordIndex", "parms": "", "features":"FTR_SEN&!FTR_SEN_LTR"},
             {"name": "increment the current letter index(letter level feedback).", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "incrementActiveIndex", "parms": "", "features":"FTR_SEN&FTR_SEN_LTR"},
 
-                        {"name": "debug audio"    , "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Continue.mp3",     "soundpackage": "sentence", "mode":"flow", "features": "FTR_SEN"},
+//                        {"name": "debug audio"    , "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Continue.mp3",     "soundpackage": "sentence", "mode":"flow", "features": "FTR_SEN"},
 
             {"name": "Replay Complete behavior", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "REPLAY_COMPLETE:String|DELAYED_NEXT_2:String" ,"features":"!FTR_SEN"},
 
@@ -1660,8 +1664,14 @@
 
 
             //sentence writing activities
-                //copy
-            {"name":"Play - please copy the sentence", "type": "AUDIO", "command": "PLAY", "soundsource": "Please copy the sentence.mp3","soundpackage": "sentence","mode":"flow", "features": "FTR_SEN_COPY"},
+
+            //copy
+            {"name":"Play - please copy the sentence", "type": "AUDIO", "command": "PLAY", "soundsource": "Please copy the sentence.mp3","soundpackage": "sentence","mode":"flow", "features": "FTR_SEN_COPY&!FTR_DICTATION"},
+
+            //play prompt
+            {"name":"Play - .audiostimulus", "type": "AUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim1}}.mp3","soundpackage": "story","mode":"flow", "features": "FTR_SEN"},
+
+
                //copy and correct mistakes
                //word editing
 
