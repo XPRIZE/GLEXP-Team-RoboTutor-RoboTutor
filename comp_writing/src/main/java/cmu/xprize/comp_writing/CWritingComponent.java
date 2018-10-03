@@ -93,8 +93,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     protected int               mActiveIndex;
 
     protected ImageButton       mReplayButton;
-    protected ImageButton       mScrollRightButton;
-    protected ImageButton       mScrollLeftButton;
+//    protected ImageButton       mScrollRightButton;
+//    protected ImageButton       mScrollLeftButton;
 
     protected LinearLayout      mRecogList;
     protected LinearLayout      mResponseViewList; //amogh added

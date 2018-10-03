@@ -155,106 +155,107 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         mGlyphList.setClipChildren(false);
 
         mReplayButton = (ImageButton) findViewById(R.id.Sreplay);
-        //amogh added for scrolling fingerwriter
-        mScrollRightButton = (ImageButton) findViewById(R.id.buttonright);
-        mScrollLeftButton = (ImageButton) findViewById(R.id.buttonleft);
-        mScrollLeftButton.setVisibility(View.INVISIBLE);
 
-        mScrollRightButton.setOnTouchListener(new View.OnTouchListener() {
-
-            private Handler mHandler;
-            private long mInitialDelay = 5;
-            private long mRepeatDelay = 5;
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        if (mHandler != null)
-                            return true;
-                        mHandler = new Handler();
-                        mHandler.postDelayed(mAction, mInitialDelay);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        if (mHandler == null)
-                            return true;
-                        mHandler.removeCallbacks(mAction);
-                        mHandler = null;
-                        break;
-                }
-                return false;
-            }
-
-            Runnable mAction = new Runnable() {
-                @Override
-                public void run() {
-                    mDrawnScroll.scrollTo((int) mDrawnScroll.getScrollX() + 20, (int) mDrawnScroll.getScrollY());
-                    mHandler.postDelayed(mAction, mRepeatDelay);
-                }
-            };
-        });
-
-        mScrollLeftButton.setOnTouchListener(new View.OnTouchListener() {
-
-            private Handler mHandler;
-            private long mInitialDelay = 5;
-            private long mRepeatDelay = 5;
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        if (mHandler != null)
-                            return true;
-                        mHandler = new Handler();
-                        mHandler.postDelayed(mAction, mInitialDelay);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        if (mHandler == null)
-                            return true;
-                        mHandler.removeCallbacks(mAction);
-                        mHandler = null;
-                        break;
-                }
-                return false;
-            }
-
-            Runnable mAction = new Runnable() {
-                @Override
-                public void run() {
-                    mDrawnScroll.scrollTo((int) mDrawnScroll.getScrollX() - 20, (int) mDrawnScroll.getScrollY());
-                    mHandler.postDelayed(mAction, mRepeatDelay);
-                }
-            };
-        });
-
-        mDrawnScroll.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-            @Override
-            public void onScrollChanged() {
-                int scrollX = mDrawnScroll.getScrollX(); // For HorizontalScrollView
-//                int maxScrollX = mDrawnScroll.getChildAt(0).getWidth();
-                int maxScrollX = 5000;
-                int a = mDrawnScroll.getWidth();
-                if (scrollX > 0){
-                    mScrollLeftButton.setVisibility(View.VISIBLE);
-                }
-                else{
-                    mScrollLeftButton.setVisibility(View.INVISIBLE);
-                }
-                if (scrollX < maxScrollX){
-                    mScrollRightButton.setVisibility(View.VISIBLE);
-                }
-                else{
-                    mScrollRightButton.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
-
-        if (activityFeature.contains("FTR_SEN")){
-            mScrollRightButton.setVisibility(View.VISIBLE);
-            mScrollRightButton.setVisibility(View.VISIBLE);
-        }
-        //amogh added ends
+        //scrolling buttons
+//        mScrollRightButton = (ImageButton) findViewById(R.id.buttonright);
+//        mScrollLeftButton = (ImageButton) findViewById(R.id.buttonleft);
+//        mScrollLeftButton.setVisibility(View.INVISIBLE);
+//
+//        mScrollRightButton.setOnTouchListener(new View.OnTouchListener() {
+//
+//            private Handler mHandler;
+//            private long mInitialDelay = 5;
+//            private long mRepeatDelay = 5;
+//
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                switch (event.getAction()) {
+//                    case MotionEvent.ACTION_DOWN:
+//                        if (mHandler != null)
+//                            return true;
+//                        mHandler = new Handler();
+//                        mHandler.postDelayed(mAction, mInitialDelay);
+//                        break;
+//                    case MotionEvent.ACTION_UP:
+//                        if (mHandler == null)
+//                            return true;
+//                        mHandler.removeCallbacks(mAction);
+//                        mHandler = null;
+//                        break;
+//                }
+//                return false;
+//            }
+//
+//            Runnable mAction = new Runnable() {
+//                @Override
+//                public void run() {
+//                    mDrawnScroll.scrollTo((int) mDrawnScroll.getScrollX() + 20, (int) mDrawnScroll.getScrollY());
+//                    mHandler.postDelayed(mAction, mRepeatDelay);
+//                }
+//            };
+//        });
+//
+//        mScrollLeftButton.setOnTouchListener(new View.OnTouchListener() {
+//
+//            private Handler mHandler;
+//            private long mInitialDelay = 5;
+//            private long mRepeatDelay = 5;
+//
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                switch (event.getAction()) {
+//                    case MotionEvent.ACTION_DOWN:
+//                        if (mHandler != null)
+//                            return true;
+//                        mHandler = new Handler();
+//                        mHandler.postDelayed(mAction, mInitialDelay);
+//                        break;
+//                    case MotionEvent.ACTION_UP:
+//                        if (mHandler == null)
+//                            return true;
+//                        mHandler.removeCallbacks(mAction);
+//                        mHandler = null;
+//                        break;
+//                }
+//                return false;
+//            }
+//
+//            Runnable mAction = new Runnable() {
+//                @Override
+//                public void run() {
+//                    mDrawnScroll.scrollTo((int) mDrawnScroll.getScrollX() - 20, (int) mDrawnScroll.getScrollY());
+//                    mHandler.postDelayed(mAction, mRepeatDelay);
+//                }
+//            };
+//        });
+//
+//        mDrawnScroll.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+//            @Override
+//            public void onScrollChanged() {
+//                int scrollX = mDrawnScroll.getScrollX(); // For HorizontalScrollView
+////                int maxScrollX = mDrawnScroll.getChildAt(0).getWidth();
+//                int maxScrollX = 5000;
+//                int a = mDrawnScroll.getWidth();
+//                if (scrollX > 0){
+//                    mScrollLeftButton.setVisibility(View.VISIBLE);
+//                }
+//                else{
+//                    mScrollLeftButton.setVisibility(View.INVISIBLE);
+//                }
+//                if (scrollX < maxScrollX){
+//                    mScrollRightButton.setVisibility(View.VISIBLE);
+//                }
+//                else{
+//                    mScrollRightButton.setVisibility(View.INVISIBLE);
+//                }
+//            }
+//        });
+//
+//        if (activityFeature.contains("FTR_SEN")){
+//            mScrollRightButton.setVisibility(View.VISIBLE);
+//            mScrollRightButton.setVisibility(View.VISIBLE);
+//        }
+        //code for scrolling buttons ends
 
 // TODO: DEBUG only
 //        mRecogList.setOnTouchListener(new RecogTouchListener());
