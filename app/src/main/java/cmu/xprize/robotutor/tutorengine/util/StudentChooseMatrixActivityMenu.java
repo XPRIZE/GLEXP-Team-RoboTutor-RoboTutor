@@ -116,7 +116,7 @@ public class StudentChooseMatrixActivityMenu implements IActivityMenu {
 
                 RoboTutor.STUDENT_CHOSE_REPEAT = true;
 
-                String lastTutor = _student.getLastTutor();
+                String lastTutor = _student.getLastTutor(); // MENU_LOGIC why is this only called once?
                 if (lastTutor != null) { // for when it's the first time...s
                     activeTutorId = lastTutor;
                 }
@@ -150,7 +150,7 @@ public class StudentChooseMatrixActivityMenu implements IActivityMenu {
         }
 
         // update active skill based on student choice
-        if (activeSkill != null && !RoboTutor.STUDENT_CHOSE_REPEAT) _student.updateActiveSkill(activeSkill);
+        if (activeSkill != null && !RoboTutor.STUDENT_CHOSE_REPEAT) _student.updateActiveSkill(activeSkill); // MENU_LOGIC update activeSkill
 
         // the next tutor to be launched
         CAt_Data tutorToLaunch = (CAt_Data) transitionMap.get(activeTutorId);

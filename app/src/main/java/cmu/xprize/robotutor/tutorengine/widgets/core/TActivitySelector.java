@@ -209,7 +209,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         HashMap transitionMap = null;
         String rootTutor = "";
 
-        // MENU_REPEAT this should be different for new skill type... make new thing?
         // look up activeSkill every time?
         String activeSkill = menu.getDebugMenuSkill();
         switch (activeSkill) { // √
@@ -340,12 +339,11 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
         // look up activeSkill every time?
         // if student chose repeat, use last skill instead
-        String activeSkill = RoboTutor.STUDENT_CHOSE_REPEAT ? studentModel.getLastSkill() : studentModel.getActiveSkill();
-        switch (activeSkill) { // √
+        switch (menu.getDebugMenuSkill()) {  // this is dependent on which debug menu we're in
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
 
-                studentModel.updateWritingTutorID(debugTutor);
+                studentModel.updateWritingTutorID(debugTutor); // DEBUG_MENU_LOGIC (x) this might be wrong...
                 rootTutor     = matrix.getRootSkillByContentArea(SELECT_WRITING);
                 transitionMap = matrix.getTransitionMapByContentArea(SELECT_WRITING);
                 break;
@@ -366,14 +364,6 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         }
 
         RoboTutor.SELECTOR_MODE = TCONST.FTR_DEBUG_LAUNCH;
-
-        // Special Flavor processing to exclude ASR apps - this was a constraint for BETA trials
-        // reenable the ASK buttons if we don't execute the story_tutor
-        //
-        /*if (BuildConfig.NO_ASR_APPS && transitionMap == matrix.storyTransitions) {
-            SaskActivity.enableButtons(true);
-            return;
-        }*/
 
         // the next tutor to be launched
         CAt_Data tutorToLaunch = (CAt_Data) transitionMap.get(debugTutor);

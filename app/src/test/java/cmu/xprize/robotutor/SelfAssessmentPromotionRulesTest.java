@@ -6,7 +6,7 @@ import org.junit.Test;
 import cmu.xprize.robotutor.tutorengine.util.PerformanceData;
 import cmu.xprize.robotutor.tutorengine.util.PerformanceData.StudentSelfAssessment;
 import cmu.xprize.robotutor.tutorengine.util.PromotionRules;
-import cmu.xprize.robotutor.tutorengine.util.PromotionRules.SelectedActivity;
+import cmu.xprize.robotutor.tutorengine.util.PromotionRules.PromotionDecision;
 import cmu.xprize.robotutor.tutorengine.util.SelfAssessmentPromotionRules;
 
 import static org.junit.Assert.assertEquals;
@@ -28,9 +28,9 @@ public class SelfAssessmentPromotionRulesTest {
     private PromotionRules rules;
 
     // which activity are we expecting next?
-    private SelectedActivity expectedSelection;
+    private PromotionDecision expectedSelection;
     // which activity did our rule-engine actually select?
-    private SelectedActivity selectedActivity;
+    private PromotionDecision promotionDecision;
 
 
     @Before
@@ -46,10 +46,10 @@ public class SelfAssessmentPromotionRulesTest {
     public void selfAssessNull() {
         performance = new PerformanceData();
 
-        selectedActivity = rules.selectActivityByPerformance(performance);
-        expectedSelection = SelectedActivity.NEXT;
+        promotionDecision = rules.assessPerformance(performance);
+        expectedSelection = PromotionDecision.NEXT;
 
-        assertEquals(expectedSelection, selectedActivity);
+        assertEquals(expectedSelection, promotionDecision);
     }
 
     /**
@@ -61,10 +61,10 @@ public class SelfAssessmentPromotionRulesTest {
         performance = new PerformanceData();
         performance.setSelfAssessment(StudentSelfAssessment.PLAY_AGAIN);
 
-        selectedActivity = rules.selectActivityByPerformance(performance);
-        expectedSelection = SelectedActivity.SAME;
+        promotionDecision = rules.assessPerformance(performance);
+        expectedSelection = PromotionDecision.SAME;
 
-        assertEquals(expectedSelection, selectedActivity);
+        assertEquals(expectedSelection, promotionDecision);
     }
 
     /**
@@ -76,10 +76,10 @@ public class SelfAssessmentPromotionRulesTest {
         performance = new PerformanceData();
         performance.setSelfAssessment(StudentSelfAssessment.JUST_RIGHT);
 
-        selectedActivity = rules.selectActivityByPerformance(performance);
-        expectedSelection = SelectedActivity.NEXT;
+        promotionDecision = rules.assessPerformance(performance);
+        expectedSelection = PromotionDecision.NEXT;
 
-        assertEquals(expectedSelection, selectedActivity);
+        assertEquals(expectedSelection, promotionDecision);
     }
 
     /**
@@ -91,10 +91,10 @@ public class SelfAssessmentPromotionRulesTest {
         performance = new PerformanceData();
         performance.setSelfAssessment(StudentSelfAssessment.TOO_HARD);
 
-        selectedActivity = rules.selectActivityByPerformance(performance);
-        expectedSelection = SelectedActivity.OLD_EASIER;
+        promotionDecision = rules.assessPerformance(performance);
+        expectedSelection = PromotionDecision.OLD_EASIER;
 
-        assertEquals(expectedSelection, selectedActivity);
+        assertEquals(expectedSelection, promotionDecision);
     }
 
     /**
@@ -106,10 +106,10 @@ public class SelfAssessmentPromotionRulesTest {
         performance = new PerformanceData();
         performance.setSelfAssessment(StudentSelfAssessment.TOO_EASY);
 
-        selectedActivity = rules.selectActivityByPerformance(performance);
-        expectedSelection = SelectedActivity.OLD_HARDER;
+        promotionDecision = rules.assessPerformance(performance);
+        expectedSelection = PromotionDecision.OLD_HARDER;
 
-        assertEquals(expectedSelection, selectedActivity);
+        assertEquals(expectedSelection, promotionDecision);
     }
 
 

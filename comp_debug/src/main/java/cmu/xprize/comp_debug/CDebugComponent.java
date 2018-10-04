@@ -63,21 +63,6 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
     //private CSm_Component customView;
     private CDebugAdapter gridAdapter;
 
-
-    // CUSTOM_MENU (0) stash changes, checkout new branch from dev, unstash and commit
-    // CUSTOM_MENU (a2) merge num_compare
-    // CUSTOM_MENU (a2) merge kevin_asm into development
-    // CUSTOM_MENU (a3) add numcompare data sources
-    // CUSTOM_MENU (a3) test numcompare data sources briefly
-    // CUSTOM_MENU (a4) add numcompare menu (mimic 1)
-
-    // CUSTOM_MENU (b2) merge sentence_writing
-    // CUSTOM_MENU (b2) checkout amogh branch https://github.com/RoboTutorLLC/RoboTutor/pull/374
-    // CUSTOM_MENU (b2) test amogh branch
-    // CUSTOM_MENU (b2) merge amogh into development
-    // CUSTOM_MENU (b3) get list of tutor_desc, tutor_id, tutor_data.
-    // CUSTOM_MENU (b4) add sentence menu (mimic 1)
-
     private LinearLayout customView;
     //private Button SBpopCustom;
     Button SAsmCustom;
@@ -165,7 +150,6 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
         SAkiraCustom = (Button) findViewById(R.id.SAkiraCustom);
         SAsmCustom = (Button) findViewById(R.id.SAsmCustom);
         /* bubble pop debug views */
-        // CUSTOM_MENU √√√ (mimic) make a similar menu for each new one
         SBpopMenuButton = (Button) findViewById(R.id.SBPopMenuButton);
         SBpopMenu = (LinearLayout) findViewById(R.id.SBPopMenu);
         SBPopLetters = (Button) findViewById(R.id.SBPopLetters);
@@ -222,7 +206,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
 
         SlaunchTutor  = (Button) findViewById(R.id.SlaunchTutor);
-        ScustomLaunch = (Button) findViewById(R.id.ScustomButton); // CUSTOM_MENU √√√
+        ScustomLaunch = (Button) findViewById(R.id.ScustomButton);
         SresetTutor   = (Button) findViewById(R.id.SresetTutor);
 
         SlaunchTutor.setOnClickListener(new View.OnClickListener() {
@@ -241,7 +225,6 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
         /*
          * Custom launch!
-         * CUSTOM_MENU √√√ (keep)
          */
         ScustomLaunch.setOnClickListener(new View.OnClickListener() {
 
@@ -271,7 +254,6 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
             @Override
             public void onClick(View view) {
 
-                // CUSTOM_MENU √√√ (keep) this
                 mButtonController.doDebugTagLaunchAction((String) view.getTag());
             }
         };
@@ -282,7 +264,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
         SAsmCustom.setOnClickListener(roboDebuggerClickListener);
 
-        // CUSTOM_MENU √√√ (mimic) menu display for each new activity
+        // menu display for each new activity
         SBpopMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -299,7 +281,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
         SBPopShapes.setOnClickListener(roboDebuggerClickListener);
         SBPopExpressions.setOnClickListener(roboDebuggerClickListener);
 
-        // CUSTOM_MENU √√√ new click listeners
+        // new click listeners
         SNumCompareMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -324,7 +306,6 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
             }
         });
 
-        // CUSTOM_MENU...
         SPlaceValueMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -383,17 +364,12 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
     private void initializeQA_Code_Drop2_DebugTutors() {
         ArrayList<CAt_Data> readingCompTutors = new ArrayList<>();
 
-        // CUSTOM_MENU √√√ (1) initialize new CAt_Data for each one we want to create
-        // CUSTOM_MENU √√√ (1) make an array of data sources, and make a custom button with a custom OnClickListener class that takes in args... for each class
-        // CUSTOM_MENU √√√ (1) we need tutor_desc, tutor_data, and tutor_id
-
         String[] storyTypes = {"story.gen.hide",
         "story.clo.hear",
         "story.pic.hear",
         "story.gen.hear",
         "story.pic.hide"};
 
-        // CUSTOM_MENU √√√ (1) try it with story data (see RoboTutor)
         final String tutor_desc = "story.pic.hear";
         final String tutor_id = "story.pic.hear::story_30";
         final String tutor_data = "[encfolder]story_30";
@@ -405,7 +381,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
         };
 
 
-        // CUSTOM_MENU (4) mimic this for each of the layouts
+        // mimic this for each of the layouts
         createCustomMenu(SComprehensionMenu, storyTutors);
 
 
@@ -414,7 +390,6 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
                 {"numdiscr", "numcompare::2d.compare.mix", "[file]numcompare.2d.compare.mix.json"},
                 {"numdiscr", "numcompare::3d.compare.mix", "[file]numcompare.3d.compare.mix.json"}
         };
-        // CUSTOM_MENU (4)
         createCustomMenu(SNumCompareMenu, numCompareTutors);
 
 

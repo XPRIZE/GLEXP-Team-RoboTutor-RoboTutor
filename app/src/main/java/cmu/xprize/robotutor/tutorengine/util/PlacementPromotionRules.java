@@ -1,10 +1,7 @@
 package cmu.xprize.robotutor.tutorengine.util;
 
-import android.util.Log;
-
 import java.util.Locale;
 
-import cmu.xprize.comp_logging.CLogManager;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.util.TCONST;
 
@@ -30,12 +27,12 @@ public class PlacementPromotionRules extends PromotionRules {
      * @return
      */
     @Override
-    public SelectedActivity selectActivityByPerformance(PerformanceData performance) {
+    public PromotionDecision assessPerformance(PerformanceData performance) {
         RoboTutor.logManager.postEvent_D(TAG, performance.toString());
 
         // if they want to play again, repeat no matter what
         if (performance.getSelfAssessment() == PerformanceData.StudentSelfAssessment.PLAY_AGAIN) {
-            return SelectedActivity.SAME;
+            return PromotionDecision.SAME;
         }
 
         RoboTutor.logManager.postEvent_D(TCONST.PLACEMENT_TAG, performance.toString());
@@ -50,7 +47,7 @@ public class PlacementPromotionRules extends PromotionRules {
         RoboTutor.logManager.postEvent_I(TCONST.PLACEMENT_TAG, msg);
         // if they start an activity but don't like it.... what do?
         if (performance.getNumberAttempts() < performance.getTotalNumberQuestions()) {
-            return SelectedActivity.SAME;
+            return PromotionDecision.SAME;
         }
 
         // percentage is #correct / #totalQuestions.... NOT #correct / #numAttempts
@@ -65,9 +62,9 @@ public class PlacementPromotionRules extends PromotionRules {
         // YYY if they get above 90, keep going. If not, fun is over.
         if (percentCorrect >= HIGH_PERFORMANCE_THRESHOLD) {
             // 50/50 probability
-            return SelectedActivity.NEXT;
+            return PromotionDecision.NEXT;
         } else {
-            return SelectedActivity.PREVIOUS;
+            return PromotionDecision.PREVIOUS;
         }
     }
 }

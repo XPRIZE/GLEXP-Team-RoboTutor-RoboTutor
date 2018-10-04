@@ -7,7 +7,7 @@ import cmu.xprize.robotutor.tutorengine.util.PerformanceData;
 import cmu.xprize.robotutor.tutorengine.util.PerformanceData.StudentSelfAssessment;
 import cmu.xprize.robotutor.tutorengine.util.PerformancePromotionRules;
 import cmu.xprize.robotutor.tutorengine.util.PromotionRules;
-import cmu.xprize.robotutor.tutorengine.util.PromotionRules.SelectedActivity;
+import cmu.xprize.robotutor.tutorengine.util.PromotionRules.PromotionDecision;
 
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -29,9 +29,9 @@ public class PerformanceBasedPromotionRulesTest {
     private PromotionRules rules;
 
     // which activity are we expecting next?
-    private SelectedActivity expectedSelection;
+    private PromotionDecision expectedSelection;
     // which activity did our rule-engine actually select?
-    private SelectedActivity selectedActivity;
+    private PromotionDecision promotionDecision;
 
 
     @Before
@@ -52,13 +52,13 @@ public class PerformanceBasedPromotionRulesTest {
         // set desired performance variables i.e. num wrong, num correct, etc
 
         // specify which activity is expected
-        expectedSelection = SelectedActivity.NEXT;
+        expectedSelection = PromotionDecision.NEXT;
 
-        // execute the "selectActivityByPerformance" method
-        selectedActivity = rules.selectActivityByPerformance(performance);
+        // execute the "assessPerformance" method
+        promotionDecision = rules.assessPerformance(performance);
 
         // perform assertion
-        assertEquals(expectedSelection, selectedActivity);
+        assertEquals(expectedSelection, promotionDecision);
     }
 
     /**
@@ -73,13 +73,13 @@ public class PerformanceBasedPromotionRulesTest {
         performance.setSelfAssessment(StudentSelfAssessment.PLAY_AGAIN);
 
         // specify which activity is expected
-        expectedSelection = SelectedActivity.SAME;
+        expectedSelection = PromotionDecision.SAME;
 
-        // execute the "selectActivityByPerformance" method
-        selectedActivity = rules.selectActivityByPerformance(performance);
+        // execute the "assessPerformance" method
+        promotionDecision = rules.assessPerformance(performance);
 
         // perform assertion
-        assertEquals(expectedSelection, selectedActivity);
+        assertEquals(expectedSelection, promotionDecision);
     }
 
     /**
@@ -95,45 +95,45 @@ public class PerformanceBasedPromotionRulesTest {
         performance = new PerformanceData();
         performance.setActivityType("story.read");
 
-        expectedSelection = SelectedActivity.NEXT;
-        selectedActivity = rules.selectActivityByPerformance(performance);
-        assertEquals(expectedSelection, selectedActivity);
+        expectedSelection = PromotionDecision.NEXT;
+        promotionDecision = rules.assessPerformance(performance);
+        assertEquals(expectedSelection, promotionDecision);
 
 
         // test story.echo
         performance = new PerformanceData();
         performance.setActivityType("story.echo");
 
-        expectedSelection = SelectedActivity.NEXT;
-        selectedActivity = rules.selectActivityByPerformance(performance);
-        assertEquals(expectedSelection, selectedActivity);
+        expectedSelection = PromotionDecision.NEXT;
+        promotionDecision = rules.assessPerformance(performance);
+        assertEquals(expectedSelection, promotionDecision);
 
 
         // test story.hear
         performance = new PerformanceData();
         performance.setActivityType("story.hear");
 
-        expectedSelection = SelectedActivity.NEXT;
-        selectedActivity = rules.selectActivityByPerformance(performance);
-        assertEquals(expectedSelection, selectedActivity);
+        expectedSelection = PromotionDecision.NEXT;
+        promotionDecision = rules.assessPerformance(performance);
+        assertEquals(expectedSelection, promotionDecision);
 
 
         // test write
         performance = new PerformanceData();
         performance.setActivityType("write");
 
-        expectedSelection = SelectedActivity.NEXT;
-        selectedActivity = rules.selectActivityByPerformance(performance);
-        assertEquals(expectedSelection, selectedActivity);
+        expectedSelection = PromotionDecision.NEXT;
+        promotionDecision = rules.assessPerformance(performance);
+        assertEquals(expectedSelection, promotionDecision);
 
 
         // test countingx
         performance = new PerformanceData();
         performance.setActivityType("countingx");
 
-        expectedSelection = SelectedActivity.NEXT;
-        selectedActivity = rules.selectActivityByPerformance(performance);
-        assertEquals(expectedSelection, selectedActivity);
+        expectedSelection = PromotionDecision.NEXT;
+        promotionDecision = rules.assessPerformance(performance);
+        assertEquals(expectedSelection, promotionDecision);
 
     }
 
@@ -153,9 +153,9 @@ public class PerformanceBasedPromotionRulesTest {
         performance.setNumberAttempts(0);
         performance.setTotalNumberQuestions(10);
 
-        expectedSelection = SelectedActivity.NEXT;
-        selectedActivity = rules.selectActivityByPerformance(performance);
-        assertEquals(expectedSelection, selectedActivity);
+        expectedSelection = PromotionDecision.NEXT;
+        promotionDecision = rules.assessPerformance(performance);
+        assertEquals(expectedSelection, promotionDecision);
 
 
         // student tries one question and quits. Go to next?
@@ -166,9 +166,9 @@ public class PerformanceBasedPromotionRulesTest {
         performance.setNumberAttempts(1);
         performance.setTotalNumberQuestions(10);
 
-        expectedSelection = SelectedActivity.NEXT;
-        selectedActivity = rules.selectActivityByPerformance(performance);
-        assertEquals(expectedSelection, selectedActivity);
+        expectedSelection = PromotionDecision.NEXT;
+        promotionDecision = rules.assessPerformance(performance);
+        assertEquals(expectedSelection, promotionDecision);
 
 
         // student tries two questions and quits. Go to next?
@@ -179,9 +179,9 @@ public class PerformanceBasedPromotionRulesTest {
         performance.setNumberAttempts(2);
         performance.setTotalNumberQuestions(10);
 
-        expectedSelection = SelectedActivity.NEXT;
-        selectedActivity = rules.selectActivityByPerformance(performance);
-        assertEquals(expectedSelection, selectedActivity);
+        expectedSelection = PromotionDecision.NEXT;
+        promotionDecision = rules.assessPerformance(performance);
+        assertEquals(expectedSelection, promotionDecision);
 
     }
 
@@ -198,9 +198,9 @@ public class PerformanceBasedPromotionRulesTest {
         performance.setNumberAttempts(1);
         performance.setTotalNumberQuestions(3);
 
-        expectedSelection = SelectedActivity.NEXT;
-        selectedActivity = rules.selectActivityByPerformance(performance);
-        assertEquals(expectedSelection, selectedActivity);
+        expectedSelection = PromotionDecision.NEXT;
+        promotionDecision = rules.assessPerformance(performance);
+        assertEquals(expectedSelection, promotionDecision);
     }
 
     /**
@@ -219,9 +219,9 @@ public class PerformanceBasedPromotionRulesTest {
         performance.setNumberAttempts(3);
         performance.setTotalNumberQuestions(3);
 
-        expectedSelection = SelectedActivity.PREVIOUS;
-        selectedActivity = rules.selectActivityByPerformance(performance);
-        assertEquals(expectedSelection, selectedActivity);
+        expectedSelection = PromotionDecision.PREVIOUS;
+        promotionDecision = rules.assessPerformance(performance);
+        assertEquals(expectedSelection, promotionDecision);
 
 
         // student gets 1/3 correct, go to previous
@@ -232,9 +232,9 @@ public class PerformanceBasedPromotionRulesTest {
         performance.setNumberAttempts(3);
         performance.setTotalNumberQuestions(3);
 
-        expectedSelection = SelectedActivity.PREVIOUS;
-        selectedActivity = rules.selectActivityByPerformance(performance);
-        assertEquals(expectedSelection, selectedActivity);
+        expectedSelection = PromotionDecision.PREVIOUS;
+        promotionDecision = rules.assessPerformance(performance);
+        assertEquals(expectedSelection, promotionDecision);
 
 
         // student gets 2/3 correct, stay here
@@ -245,9 +245,9 @@ public class PerformanceBasedPromotionRulesTest {
         performance.setNumberAttempts(3);
         performance.setTotalNumberQuestions(3);
 
-        expectedSelection = SelectedActivity.SAME;
-        selectedActivity = rules.selectActivityByPerformance(performance);
-        assertEquals(expectedSelection, selectedActivity);
+        expectedSelection = PromotionDecision.SAME;
+        promotionDecision = rules.assessPerformance(performance);
+        assertEquals(expectedSelection, promotionDecision);
 
 
         // student gets 3/3 correct, go to next
@@ -258,9 +258,9 @@ public class PerformanceBasedPromotionRulesTest {
         performance.setNumberAttempts(3);
         performance.setTotalNumberQuestions(3);
 
-        expectedSelection = SelectedActivity.NEXT;
-        selectedActivity = rules.selectActivityByPerformance(performance);
-        assertEquals(expectedSelection, selectedActivity);
+        expectedSelection = PromotionDecision.NEXT;
+        promotionDecision = rules.assessPerformance(performance);
+        assertEquals(expectedSelection, promotionDecision);
 
 
     }
@@ -277,10 +277,10 @@ public class PerformanceBasedPromotionRulesTest {
         performance.setNumberAttempts(10);
         performance.setTotalNumberQuestions(10);
 
-        expectedSelection = SelectedActivity.PREVIOUS;
+        expectedSelection = PromotionDecision.PREVIOUS;
 
-        selectedActivity = rules.selectActivityByPerformance(performance);
-        assertEquals(expectedSelection, selectedActivity);
+        promotionDecision = rules.assessPerformance(performance);
+        assertEquals(expectedSelection, promotionDecision);
 
     }
 
@@ -296,10 +296,10 @@ public class PerformanceBasedPromotionRulesTest {
         performance.setNumberAttempts(10);
         performance.setTotalNumberQuestions(10);
 
-        expectedSelection = SelectedActivity.SAME;
+        expectedSelection = PromotionDecision.SAME;
 
-        selectedActivity = rules.selectActivityByPerformance(performance);
-        assertEquals(expectedSelection, selectedActivity);
+        promotionDecision = rules.assessPerformance(performance);
+        assertEquals(expectedSelection, promotionDecision);
     }
 
     /**
@@ -314,10 +314,10 @@ public class PerformanceBasedPromotionRulesTest {
         performance.setNumberAttempts(10);
         performance.setTotalNumberQuestions(10);
 
-        expectedSelection = SelectedActivity.NEXT;
+        expectedSelection = PromotionDecision.NEXT;
 
-        selectedActivity = rules.selectActivityByPerformance(performance);
-        assertEquals(expectedSelection, selectedActivity);
+        promotionDecision = rules.assessPerformance(performance);
+        assertEquals(expectedSelection, promotionDecision);
     }
 
     /**
@@ -332,9 +332,9 @@ public class PerformanceBasedPromotionRulesTest {
         performance.setNumberAttempts(10);
         performance.setTotalNumberQuestions(10);
 
-        selectedActivity = rules.selectActivityByPerformance(performance);
+        promotionDecision = rules.assessPerformance(performance);
         // could be one of two options
-        assertTrue(selectedActivity == SelectedActivity.NEXT || selectedActivity == SelectedActivity.DOUBLE_NEXT);
+        assertTrue(promotionDecision == PromotionDecision.NEXT || promotionDecision == PromotionDecision.DOUBLE_NEXT);
     }
 
 }

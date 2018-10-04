@@ -410,6 +410,7 @@ public class TCONST {
 
     public static final String DEBUG_STORY_TAG = "GENERAL_TSO";
     public static final String DEBUG_HESITATE = "MATH_HESITATE";
+    public static final String DEBUG_MENU      = "DEBUG_MENU";
 
     // Navigator types
     final static public String SIMPLENAV       = "SIMPLE_NAVIGATOR";
@@ -868,6 +869,7 @@ public class TCONST {
     public static final String DEBUG_AUDIO_FILE = "DEBUG_AUDIO";
 
     public static final String PLACEMENT_TAG = "DEBUG_PLACEMENT";
+    public static final String MENU_BUG_TAG  = "MENU_BUG";
     public static final String MATH_PLACEMENT = "MATH_PLACEMENT"; // TOGGLE_PLACEMENT trace me...
     public static final String MATH_PLACEMENT_INDEX = "MATH_PLACEMENT_INDEX";
     public static final String WRITING_PLACEMENT = "WRITING_PLACEMENT";

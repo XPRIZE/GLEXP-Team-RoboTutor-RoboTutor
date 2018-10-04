@@ -394,11 +394,8 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
                         // don't do end of tutor assessment when we're ending the default tutor (activity selector)
                         if (!mTutorName.equals(CTutorEngine.defTutor)) {
-                            if (!RoboTutor.STUDENT_CHOSE_REPEAT) {
-                                studentModel.incrementActiveSkill();
-                            }
                             // assess student performance after tutor is completed
-                            CTutorEngine.promotionMechanism.adjustPositionFromPreviousPerformance(CTutor.this);
+                            CTutorEngine.promotionMechanism.assessPerformanceAndAdjustPosition(CTutor.this, RoboTutor.STUDENT_CHOSE_REPEAT);
 
                             Log.wtf("STUDENT_MODEL:AFTER_ASSESSMENT", studentModel.toString());
                         }

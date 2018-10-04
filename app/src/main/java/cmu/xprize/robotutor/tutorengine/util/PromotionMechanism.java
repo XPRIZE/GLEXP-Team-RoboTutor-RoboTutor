@@ -1,7 +1,5 @@
 package cmu.xprize.robotutor.tutorengine.util;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -11,12 +9,11 @@ import java.util.Map;
 import cmu.xprize.comp_session.AS_CONST;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CTutor;
-import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.util.CAt_Data;
 import cmu.xprize.util.CPlacementTest_Tutor;
 import cmu.xprize.util.TCONST;
 
-import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;
+import static cmu.xprize.util.TCONST.MENU_BUG_TAG;
 import static cmu.xprize.util.TCONST.PLACEMENT_TAG;
 
 /**
@@ -42,20 +39,57 @@ public class PromotionMechanism {
     /**
      *
      * Adjust the student's position in _matrix based on their last performance
+     * MENU_LOGIC: weird behavior observed... "WRITE" is the only one that doesn't increment on BACKBUTTON. MATH and STORIES both increment
      *
      */
-    public void adjustPositionFromPreviousPerformance(CTutor tutor) {
+    public void assessPerformanceAndAdjustPosition(CTutor lastTutorPlayed, boolean wasRepeat) {
 
-        boolean useMathPlacement = false;
-        boolean useWritingPlacement = false;
+        String lastSkillPlayed = wasRepeat ? _studentModel.getLastSkill() : _studentModel.getActiveSkill();
+
+        String nextTutor = selectNextTutor(lastTutorPlayed, lastSkillPlayed);
+        RoboTutor.logManager.postEvent_I(TCONST.PLACEMENT_TAG, "nextTutor = " + nextTutor);
+
+
+        // 3. Set SELECTOR_MODE
+        RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
+
+        switch (lastSkillPlayed) { // √
+
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
+                _studentModel.updateWritingTutorID(nextTutor);
+                break;
+
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES:
+                _studentModel.updateStoryTutorID(nextTutor);
+                break;
+
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_MATH:
+                _studentModel.updateMathTutorID(nextTutor);
+                break;
+        }
+
+        _studentModel.updateLastTutor(lastTutorPlayed.getTutorId());
+
+        if (!wasRepeat) {
+            _studentModel.incrementActiveSkill(); // MENU_LOGIC... activeSkill should be incremented after assessment
+        }
+    }
+
+
+    /**
+     * select Next Tutor
+     * MENU_LOGIC note that in some cases, "activeSkill" doesn't match "lastTutor"... (NEXT NEXT NEXT)
+     */
+    private String selectNextTutor(CTutor lastTutorPlayed, String lastSkillPlayed) {
 
         //
         String activeTutorId = "";
         HashMap transitionMap = null;
-        // look up activeSkill every time?
-        String activeSkill = _studentModel.getActiveSkill();
         int placementIndex = 0;
-        switch (activeSkill) { // √
+        boolean useMathPlacement = false;
+        boolean useWritingPlacement = false;
+
+        switch (lastSkillPlayed) { // √
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
 
@@ -63,7 +97,6 @@ public class PromotionMechanism {
                 transitionMap = _matrix.writeTransitions;
                 useWritingPlacement = _studentModel.getWritingPlacement();
                 placementIndex = _studentModel.getWritingPlacementIndex();
-
                 break;
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES:
@@ -79,63 +112,11 @@ public class PromotionMechanism {
                 useMathPlacement = _studentModel.getMathPlacement();
                 placementIndex = _studentModel.getMathPlacementIndex();
                 break;
-
         }
 
-        // this should be broken up appropriately...
-        String nextTutor = selectNextTutor(tutor, activeTutorId, activeSkill, useWritingPlacement, useMathPlacement, transitionMap, placementIndex); // √
-
-        RoboTutor.logManager.postEvent_I(TCONST.PLACEMENT_TAG, "nextTutor = " + nextTutor);
-
-
-        // 3. Set SELECTOR_MODE
-        RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
-
-        // Update the active skill
-        //
-        // look up activeSkill every time?
-        String writingTutorID = null, storiesTutorID = null, mathTutorID = null;
-        switch (activeSkill) { // √
-
-            case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
-
-                writingTutorID = nextTutor;
-                break;
-
-            case AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES:
-
-                storiesTutorID = nextTutor;
-                break;
-
-            case AS_CONST.BEHAVIOR_KEYS.SELECT_MATH:
-
-                mathTutorID = nextTutor;
-                break;
-        }
-
-        // Serialize the new state
-        // #Mod 329 language switch capability
-        //
-
-
-        //editor.putString(TCONST.SKILL_SELECTED, AS_CONST.SELECT_NONE); // √√√ √√√
-        //Log.wtf("REPEAT_STUFF", "(difficultySelectMode) setting SKILL_SELECTED... " + AS_CONST.SELECT_NONE);
-
-        // only one will have been changed but update all
-        //
-        if (writingTutorID != null) _studentModel.updateWritingTutorID(writingTutorID);
-        if (storiesTutorID != null) _studentModel.updateStoryTutorID(storiesTutorID);
-        if (mathTutorID != null) _studentModel.updateMathTutorID(mathTutorID);
-
-        _studentModel.updateLastTutor(activeTutorId);
-    }
-
-
-    /**
-     * select Next Tutor
-     */
-    private String selectNextTutor(CTutor lastTutor, String activeTutorId, String activeSkill, boolean useWritingPlacement, boolean useMathPlacement, HashMap transitionMap, int placementIndex) {
-        RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format(Locale.US, "selectNextTutor, w=%s, m=%s",
+        RoboTutor.logManager.postEvent_I(MENU_BUG_TAG, String.format("compare lastTutorPlayed=%s == activeTutorId=%s", lastTutorPlayed.getTutorId(), activeTutorId));
+        RoboTutor.logManager.postEvent_I(MENU_BUG_TAG, "selectNextTutor -- activeTutorId=" + activeTutorId+ " -- activeSkill=" + lastSkillPlayed);
+        RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format(Locale.US, "selectNextTutor -- w=%s -- m=%s",
                 String.valueOf(useWritingPlacement),
                 String.valueOf(useMathPlacement)));
         // 1. pick the next tutor
@@ -150,39 +131,44 @@ public class PromotionMechanism {
         PerformanceData performance = new PerformanceData();
         performance.setActivityType(activeTutorId);
         // look up activeSkill every time?
-        performance.setActiveSkill(activeSkill);
+        performance.setActiveSkill(lastSkillPlayed);
 
 
         // can this work from last tutor???
-        performance.setNumberCorrect(lastTutor.getScore());
-        performance.setNumberWrong(lastTutor.getIncorrect());
-        performance.setNumberAttempts(lastTutor.getAttempts());
-        performance.setTotalNumberQuestions(lastTutor.getTotalQuestions());
+        performance.setNumberCorrect(lastTutorPlayed.getScore());
+        performance.setNumberWrong(lastTutorPlayed.getIncorrect());
+        performance.setNumberAttempts(lastTutorPlayed.getAttempts());
+        performance.setTotalNumberQuestions(lastTutorPlayed.getTotalQuestions());
 
 
-        PromotionRules.SelectedActivity selectedActivity = rules.selectActivityByPerformance(performance);
-        Log.d(TAG, "PerformancePromotionRules result: " + selectedActivity);
+        PromotionRules.PromotionDecision promotionDecision = rules.assessPerformance(performance);
+        RoboTutor.logManager.postEvent_I(MENU_BUG_TAG, "PerformancePromotionRules result = " + promotionDecision);
 
         // YYY use placement logic
         String nextTutor;
         if (useWritingPlacement || useMathPlacement) {
-            nextTutor = getNextPlacementTutor(activeTutorId, useMathPlacement, selectedActivity, transitionMap, placementIndex);
+            nextTutor = getNextPlacementTutor(activeTutorId, useMathPlacement, promotionDecision, transitionMap, placementIndex);
 
         } else {
-            nextTutor = getNextPromotionTutor(activeTutorId, selectedActivity, transitionMap);
+            nextTutor = getNextPromotionTutor(activeTutorId, promotionDecision, transitionMap);
+            // MENU_LOGIC:::: nextTutor = "story.hear::story_1";
         }
-        return nextTutor;
+        return nextTutor; // MENU_LOGIC:::: nextTutor = "story.hear::story_1";
     }
 
     /**
      * get next tutor using Promotion Logic
-     * @param selectedActivity
+     * @param activeTutorId the last tutor played
+     * @param promotionDecision NEXT, SAME, PREVIOUS, DOUBLE_NEXT...
+     * @param transitionMap the transitionMap to get the next tutor from
      * @return
      */
-    private String getNextPromotionTutor(String activeTutorId, PromotionRules.SelectedActivity selectedActivity, HashMap<String, CAt_Data> transitionMap) {
-        // this is
+    private String getNextPromotionTutor(String activeTutorId, PromotionRules.PromotionDecision promotionDecision, HashMap<String, CAt_Data> transitionMap) {
+        // MENU_SOLUTION... Log.info all of these
+        RoboTutor.logManager.postEvent_I(MENU_BUG_TAG, "activeTutorId=" + activeTutorId + " -- ");
+
         CAt_Data transitionData = transitionMap.get(activeTutorId);
-        switch (selectedActivity) {
+        switch (promotionDecision) {
             case NEXT:
                 return transitionData.next;
 
@@ -233,10 +219,10 @@ public class PromotionMechanism {
     /**
      * get next tutor using Placement Logic
      */
-    private String getNextPlacementTutor(String activeTutorId, boolean useMathPlacement, PromotionRules.SelectedActivity selectedActivity, HashMap<String, CAt_Data> transitionMap, int placementIndex) {
+    private String getNextPlacementTutor(String activeTutorId, boolean useMathPlacement, PromotionRules.PromotionDecision promotionDecision, HashMap<String, CAt_Data> transitionMap, int placementIndex) {
         RoboTutor.logManager.postEvent_V(TCONST.PLACEMENT_TAG, "using placement logic");
 
-        switch(selectedActivity) {
+        switch(promotionDecision) {
 
             /// YYY it might be better to keep the placement tutors in a map instead of in an array
             /// YYY logic might be more symmetrical

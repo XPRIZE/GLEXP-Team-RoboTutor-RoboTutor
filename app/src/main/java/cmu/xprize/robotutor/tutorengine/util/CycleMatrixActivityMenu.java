@@ -19,6 +19,7 @@ import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_OPTION_2;
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING;
 import static cmu.xprize.comp_session.AS_CONST.SELECT_REPEAT;
+import static cmu.xprize.util.TCONST.MENU_BUG_TAG;
 
 /**
  * CycleMatrixActivityMenu
@@ -178,8 +179,7 @@ public class CycleMatrixActivityMenu implements IActivityMenu {
                 break;
         }
 
-        Log.d("REPEAT_ME", "activeSkill = " + activeSkill);
-        Log.d("REPEAT_ME", "activeTutorId = " + activeTutorId);
+        RoboTutor.logManager.postEvent_I(MENU_BUG_TAG, "CycleMatrixActivityMenu: activeSkill=" + activeSkill + " -- activeTutorId=" + activeTutorId);
         transitionMap = _matrix.getTransitionMapByContentArea(activeSkill);
         activeTutor = (CAt_Data) transitionMap.get(activeTutorId);
         nextTutors[0] = activeTutor.tutor_id;
@@ -224,6 +224,6 @@ public class CycleMatrixActivityMenu implements IActivityMenu {
 
     @Override
     public String getDebugMenuSkill() {
-        return RoboTutor.STUDENT_CHOSE_REPEAT ? _student.getLastSkill() : _student.getActiveSkill();
+        return RoboTutor.STUDENT_CHOSE_REPEAT ? _student.getLastSkill() : _student.getActiveSkill(); // DEBUG_MENU_LOGIC (x) lastSkill vs ActiveSkill...
     }
 }
