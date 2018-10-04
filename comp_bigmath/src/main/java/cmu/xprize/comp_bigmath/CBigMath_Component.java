@@ -19,6 +19,8 @@ import android.widget.TextView;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.ltkplus.CRecognizerPlus;
@@ -122,6 +124,39 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
         // initialize mechanic
         _mechanic = new BigMathMechanic(getContext(), this, this, this, this);
         _layout = new BigMathLayoutHelper(getContext(), this);
+    }
+
+    public void onDestroy() {
+        terminateQueue();
+    }
+
+    /**
+     *  Disable the input queues permenantly in prep for destruction
+     *  walks the queue chain to diaable scene queue
+     *
+     */
+    private void terminateQueue() {
+
+        // disable the input queue permenantly in prep for destruction
+        //
+        _qDisabled = true;
+        flushQueue();
+    }
+
+
+    /**
+     * Remove any pending scenegraph commands.
+     *
+     */
+    private void flushQueue() {
+
+        Iterator<?> tObjects = queueMap.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            mainHandler.removeCallbacks((Queue)(entry.getValue()));
+        }
     }
 
     public void next() {

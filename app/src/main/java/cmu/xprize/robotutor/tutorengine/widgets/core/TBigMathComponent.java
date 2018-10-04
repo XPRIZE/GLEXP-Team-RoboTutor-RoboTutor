@@ -90,6 +90,8 @@ public class TBigMathComponent extends CBigMath_Component implements ITutorObjec
     @Override
     public void onDestroy() {
 
+        super.onDestroy();
+
     }
 
     @Override

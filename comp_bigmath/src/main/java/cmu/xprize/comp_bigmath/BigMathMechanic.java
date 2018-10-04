@@ -209,7 +209,8 @@ public class BigMathMechanic {
                 }
 
             // PART 2 (BOX) for (one, ten, hun) will move sequential ones. These may or may not (but probably will) be used.
-            _layout.getContainingBox(numLoc, ONE_DIGIT).setOnClickListener(ALL_AT_ONCE ? _animator.generateWaterfallClickListener(numLoc, ONE_DIGIT, _data.operation) : _animator.generateSequentialClickListener(ONE_DIGIT));
+            if (_numDigits >= 2) // containing box doesn't need to be moved
+                _layout.getContainingBox(numLoc, ONE_DIGIT).setOnClickListener(ALL_AT_ONCE ? _animator.generateWaterfallClickListener(numLoc, ONE_DIGIT, _data.operation) : _animator.generateSequentialClickListener(ONE_DIGIT));
 
             if (_numDigits >= 2)
                 _layout.getContainingBox(numLoc, TEN_DIGIT).setOnClickListener(ALL_AT_ONCE ? _animator.generateWaterfallClickListener(numLoc, TEN_DIGIT, _data.operation) :  _animator.generateSequentialClickListener(TEN_DIGIT));
