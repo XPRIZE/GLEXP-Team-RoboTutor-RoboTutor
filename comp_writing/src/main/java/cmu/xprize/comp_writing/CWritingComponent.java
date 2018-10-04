@@ -749,7 +749,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         // Check answer
         mResponse = candidate.getRecChar();
 
-        //when the recognised character is not accurate
+        //when the recognised character is not accurate, just flash that box.
         if(candidate.getVisualConfidence() < 0.1){
             gController.eraseGlyph();
             gController.post(TCONST.HIGHLIGHT);
@@ -844,7 +844,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             resp.setStimulusChar(mResponse, false);
 
             //update the controller's correct status
-            mActiveController.updateCorrectStatus(_isValid);
+            mActiveController.updateCorrectStatus(_isValid); //sets the _correct in CGlyphInputController, would change for the different sentence level activities.
 
             if(activityFeature.contains("FTR_SEN_LTR") && activityFeature.contains("FTR_SEN_COPY")){
 
@@ -875,10 +875,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 inhibitInput(mActiveController, !_isValid);
                 mActiveController.inhibitInput(_isValid);
-                // Publish the state features.
 
                 // Fire the appropriate behavior
-                //
+                //Here isComplete just loops through the mGlyphList elements and checks the isCorrect of all. For word level/sentence level feedback, this might not work.
                 if (isComplete()) {
 
                     applyBehavior(WR_CONST.DATA_ITEM_COMPLETE); // goto node "ITEM_COMPLETE_BEHAVIOR" -- run when item is complete...
@@ -913,12 +912,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 }
             }
 
-
             //for word level feedback
             else if(activityFeature.contains("FTR_SEN_WRD")){
 
                 mActiveWord = mListWordsInput.get(currentWordIndex);
-//                mActiveWord = mListWordsInput.get(currentWordIndex);
                 int attempts = mActiveWord.getAttempt();
 
                 //when the word is being written and evaluated for the first time, also making sure that its not the first box
@@ -1155,7 +1152,59 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     }
                 }
             }
-            else if (activityFeature.contains("FTR_SEN_CORR")){
+
+
+            //letter level feedback in correction activities
+            else if (activityFeature.contains("FTR_SEN_CORR") && activityFeature.contains("FTR_SEN_LTR"))          {
+                // Update the controller feedback colors
+                resp.updateResponseState(_isValid);
+
+                //update sentence parameters
+                updateSentenceEditSequence();
+
+                //inhibit the input if correct replacement.
+                inhibitInput(mActiveController, !_isValid);
+                mActiveController.inhibitInput(_isValid);
+
+                //Here isComplete just loops through the mGlyphList elements and checks the isCorrect of all. For word level/sentence level feedback, this might not work.
+                if (isComplete()) {
+
+                    applyBehavior(WR_CONST.DATA_ITEM_COMPLETE); // goto node "ITEM_COMPLETE_BEHAVIOR" -- run when item is complete..
+                }
+
+                //when the sentence is not yet complete
+                else{
+                    //when not valid
+                    if (!_isValid) {
+
+                        // lots of fun feature updating here
+                        publishFeature(WR_CONST.FTR_HAD_ERRORS);
+
+                        int attempt = updateAttemptFeature();
+
+                        if (attempt > 4) {
+                            applyBehavior(WR_CONST.MERCY_RULE); // goto node "MERCY_RULE_BEHAVIOR"
+                        } else {
+                            applyBehavior(WR_CONST.ON_ERROR); // goto node "GENERAL_ERROR_BEHAVIOR"
+                        }
+
+                        if (!_charValid)
+                            applyBehavior(WR_CONST.ON_CHAR_ERROR);
+                        else if (!_metricValid)
+                            applyBehavior(WR_CONST.ON_METRIC_ERROR);
+                    }
+
+                    //else when valid
+                    else {
+                        mActiveController.updateCorrectStatus(true);
+                        applyBehavior(WR_CONST.ON_CORRECT); //goto node "GENERAL_CORRECT_BEHAVIOR"
+                    }
+                }
+
+            }
+
+            //sentence level feedback in correction activities
+            else if (activityFeature.contains("FTR_SEN_CORR") && activityFeature.contains("FTR_SEN_SEN")){
 //                //set the current active word, so that hesitation and feedback can be shown on this word.
 //                currentWordIndex = getActiveWordIndex(mActiveIndex);
 //                if (currentWordIndex != -1){
@@ -1771,7 +1820,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             int sw = mDrawnScroll.getWidth();
 
             int gx = (int) view.getX();
-            int gw = view.getWidth() * 2;
+            int gw = view.getWidth() * 3;
 
             // If the glyph to the right of the current glyph is partially obscurred then calc
             // the offset to bring it on screen - with some padding (i.e. multiple glyph widths)
@@ -2296,7 +2345,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         //LOADING THE STIMULUS
         if(!singleStimulus) {
 
-            //for sentence level activities, the stimulus should always be correct
+            //for sentence level activities, the stimulus should always be correct ie mAnswer should be loaded in the stimulus
             if(activityFeature.contains("FTR_SEN")){
                 for (int i1 = 0; i1 < mAnswer.length(); i1++) {
                     // create a new view
@@ -2339,6 +2388,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             r.setLinkedScroll(mDrawnScroll);
             r.setWritingController(this);
         }
+        //STIMULUS LOADED
+
+        //LOAD GLYPH INPUT CONTAINERS ie WRITING BOXES
 
         // Add the Glyph input containers
         mGlyphList.removeAllViews();
@@ -2472,7 +2524,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
 
         //initialise the mListWordsAnswer for sentence writing activities
-        if(activityFeature.contains("FTR_SEN") || activityFeature.contains("FTR_SEN_CORR")){
+        if(activityFeature.contains("FTR_SEN")){
             mListWordsAnswer = new ArrayList<>();
             mListWordsAnswer = getListWords(mAnswer);
             updateSentenceEditSequence();
@@ -2480,7 +2532,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             mActiveWord = mListWordsAnswer.get(0);
         }
 
-        //now that the sentence parameters have been initialised, for correction activities set the expected characters and protoglyphs, also show buttons
+        //for correction activities set the expected characters and protoglyphs, also show buttons(optional); now that the sentence parameters have been initialised,
         if(activityFeature.contains("FTR_SEN_CORR")){
 
             int expectedCharIndex = 0;
@@ -2580,7 +2632,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         CGlyphController g;
         for (int i = 0; i < mGlyphList.getChildCount(); i++){
             g = (CGlyphController) mGlyphList.getChildAt(i);
-            if(!g.isCorrect()) {
+            if(!g.isCorrect()&&!g.getExpectedChar().equals(" ")) {
                 g.pointAtGlyph();
                 break;
             }

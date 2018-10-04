@@ -201,22 +201,28 @@
       "features": "FTR_SEN:FTR_SEN_COPY:FTR_SEN_LTR:FTR_DICTATION" //immediate letter level feedback
     },
     //no stimulus, buggy response, preloaded writing boxes
-    "write.sen.corr.nostim": {
+    "write.sen.corr.sen.nostim": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
       "features": "FTR_NO_STIM:FTR_SEN:FTR_SEN_SEN:FTR_SEN_CORR" //immediate letter level feedback
     },
     //correct stimulus, buggy response, preloaded boxes
-    "write.sen.corr.stim": {
+    "write.sen.corr.sen.stim": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
       "features": "FTR_SEN:FTR_SEN_SEN:FTR_SEN_CORR" //word level feedback
     },
-    //empty for now.
-    "write.sen.corr.sen": {
+    //no stimulus, buggy response, preloaded writing boxes
+    "write.sen.corr.ltr.nostim": {
       "type": "TUTORVAR_MAP",
       "tutorName": "word_copy",
-      "features": "FTR_SEN:FTR_SEN_CORR:FTR_SEN_SEN" //sentence level feedback
+      "features": "FTR_NO_STIM:FTR_SEN:FTR_SEN_LTR:FTR_SEN_CORR" //immediate letter level feedback
+    },
+    //correct stimulus, buggy response, preloaded boxes
+    "write.sen.corr.ltr.stim": {
+      "type": "TUTORVAR_MAP",
+      "tutorName": "word_copy",
+      "features": "FTR_SEN:FTR_SEN_LTR:FTR_SEN_CORR" //word level feedback
     },
     //correct stimulus, empty response, empty writing boxes, letter level feedback
     "write.sen.copy.ltr": {
