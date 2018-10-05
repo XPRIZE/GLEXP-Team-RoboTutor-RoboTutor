@@ -219,6 +219,9 @@ public class CTutorData_Metadata {
             case "write.sen.copy.sen":
                 return "thumb_sentence_writing.png";
 
+            case "bigmath":
+                return "thumb_bigmath_1d.png";
+
         }
 
         return null;
