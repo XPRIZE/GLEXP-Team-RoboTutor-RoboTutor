@@ -515,8 +515,8 @@
             {"name": "Disable Input",  "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput",       "parms": "TRUE:Boolean",  "features":"" },
 
             // Highlight all glyphs and point at first glyph
-            {"name":"Highlight glyphs", "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "GLYPH_HIGHLIGHT:String|2000:Integer", "features":"!FTR_WORDS"},
-            {"name":"Point at Glyph",   "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "POINT_AT_GLYPH:String|15000:Integer",  "features":""},
+            {"name":"Highlight glyphs", "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "GLYPH_HIGHLIGHT:String|2000:Integer", "features":"!FTR_WORDS&!FTR_SEN"},
+            {"name":"Point at Glyph",   "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "POINT_AT_GLYPH:String|15000:Integer",  "features":"!FTR_SEN"},
 
             {"name": "Write Prompt", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please write the number.mp3","soundpackage": "default","mode": "flow", "features": "FTR_NUMBERS"},
             {"name": "Write Prompt", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please write the letter.mp3","soundpackage": "default","mode": "flow", "features": "FTR_LETTERS"},
@@ -776,7 +776,11 @@
 //            {"name": "errordebugaudio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "1.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_ATTEMPT_1"},
 //            {"name": "errordebugaudio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "2.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_ATTEMPT_2"},
 //            {"name": "errordebugaudio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "3.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_ATTEMPT_3"},
-//            {"name": "errordebugaudio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "4.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_ATTEMPT_4"},
+            //            {"name": "errordebugaudio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "4.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_ATTEMPT_4"},
+
+
+
+            {"name": "incorrect audio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Uh uh.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR"},
 
 
             //simple sentence writing prompts end
