@@ -1080,8 +1080,8 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
      * @param show
      */
     public void showSampleChar(boolean show) {
-
         _showSampleChar = show;
+        _showUserGlyph = true;
         invalidate();
     }
 
@@ -1307,8 +1307,8 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             _protoGlyph = null;
 
         // Remove the save button
-        if(mGlyphController != null)
-            mGlyphController.setProtoTypeDirty(false);
+//        if(mGlyphController != null)
+//            mGlyphController.setProtoTypeDirty(false);
 
         _glyphColor = TCONST.colorMap.get(TCONST.COLORNORMAL);
 
@@ -1542,8 +1542,8 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
                 // Show the save button for this glyph
                 //
-                if(mGlyphController != null)
-                    mGlyphController.setProtoTypeDirty(true);
+//                if(mGlyphController != null)
+//                    mGlyphController.setProtoTypeDirty(true);
             }
 
             setHasGlyph(true);

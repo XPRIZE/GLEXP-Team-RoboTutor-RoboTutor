@@ -2576,6 +2576,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             updateSentenceEditSequence();
             mListWordsInput = getListWordsInputFromAlignedSentences(mAlignedSourceSentence,mAlignedTargetSentence);
             mActiveWord = mListWordsAnswer.get(0);
+
+            mActiveIndex = 0;
+            mActiveController = (CGlyphController) mGlyphList.getChildAt(mActiveIndex);
         }
 
         //for correction activities set the expected characters and protoglyphs, also show buttons(optional); now that the sentence parameters have been initialised,
@@ -2679,8 +2682,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         for (int i = 0; i < mGlyphList.getChildCount(); i++){
             g = (CGlyphController) mGlyphList.getChildAt(i);
             if(!g.isCorrect()&&!g.getExpectedChar().equals(" ")) {
-                autoScroll(g);
                 g.pointAtGlyph();
+                autoScroll(g);
                 break;
             }
         }
@@ -3994,15 +3997,18 @@ public class EditOperation {
 
                     case WR_CONST.HIDE_CURRENT_WORD_GLYPHS:
                         hideCurrentWordGlyph();
+                        break;
 
                     case WR_CONST.HIDE_CURRENT_LETTER_GLYPH:
                         hideGlyphForActiveIndex();
-
-                    case WR_CONST.HIDE_SAMPLE_ACTIVE_INDEX:
-                        hideSampleForActiveIndex();
+                        break;
 
                     case WR_CONST.HIDE_SAMPLES:
                         hideSamples();
+                        break;
+
+                    case WR_CONST.HIDE_SAMPLE_ACTIVE_INDEX:
+                        hideSampleForActiveIndex();
                         break;
 
                     case WR_CONST.RIPPLE_HIGHLIGHT:
@@ -4041,6 +4047,7 @@ public class EditOperation {
 
                     case WR_CONST.INC_HESITATION:
                         updateHesitationFeature();
+                        break;
                     //amogh added ends
 
                     case TCONST.APPLY_BEHAVIOR:
@@ -4076,7 +4083,11 @@ public class EditOperation {
                     case WR_CONST.ANIMATE_PROTOGLYPH:
                     case WR_CONST.ANIMATE_OVERLAY:
                     case WR_CONST.ANIMATE_ALIGN:
-
+                        mActiveController = (CGlyphController) mGlyphList.getChildAt(mActiveIndex);
+                        if(mActiveController.getExpectedChar().equals(" ") || mActiveController.getExpectedChar().equals("")){
+                            publishFeature("FTR_SPACE_SAMPLE");
+                            break;
+                        }
                         if(mActiveController != null)
                             mActiveController.post(_command);
                         break;
