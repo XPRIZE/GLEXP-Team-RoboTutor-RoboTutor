@@ -367,6 +367,7 @@ public class TCONST {
 
     static final public String BASE_ASSETS        = "assets";
     public static final String STORY_ASSETS       = "story";
+    public static final String ICON_ASSETS        = "icons";
     static final public String EXTERNAL           = "external";
     static final public String ROBOTUTOR_ASSETS   = "sdcard/robotutor_assets/assets";
     static final public String LOCAL_STORY_AUDIO  = "sdcard/Download/RoboTutor/assets/story_questions";
@@ -853,6 +854,7 @@ public class TCONST {
 
 
     // Debugger Thumb key words
+    // NEW_THUMBS trace me
     public enum Thumb {
         AKIRA, BPOP_NUM, GL, MN, BPOP_LTR, CX_1, CX_10, CX_100, MATH, NUMSCALE, STORY_1, STORY_2, STORY_3, STORY_4, STORY_5, SONG, STORY_NONSTORY, WRITE, SPELLING, PICMATCH, NUMCOMPARE, COMPREHENSION, PLACEVALUE, BIGMATH, NOTHING
     }

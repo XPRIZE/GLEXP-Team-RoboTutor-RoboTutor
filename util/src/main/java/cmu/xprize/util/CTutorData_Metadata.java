@@ -18,6 +18,11 @@ import cmu.xprize.common.R;
 
 public class CTutorData_Metadata {
 
+    /**
+     * NEW_THUMBS why can't this return a string instead?
+     * @param tutor
+     * @return
+     */
     public static TCONST.Thumb getThumbImage(CAt_Data tutor) {
 
 
@@ -144,6 +149,82 @@ public class CTutorData_Metadata {
 
         }
 
+    }
+
+    /**
+     * Return filename to a thumb image.
+     *
+     * @param tutor
+     * @return
+     */
+    public static String getThumbName(CAt_Data tutor) {
+        // NEW_THUMBS (if returns null... then use the "getThumbImage" method")
+
+        // check story
+        if (tutor.tutor_desc.startsWith("story")) {
+
+            StringBuilder builder = new StringBuilder("thumb_");
+            String suffix = null;
+
+            switch(tutor.tutor_desc) {
+
+                case "story.hear":
+                    suffix = "_hear";
+                    break;
+
+                case "story.echo":
+                case "story.read":
+                case "story.hide":
+                case "story.reveal":
+                case "story.parrot":
+                    suffix = "_read";
+                    break;
+
+                case "story.gen.hide":
+                case "story.clo.hear":
+                case "story.pic.hear":
+                case "story.gen.hear":
+                    suffix = "_comp";
+                    break;
+            }
+
+            String storyName = tutor.tutor_id.split("::")[1];
+            builder.append(storyName)
+                    .append(suffix)
+                    .append(".png");
+
+            return builder.toString();
+        }
+
+
+        switch(tutor.tutor_desc) {
+            case "numcompare":
+                return "thumb_number_discrimination.png";
+
+            case "picmatch":
+                return "thumb_picture_matching.png";
+
+            case "place.value":
+            case "placevalue":
+                return "thumb_place_value.png";
+
+            case "spelling":
+                return "thumb_spelling_tutor.png";
+
+            case "write.sen.corr.ltr":
+            case "write.sen.corr.wrd":
+            case "write.sen.corr.sen":
+            case "write.sen.copy.ltr":
+            case "write.sen.copy.wrd":
+            case "write.sen.copy.sen":
+                return "thumb_sentence_writing.png";
+
+            case "bigmath":
+                return "thumb_bigmath_1d.png";
+
+        }
+
+        return null;
     }
 
     public static ArrayList<String> parseNameIntoLabels(CAt_Data tutor) {
