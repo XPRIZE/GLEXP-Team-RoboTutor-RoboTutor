@@ -847,7 +847,7 @@ public class CQn_Component extends ViewAnimator implements IEventListener, IVMan
                 }
             }
             catch(Exception e) {
-                CErrorManager.logEvent(TAG, "Run Error: cmd:" + _command + " tar: " + _target + "  >", e, false);
+                CErrorManager.logEvent(TAG, "Run Error: cmd:" + _command + " tar: " + _target + "  >", e, true);
             }
         }
     }

@@ -36,7 +36,6 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,6 +53,15 @@ import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.ListenerBase;
 
+import static cmu.xprize.comp_questions.QN_CONST.FILLER_SPACE;
+import static cmu.xprize.comp_questions.QN_CONST.RTC_VAR_CLZSTATE;
+import static cmu.xprize.comp_questions.QN_CONST.RTC_VAR_LINESTATE;
+import static cmu.xprize.comp_questions.QN_CONST.RTC_VAR_PARASTATE;
+import static cmu.xprize.comp_questions.QN_CONST.RTC_VAR_PMSTATE;
+import static cmu.xprize.comp_questions.QN_CONST.RTC_VAR_QNSTATE;
+import static cmu.xprize.comp_questions.QN_CONST.RTC_VAR_WORDSTATE;
+import static cmu.xprize.comp_questions.QN_CONST.SHOW_CLOZE;
+import static cmu.xprize.comp_questions.QN_CONST.SHOW_PICMATCH;
 import static cmu.xprize.util.TCONST.FTR_USER_READ;
 import static cmu.xprize.util.TCONST.FTR_USER_READING;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
@@ -120,6 +128,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
     private ViewGroup               mWordFrame4;
 
     private ClozeQuestion           clozeQuestion;
+    private String                  clozeTarget;
 
     private int                     mOddIndex;
     private int                     mEvenIndex;
@@ -264,7 +273,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
     public void initStory(IVManListener owner, String assetPath, String location) {
         for(int i = 0; i < questions.length; i++){
             if (questions[i].distractor != null) {
-                clozeIndices.add(i+1);
+                clozeIndices.add(i+1); // TRACE_CLOZE (1) adding indices...
             }
         }
         int numPara = 0;
@@ -288,17 +297,17 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
         //uhq
         if (mParent.testFeature(TCONST.FTR_CLO)) {
-            mParent.publishValue(TCONST.RTC_VAR_CLZSTATE, TCONST.TRUE);
-            mParent.publishValue(TCONST.RTC_VAR_QNSTATE, TCONST.FALSE);
-            mParent.publishValue(TCONST.RTC_VAR_PMSTATE, TCONST.FALSE);
+            mParent.publishValue(RTC_VAR_CLZSTATE, TCONST.TRUE);
+            mParent.publishValue(RTC_VAR_QNSTATE, TCONST.FALSE);
+            mParent.publishValue(RTC_VAR_PMSTATE, TCONST.FALSE);
         }else if (mParent.testFeature(TCONST.FTR_GEN)) {
-            mParent.publishValue(TCONST.RTC_VAR_CLZSTATE, TCONST.FALSE);
-            mParent.publishValue(TCONST.RTC_VAR_QNSTATE, TCONST.TRUE);
-            mParent.publishValue(TCONST.RTC_VAR_PMSTATE, TCONST.FALSE);
+            mParent.publishValue(RTC_VAR_CLZSTATE, TCONST.FALSE);
+            mParent.publishValue(RTC_VAR_QNSTATE, TCONST.TRUE);
+            mParent.publishValue(RTC_VAR_PMSTATE, TCONST.FALSE);
         } else if (mParent.testFeature(TCONST.FTR_PIC)) {
-            mParent.publishValue(TCONST.RTC_VAR_CLZSTATE, TCONST.FALSE);
-            mParent.publishValue(TCONST.RTC_VAR_QNSTATE, TCONST.FALSE);
-            mParent.publishValue(TCONST.RTC_VAR_PMSTATE, TCONST.TRUE);
+            mParent.publishValue(RTC_VAR_CLZSTATE, TCONST.FALSE);
+            mParent.publishValue(RTC_VAR_QNSTATE, TCONST.FALSE);
+            mParent.publishValue(RTC_VAR_PMSTATE, TCONST.TRUE);
         }
 
 
@@ -323,6 +332,10 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         }
     }
 
+    /**
+     * Initializes a cloze page.
+     * Called by "CLOZE_PAGE_NODE" --> "SET_CLOZE_PAGE"
+     */
     @Override
     public void setClozePage(){
         int paracount = data[mCurrPage+1].text.length;
@@ -340,9 +353,10 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
             }
         }
         int sum=mCurrLineInStory+numLines;
+        // TRACE_CLOZE where cloze_page_mode is set to true
         if(this.clozeIndices.contains(mCurrLineInStory+numLines)){
             clozeQuestion = questions[sum-1];
-            TCONST.TARGET = clozeQuestion.target;
+            clozeTarget = clozeQuestion.target;
             cloze_page_mode = true;
             updateClozeButtons();
         } else {
@@ -499,135 +513,60 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
     }
 
     /**
-     * * FIX_CLOZE updateClozeQuestions
+     * define behavior of cloze buttons
      */
     private void updateClozeButtons(){
         Log.d(TAG, "updateClozeButtons: ");
         disableClozeButtons();
         if (isClozePage){
-            mWord1Text.setOnTouchListener(new OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            Log.d(TAG, "onTouch: storyquestions.currword = "+printArray(wordsToSpeak)+ " "+ mCurrWord);
-                            mParent.updateViewColor(mWordFrame1, Color.LTGRAY);
-                            break;
-                        case MotionEvent.ACTION_CANCEL:
-                            mParent.updateViewColor(mWordFrame1, Color.WHITE);
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            disableImageButtons();
-                            if (mWord1Text.getText().toString().equals(TCONST.TARGET)){
-                                mParent.updateViewColor(mWordFrame1, Color.GREEN);
-                                mParent.retractFeature(TCONST.CLOZE_WRONG);
-                                mParent.publishFeature(TCONST.CLOZE_CORRECT);
-                                mParent.publishValue(TCONST.SHOW_CLOZE, TCONST.FALSE);
-                                isClozePage = false;
-                                replayCloze = true;
-                            }else{
-                                mParent.updateViewColor(mWordFrame1, Color.RED);
-                                mParent.retractFeature(TCONST.CLOZE_CORRECT);
-                                mParent.publishFeature(TCONST.CLOZE_WRONG);
-                            }
-                            mParent.nextNode();
-                            break;
-                    }
-                    return true;
-                }
-            });
-            mWord2Text.setOnTouchListener(new OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            mParent.updateViewColor(mWordFrame2, Color.LTGRAY);
-                            break;
-                        case MotionEvent.ACTION_CANCEL:
-                            mParent.updateViewColor(mWordFrame2, Color.WHITE);
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            disableImageButtons();
-                            if (mWord2Text.getText().toString().equals(TCONST.TARGET)){
-                                mParent.updateViewColor(mWordFrame2, Color.GREEN);
-                                mParent.retractFeature(TCONST.CLOZE_WRONG);
-                                mParent.publishFeature(TCONST.CLOZE_CORRECT);
-                                mParent.publishValue(TCONST.SHOW_CLOZE, TCONST.FALSE);
-                                isClozePage = false;
-                                replayCloze = true;
+            mWord1Text.setOnTouchListener(new ClozeTouchListener(mWord1Text, mWordFrame1));
+            mWord2Text.setOnTouchListener(new ClozeTouchListener(mWord2Text, mWordFrame2));
+            mWord3Text.setOnTouchListener(new ClozeTouchListener(mWord3Text, mWordFrame3));
+            mWord4Text.setOnTouchListener(new ClozeTouchListener(mWord4Text, mWordFrame4));
+        }
+    }
 
-                            }else{
-                                mParent.updateViewColor(mWordFrame2, Color.RED);
-                                mParent.retractFeature(TCONST.CLOZE_CORRECT);
-                                mParent.publishFeature(TCONST.CLOZE_WRONG);
-                            }
-                            mParent.nextNode();
-                            break;
-                    }
-                    return true;
-                }
-            });
-            mWord3Text.setOnTouchListener(new OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            mParent.updateViewColor(mWordFrame3, Color.LTGRAY);
-                            break;
-                        case MotionEvent.ACTION_CANCEL:
-                            mParent.updateViewColor(mWordFrame3, Color.WHITE);
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            disableImageButtons();
-                            if (mWord3Text.getText().toString().equals(TCONST.TARGET)){
-                                mParent.updateViewColor(mWordFrame3, Color.GREEN);
-                                mParent.retractFeature(TCONST.CLOZE_WRONG);
-                                mParent.publishFeature(TCONST.CLOZE_CORRECT);
-                                mParent.publishValue(TCONST.SHOW_CLOZE, TCONST.FALSE);
-                                isClozePage = false;
-                                replayCloze = true;
 
-                            }else{
-                                mParent.updateViewColor(mWordFrame3, Color.RED);
-                                mParent.retractFeature(TCONST.CLOZE_CORRECT);
-                                mParent.publishFeature(TCONST.CLOZE_WRONG);
-                            }
-                            mParent.nextNode();
-                            break;
+    /**
+     * Reacts to touch of a cloze button
+     */
+    private class ClozeTouchListener implements OnTouchListener {
+
+        TextView _wordTextView;
+        ViewGroup _wordFrame;
+
+        ClozeTouchListener(TextView wordTextView, ViewGroup wordFrame) {
+            this._wordTextView = wordTextView;
+            this._wordFrame = wordFrame;
+        }
+
+        @Override
+        public boolean onTouch(View view, MotionEvent event) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    mParent.updateViewColor(_wordFrame, Color.LTGRAY);
+                    break;
+                case MotionEvent.ACTION_CANCEL:
+                    mParent.updateViewColor(_wordFrame, Color.WHITE);
+                    break;
+                case MotionEvent.ACTION_UP:
+                    disableImageButtons();
+                    if (_wordTextView.getText().toString().equals(clozeTarget)){
+                        mParent.updateViewColor(_wordFrame, Color.GREEN);
+                        mParent.retractFeature(TCONST.CLOZE_WRONG);
+                        mParent.publishFeature(TCONST.CLOZE_CORRECT);
+                        mParent.publishValue(SHOW_CLOZE, TCONST.FALSE);
+                        isClozePage = false;
+                        replayCloze = true;
+                    }else{
+                        mParent.updateViewColor(_wordFrame, Color.RED);
+                        mParent.retractFeature(TCONST.CLOZE_CORRECT);
+                        mParent.publishFeature(TCONST.CLOZE_WRONG);
                     }
-                    return true;
-                }
-            });
-            mWord4Text.setOnTouchListener(new OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            mParent.updateViewColor(mWordFrame4, Color.LTGRAY);
-                            break;
-                        case MotionEvent.ACTION_CANCEL:
-                            mParent.updateViewColor(mWordFrame4, Color.WHITE);
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            disableImageButtons();
-                            if (mWord4Text.getText().toString().equals(TCONST.TARGET)){
-                                mParent.updateViewColor(mWordFrame4, Color.GREEN);
-                                mParent.retractFeature(TCONST.CLOZE_WRONG);
-                                mParent.publishFeature(TCONST.CLOZE_CORRECT);
-                                mParent.publishValue(TCONST.SHOW_CLOZE, TCONST.FALSE);
-                                isClozePage = false;
-                                replayCloze = true;
-                            }else{
-                                mParent.updateViewColor(mWordFrame4, Color.RED);
-                                mParent.retractFeature(TCONST.CLOZE_CORRECT);
-                                mParent.publishFeature(TCONST.CLOZE_WRONG);
-                            }
-                            mParent.nextNode();
-                            break;
-                    }
-                    return true;
-                }
-            });
+                    mParent.nextNode();
+                    break;
+            }
+            return true;
         }
     }
 
@@ -662,7 +601,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         this.oldClozePageText = this.oldClozePageText.replace("#AAAAAA", "#000000");
         this.oldClozePageText = this.oldClozePageText.replace("#00B600", "#000000");
         Log.d(TAG, "showClozeWordInBlank: oldClozePageText = "+this.oldClozePageText);
-        String pageTextHTML = this.oldClozePageText.replace("____________", newWord); // FIX_CLOZE
+        String pageTextHTML = this.oldClozePageText.replace(FILLER_SPACE, newWord);
         mParent.updateTextviewHTML(mPageText, pageTextHTML);
     }
 
@@ -678,28 +617,18 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
      * cmu/xprize/literacy are apparently formatted.
      */
     public void publishClozeWord(){
-        if (this.clozeWordsCounter==0){
-            this.clozeWordToPlay = mWord1Text.getText().toString();
-            this.curClozeTextView = mWord1Text;
-            mParent.updateVisibility(mWord1Text, "SHOW");
-            mParent.updateVisibility(mWordFrame1, "SHOW");
+        TextView[] textViews = {mWord1Text, mWord2Text, mWord3Text, mWord4Text};
+        ViewGroup[] wordFrames = {mWordFrame1, mWordFrame2, mWordFrame3, mWordFrame4};
 
-        }else if(clozeWordsCounter==1){
-            this.clozeWordToPlay = mWord2Text.getText().toString();
-            this.curClozeTextView = mWord2Text;
-            mParent.updateVisibility(mWord2Text, "SHOW");
-            mParent.updateVisibility(mWordFrame2, "SHOW");
-        }else if(clozeWordsCounter==2){
-            this.clozeWordToPlay = mWord3Text.getText().toString();
-            this.curClozeTextView = mWord3Text;
-            mParent.updateVisibility(mWord3Text, "SHOW");
-            mParent.updateVisibility(mWordFrame3, "SHOW");
-        }else {
-            this.clozeWordToPlay = mWord4Text.getText().toString();
-            this.curClozeTextView = mWord4Text;
-            mParent.updateVisibility(mWord4Text, "SHOW");
-            mParent.updateVisibility(mWordFrame4, "SHOW");
-        }
+        if (this.clozeWordsCounter > 3) this.clozeWordsCounter = 3; // to prevent outOfBoundsException, just in case
+        TextView updateTextView = textViews[this.clozeWordsCounter];
+        ViewGroup updateWordFrame = wordFrames[this.clozeWordsCounter];
+
+        this.clozeWordToPlay = updateTextView.getText().toString();
+        this.curClozeTextView = updateTextView;
+        mParent.updateVisibility(updateTextView, "SHOW");
+        mParent.updateVisibility(updateWordFrame, "SHOW");
+
         Log.d(TAG, "publishClozeWord: clozeWordToPlay = "+this.clozeWordToPlay);
         this.clozeWordsCounter += 1;
         mParent.publishValue(TCONST.RTC_VAR_CLOZEWORD, this.clozeWordToPlay.toUpperCase());
@@ -804,139 +733,61 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         if (show_image_options && picture_match_mode){
             Log.d(TAG, "updateImageButtons: picmatch_answer = "+picmatch_answer);
             if(this.numPicMatch>=2){
-                mMatchImage1.setOnTouchListener(new OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        switch (event.getAction()) {
-                            case MotionEvent.ACTION_DOWN:
-                                mParent.updateViewAlpha(mMatchImage1, (float) 0.5);
-                                break;
-                            case MotionEvent.ACTION_CANCEL:
-                                mParent.updateViewAlpha(mMatchImage1, (float) 1.0);
-                                break;
-                            case MotionEvent.ACTION_UP:
-                                mParent.updateViewAlpha(mMatchImage1, (float) 1.0);
-                                disableImageButtons();
-                                if (picmatch_answer == 0){
-                                    mParent.updateViewColor(mImageFrame1, Color.GREEN);
-                                    mParent.publishFeature(TCONST.PICMATCH_CORRECT);
-                                    mParent.retractFeature(TCONST.PICMATCH_WRONG);
-                                    picture_match_mode = false;
-                                    show_image_options = false;
-                                    hasQuestion();
-                                }else{
-                                    mParent.updateViewColor(mImageFrame1, Color.RED);
-                                    mParent.retractFeature(TCONST.PICMATCH_CORRECT);
-                                    mParent.publishFeature(TCONST.PICMATCH_WRONG);
-                                }
-                                mParent.nextNode();
-                                break;
-                        }
-                        return true;
-                    }
-                });
-
-                mMatchImage2.setOnTouchListener(new OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        switch (event.getAction()) {
-                            case MotionEvent.ACTION_DOWN:
-                                mParent.updateViewAlpha(mMatchImage2, (float) 0.5);
-                                break;
-                            case MotionEvent.ACTION_CANCEL:
-                                mParent.updateViewAlpha(mMatchImage2, (float) 1.0);
-                                break;
-                            case MotionEvent.ACTION_UP:
-                                mParent.updateViewAlpha(mMatchImage2, (float) 1.0);
-                                disableImageButtons();
-                                if (picmatch_answer == 1){
-                                    mParent.updateViewColor(mImageFrame2, Color.GREEN);
-                                    mParent.publishFeature(TCONST.PICMATCH_CORRECT);
-                                    mParent.retractFeature(TCONST.PICMATCH_WRONG);
-                                    picture_match_mode = false;
-                                    show_image_options = false;
-                                    hasQuestion();
-                                }else{
-                                    mParent.updateViewColor(mImageFrame2, Color.RED);
-                                    mParent.retractFeature(TCONST.PICMATCH_CORRECT);
-                                    mParent.publishFeature(TCONST.PICMATCH_WRONG);
-                                }
-                                mParent.nextNode();
-                                break;
-                        }
-                        return true;
-                    }
-                });
+                mMatchImage1.setOnTouchListener(new PicMatchTouchListener(mMatchImage1, mImageFrame1));
+                mMatchImage2.setOnTouchListener(new PicMatchTouchListener(mMatchImage2, mImageFrame2));
             }
             if (this.numPicMatch >=3){
-                mMatchImage3.setOnTouchListener(new OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        switch (event.getAction()) {
-                            case MotionEvent.ACTION_DOWN:
-                                mParent.updateViewAlpha(mMatchImage3, (float) 0.5);
-                                break;
-                            case MotionEvent.ACTION_CANCEL:
-                                mParent.updateViewAlpha(mMatchImage3, (float) 1.0);
-                                break;
-                            case MotionEvent.ACTION_UP:
-                                mParent.updateViewAlpha(mMatchImage3, (float) 1.0);
-                                disableImageButtons();
-                                if (picmatch_answer == 2){
-                                    mParent.updateViewColor(mImageFrame3, Color.GREEN);
-                                    mParent.publishFeature(TCONST.PICMATCH_CORRECT);
-                                    mParent.retractFeature(TCONST.PICMATCH_WRONG);
-                                    picture_match_mode = false;
-                                    show_image_options = false;
-                                    hasQuestion();
-                                }else{
-                                    mParent.updateViewColor(mImageFrame3, Color.RED);
-                                    mParent.retractFeature(TCONST.PICMATCH_CORRECT);
-                                    mParent.publishFeature(TCONST.PICMATCH_WRONG);
-                                }
-                                mParent.nextNode();
-                                break;
-                        }
-                        return true;
-                    }
-                });
+                mMatchImage3.setOnTouchListener(new PicMatchTouchListener(mMatchImage3, mImageFrame3));
             }
             if(this.numPicMatch==4){
-                mMatchImage4.setOnTouchListener(new OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        switch (event.getAction()) {
-                            case MotionEvent.ACTION_DOWN:
-                                mParent.updateViewAlpha(mMatchImage4, (float) 0.5);
-                                break;
-                            case MotionEvent.ACTION_CANCEL:
-                                mParent.updateViewAlpha(mMatchImage4, (float) 1.0);
-                                break;
-                            case MotionEvent.ACTION_UP:
-                                mParent.updateViewAlpha(mMatchImage4, (float) 1.0);
-                                disableImageButtons();
-                                if (picmatch_answer == 3){
-                                    mParent.updateViewColor(mImageFrame4, Color.GREEN);
-                                    mParent.publishFeature(TCONST.PICMATCH_CORRECT);
-                                    mParent.retractFeature(TCONST.PICMATCH_WRONG);
-                                    picture_match_mode = false;
-                                    show_image_options = false;
-                                    hasQuestion();
-                                }else{
-                                    mParent.updateViewColor(mImageFrame4, Color.RED);
-                                    mParent.retractFeature(TCONST.PICMATCH_CORRECT);
-                                    mParent.publishFeature(TCONST.PICMATCH_WRONG);
-                                }
-                                mParent.nextNode();
-                                break;
-                        }
-                        return true;
-                    }
-                });
+                mMatchImage4.setOnTouchListener(new PicMatchTouchListener(mMatchImage4, mImageFrame4));
             }
             showImageButtons();
         } else {
             hideImageButtons();
+        }
+    }
+
+    /**
+     * OnTouchListener for listening to PictureMatch touches.
+     */
+    private class PicMatchTouchListener implements OnTouchListener {
+
+        ImageView _imageView;
+        ViewGroup _frame;
+
+        PicMatchTouchListener(ImageView imageView, ViewGroup frame) {
+            this._imageView = imageView;
+            this._frame = frame;
+        }
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    mParent.updateViewAlpha(_imageView, (float) 0.5);
+                    break;
+                case MotionEvent.ACTION_CANCEL:
+                    mParent.updateViewAlpha(_imageView, (float) 1.0);
+                    break;
+                case MotionEvent.ACTION_UP:
+                    mParent.updateViewAlpha(_imageView, (float) 1.0);
+                    disableImageButtons();
+                    if (picmatch_answer == 3){
+                        mParent.updateViewColor(_frame, Color.GREEN);
+                        mParent.publishFeature(TCONST.PICMATCH_CORRECT);
+                        mParent.retractFeature(TCONST.PICMATCH_WRONG);
+                        picture_match_mode = false;
+                        show_image_options = false;
+                        hasQuestion();
+                    }else{
+                        mParent.updateViewColor(_frame, Color.RED);
+                        mParent.retractFeature(TCONST.PICMATCH_CORRECT);
+                        mParent.publishFeature(TCONST.PICMATCH_WRONG);
+                    }
+                    mParent.nextNode();
+                    break;
+            }
+            return true;
         }
     }
 
@@ -1351,7 +1202,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
                 for (CASB_Content rawContent : data[currPage].text[paraIndex]) {
 
-                    otherWordsToSpeak = rawContent.sentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
+                    otherWordsToSpeak = splitSentence(rawContent.sentence);
 
                     // Add the previous line to the list of spoken words used to build the
                     // language model - so it allows all on screen words to be spoken
@@ -1370,7 +1221,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
             for (int lineIndex = 0 ; lineIndex <  currLine ; lineIndex++) {
 
                 rawSentence = data[currPage].text[currPara][lineIndex].sentence;
-                otherWordsToSpeak = rawSentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
+                otherWordsToSpeak = splitSentence(rawSentence);
 
                 // Add the previous line to the list of spoken words used to build the
                 // language model - so it allows all on screen words to be spoken
@@ -1414,14 +1265,14 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         // these are reconstructed by the highlight logic without adding spaces which it otherwise inserts
         // automatically.
         //
-        // FIX_CLOZE (3) this is different. Don't show (wordsToDisplay) or speak (wordsToSpeak) last word
+        //
         wordsToDisplay = splitRawSentence(rawSentence);
 
 
         // TODO: strip word-final or -initial apostrophes as in James' or 'cause.
         // Currently assuming hyphenated expressions split into two Asr words.
         //
-        wordsToSpeak = rawSentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
+        wordsToSpeak = splitSentence(rawSentence);
 
         mCurrWord  = currWord;
         mWordCount = wordsToSpeak.length;
@@ -1444,9 +1295,9 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
             for (int lineIndex = currLine+1 ; lineIndex <  mLineCount ; lineIndex++) {
 
                 rawSentence = data[currPage].text[currPara][lineIndex].sentence;
-                otherWordsToSpeak = rawSentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
+                otherWordsToSpeak = splitSentence(rawSentence);
 
-                // FIX_CLOZE (2) this is different. (otherWordsToSpeak) is different
+                // TRACE_CLOZE this differs from regular ViewManager code
                 // Add the previous line to the list of spoken words used to build the
                 // language model - so it allows all on screen words to be spoken
                 //
@@ -1464,10 +1315,10 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                 //
                 futureSentences += "<br><br>";
 
-                // FIX_CLOZE (1) this is different
+                // TRACE_CLOZE this differs from regular ViewManager code
                 for (CASB_Content rawSentence : data[currPage].text[paraIndex]) {
 
-                    otherWordsToSpeak = rawSentence.sentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
+                    otherWordsToSpeak = splitSentence(rawSentence.sentence);
 
                     // Add the previous line to the list of spoken words used to build the
                     // language model - so it allows all on screen words to be spoken
@@ -1502,6 +1353,10 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
     }
 
+    private String[] splitSentence(String sentence) {
+        return sentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
+    }
+
     private void seekToClozeStoryPosition(int currPage, int currPara, int currLine, int currWord) {
         String otherWordsToSpeak[];
 
@@ -1527,7 +1382,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
                 for (CASB_Content rawContent : data[currPage].text[paraIndex]) {
 
-                    otherWordsToSpeak = rawContent.sentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
+                    otherWordsToSpeak = splitSentence(rawContent.sentence);
 
                     // Add the previous line to the list of spoken words used to build the
                     // language model - so it allows all on screen words to be spoken
@@ -1546,7 +1401,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
             for (int lineIndex = 0 ; lineIndex <  currLine ; lineIndex++) {
 
                 rawSentence = data[currPage].text[currPara][lineIndex].sentence;
-                otherWordsToSpeak = rawSentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
+                otherWordsToSpeak = splitSentence(rawSentence);
 
                 // Add the previous line to the list of spoken words used to build the
                 // language model - so it allows all on screen words to be spoken
@@ -1593,24 +1448,20 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         // automatically.
         //
 
-        // FIX_CLOZE (3) this is different. Don't show (wordsToDisplay) or speak (wordsToSpeak) last word
-        if (currLine == mLineCount){
-            String[] wordsToDisplayTemp = splitRawSentence(rawSentence);
-            String res1 = "";
-            for(int i = 0; i < wordsToDisplayTemp.length-1; i++){
-                wordsToDisplay[i] = wordsToDisplayTemp[i];
-                res1 += wordsToDisplayTemp[i];
+        // TRACE_CLOZE
+        // If it's the last paragraph of the page, and the last line of the paragraph, we can
+        // replace the last word with a _____.
+        if (currPara == mParaCount - 1 && currLine == mLineCount - 1){
+
+            if (!rawSentence.contains(FILLER_SPACE)) {
+                rawSentence = insertBlankSpaceAtEndOfSentence(rawSentence);
             }
-            String res = "";
-            String[] wordsToSpeakTemp = rawSentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
-            for(int i = 0; i < wordsToSpeakTemp.length-1; i++){
-                wordsToSpeak[i] = wordsToSpeakTemp[i];
-                res += wordsToSpeakTemp[i];
-            }
+            wordsToDisplay = splitRawSentence(rawSentence);
+            wordsToSpeak = splitSentence(rawSentence);
 
         } else {
             wordsToDisplay = splitRawSentence(rawSentence);
-            wordsToSpeak = rawSentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
+            wordsToSpeak = splitSentence(rawSentence);
         }
 
 
@@ -1642,9 +1493,9 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
             for (int lineIndex = currLine+1 ; lineIndex <  mLineCount ; lineIndex++) {
 
                 rawSentence = data[currPage].text[currPara][lineIndex].sentence;
-                otherWordsToSpeak = rawSentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
+                otherWordsToSpeak = splitSentence(rawSentence);
 
-                // FIX_CLOZE (2) this is different. (otherWordsToSpeak) is different
+                // not sure what this does
                 if (lineIndex == mLineCount-1) {
                     String[] wordsToSpeakTemp = new String[otherWordsToSpeak.length - 1];
                     for (int i = 0; i < otherWordsToSpeak.length - 2; i++) {
@@ -1668,24 +1519,24 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                 //
                 futureSentences += "<br><br>";
 
-                // FIX_CLOZE (1) this is different
+                // TRACE_CLOZE this differs from regular ViewManager code
                 for (CASB_Content rawSentence : data[currPage].text[paraIndex]) {
-                    otherWordsToSpeak = rawSentence.sentence.replace('-', ' ').replaceAll("['.!?,:;\"\\(\\)]", " ").toUpperCase(Locale.US).trim().split("\\s+");
-                    if (rawSentence.sentence == data[currPage].text[mParaCount-1][mLineCount-1].sentence) {
+                    otherWordsToSpeak = splitSentence(rawSentence.sentence);
+
+                    String lastSentence = data[currPage].text[mParaCount-1][mLineCount-1].sentence;
+
+                    // don't speak last word
+                    if (rawSentence.sentence == lastSentence) {
                         String[] wordsToSpeakTemp = new String[otherWordsToSpeak.length - 1];
                         for (int i = 0; i < otherWordsToSpeak.length - 2; i++) {
                             wordsToSpeakTemp[i] = otherWordsToSpeak[i];
                         }
                         otherWordsToSpeak = wordsToSpeakTemp;
 
-                        // FIX_CLOZE here is where the blank is replaced
-                        if (!rawSentence.sentence.contains(" ____________") &&
-                                rawSentence.sentence == data[currPage].text[mParaCount-1][mLineCount-1].sentence){
-                            int len = rawSentence.sentence.length();
-                            String punctuation = rawSentence.sentence.substring(len-1, len);
-                            rawSentence.sentence = rawSentence.sentence.substring(0, rawSentence.sentence.lastIndexOf(" "));
-                            String lastWord = rawSentence.sentence.substring(rawSentence.sentence.lastIndexOf(" ") + 1);
-                            rawSentence.sentence = rawSentence.sentence + " ____________"+ punctuation;
+                        // here is where the blank is replaced
+                        if (!rawSentence.sentence.contains(" " + FILLER_SPACE) &&
+                                rawSentence.sentence == lastSentence){
+                            insertBlankSpaceAtEndOfSentence(rawSentence);
                         }
                     }
 
@@ -1720,6 +1571,27 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         if (!storyBooting)
             speakOrListen();
 
+    }
+
+    /**
+     * Replaces the last word in the raw sentence with a blank
+     * @param rawSentence
+     */
+    private void insertBlankSpaceAtEndOfSentence(CASB_Content rawSentence) {
+        int len = rawSentence.sentence.length();
+        String punctuation = rawSentence.sentence.substring(len-1, len);
+        rawSentence.sentence = rawSentence.sentence.substring(0, rawSentence.sentence.lastIndexOf(" "));
+        String lastWord = rawSentence.sentence.substring(rawSentence.sentence.lastIndexOf(" ") + 1);
+        rawSentence.sentence = rawSentence.sentence + " " + FILLER_SPACE + punctuation;
+    }
+    
+    private String insertBlankSpaceAtEndOfSentence(String sentence) {
+        int len = sentence.length();
+        String punctuation = sentence.substring(len-1, len);
+        sentence = sentence.substring(0, sentence.lastIndexOf(" "));
+        String lastWord = sentence.substring(sentence.lastIndexOf(" ") + 1);
+        sentence = sentence + " " + FILLER_SPACE + punctuation;
+        return sentence;
     }
 
 
@@ -1989,7 +1861,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                     //Log.d("ISREADING", "NO");
 
                     cummulativeState = TCONST.RTC_LINECOMPLETE;
-                    mParent.publishValue(TCONST.RTC_VAR_WORDSTATE, TCONST.LAST);
+                    mParent.publishValue(RTC_VAR_WORDSTATE, TCONST.LAST);
 
                     mListener.setPauseListener(true);
                 }
@@ -2004,26 +1876,26 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                     //Log.d("ISREADING", "YES");
 
                     cummulativeState = TCONST.RTC_LINECOMPLETE;
-                    mParent.publishValue(TCONST.RTC_VAR_WORDSTATE, TCONST.LAST);
+                    mParent.publishValue(RTC_VAR_WORDSTATE, TCONST.LAST);
                 }
             } else {
                 cummulativeState = TCONST.RTC_LINECOMPLETE;
-                mParent.publishValue(TCONST.RTC_VAR_WORDSTATE, TCONST.LAST);
+                mParent.publishValue(RTC_VAR_WORDSTATE, TCONST.LAST);
             }
         } else
-            mParent.publishValue(TCONST.RTC_VAR_WORDSTATE, TCONST.NOT_LAST);
+            mParent.publishValue(RTC_VAR_WORDSTATE, TCONST.NOT_LAST);
 
         if (mCurrLine >= mLineCount-1) {
             cummulativeState = TCONST.RTC_PARAGRAPHCOMPLETE;
-            mParent.publishValue(TCONST.RTC_VAR_LINESTATE, TCONST.LAST);
+            mParent.publishValue(RTC_VAR_LINESTATE, TCONST.LAST);
         } else
-            mParent.publishValue(TCONST.RTC_VAR_LINESTATE, TCONST.NOT_LAST);
+            mParent.publishValue(RTC_VAR_LINESTATE, TCONST.NOT_LAST);
 
         if (mCurrPara >= mParaCount-1) {
             cummulativeState = TCONST.RTC_PAGECOMPLETE;
-            mParent.publishValue(TCONST.RTC_VAR_PARASTATE, TCONST.LAST);
+            mParent.publishValue(RTC_VAR_PARASTATE, TCONST.LAST);
         } else{
-            mParent.publishValue(TCONST.RTC_VAR_PARASTATE, TCONST.NOT_LAST);
+            mParent.publishValue(RTC_VAR_PARASTATE, TCONST.NOT_LAST);
             mParent.publishValue(TCONST.RTC_VAR_CLOZESTATE, TCONST.FTR_COMPLETE);
         }
 
@@ -2153,7 +2025,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         // are defined
         // NOTE: we reset mCurrPara, mCurrLine and mCurrWord
         //
-        seekToClozeStoryPosition(mCurrPage, TCONST.ZERO, TCONST.ZERO, TCONST.ZERO);  // FIX_CLOZE seekToClozeStoryPosition
+        seekToClozeStoryPosition(mCurrPage, TCONST.ZERO, TCONST.ZERO, TCONST.ZERO);
     }
 
 
@@ -2225,7 +2097,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
         // Update the state vars
         //
-        seekToClozeStoryPosition(mCurrPage, mCurrPara, TCONST.ZERO, TCONST.ZERO);  // FIX_CLOZE seekToClozeStoryPosition
+        seekToClozeStoryPosition(mCurrPage, mCurrPara, TCONST.ZERO, TCONST.ZERO);
     }
 
 
@@ -2315,7 +2187,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
             mCurrLine += incr;
             // Update the state vars
             //
-            seekToClozeStoryPosition(mCurrPage, mCurrPara, mCurrLine, TCONST.ZERO);  // FIX_CLOZE seekToClozeStoryPosition
+            seekToClozeStoryPosition(mCurrPage, mCurrPara, mCurrLine, TCONST.ZERO);
         }
     }
 
@@ -2367,10 +2239,10 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         if (mCurrWord < TCONST.ZERO)  mCurrWord = TCONST.ZERO;
 
         // Update the state vars
-        //
+        // note that both regular and cloze pages can occur in cloze mode
         if (cloze_page_mode){
             if (this.isClozePage){
-                seekToClozeStoryPosition(mCurrPage, mCurrPara, mCurrLine, wordIndex); // FIX_CLOZE seekToClozeStoryPosition
+                seekToClozeStoryPosition(mCurrPage, mCurrPara, mCurrLine, wordIndex);
 
             } else {
                 seekToStoryPosition(mCurrPage, mCurrPara, mCurrLine, wordIndex);
@@ -2579,7 +2451,6 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
     /**
      * Finds the last sentence of the current page, which will be used as a cloze question
-     * FIX_CLOZE set cloze questions
      */
     @Override
     public void setClozeQuestion(){
@@ -2610,6 +2481,9 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         return result;
     }
 
+    /**
+     * TRACE_CLOZE here is where the cloze question text is set
+     */
     @Override
     public void displayClozeQuestion(){
         ArrayList<String> nonsensical = new ArrayList<>(Arrays.asList(clozeQuestion.distractor.nonsensical));
@@ -2823,11 +2697,11 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
     public void hasClozeDistractor(){
         if (mCurrPage <= mPageCount-1) {
             if (isClozePage && mCurrPara >= mParaCount-1){
-                mParent.publishValue(TCONST.SHOW_CLOZE, TCONST.TRUE);
-                mParent.publishValue(TCONST.SHOW_PICMATCH, TCONST.FALSE);
+                mParent.publishValue(SHOW_CLOZE, TCONST.TRUE);
+                mParent.publishValue(SHOW_PICMATCH, TCONST.FALSE);
             } else {
-                mParent.publishValue(TCONST.SHOW_CLOZE, TCONST.FALSE);
-                mParent.publishValue(TCONST.SHOW_PICMATCH, TCONST.FALSE);
+                mParent.publishValue(SHOW_CLOZE, TCONST.FALSE);
+                mParent.publishValue(SHOW_PICMATCH, TCONST.FALSE);
             }
         }
     }
@@ -2841,8 +2715,8 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
     public void hasPictureMatch(){
         if (picture_match_mode && mCurrPara >= mParaCount-1 && mCurrPage % 2 == 1) {
-            mParent.publishValue(TCONST.SHOW_PICMATCH, TCONST.TRUE);
-            mParent.publishValue(TCONST.SHOW_CLOZE, TCONST.FALSE);
+            mParent.publishValue(SHOW_PICMATCH, TCONST.TRUE);
+            mParent.publishValue(SHOW_CLOZE, TCONST.FALSE);
         }
 //        } else {
 //            mParent.publishValue(TCONST.SHOW_PICMATCH, TCONST.FALSE);
