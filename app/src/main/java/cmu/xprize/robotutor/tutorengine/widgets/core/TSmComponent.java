@@ -25,12 +25,13 @@ import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.util.Log;
 
 import org.json.JSONObject;
 
-import cmu.xprize.robotutor.BuildConfig;
+import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.robotutor.R;
+import cmu.xprize.robotutor.startup.configuration.Configuration;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
@@ -41,8 +42,6 @@ import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
 import cmu.xprize.sm_component.CSm_Component;
-import cmu.xprize.comp_logging.CErrorManager;
-import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
@@ -161,7 +160,7 @@ public class TSmComponent extends CSm_Component implements ITutorObject, IDataSi
 
         // Special Flavor processing to exclude ASR apps - this was a constraint for BETA trials
         //
-        if(!(BuildConfig.NO_ASR_APPS && (intent.equals(TCONST.STORY_INTENT) || intent.equals(TCONST.QUESTIONS_INTENT)) )) {
+        if(!(Configuration.noAsrApps(getContext()) && (intent.equals(TCONST.STORY_INTENT) || intent.equals(TCONST.QUESTIONS_INTENT)) )) {
 
             // update the response variable  "<Sresponse>.value"
 
@@ -243,7 +242,7 @@ public class TSmComponent extends CSm_Component implements ITutorObject, IDataSi
         // Hide the language toggle on the release builds
         // TODO : Use build Variant to ensure release configurations
         //
-        if(BuildConfig.LANGUAGE_OVERRIDE) {
+        if (Configuration.languageOverride(getContext())) {
 
             View view = findViewById(R.id.SsmComponent);
             PercentRelativeLayout.LayoutParams params = (PercentRelativeLayout.LayoutParams) view.getLayoutParams();

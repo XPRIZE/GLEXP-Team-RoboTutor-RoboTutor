@@ -1,7 +1,5 @@
 package cmu.xprize.robotutor.tutorengine.util;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Build;
 
 import java.io.File;

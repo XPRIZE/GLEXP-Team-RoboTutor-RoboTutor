@@ -19,33 +19,33 @@ import java.util.Map;
 
 import cmu.xprize.comp_ask.CAskElement;
 import cmu.xprize.comp_debug.CDebugComponent;
+import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_logging.CLogManager;
+import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.comp_logging.ITutorLogger;
 import cmu.xprize.comp_session.AS_CONST;
 import cmu.xprize.comp_session.CActivitySelector;
-import cmu.xprize.robotutor.tutorengine.CTutorEngine;
-import cmu.xprize.robotutor.tutorengine.util.CycleMatrixActivityMenu;
-import cmu.xprize.robotutor.tutorengine.util.IActivityMenu;
-import cmu.xprize.robotutor.tutorengine.util.StudentChooseMatrixActivityMenu;
-import cmu.xprize.robotutor.tutorengine.util.StudentDataModel;
-import cmu.xprize.robotutor.tutorengine.util.TransitionMatrixModel;
-import cmu.xprize.util.CAt_Data;
-import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.RoboTutor;
+import cmu.xprize.robotutor.startup.configuration.Configuration;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CSceneDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
+import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
-import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.robotutor.tutorengine.util.CycleMatrixActivityMenu;
+import cmu.xprize.robotutor.tutorengine.util.IActivityMenu;
+import cmu.xprize.robotutor.tutorengine.util.StudentChooseMatrixActivityMenu;
+import cmu.xprize.robotutor.tutorengine.util.StudentDataModel;
+import cmu.xprize.robotutor.tutorengine.util.TransitionMatrixModel;
+import cmu.xprize.util.CAt_Data;
 import cmu.xprize.util.IEventSource;
-import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.util.IPublisher;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.TCONST;
@@ -53,16 +53,12 @@ import cmu.xprize.util.TCONST;
 import static cmu.xprize.comp_session.AS_CONST.ACTIONMAP_KEYS.CLEAR_HESITATION_BEHAVIOR;
 import static cmu.xprize.comp_session.AS_CONST.ACTIONMAP_KEYS.SET_HESITATION_FEEDBACK;
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_MATH;
-import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_OPTION_0;
-import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_OPTION_1;
-import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_OPTION_2;
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING;
-import static cmu.xprize.comp_session.AS_CONST.SELECT_REPEAT;
-import static cmu.xprize.comp_session.AS_CONST.VAR_TUTOR_ID;
 import static cmu.xprize.comp_session.AS_CONST.VAR_DATASOURCE;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENT;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENTDATA;
+import static cmu.xprize.comp_session.AS_CONST.VAR_TUTOR_ID;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_AKIRA;
 import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_ASM;
@@ -140,7 +136,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
         // Set the debug launcher based on the variant built
         //
-        if (BuildConfig.SHOW_DEBUGLAUNCHER) {
+        if (Configuration.showDebugLauncher(getContext())) {
             DEBUG_LANCHER = true;
         }
 
@@ -150,7 +146,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         // Hide the language toggle on the release builds
         // TODO : Use build Variant to ensure release configurations
         //
-        if(!BuildConfig.LANGUAGE_SWITCH) {
+        if (!Configuration.getLanguageSwitcher(getContext())) {
 
             mLangButton.setVisibility(INVISIBLE);
             requestLayout(); // https://stackoverflow.com/questions/13856180/usage-of-forcelayout-requestlayout-and-invalidate
@@ -365,6 +361,14 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
         RoboTutor.SELECTOR_MODE = TCONST.FTR_DEBUG_LAUNCH;
 
+        // Special Flavor processing to exclude ASR apps - this was a constraint for BETA trials
+        // reenable the ASK buttons if we don't execute the story_tutor
+        //
+        /*if (Configuration.noAsrApps(getContext()) && transitionMap == matrix.storyTransitions) {
+            SaskActivity.enableButtons(true);
+            return;
+        }*/
+
         // the next tutor to be launched
         CAt_Data tutorToLaunch = (CAt_Data) transitionMap.get(debugTutor);
 
@@ -378,7 +382,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         // #Mod 330 Show TutorID in Banner in debug builds
         // DEBUG_TUTORID is used to communicate the active tutor to the Banner in DEBUG mode
         //
-        if (BuildConfig.SHOW_TUTORVERSION) {
+        if (Configuration.showTutorVersion(getContext())) {
             DEBUG_TUTORID = debugTutor;
         }
 
@@ -409,7 +413,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         // Special Flavor processing to exclude ASR apps - this was a constraint for BETA trials
         // reenable the ASK buttons if we don't execute the story_tutor
         //
-        /*if (BuildConfig.NO_ASR_APPS && transitionMap == matrix.storyTransitions) {
+        /*if (Configuration.noAsrApps(getContext()) && transitionMap == matrix.storyTransitions) {
             SaskActivity.enableButtons(true);
             return;
         }*/
@@ -420,7 +424,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         // #Mod 330 Show TutorID in Banner in debug builds
         // DEBUG_TUTORID is used to communicate the active tutor to the Banner in DEBUG mode
         //
-        if (BuildConfig.SHOW_TUTORVERSION) {
+        if (Configuration.showTutorVersion(getContext())) {
             DEBUG_TUTORID = tutorToLaunch.tutor_id;
         }
 
@@ -485,7 +489,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         String activeTutorId = tutorToLaunch.tutor_id;
         // Update the tutor id shown in the log stream
 
-        if(BuildConfig.SHOW_DEMO_VIDS && false) {
+        if(Configuration.showDemoVids(getContext()) && false) {
 
             String whichActivityIsNext = parseActiveTutorForTutorName(activeTutorId);
 
