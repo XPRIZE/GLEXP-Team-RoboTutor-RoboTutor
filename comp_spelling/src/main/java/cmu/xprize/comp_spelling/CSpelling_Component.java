@@ -22,17 +22,22 @@ import java.util.HashMap;
 import java.util.List;
 
 import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.util.IEvent;
+import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IPublisher;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.util.TCONST.AUDIO_EVENT;
+import static cmu.xprize.util.TCONST.TYPE_AUDIO;
+
 /**
  * Generated automatically w/ code written by Kevin DeLand
  */
 
-public class CSpelling_Component extends ConstraintLayout implements ILoadableObject, IPublisher {
+public class CSpelling_Component extends ConstraintLayout implements ILoadableObject, IPublisher, IEventListener {
 
     //region Class Variables
 
@@ -44,6 +49,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     protected String level;
     protected String task;
     protected String layout;
+    private String _sound;
 
     private String IMAGES_PATH;
 
@@ -59,6 +65,8 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     protected String _imageFileName;
     protected String _fullword;
     protected int _attemptCount;
+
+    protected boolean lastSyllable;
 
     // View
     protected Context mContext;
@@ -179,6 +187,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     //region View
     public void onLetterTouch(String letter, int index, CLetter_Tile lt) {
 
+        // FIX_SPELLING if correct, applyBehaviorNode("SAY_SYLLABLE")
         Log.d("ddd", "Touch: " + letter);
 
         retractFeature(SP_CONST.FTR_CORRECT);
@@ -188,6 +197,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
 
         String current = "" + _word.get(_currentLetterIndex);
 
+        // publish the syllable to be pronounced
         publishValue(SP_CONST.SYLLABLE_STIM, letter);
 
         boolean isCorrect = letter.equalsIgnoreCase(current);
@@ -197,14 +207,18 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
             _selectedLetters.add(letter);
             _selectableLetters.remove(index);
 
+            applyBehaviorNode("SAY_SYLLABLE");
             updateLetter();
             _currentLetterIndex++;
+            // if correct
             publishFeature(SP_CONST.FTR_CORRECT);
             if (_currentLetterIndex >= _word.size()) {
                 Log.d("ddd", "end of word");
+
+                lastSyllable = true;
                 publishFeature(SP_CONST.FTR_EOP);
             }
-            applyBehavior("NEXT_NODE");
+
             _attemptCount = 1;
         } else {
             Log.d("ddd", "INCORRECT");
@@ -231,6 +245,26 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         mImageStimulus.requestLayout();
 
 //        pointAtMyView();
+    }
+
+
+    /**
+     * Called when the syllable is completed
+     * @param eventObject
+     */
+    @Override
+    public void onEvent(IEvent eventObject) {
+
+        if (eventObject.getType().equals(TYPE_AUDIO)) {
+            String command = (String) eventObject.getString(AUDIO_EVENT);
+
+            // don't advance until it's the last syllable
+            if (lastSyllable) {
+                publishValue(SP_CONST.WORD_STIM, _sound);
+                applyBehavior("NEXT_NODE");
+            }
+            Log.d("FIX_SPELLING", "onEvent -- " + command);
+        }
     }
 
     public void updateLetter() {
@@ -350,12 +384,16 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
      */
     protected void loadDataSet(CSpelling_Data data) {
 
+        lastSyllable = false;
+
         level = data.level;
         task = data.task;
         layout = data.layout;
         _word = new ArrayList<>(Arrays.asList(data.word));
         _attemptCount = 1;
         _currentLetterIndex = 0;
+
+        _sound = data.sound;
 
         // TODO: Is there a join function?
         StringBuilder sb = new StringBuilder();
@@ -371,7 +409,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         _selectedLetters = new ArrayList<>();
         _imageFileName = data.image;
 
-        publishValue(SP_CONST.WORD_STIM, data.sound);
+        publishValue(SP_CONST.WORD_STIM, _sound);
     }
 
     /**
