@@ -599,14 +599,13 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
         // change tutor image
 
-        // NEW_THUMBS this process is convoluted
-        Thumb tutorThumb = CTutorData_Metadata.getThumbImage(currentTransition);
+        Thumb tutorThumb = CTutorData_Metadata.getThumbImage(currentTransition); // NEW_THUMBS (0) big icon in debugger
 
         int thumbId;
 
         // NEW_THUMBS https://stackoverflow.com/questions/4427608/android-getting-resource-id-from-string
-        thumbId = getThumbId(tutorThumb);
-        ScurrentTutorImage.setImageResource(thumbId);
+        thumbId = getThumbId(tutorThumb); // NEW_THUMBS (1) getThumbId
+        ScurrentTutorImage.setImageResource(thumbId);  // NEW_THUMBS (2) setImageResource
         ScurrentTutorImage.setPadding(36, 36, 36, 36);
         ScurrentTutorImage.setBackground(getResources().getDrawable(R.drawable.outline_current_large, null));
 

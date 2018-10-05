@@ -367,6 +367,7 @@ public class TCONST {
 
     static final public String BASE_ASSETS        = "assets";
     public static final String STORY_ASSETS       = "story";
+    public static final String ICON_ASSETS        = "icons";
     static final public String EXTERNAL           = "external";
     static final public String ROBOTUTOR_ASSETS   = "sdcard/robotutor_assets/assets";
     static final public String LOCAL_STORY_AUDIO  = "sdcard/Download/RoboTutor/assets/story_questions";

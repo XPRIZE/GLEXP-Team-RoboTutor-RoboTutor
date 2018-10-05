@@ -89,7 +89,7 @@ public class CDebugButton extends ImageButton {
             if(tutorData != null) {
 
 
-                TCONST.Thumb thumbnail = CTutorData_Metadata.getThumbImage(tutorData);
+                TCONST.Thumb thumbnail = CTutorData_Metadata.getThumbImage(tutorData); // NEW_THUMBS don't change this. I don't know what tutor_CONST even does.
                 Log.d("BOJACK", "tutor_desc = " + tutorData.tutor_desc);
                 // tutortype is first token... e.g. "story.hear" --> "story"
                 String[] tutorDesc = tutorData.tutor_desc.split("\\.");
