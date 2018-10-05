@@ -33,7 +33,7 @@ public class ConfigurationItems implements ILoadableObject {
     public boolean show_demo_vids;
 
     public ConfigurationItems() {
-        String dataPath = TCONST.DOWNLOAD_RT_PATH + "/config.json";
+        String dataPath = TCONST.DOWNLOAD_PATH + "/config.json";
         String jsonData = JSON_Helper.cacheDataByName(dataPath);
 
         try {
@@ -52,7 +52,7 @@ public class ConfigurationItems implements ILoadableObject {
         show_debug_launcher = false;
         language_switcher = false;
         no_asr_apps = false;
-        language_feature_id = "\"LANG_SW\"";
+        language_feature_id = "LANG_SW";
         show_demo_vids = true;
     }
 

@@ -55,7 +55,7 @@ public class Configuration {
 
     public static String getLanguageFeatureID(Context context) {
         return context.getSharedPreferences(ROBOTUTOR_CONFIGURATION, MODE_PRIVATE)
-                .getString(ConfigurationItems.LANGUAGE_FEATURE_ID, "\"LANG_SW\"");
+                .getString(ConfigurationItems.LANGUAGE_FEATURE_ID, "LANG_SW");
     }
 
     public static boolean showDemoVids(Context context) {

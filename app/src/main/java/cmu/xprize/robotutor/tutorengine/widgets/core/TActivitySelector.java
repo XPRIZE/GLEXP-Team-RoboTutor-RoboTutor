@@ -146,7 +146,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         // Hide the language toggle on the release builds
         // TODO : Use build Variant to ensure release configurations
         //
-        if (Configuration.getLanguageSwitcher(getContext())) {
+        if (!Configuration.getLanguageSwitcher(getContext())) {
 
             mLangButton.setVisibility(INVISIBLE);
             requestLayout(); // https://stackoverflow.com/questions/13856180/usage-of-forcelayout-requestlayout-and-invalidate
