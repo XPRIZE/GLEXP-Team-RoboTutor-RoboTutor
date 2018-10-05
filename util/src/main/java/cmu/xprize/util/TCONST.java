@@ -266,7 +266,6 @@ public class TCONST {
     public static final String CLOZE_WRONG                = "CLOZE_WRONG";
     public static final String PICMATCH_CORRECT              = "PICMATCH_CORRECT";
     public static final String PICMATCH_WRONG                = "PICMATCH_WRONG";
-    public static String TARGET                                  = "";
     public static final String NEXT_SCENE                 = "NEXT_SCENE";
     public static final String NEXT_WORD                  = "NEXT_WORD";
 
@@ -780,9 +779,6 @@ public class TCONST {
 
     public static final String RTC_VAR_ECHOSTATE   = ".echoState";
     public static final String RTC_VAR_PARROTSTATE = ".parrotState";
-    public static final String RTC_VAR_QNSTATE = ".qnState";
-    public static final String RTC_VAR_CLZSTATE = ".clzState";
-    public static final String RTC_VAR_PMSTATE = ".pmState";
     // Generic question state flag
     public static final String RTC_VAR_QUESTIONSTATE = ".questionState";
     public static final String RTC_VAR_CLOZESTATE = ".clozeState";
@@ -797,8 +793,6 @@ public class TCONST {
     public static final String RTC_VAR_PARASTATE   = ".paraState";
     public static final String RTC_VAR_LINESTATE   = ".lineState";
     public static final String RTC_VAR_WORDSTATE   = ".wordState";
-    public static final String SHOW_CLOZE          = ".showCloze";
-    public static final String SHOW_PICMATCH        = ".showPicMatch";
     public static final String RTC_VAR_ATTEMPT     = ".attempt";
     public static final String LAST                = "LAST";
     public static final String NOT_LAST            = "NOT_LAST";

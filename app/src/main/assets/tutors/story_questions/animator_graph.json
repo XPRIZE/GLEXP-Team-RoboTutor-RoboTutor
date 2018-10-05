@@ -352,6 +352,7 @@
           "preenter": [],
           "preexit": ["RESET_CLOZE_BUTTONS", "HIDE_CLOZE_BUTTONS"],
           "edges": [
+            {"constraint": "TEST_CLZ_MODE_SIMPLE", "edge": "CLOZE_PAGE_NODE"},
             {"constraint": "", "edge": "NEXT_PAGE_NODE"}
           ]
         },
@@ -986,6 +987,12 @@
         "TEST_CLZ_MODE": {
           "type": "CONDITION",
           "If": "({{SstoryQuestions.showPicMatch}}=='FALSE') && ({{SstoryQuestions.showCloze}}=='FALSE') && ({{SstoryQuestions.paraState}}=='LAST') && ({{SstoryQuestions.lineState}}=='LAST') && ({{SstoryQuestions.wordState}}=='LAST') && ({{SstoryQuestions.pmState}}=='FALSE') && ({{SstoryQuestions.qnState}}=='FALSE') && ({{SstoryQuestions.clzState}}=='TRUE')",
+          "Then": "true",
+          "Else": "false"
+        },
+        "TEST_CLZ_MODE_SIMPLE": {
+          "type": "CONDITION",
+          "If": "({{SstoryQuestions.clzState}}=='TRUE')",
           "Then": "true",
           "Else": "false"
         }

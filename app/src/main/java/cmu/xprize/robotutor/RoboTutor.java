@@ -103,9 +103,10 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 //    private static final String debugTutorId = "place.value:1";
 //    private static final String debugTutorFile = "[file]place.value__pv-11..99.2D.diff0.3.json";
     private static final boolean QUICK_DEBUG = false;
-    private static final String debugTutorVariant = "bigmath";
-    private static final String debugTutorId = "WHO CARES";
-    private static final String debugTutorFile = "[file]bigmath_sub.by.rand.20..90.NoCarryBorrow.lev8.json";//bigmath_sub.by.rand.1..9.NoCarryBorrow.lev4.json";
+    private static final String debugTutorVariant = "story.clo.hear";
+    private static final String debugTutorId = "story.clo.hear::story_2";
+    private static final String debugTutorFile = "[encfolder]story_2";
+
     // MATH_MISC (2)... make subtract behavior correct. bigmath_sub.by.rand.20..90.NoCarryBorrow.lev8.json
 
 
