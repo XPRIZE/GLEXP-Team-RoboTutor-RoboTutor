@@ -634,10 +634,76 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         event.setProblemNumber(_dataIndex);
         event.setSubstepNumber(mActiveIndex);
         event.setAttemptNumber(-1);
-        event.setExpectedAnswer(mStimulus.substring(mActiveIndex, mActiveIndex + 1));
+        String expectedAns = mStimulus.substring(mActiveIndex, mActiveIndex + 1);
+        if(expectedAns.equals(" ")) expectedAns = "<space>";
+        event.setExpectedAnswer(expectedAns);
         event.setUserResponse(mResponse);
         event.setCorrectness(isCorrect ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
         event.setFeedbackType(reason);
+
+        event.setTimestamp(System.currentTimeMillis());
+
+        RoboTutor.perfLogManager.postPerformanceLog(event);
+    }
+
+    @Override
+    public void publishOnEraseState() {
+
+        // this is actually handled via the animator_graph
+        PerformanceLogItem event = new PerformanceLogItem();
+
+        event.setUserId(RoboTutor.STUDENT_ID);
+        event.setSessionId(RoboTutor.SESSION_ID);
+        event.setGameId(mTutor.getUuid().toString()); // a new tutor is generated for each game, so this will be unique
+        event.setLanguage(CTutorEngine.language);
+        event.setTutorName(mTutor.getTutorName());
+        Log.wtf("WARRIOR_MAN", mTutor.getTutorId());
+        event.setTutorId(mTutor.getTutorId());
+        event.setPromotionMode(RoboTutor.getPromotionMode(event.getMatrixName()));
+        event.setLevelName(level);
+        event.setTaskName(task);
+        event.setProblemName("write_" + mStimulus);
+        event.setTotalProblemsCount(_data.size());
+        event.setProblemNumber(_dataIndex);
+        event.setSubstepNumber(mActiveIndex);
+        event.setAttemptNumber(-1);
+        String expectedAns = mStimulus.substring(mActiveIndex, mActiveIndex + 1);
+        if(expectedAns.equals(" ")) expectedAns = "<space>";
+        event.setExpectedAnswer(expectedAns);
+        event.setUserResponse("<space>");
+//        event.setCorrectness(isCorrect ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
+//        event.setFeedbackType(reason);
+
+        event.setTimestamp(System.currentTimeMillis());
+
+        RoboTutor.perfLogManager.postPerformanceLog(event);
+    }
+
+    @Override
+    public void publishHesitationState(int hesNo){
+        PerformanceLogItem event = new PerformanceLogItem();
+
+        event.setUserId(RoboTutor.STUDENT_ID);
+        event.setSessionId(RoboTutor.SESSION_ID);
+        event.setGameId(mTutor.getUuid().toString());
+        event.setLanguage(CTutorEngine.language);
+        event.setTutorName(mTutor.getTutorName());
+        Log.wtf("WARRIOR_MAN", mTutor.getTutorId());
+        event.setTutorId(mTutor.getTutorId());
+        event.setPromotionMode(RoboTutor.getPromotionMode(event.getMatrixName()));
+        event.setLevelName(level);
+        event.setTaskName(task);
+        event.setProblemName("write_" + mStimulus);
+        event.setTotalProblemsCount(_data.size());
+        event.setProblemNumber(_dataIndex);
+        //substep number might change, it is the mActiveIndex
+        event.setSubstepNumber(mActiveIndex);
+        event.setAttemptNumber(-1);
+        event.setExpectedAnswer(mStimulus.substring(mActiveIndex, mActiveIndex + 1));
+        event.setUserResponse(mResponse);
+//        event.setCorrectness(isCorrect ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
+//        event.setFeedbackType(reason);
+        event.setScaffolding("HES_" + hesNo);
 
         event.setTimestamp(System.currentTimeMillis());
 

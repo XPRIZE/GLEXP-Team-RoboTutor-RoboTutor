@@ -445,6 +445,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     public void onErase(int eraseIndex){
             updateSentenceEditSequence();
             updateExpectedCharacters();
+            publishOnEraseState();
     }
     //
 
@@ -879,6 +880,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 inhibitInput(mActiveController, !_isValid);
                 mActiveController.inhibitInput(_isValid);
+
+
+                publishState();
+
 
                 // Fire the appropriate behavior
                 //Here isComplete just loops through the mGlyphList elements and checks the isCorrect of all. For word level/sentence level feedback, this might not work.
@@ -1542,7 +1547,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         if(hesitationNo <= 4)
             publishFeature(_hesitationFTR.get(hesitationNo-1));
 
-
+        publishHesitationState(hesitationNo);
         return hesitationNo;
     }
 
@@ -1824,7 +1829,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             int sw = mDrawnScroll.getWidth();
 
             int gx = (int) view.getX();
-            int gw = view.getWidth() * 3;
+            int gw = view.getWidth() * 2;
 
             // If the glyph to the right of the current glyph is partially obscurred then calc
             // the offset to bring it on screen - with some padding (i.e. multiple glyph widths)
@@ -4077,17 +4082,21 @@ public class EditOperation {
                         hideTraceLine();
                         break;
                     case WR_CONST.SHOW_SAMPLE:
-                    case WR_CONST.HIDE_SAMPLE:
-                    case WR_CONST.ERASE_GLYPH:
-                    case WR_CONST.DEMO_PROTOGLYPH:
-                    case WR_CONST.ANIMATE_PROTOGLYPH:
-                    case WR_CONST.ANIMATE_OVERLAY:
-                    case WR_CONST.ANIMATE_ALIGN:
+
                         mActiveController = (CGlyphController) mGlyphList.getChildAt(mActiveIndex);
                         if(mActiveController.getExpectedChar().equals(" ") || mActiveController.getExpectedChar().equals("")){
                             publishFeature("FTR_SPACE_SAMPLE");
                             break;
                         }
+
+                    case WR_CONST.HIDE_SAMPLE:
+
+                    case WR_CONST.ERASE_GLYPH:
+                    case WR_CONST.DEMO_PROTOGLYPH:
+                    case WR_CONST.ANIMATE_PROTOGLYPH:
+                    case WR_CONST.ANIMATE_OVERLAY:
+                    case WR_CONST.ANIMATE_ALIGN:
+
                         if(mActiveController != null)
                             mActiveController.post(_command);
                         break;
@@ -4269,6 +4278,14 @@ public class EditOperation {
     // Must override in TClass
     // TClass domain where TScope lives providing access to tutor scriptables
     //
+
+    public void publishHesitationState(int hesNo){
+    }
+
+
+    public void publishOnEraseState(){
+    }
+
     @Override
     public void publishState() {
     }
