@@ -68,7 +68,6 @@
           "preenter": [],
           "preexit": [],
           "edges": [
-            // FIX_SPELLING go to "INCORRECT" or "NEXT"
             {"constraint": "FTR_EOP", "edge":"SAY_AGAIN"},
             {"constraint": "FTR_INCORRECT", "edge":"INCORRECT"}
           ]

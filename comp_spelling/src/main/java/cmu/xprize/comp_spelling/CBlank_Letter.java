@@ -32,8 +32,8 @@ public class CBlank_Letter extends ImageView {
 
         LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         llp.setMargins(50, 0, 0, 0);
-        llp.width = SP_CONST.LETTER_TILE_SIZE;
-        llp.height = SP_CONST.LETTER_TILE_SIZE;
+        llp.width = SP_CONST.LETTER_TILE_WIDTH;
+        llp.height = SP_CONST.LETTER_TILE_HEIGHT;
         this.setLayoutParams(llp);
     }
 

@@ -188,7 +188,6 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     //region View
     public void onLetterTouch(String letter, int index, CLetter_Tile lt) {
 
-        // FIX_SPELLING if correct, applyBehaviorNode("SAY_SYLLABLE")
         Log.d("ddd", "Touch: " + letter);
 
         //retractFeature(SP_CONST.FTR_CORRECT);
@@ -206,7 +205,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         if (isCorrect) {
             Log.d("ddd", "Correct");
             _selectedLetters.add(letter);
-            _selectableLetters.remove(index);
+            _selectableLetters.set(index, null);
 
             applyBehaviorNode("SAY_SYLLABLE");
             updateLetter();
@@ -275,7 +274,13 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
 
         int i = 0;
         for (String l : _selectableLetters) {
-            CLetter_Tile letter = new CLetter_Tile(mContext, l, i, this);
+
+            CLetter_Tile letter;
+            if (l == null) {
+                letter = new CLetter_Tile(mContext, null, i, this);
+            } else {
+                letter = new CLetter_Tile(mContext, l, i, this);
+            }
             i++;
             mLetterHolder.addView(letter);
         }
