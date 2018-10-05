@@ -890,6 +890,10 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         invalidate();
     }
 
+    public void setIsPlaying(boolean playing){
+        isPlaying = playing;
+    }
+
     public void replayGlyph(String replayTarget) {
 
         if(!isPlaying) {
@@ -1250,7 +1254,6 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     public void erase() {
 
         _showUserGlyph  = true;
-
         clear();
         inhibitInput(false);
     }
@@ -1284,6 +1287,10 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             resp.setStimulusChar("",false);
             return false;
         }
+    }
+
+    public void clearReplay(){
+        mReplayComp.clearReplay();
     }
 
     private void    clear() {

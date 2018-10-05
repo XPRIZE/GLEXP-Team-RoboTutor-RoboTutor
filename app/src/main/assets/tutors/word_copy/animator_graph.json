@@ -108,6 +108,7 @@
 //            {"name": "hesitationdebugaudio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "3.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_HESITATION_3"},
 //            {"name": "hesitationdebugaudio", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "4.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_HESITATION_4"},
 //             when to release? when the sentence has been evaluated atleast once (ie one of the FTR_SEN_ATTEMPT is enabled)
+
             {"name": "release the audio features for the first edit", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "releaseFirstEditAudioFeatures", "parms": "", "features":"FTR_SEN&FTR_SEN_LTR||FTR_SEN&FTR_SEN_WRD|FTR_SEN&FTR_SEN_SEN&FTR_SEN_ATTEMPT_1|FTR_SEN&FTR_SEN_SEN&FTR_SEN_ATTEMPT_2|FTR_SEN&FTR_SEN_SEN&FTR_SEN_ATTEMPT_3|FTR_SEN&FTR_SEN_SEN&FTR_SEN_ATTEMPT_4"},
 
 
@@ -115,8 +116,8 @@
 
 
             //letter level feedback
-            {"name": "Please continue writing", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please continue writing.mp3","soundpackage": "sentence","mode": "flow", "features": "FTR_SEN_LTR&FTR_HESITATION_2"},
-            {"name": "point to the next glyph", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "pointAtNextGlyph", "parms": "", "features":"FTR_SEN_LTR&FTR_HESITATION_2"},
+            {"name": "Please continue writing", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please continue writing.mp3","soundpackage": "sentence","mode": "flow", "features": "FTR_SEN_LTR&FTR_HESITATION_1"},
+            {"name": "point to the next glyph", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "pointAtNextGlyph", "parms": "", "features":"FTR_SEN_LTR&FTR_HESITATION_1"},
 
             //word level feedback
             {"name": "point on the first letter of the word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "pointAtActiveWord", "parms": "", "features":"!FTR_AUDIO_SPACE&!FTR_AUDIO_PUNC&FTR_SEN_WRD&FTR_HESITATION_2"},
@@ -128,20 +129,29 @@
                   //HESITATION 2, all ATTEMPTS
 //            {"name": "show box on first edit group", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBoxOnFirstEditGroup", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_LTR&FTR_HESITATION_2"},
 
-            {"name": "prompt - please trace the...", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please trace the letter.mp3", "soundpackage": "sentence","mode": "flow", "features": "FTR_SEN&FTR_HESITATION_2"},
-            {"name": "SHOW sample",          "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent",  "parms": "SHOW_SAMPLE:String",    "features":"FTR_SEN&FTR_SEN_LTR&FTR_HESITATION_2"},
-            {"name": "Hide Current Letter sample",   "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "HIDE_SAMPLE_ACTIVE_INDEX:String",  "features":"FTR_SEN&FTR_SEN_LTR&FTR_HESITATION_2"},
+//            {"name": "prompt - please trace the...", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please trace the letter.mp3", "soundpackage": "sentence","mode": "flow", "features": "FTR_SEN&FTR_HESITATION_2"},
+
+//            {"name": "SHOW sample",          "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent",  "parms": "SHOW_SAMPLE:String",    "features":"FTR_SEN&FTR_SEN_LTR&FTR_HESITATION_2"},
+//            {"name": "Hide Current Letter sample",   "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "HIDE_SAMPLE_ACTIVE_INDEX:String",  "features":"FTR_SEN&FTR_SEN_LTR&FTR_HESITATION_2"},
 
 
 
             //  letter level feedback
-            {"name": "Hide Current Letter Glyphs",    "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "HIDE_CURRENT_LETTER_GLYPH:String", "features":"FTR_SEN&FTR_SEN_LTR&FTR_ATTEMPT_4"},
-            {"name": "SHOW sample",          "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent",  "parms": "SHOW_SAMPLE:String",    "features":"FTR_SEN&FTR_SEN_LTR&FTR_ATTEMPT_4"},
-                  //HESITATION 3, all ATTEMPTS
-            {"name": "show box on first edit", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBoxOnFirstEdit", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_LTR&FTR_HESITATION_3"},
+//            {"name": "Hide Current Letter Glyphs",    "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "HIDE_CURRENT_LETTER_GLYPH:String", "features":"FTR_SEN&FTR_SEN_LTR&FTR_ATTEMPT_4"},
+//            {"name": "SHOW sample",          "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent",  "parms": "SHOW_SAMPLE:String",    "features":"FTR_SEN&FTR_SEN_LTR&FTR_ATTEMPT_4"},
 
 
-                  //HESITATION 4
+            {"name": "show box on first edit", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBoxOnFirstEdit", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_LTR&FTR_HESITATION_2"},
+
+
+            //letter level feedback, HESITATION 3, all ATTEMPTS
+//            {"name": "on completion of animation, make the replay glyph disappear", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "FIELD_REPLAY_COMPLETE:String|CLEAR_REPLAY_GLYPH:String" ,"features":"FTR_SEN&FTR_SEN_LTR"},
+//            {"name": "play current glyph animation", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "rippleReplayDisappearActiveIndex", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_LTR&FTR_HESITATION_3"},
+
+
+
+
+            //HESITATION 4
 //            {"name": "Letter Ripple Prototype",         "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "rippleReplayActiveIndex", "parms": "",  "features":"FTR_SEN&FTR_SEN_LTR"},
 //            {"name": "Hide Current Letter sample",   "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "HIDE_SAMPLE_ACTIVE_INDEX:String",  "features":"FTR_SEN&FTR_SEN_LTR"},
 //            {"name": "Hide Current Letter Glyphs",    "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "HIDE_CURRENT_LETTER_GLYPH:String", "features":"FTR_SEN&FTR_SEN_LTR"},
@@ -219,8 +229,8 @@
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Here there should be a.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_3&FTR_ATTEMPT_3"},
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "letters",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_3&FTR_ATTEMPT_3"},
             //for letter level, audio should be played even if no attempt, so att1,2,3 covered, let's play for no attempt
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Here there should be a.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_3&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3"},
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "letters",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_3&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Here there should be a.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_2&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_2"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "letters",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_LTR&FTR_INSERT&FTR_HESITATION_2&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_2"},
 
                   //REPLACE
                         //HESITATION 1
@@ -250,8 +260,8 @@
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Here there should be a.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_REPLACE&FTR_HESITATION_3&FTR_ATTEMPT_3"},
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "letters",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_REPLACE&FTR_HESITATION_3&FTR_ATTEMPT_3"},
                             //for letter level see first comment to see why
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Here there should be a.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_LTR&FTR_REPLACE&FTR_HESITATION_3&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3"},
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "letters",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_LTR&FTR_REPLACE&FTR_HESITATION_3&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Here there should be a.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_LTR&FTR_REPLACE&FTR_HESITATION_2&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "letters",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_LTR&FTR_REPLACE&FTR_HESITATION_2&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3"},
 
                   //DELETE
                         //HESITATION 1
@@ -276,7 +286,7 @@
                               //ATTEMPT 3
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "This letter is not needed.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_DELETE&FTR_HESITATION_3&FTR_ATTEMPT_3"},
                               //for letter level
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "This letter is not needed.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_LTR&FTR_DELETE&FTR_HESITATION_3&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "This letter is not needed.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_LTR&FTR_DELETE&FTR_HESITATION_2&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3"},
                         //HESITATION 4
                               //ATTEMPT 1
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Delete this letter.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_LTR&FTR_DELETE&FTR_HESITATION_4&FTR_ATTEMPT_1|FTR_SEN&FTR_AUDIO_LTR&FTR_DELETE&FTR_HESITATION_4&FTR_SEN_ATTEMPT_1&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3&!FTR_ATTEMPT_4"},
@@ -309,7 +319,7 @@
                                 //ATTEMPT 2
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We leave one space between words.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_SPACE&FTR_INSERT&FTR_HESITATION_3&FTR_ATTEMPT_2"},
                         //for letter level
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We leave one space between words.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_SPACE&FTR_INSERT&FTR_HESITATION_3&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We leave one space between words.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_SPACE&FTR_INSERT&FTR_HESITATION_2&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3"},
 
 
             //REPLACE
@@ -335,7 +345,7 @@
                               //ATTEMPT 2
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We leave one space between words.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_SPACE&FTR_REPLACE&FTR_HESITATION_3&FTR_ATTEMPT_2"},
                               //for letter level
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We leave one space between words.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_SPACE&FTR_REPLACE&FTR_HESITATION_3&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We leave one space between words.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_SPACE&FTR_REPLACE&FTR_HESITATION_2&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3"},
 
 
                   //DELETE
@@ -356,7 +366,7 @@
                                 //ATTEMPT 3
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Delete this space.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_SPACE&FTR_DELETE&FTR_HESITATION_3&FTR_ATTEMPT_3"},
                                 //for letter level
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Delete this space.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_SPACE&FTR_DELETE&FTR_HESITATION_3&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Delete this space.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_SPACE&FTR_DELETE&FTR_HESITATION_2&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3"},
 
             //Capitalisation
                   //REPLACE
@@ -381,9 +391,9 @@
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "big.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_3&FTR_ATTEMPT_3"},
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "letters",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_3&FTR_ATTEMPT_3"},
                                 //for letter level
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Change this letter to.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_3&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3"},
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "big.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_3&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3"},
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "letters",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_3&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Change this letter to.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_2&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "big.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_2&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "letters",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_CAP&FTR_REPLACE&FTR_HESITATION_2&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3"},
 
             //Punctuation
                   //INSERT AND DELETE BOTH
@@ -411,7 +421,7 @@
                                 //ATTEMPT 3
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We put a period at the end of a statement.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_PUNC&FTR_PERIOD&FTR_HESITATION_3&FTR_ATTEMPT_3"},
                                 //for letter level
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We put a period at the end of a statement.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_PUNC&FTR_PERIOD&FTR_HESITATION_3&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We put a period at the end of a statement.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_PUNC&FTR_PERIOD&FTR_HESITATION_2&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3"},
 
                         //exclaim
                                 //ATTEMPT 1
@@ -421,7 +431,7 @@
                                 //ATTEMPT 3
             {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We use an exclamation point to show excitement or emphasis.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_AUDIO_PUNC&FTR_EXCLAIM&FTR_HESITATION_3&FTR_ATTEMPT_3"},
                                 //for letter level
-            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We use an exclamation point to show excitement or emphasis.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_PUNC&FTR_EXCLAIM&FTR_HESITATION_3&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3"},
+            {"name": "", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "We use an exclamation point to show excitement or emphasis.mp3","soundpackage": "sentence",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_PUNC&FTR_EXCLAIM&FTR_HESITATION_2&!FTR_ATTEMPT_1&!FTR_ATTEMPT_2&!FTR_ATTEMPT_3"},
 
                         //question mark
                                 //ATTEMPT 1
@@ -1152,6 +1162,57 @@
           ]
         },
 
+        "MERCY_RULE_BEHAVIOR_DISAPPEAR.": {
+          "type": "QUEUE",
+          "COMMENT": "Do this when they've made too many mistakes",
+          "preenter": ["CANCEL_HESITATION_FEEDBACK", "CANCEL_INPUT_HESITATION_POSTING"],
+          "reuse": true,
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "logState", "parms": "type#behavior,value#MERCY_RULE_BEHAVIOR:String", "features":""},
+
+            {"name": "Disable Input", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput", "parms": "TRUE:Boolean", "features":""},
+
+            {"name": "DO BETTER NEXT TIME - Feedback", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Next time you can do better.mp3","soundpackage": "xprize","mode": "flow", "features": "!FTR_SEN"}, //add !FTR_SEN for word level mercy later.
+            {"name": "Hide Glyphs",    "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "HIDE_GLYPHS:String", "features":"!FTR_SEN"}, //add !FTR_SEN for word level mercy later.
+
+
+            //letter level
+            {"name": "Hide Current Letter sample",   "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "HIDE_SAMPLE_ACTIVE_INDEX:String",  "features":"FTR_SEN&FTR_SEN_LTR"},
+            {"name": "Hide Current Letter Glyphs",    "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "HIDE_CURRENT_LETTER_GLYPH:String", "features":"FTR_SEN&FTR_SEN_LTR"},
+
+            //word level
+            {"name": "Hide Current Word Glyphs",    "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "HIDE_CURRENT_WORD_GLYPHS:String", "features":"FTR_SEN&FTR_SEN_WRD"},
+
+            //!sentence
+            {"name": "Ripple Prototype",         "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "RIPPLE_PROTO:String",  "features":"!FTR_SEN"}, // add !FTR_SEN to disable for sentence activities.
+
+
+            //letter level feedback - sentence writing
+            {"name": "Letter Ripple Prototype",         "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "rippleReplayActiveIndex", "parms": "",  "features":"FTR_SEN&FTR_SEN_LTR"},
+
+            //amogh added for sentence writing
+            {"name": "audio - please write", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please write.mp3","soundpackage": "sentence", "mode":"flow", "features": "FTR_SEN&!FTR_SPACE_REPLAY"},
+            {"name": "audio - like this", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "like this.mp3","soundpackage": "sentence", "mode":"flow", "features": "FTR_SEN&!FTR_SPACE_REPLAY"},
+
+            //                        {"name": "debug audio"    , "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Continue.mp3",     "soundpackage": "sentence", "mode":"flow", "features": "FTR_SEN"},
+
+
+            //retract features
+            {"name": "Clear space feature",    "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "retractFeature", "parms": "FTR_SPACE_REPLAY:String",  "features":"FTR_SEN"},
+
+
+            {"name": "end mercy behavior on complete.", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "setVolatileBehavior", "parms": "REPLAY_COMPLETE:String|START_HESITATION_ON_MERCY_COMPLETE:String" ,"features":"FTR_SEN"}
+
+
+//            {"name": "Clear attempt Index",      "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "CLEAR_ATTEMPT:String", "features":""},
+//            {"name": "Clear hesitation Index",      "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "CLEAR_HESITATION:String", "features":"FTR_SEN"},
+
+            //            {"name": "debug audio"    , "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Continue.mp3",     "soundpackage": "sentence", "mode":"flow", "features": "FTR_SEN"}
+
+
+          ]
+        },
+
         "MERCY_RULE_BEHAVIOR": {
           "type": "QUEUE",
           "COMMENT": "Do this when they've made too many mistakes",
@@ -1867,6 +1928,8 @@
         "CANCEL_INPUT_HESITATION_POSTING": {"name":"",  "type": "COMMAND", "id": "SWordCopy", "method": "cancelPost", "parms": "HESITATION_PROMPT:String",    "features":""},
         "RESET_HESITATION_NUMBER": {"name":"",  "type": "COMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "RESET_HESITATION:String",    "features":""},
         "CANCEL_AND_RESET_INPUT_HESITATION_POSTING": {"name":"",  "type": "COMMAND", "id": "SWordCopy", "method": "cancelAndResetHesitation", "parms": "HESITATION_PROMPT:String",    "features":""},
+        "CLEAR_REPLAY_GLYPH": {"name":"",  "type": "COMMAND", "id": "SWordCopy", "method": "eraseCurrentReplayGlyph", "parms": "",    "features":""},
+
 
 
         "FW_DISABLE":{"name":"",  "type": "COMMAND", "id": "SWordCopy", "method": "inhibitInput", "parms": "TRUE:Boolean","features":""},

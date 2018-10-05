@@ -241,12 +241,20 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
         }
     }
 
+    public void setIsPlaying(boolean playing){
+        mGlyphInput.setIsPlaying(playing);
+    }
+
     /**
      * This erases the glyph drawn by the user
      */
     public void eraseGlyph() {
 
         mGlyphInput.erase();
+    }
+
+    public void eraseReplayGlyph(){
+        mGlyphInput.clearReplay();
     }
 
 

@@ -2014,6 +2014,43 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
     }
 
+    //for hesitation, animate the letter and then disappear
+    public void eraseCurrentReplayGlyph(){
+        CGlyphController v = (CGlyphController) mGlyphList.getChildAt(mActiveIndex);
+        v.eraseReplayGlyph();
+        invalidate();
+    }
+
+
+    public void rippleReplayDisappearActiveIndex()
+    {
+        CGlyphController v = (CGlyphController) mGlyphList.getChildAt(mActiveIndex);
+
+        //if already correct move to the next one
+        if(v.isCorrect()){
+        }
+
+        //if not correct, play replay unless its a space, and update the response, the sentence parameters and the correct status of the glyph
+        else {
+            v.eraseGlyph();
+
+            String expectedCharString = mAnswer.substring(mActiveIndex,mActiveIndex + 1);
+
+            boolean isSpaceExpected = expectedCharString.equals(" ");
+
+            if (!isSpaceExpected) {
+                v.post(WR_CONST.RIPPLE_PROTO);
+            }
+            else{
+//                applyBehavior(WR_CONST.FIELD_REPLAY_COMPLETE);
+                publishFeature("FTR_SPACE_REPLAY");
+                applyBehavior(WR_CONST.ON_STOP_WRITING); //amogh added for hesitation.
+            }
+//            v.eraseGlyph();
+            applyBehavior(WR_CONST.REPLAY_COMPLETE);
+        }
+    }
+
     //for letter level mercy rule, called directly from the animator graph
     public void rippleReplayActiveIndex(){
         CGlyphController v = (CGlyphController) mGlyphList.getChildAt(mActiveIndex);
@@ -2122,6 +2159,11 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         //in case of sentence writing letter level feedback, it plays for just one letter
         else if(activityFeature.contains("FTR_SEN_LTR")){
+            CGlyphController v = (CGlyphController) mGlyphList.getChildAt(mActiveIndex);
+            v.setIsPlaying(false);
+//            v.eraseReplayGlyph();
+//            invalidate();
+
             return;
         }
 
