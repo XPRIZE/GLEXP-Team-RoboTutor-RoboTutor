@@ -561,8 +561,8 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
 
     /**
-     * CHUNT this is called when a new tutor is selected
-     * CHUNT it updates the display names and the display image
+     * this is called when a new tutor is selected
+     * it updates the display names and the display image
      */
     private void udpateViewVectorNames() {
 
@@ -571,7 +571,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
         SharderTutorName.setText("Harder Tutor:   " + currentTransition.harder);
         SeasierTutorName.setText("Easier Tutor:   " + currentTransition.easier);
 
-        // CHUNT here's where you set the names
+        // Here is where the names are set
 
 
         ArrayList<String> metadata;
@@ -597,12 +597,14 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
             ScurrentTutorMetadata.addView(textView);
         }
 
-        // CHUNT change tutor image
+        // change tutor image
+
+        // NEW_THUMBS this process is convoluted
         Thumb tutorThumb = CTutorData_Metadata.getThumbImage(currentTransition);
 
         int thumbId;
 
-        // https://stackoverflow.com/questions/4427608/android-getting-resource-id-from-string
+        // NEW_THUMBS https://stackoverflow.com/questions/4427608/android-getting-resource-id-from-string
         thumbId = getThumbId(tutorThumb);
         ScurrentTutorImage.setImageResource(thumbId);
         ScurrentTutorImage.setPadding(36, 36, 36, 36);
@@ -610,6 +612,11 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
     }
 
+    /**
+     * NEW_THUMBS this could return a String instead...
+     * @param tutorThumb
+     * @return
+     */
     public static int getThumbId(Thumb tutorThumb) {
         int thumbId;
         switch(tutorThumb) {

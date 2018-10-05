@@ -18,6 +18,11 @@ import cmu.xprize.common.R;
 
 public class CTutorData_Metadata {
 
+    /**
+     * NEW_THUMBS why can't this return a string instead?
+     * @param tutor
+     * @return
+     */
     public static TCONST.Thumb getThumbImage(CAt_Data tutor) {
 
 
