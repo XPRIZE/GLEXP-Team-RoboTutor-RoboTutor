@@ -94,6 +94,7 @@
           "preenter": [],
           "preexit": [],
           "edges": [
+            {"constraint": "FTR_EOD", "edge": "NEXT_SCENE"},
             {"constraint": "", "edge": "UPDATE_STIMULUS"}
           ]
         },
@@ -121,7 +122,6 @@
           "COMMENT": "????",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#PLAYINTRO:String", "features":""}
-//            {"name":"Intro clip", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets add some numbers now.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
           ]
         },
 
@@ -130,8 +130,6 @@
           "reuse": true,
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""},
-            {"name":"Please spell", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets add some numbers now.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
-//            {"name":"Play word", "type": "AUDIO", "command": "PLAY", "soundsource": "akalala.mp3","soundpackage": "words","mode":"flow", "features": ""}
             {"name":"Play word", "type": "AUDIO", "command": "PLAY", "soundsource": "{{SSpelling.wordStim}}","soundpackage": "words","mode":"flow", "features": ""}
           ]
         },
@@ -143,7 +141,6 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#PLAYINCORRECT:String", "features":""},
             {"name":"Play syllable", "type": "AUDIO", "command": "PLAY", "soundsource": "{{SSpelling.syllableStim}}.mp3","soundpackage": "words","mode":"flow", "features": ""},
-            {"name":"Please spell", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets add some numbers now.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
             {"name":"Play word", "type": "AUDIO", "command": "PLAY", "soundsource": "{{SSpelling.wordStim}}","soundpackage": "words","mode":"flow", "features": ""},
 //            {"name": "After incorrect clip", "type": "AUDIO", "command": "PLAY", "soundsource": "Not quite try again.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
             {"name": "Revert color", "type": "COMMAND", "id": "SSpelling", "method": "revertColor", "features": ""}

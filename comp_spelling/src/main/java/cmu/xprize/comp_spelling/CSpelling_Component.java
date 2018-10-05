@@ -31,6 +31,7 @@ import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
 import static cmu.xprize.util.TCONST.AUDIO_EVENT;
+import static cmu.xprize.util.TCONST.FTR_EOD;
 import static cmu.xprize.util.TCONST.TYPE_AUDIO;
 
 /**
@@ -190,7 +191,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         // FIX_SPELLING if correct, applyBehaviorNode("SAY_SYLLABLE")
         Log.d("ddd", "Touch: " + letter);
 
-        retractFeature(SP_CONST.FTR_CORRECT);
+        //retractFeature(SP_CONST.FTR_CORRECT);
         retractFeature(SP_CONST.FTR_INCORRECT);
 
         lockLetters();
@@ -211,7 +212,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
             updateLetter();
             _currentLetterIndex++;
             // if correct
-            publishFeature(SP_CONST.FTR_CORRECT);
+            //publishFeature(SP_CONST.FTR_CORRECT);
             if (_currentLetterIndex >= _word.size()) {
                 Log.d("ddd", "end of word");
 
@@ -362,7 +363,11 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
                 _dataIndex++;
             }
         } catch (Exception e) {
-            CErrorManager.logEvent(SP_CONST.TAG, "Data Exhuasted: call past end of data", e, false);
+            CErrorManager.logEvent(SP_CONST.TAG, "Data Exhuasted: call past end of data", e, true);
+        }
+
+        if (dataExhausted()) {
+            publishFeature(FTR_EOD);
         }
     }
 
