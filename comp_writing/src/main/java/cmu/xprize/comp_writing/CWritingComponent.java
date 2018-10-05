@@ -199,6 +199,19 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         setClipChildren(false);
 
+        punctuationToString = new HashMap<String, String> ();
+        punctuationToString.put(",", "comma");
+        punctuationToString.put(".", "period");
+        punctuationToString.put("!", "exclamation point");
+        punctuationToString.put("?", "question mark");
+        punctuationToString.put("-","hyphen");
+
+        punctuationToFeature = new HashMap<String,String>();
+        punctuationToFeature.put(",", WR_CONST.FTR_COMMA);
+        punctuationToFeature.put(".", WR_CONST.FTR_PERIOD);
+        punctuationToFeature.put("!", WR_CONST.FTR_EXCLAIM);
+        punctuationToFeature.put("?", WR_CONST.FTR_QUESTION);
+
         // initialize with four features
         _attemptFTR.add(WR_CONST.FTR_ATTEMPT_1);
         _attemptFTR.add(WR_CONST.FTR_ATTEMPT_2);
@@ -229,6 +242,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             _audioFTR.add(WR_CONST.FTR_COMMA);
             _audioFTR.add(WR_CONST.FTR_EXCLAIM);
             _audioFTR.add(WR_CONST.FTR_QUESTION);
+
 
 //            _audioFTR.add(WR_CONST.FTR_AUDIO_CAP);
 //            _audioFTR.add(WR_CONST.FTR_AUDIO_CAP);
@@ -295,17 +309,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             ((CGlyphController)v).setWritingController(this);
         }
 
-        punctuationToString = new HashMap<String, String> ();
-        punctuationToString.put(",", "comma");
-        punctuationToString.put(".", "period");
-        punctuationToString.put("!", "exclamation point");
-        punctuationToString.put("?", "question mark");
-        punctuationToString.put("-","hyphen");
 
-        punctuationToString.put(",", WR_CONST.FTR_COMMA);
-        punctuationToString.put(".", WR_CONST.FTR_PERIOD);
-        punctuationToString.put("!", WR_CONST.FTR_EXCLAIM);
-        punctuationToString.put("?", WR_CONST.FTR_QUESTION);
         // Obtain the prototype glyphs from the singleton recognizer
         //
         _recognizer = CRecognizerPlus.getInstance();
@@ -2091,7 +2095,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             else{
 //                applyBehavior(WR_CONST.FIELD_REPLAY_COMPLETE);
                 publishFeature("FTR_SPACE_REPLAY");
-                applyBehavior(WR_CONST.ON_STOP_WRITING); //amogh added for hesitation.
+                applyBehavior(WR_CONST.ON_STOP_WRITING); //added to restart hesitation.
             }
 
             //set the recognised character and set the response color.
@@ -2675,6 +2679,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         for (int i = 0; i < mGlyphList.getChildCount(); i++){
             g = (CGlyphController) mGlyphList.getChildAt(i);
             if(!g.isCorrect()&&!g.getExpectedChar().equals(" ")) {
+                autoScroll(g);
                 g.pointAtGlyph();
                 break;
             }
