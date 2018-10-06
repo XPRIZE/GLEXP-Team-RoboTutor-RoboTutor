@@ -1494,7 +1494,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
     }
     //amocorrectionAttgh added
-    private void clearHesitationFeatures() {
+
+    public void clearHesitationFeatures() {
 
         for (String hes : _hesitationFTR) {
             retractFeature(hes);
@@ -1551,7 +1552,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         return hesitationNo;
     }
 
-    private void resetHesitationFeature(){
+    public void resetHesitationFeature(){
         clearHesitationFeatures();
         resetHesitationNo();
     }
@@ -2688,7 +2689,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             g = (CGlyphController) mGlyphList.getChildAt(i);
             if(!g.isCorrect()&&!g.getExpectedChar().equals(" ")) {
                 g.pointAtGlyph();
-                autoScroll(g);
+//                autoScroll(g);
                 break;
             }
         }
