@@ -4262,7 +4262,9 @@ public class EditOperation {
     public void post(String command, String target, String item) {
         post(command, target, item, 0);
     }
-    public void post(String command, String target, String item, long delay) { enQueue(new Queue(null, command, target, item), delay); }
+    public void post(String command, String target, String item, long delay) {
+        enQueue(new Queue(null, command, target, item), delay);
+    }
 
 
 
