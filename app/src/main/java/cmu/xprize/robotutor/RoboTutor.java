@@ -165,6 +165,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     String hotLogPathPerf;
     String readyLogPath;
     String readyLogPathPerf;
+    String audioLogPath;
     public final static String  DOWNLOAD_PATH  = Environment.getExternalStorageDirectory() + File.separator + Environment.DIRECTORY_DOWNLOADS;
     public final static String  EXT_ASSET_PATH = Environment.getExternalStorageDirectory() + File.separator + TCONST.ROBOTUTOR_ASSET_FOLDER;
 
@@ -173,7 +174,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     private Thread audioLogThread;
     // TODO move to config file
-    private boolean RECORD_AUDIO = false;
+    private boolean RECORD_AUDIO = true; // note that this breaks story.read
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,6 +188,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         hotLogPathPerf = Environment.getExternalStorageDirectory() + TCONST.HOT_LOG_FOLDER_PERF;
         readyLogPathPerf = Environment.getExternalStorageDirectory() + TCONST.READY_LOG_FOLDER_PERF;
+
+        audioLogPath = Environment.getExternalStorageDirectory() + TCONST.AUDIO_LOG_FOLDER;
 
         APP_PRIVATE_FILES = getApplicationContext().getExternalFilesDir("").getPath();
 
@@ -248,7 +251,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         Log.v(TAG, "External_Download:" + DOWNLOAD_PATH);
 
         if (RECORD_AUDIO) {
-            audioLogThread = new CAudioLogThread(readyLogPath, logFilename);
+            audioLogThread = new CAudioLogThread(audioLogPath, logFilename);
             audioLogThread.start();
         }
 

@@ -48,7 +48,11 @@ public class CAudioLogThread extends Thread {
         try {
             android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
 
-            output = new FileOutputStream(new File(logDir, logFileName + ".raw"));
+            File outputFolder = new File(logDir);
+            if (!outputFolder.exists())
+                outputFolder.mkdir();
+
+            output = new FileOutputStream(logDir + logFileName + ".raw");
 
             recorder = new AudioRecord(MediaRecorder.AudioSource.VOICE_RECOGNITION, SAMPLERATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, AUDIO_BUFFER_SIZE);
 
