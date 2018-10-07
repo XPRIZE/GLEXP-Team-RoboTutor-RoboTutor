@@ -125,7 +125,7 @@ public class CGlyphReplayContainer extends View implements Animator.AnimatorList
         //
         mPaint = new Paint();
 
-        mPaint.setColor(Color.BLUE);
+        mPaint.setColor(Color.BLACK);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -233,7 +233,7 @@ public class CGlyphReplayContainer extends View implements Animator.AnimatorList
     }
 
 
-    private void clearReplay() {
+    public void clearReplay() {
 
         // Create a path object to hold the vector stream
 
@@ -312,6 +312,7 @@ public class CGlyphReplayContainer extends View implements Animator.AnimatorList
             if(_callback != null) {
                 _callback.applyEvent(WR_CONST.FIELD_REPLAY_COMPLETE);
                 mWritingComponent.applyBehavior(WR_CONST.ON_STOP_WRITING); //amogh added for hesitation.
+//                mWritingComponent.applyBehavior(WR_CONST.FIELD_REPLAY_COMPLETE); //amogh added for hesitation.
             }
 
             // update the persona and Pointer

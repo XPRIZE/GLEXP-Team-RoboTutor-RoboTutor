@@ -78,8 +78,10 @@ public class WR_CONST {
     public static final String ANIMATE_PROTOGLYPH       = "ANIMATE_PROTOGLYPH";
     public static final String HIDE_SAMPLE              = "HIDE_SAMPLE";
     public static final String HIDE_GLYPHS              = "HIDE_GLYPHS";
+    public static final String HIDE_CURRENT_LETTER_GLYPH = "HIDE_CURRENT_LETTER_GLYPH";
     public static final String HIDE_CURRENT_WORD_GLYPHS = "HIDE_CURRENT_WORD_GLYPHS";
     public static final String HIDE_SAMPLES             = "HIDE_SAMPLES";
+    public static final String HIDE_SAMPLE_ACTIVE_INDEX = "HIDE_SAMPLE_ACTIVE_INDEX";
     public static final String INHIBIT_OTHERS           = "INHIBIT_OTHERS";
     public static final String CLEAR_ATTEMPT            = "CLEAR_ATTEMPT";
     public static final String CLEAR_HESITATION         = "CLEAR_HESITATION"; //amogh added
@@ -135,6 +137,7 @@ public class WR_CONST {
     public static final String FTR_EXCLAIM = "FTR_EXCLAIM";
     public static final String FTR_QUESTION = "FTR_QUESTION";
     public static final String FTR_COMMA = "FTR_COMMA";
+    public static final String FTR_AUDIO_NO_ERROR = "FTR_AUDIO_NO_ERROR0";
 //    public static final String FTR_INSERT = "FTR_INSERT";
 //    public static final String FTR_INSERT = "";
 //    public static final String FTR_INSERT = "";

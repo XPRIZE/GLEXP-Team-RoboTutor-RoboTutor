@@ -538,7 +538,9 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                         _recognisedChar = "";
                         int currentIndex = this.getGlyphIndex();
                         CStimulusController resp = (CStimulusController)_responseView.getChildAt(currentIndex);
-                        resp.setStimulusChar("",false);
+                        resp.setStimulusChar(" ",false);
+                        resp.updateResponseState(true);
+                        mWritingComponent.onErase(currentIndex);
                         break;
                     }
                     moveTouch(x, y);
@@ -888,6 +890,10 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
         invalidate();
     }
 
+    public void setIsPlaying(boolean playing){
+        isPlaying = playing;
+    }
+
     public void replayGlyph(String replayTarget) {
 
         if(!isPlaying) {
@@ -923,6 +929,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                     case TCONST.STROKE_ORIGINAL:
 
                         mReplayComp.replayGlyph(_animGlyph, _baseLine, CGlyphReplayContainer.ALIGN_ORIGVIEW | CGlyphReplayContainer.SCALE_TIME, _viewBnds, this);
+                        setHasGlyph(true);
                         break;
 
                     case TCONST.STROKE_OVERLAY:
@@ -1073,8 +1080,8 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
      * @param show
      */
     public void showSampleChar(boolean show) {
-
         _showSampleChar = show;
+        _showUserGlyph = true;
         invalidate();
     }
 
@@ -1247,7 +1254,6 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     public void erase() {
 
         _showUserGlyph  = true;
-
         clear();
         inhibitInput(false);
     }
@@ -1274,8 +1280,17 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             return true;
         }
         else {
+            erase();
+            _recognisedChar = "";
+            int currentIndex = this.getGlyphIndex();
+            CStimulusController resp = (CStimulusController)_responseView.getChildAt(currentIndex);
+            resp.setStimulusChar("",false);
             return false;
         }
+    }
+
+    public void clearReplay(){
+        mReplayComp.clearReplay();
     }
 
     private void    clear() {
@@ -1292,8 +1307,8 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
             _protoGlyph = null;
 
         // Remove the save button
-        if(mGlyphController != null)
-            mGlyphController.setProtoTypeDirty(false);
+//        if(mGlyphController != null)
+//            mGlyphController.setProtoTypeDirty(false);
 
         _glyphColor = TCONST.colorMap.get(TCONST.COLORNORMAL);
 
@@ -1527,8 +1542,8 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
                 // Show the save button for this glyph
                 //
-                if(mGlyphController != null)
-                    mGlyphController.setProtoTypeDirty(true);
+//                if(mGlyphController != null)
+//                    mGlyphController.setProtoTypeDirty(true);
             }
 
             setHasGlyph(true);

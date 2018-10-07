@@ -155,106 +155,107 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         mGlyphList.setClipChildren(false);
 
         mReplayButton = (ImageButton) findViewById(R.id.Sreplay);
-        //amogh added for scrolling fingerwriter
-        mScrollRightButton = (ImageButton) findViewById(R.id.buttonright);
-        mScrollLeftButton = (ImageButton) findViewById(R.id.buttonleft);
-        mScrollLeftButton.setVisibility(View.INVISIBLE);
 
-        mScrollRightButton.setOnTouchListener(new View.OnTouchListener() {
-
-            private Handler mHandler;
-            private long mInitialDelay = 5;
-            private long mRepeatDelay = 5;
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        if (mHandler != null)
-                            return true;
-                        mHandler = new Handler();
-                        mHandler.postDelayed(mAction, mInitialDelay);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        if (mHandler == null)
-                            return true;
-                        mHandler.removeCallbacks(mAction);
-                        mHandler = null;
-                        break;
-                }
-                return false;
-            }
-
-            Runnable mAction = new Runnable() {
-                @Override
-                public void run() {
-                    mDrawnScroll.scrollTo((int) mDrawnScroll.getScrollX() + 10, (int) mDrawnScroll.getScrollY());
-                    mHandler.postDelayed(mAction, mRepeatDelay);
-                }
-            };
-        });
-
-        mScrollLeftButton.setOnTouchListener(new View.OnTouchListener() {
-
-            private Handler mHandler;
-            private long mInitialDelay = 5;
-            private long mRepeatDelay = 5;
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        if (mHandler != null)
-                            return true;
-                        mHandler = new Handler();
-                        mHandler.postDelayed(mAction, mInitialDelay);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        if (mHandler == null)
-                            return true;
-                        mHandler.removeCallbacks(mAction);
-                        mHandler = null;
-                        break;
-                }
-                return false;
-            }
-
-            Runnable mAction = new Runnable() {
-                @Override
-                public void run() {
-                    mDrawnScroll.scrollTo((int) mDrawnScroll.getScrollX() - 10, (int) mDrawnScroll.getScrollY());
-                    mHandler.postDelayed(mAction, mRepeatDelay);
-                }
-            };
-        });
-
-        mDrawnScroll.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-            @Override
-            public void onScrollChanged() {
-                int scrollX = mDrawnScroll.getScrollX(); // For HorizontalScrollView
-//                int maxScrollX = mDrawnScroll.getChildAt(0).getWidth();
-                int maxScrollX = 5000;
-                int a = mDrawnScroll.getWidth();
-                if (scrollX > 0){
-                    mScrollLeftButton.setVisibility(View.VISIBLE);
-                }
-                else{
-                    mScrollLeftButton.setVisibility(View.INVISIBLE);
-                }
-                if (scrollX < maxScrollX){
-                    mScrollRightButton.setVisibility(View.VISIBLE);
-                }
-                else{
-                    mScrollRightButton.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
-
-        if (activityFeature.contains("FTR_SEN")){
-            mScrollRightButton.setVisibility(View.VISIBLE);
-            mScrollRightButton.setVisibility(View.VISIBLE);
-        }
-        //amogh added ends
+        //scrolling buttons
+//        mScrollRightButton = (ImageButton) findViewById(R.id.buttonright);
+//        mScrollLeftButton = (ImageButton) findViewById(R.id.buttonleft);
+//        mScrollLeftButton.setVisibility(View.INVISIBLE);
+//
+//        mScrollRightButton.setOnTouchListener(new View.OnTouchListener() {
+//
+//            private Handler mHandler;
+//            private long mInitialDelay = 5;
+//            private long mRepeatDelay = 5;
+//
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                switch (event.getAction()) {
+//                    case MotionEvent.ACTION_DOWN:
+//                        if (mHandler != null)
+//                            return true;
+//                        mHandler = new Handler();
+//                        mHandler.postDelayed(mAction, mInitialDelay);
+//                        break;
+//                    case MotionEvent.ACTION_UP:
+//                        if (mHandler == null)
+//                            return true;
+//                        mHandler.removeCallbacks(mAction);
+//                        mHandler = null;
+//                        break;
+//                }
+//                return false;
+//            }
+//
+//            Runnable mAction = new Runnable() {
+//                @Override
+//                public void run() {
+//                    mDrawnScroll.scrollTo((int) mDrawnScroll.getScrollX() + 20, (int) mDrawnScroll.getScrollY());
+//                    mHandler.postDelayed(mAction, mRepeatDelay);
+//                }
+//            };
+//        });
+//
+//        mScrollLeftButton.setOnTouchListener(new View.OnTouchListener() {
+//
+//            private Handler mHandler;
+//            private long mInitialDelay = 5;
+//            private long mRepeatDelay = 5;
+//
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                switch (event.getAction()) {
+//                    case MotionEvent.ACTION_DOWN:
+//                        if (mHandler != null)
+//                            return true;
+//                        mHandler = new Handler();
+//                        mHandler.postDelayed(mAction, mInitialDelay);
+//                        break;
+//                    case MotionEvent.ACTION_UP:
+//                        if (mHandler == null)
+//                            return true;
+//                        mHandler.removeCallbacks(mAction);
+//                        mHandler = null;
+//                        break;
+//                }
+//                return false;
+//            }
+//
+//            Runnable mAction = new Runnable() {
+//                @Override
+//                public void run() {
+//                    mDrawnScroll.scrollTo((int) mDrawnScroll.getScrollX() - 20, (int) mDrawnScroll.getScrollY());
+//                    mHandler.postDelayed(mAction, mRepeatDelay);
+//                }
+//            };
+//        });
+//
+//        mDrawnScroll.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+//            @Override
+//            public void onScrollChanged() {
+//                int scrollX = mDrawnScroll.getScrollX(); // For HorizontalScrollView
+////                int maxScrollX = mDrawnScroll.getChildAt(0).getWidth();
+//                int maxScrollX = 5000;
+//                int a = mDrawnScroll.getWidth();
+//                if (scrollX > 0){
+//                    mScrollLeftButton.setVisibility(View.VISIBLE);
+//                }
+//                else{
+//                    mScrollLeftButton.setVisibility(View.INVISIBLE);
+//                }
+//                if (scrollX < maxScrollX){
+//                    mScrollRightButton.setVisibility(View.VISIBLE);
+//                }
+//                else{
+//                    mScrollRightButton.setVisibility(View.INVISIBLE);
+//                }
+//            }
+//        });
+//
+//        if (activityFeature.contains("FTR_SEN")){
+//            mScrollRightButton.setVisibility(View.VISIBLE);
+//            mScrollRightButton.setVisibility(View.VISIBLE);
+//        }
+        //code for scrolling buttons ends
 
 // TODO: DEBUG only
 //        mRecogList.setOnTouchListener(new RecogTouchListener());
@@ -633,10 +634,76 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         event.setProblemNumber(_dataIndex);
         event.setSubstepNumber(mActiveIndex);
         event.setAttemptNumber(-1);
-        event.setExpectedAnswer(mStimulus.substring(mActiveIndex, mActiveIndex + 1));
+        String expectedAns = mStimulus.substring(mActiveIndex, mActiveIndex + 1);
+        if(expectedAns.equals(" ")) expectedAns = "<space>";
+        event.setExpectedAnswer(expectedAns);
         event.setUserResponse(mResponse);
         event.setCorrectness(isCorrect ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
         event.setFeedbackType(reason);
+
+        event.setTimestamp(System.currentTimeMillis());
+
+        RoboTutor.perfLogManager.postPerformanceLog(event);
+    }
+
+    @Override
+    public void publishOnEraseState() {
+
+        // this is actually handled via the animator_graph
+        PerformanceLogItem event = new PerformanceLogItem();
+
+        event.setUserId(RoboTutor.STUDENT_ID);
+        event.setSessionId(RoboTutor.SESSION_ID);
+        event.setGameId(mTutor.getUuid().toString()); // a new tutor is generated for each game, so this will be unique
+        event.setLanguage(CTutorEngine.language);
+        event.setTutorName(mTutor.getTutorName());
+        Log.wtf("WARRIOR_MAN", mTutor.getTutorId());
+        event.setTutorId(mTutor.getTutorId());
+        event.setPromotionMode(RoboTutor.getPromotionMode(event.getMatrixName()));
+        event.setLevelName(level);
+        event.setTaskName(task);
+        event.setProblemName("write_" + mStimulus);
+        event.setTotalProblemsCount(_data.size());
+        event.setProblemNumber(_dataIndex);
+        event.setSubstepNumber(mActiveIndex);
+        event.setAttemptNumber(-1);
+        String expectedAns = mStimulus.substring(mActiveIndex, mActiveIndex + 1);
+        if(expectedAns.equals(" ")) expectedAns = "<space>";
+        event.setExpectedAnswer(expectedAns);
+        event.setUserResponse("<space>");
+//        event.setCorrectness(isCorrect ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
+//        event.setFeedbackType(reason);
+
+        event.setTimestamp(System.currentTimeMillis());
+
+        RoboTutor.perfLogManager.postPerformanceLog(event);
+    }
+
+    @Override
+    public void publishHesitationState(int hesNo){
+        PerformanceLogItem event = new PerformanceLogItem();
+
+        event.setUserId(RoboTutor.STUDENT_ID);
+        event.setSessionId(RoboTutor.SESSION_ID);
+        event.setGameId(mTutor.getUuid().toString());
+        event.setLanguage(CTutorEngine.language);
+        event.setTutorName(mTutor.getTutorName());
+        Log.wtf("WARRIOR_MAN", mTutor.getTutorId());
+        event.setTutorId(mTutor.getTutorId());
+        event.setPromotionMode(RoboTutor.getPromotionMode(event.getMatrixName()));
+        event.setLevelName(level);
+        event.setTaskName(task);
+        event.setProblemName("write_" + mStimulus);
+        event.setTotalProblemsCount(_data.size());
+        event.setProblemNumber(_dataIndex);
+        //substep number might change, it is the mActiveIndex
+        event.setSubstepNumber(mActiveIndex);
+        event.setAttemptNumber(-1);
+        event.setExpectedAnswer(mStimulus.substring(mActiveIndex, mActiveIndex + 1));
+        event.setUserResponse(mResponse);
+//        event.setCorrectness(isCorrect ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
+//        event.setFeedbackType(reason);
+        event.setScaffolding("HES_" + hesNo);
 
         event.setTimestamp(System.currentTimeMillis());
 
@@ -835,8 +902,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
                 //
                 setDataSource(dataSource);
 
-            } else if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE) ||
-                    dataNameDescriptor.startsWith(TCONST.ENCODED_FOLDER)) {
+            } else if (dataNameDescriptor.startsWith(TCONST.SOURCEFILE)) {
 
                 // XYZ add a sound package... mimic behavior from XYZ-1
 
@@ -855,29 +921,48 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
                 //
                 loadJSON(new JSONObject(jsonData), mTutor.getScope() );
 
-                // XYZ extra function to add a story sound package
-                if(dataNameDescriptor.startsWith(TCONST.ENCODED_FOLDER)) {
-
-                    String storyFolder = dataNameDescriptor.substring(TCONST.ENCODED_FOLDER.length()).toLowerCase();
-
-                    String[] levelval   = storyFolder.split("_");
-                    // "0..10.SD", "OFF1", "DES.34"
-                    // "3", "2"
-
-                    String levelFolder = levelval[0];
-
-                    AUDIOSOURCEPATH = TCONST.STORY_PATH + levelFolder + "/" + storyFolder;
-                    mMediaManager.addSoundPackage(mTutor, MEDIA_STORY, new CMediaPackage(LANG_AUTO, AUDIOSOURCEPATH));
-
-
-                }
-
-
                 // Pass the loaded json dataSource array
                 //
                 setDataSource(dataSource);
 
-            } else if (dataNameDescriptor.startsWith("db|")) {
+            }
+            else if(dataNameDescriptor.startsWith(TCONST.ENCODED_FOLDER)) {
+
+                String dataFile = dataNameDescriptor.substring(TCONST.ENCODED_FOLDER.length());
+
+                // Generate a langauage specific path to the data source -
+                // i.e. tutors/word_copy/assets/data/<iana2_language_id>/
+                // e.g. tutors/word_copy/assets/data/sw/
+                //
+                String dataPath = TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS;
+                dataPath += "/" +  TCONST.DATA_PATH + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
+
+                String jsonData = JSON_Helper.cacheData(dataPath + dataFile);
+
+                // Load the datasource in the component module - i.e. the superclass
+                //
+
+                loadJSON(new JSONObject(jsonData), mTutor.getScope() );
+                // Pass the loaded json dataSource array
+                //
+                setDataSource(dataSource);
+
+                //audio loading
+                //storyFolder should be of the form 2_1, rest will be done automatically
+                String dataSourceRawFileName = dataNameDescriptor.split("_",2)[1];
+                String storyFolder = dataSourceRawFileName.split("\\.",2)[0].toLowerCase();
+
+                String[] levelval   = storyFolder.split("_");
+                // "0..10.SD", "OFF1", "DES.34"
+                // "3", "2"
+
+                String levelFolder = levelval[0];
+
+                AUDIOSOURCEPATH = TCONST.STORY_PATH + levelFolder + "/" + storyFolder;
+                mMediaManager.addSoundPackage(mTutor, MEDIA_STORY, new CMediaPackage(LANG_AUTO, AUDIOSOURCEPATH));
+
+
+            }else if (dataNameDescriptor.startsWith("db|")) {
                 dataNameDescriptor = dataNameDescriptor.substring(3);
 
             } else if (dataNameDescriptor.startsWith("[")) {
