@@ -366,6 +366,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     public void showHighlightBoxOnFirstEdit(){
         EditOperation firstEditOperationSentence = getFirstEditOperation(mWrittenSentence, mAnswer);
+        if(!firstEditOperationSentence.toString().equals("N"))
         firstEditOperationSentence.showHighlightBox();
     }
 
@@ -446,6 +447,21 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             updateSentenceEditSequence();
             updateExpectedCharacters();
             publishOnEraseState();
+            CGlyphController c = (CGlyphController) mGlyphList.getChildAt(eraseIndex);
+            if(activityFeature.contains("FTR_SEN_LTR")){
+
+                String expectedChar = mStimulus.substring(eraseIndex,eraseIndex + 1);
+                boolean isSpaceExpected = expectedChar.equals(" ");
+                if(!isSpaceExpected){
+                    c.updateCorrectStatus(false);
+                }
+
+                if(activityFeature.contains("FTR_SEN_CORR")){
+//                    if(!isSpaceExpected){
+//                        c.toggleStimuliGlyph();
+//                    }
+                }
+            }
     }
     //
 
@@ -2605,13 +2621,18 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 //set the expected character
                 String expectedChar = mAlignedTargetSentence.substring(expectedCharIndex, expectedCharIndex + 1);
-
+                String recognisedChar = v.getRecognisedChar();
                 //Make sure that the expected character in places where deletion happens is a space so that during mercy - doesn't play
                 if(expectedChar.equals("-")){
                     v.setExpectedChar(" ");
                 }
                 else{
                     v.setExpectedChar(expectedChar);
+                }
+                //update the correct status of the glyph.
+                if(expectedChar.equals(recognisedChar)){
+                    v.updateCorrectStatus(true);
+//                    if(activityFeature.contains)
                 }
 
                 //set the protoglyphs
@@ -4085,7 +4106,7 @@ public class EditOperation {
                     case WR_CONST.SHOW_SAMPLE:
 
                         mActiveController = (CGlyphController) mGlyphList.getChildAt(mActiveIndex);
-                        if(mActiveController.getExpectedChar().equals(" ") || mActiveController.getExpectedChar().equals("")){
+                        if(mActiveController.getExpectedChar().equals(" ") || mActiveController.getExpectedChar().equals("") || activityFeature.contains("FTR_SEN_LTR") && mActiveController.isCorrect()){
                             publishFeature("FTR_SPACE_SAMPLE");
                             break;
                         }
