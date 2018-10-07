@@ -14,7 +14,7 @@
         android:id="@+id/prompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="HELLO"
+        android:text=""
         android:textSize="@dimen/picmatchPromptText"
         android:textColor="@android:color/black"
         android:background="@android:color/white"

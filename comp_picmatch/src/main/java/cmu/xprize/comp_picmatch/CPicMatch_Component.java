@@ -14,6 +14,10 @@ import android.widget.TextView;
 import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.util.ILoadableObject;
@@ -41,9 +45,13 @@ public class CPicMatch_Component extends RelativeLayout implements ILoadableObje
     protected String prompt;
     protected String[] images;
 
+    protected int attempts = 0;
+    protected static final int NUM_PROBLEMS = 10;
+
     // json loadable
     public String bootFeatures;
     public CPicMatch_Data[] dataSource;
+    protected List<CPicMatch_Data> _data;
 
     // View Things
     protected Context context;
@@ -77,9 +85,13 @@ public class CPicMatch_Component extends RelativeLayout implements ILoadableObje
 
         optionViews = new ImageView[4];
         optionViews[0] = findViewById(R.id.option_1);
+        optionViews[0].setVisibility(View.INVISIBLE);
         optionViews[1] = findViewById(R.id.option_2);
+        optionViews[1].setVisibility(View.INVISIBLE);
         optionViews[2] = findViewById(R.id.option_3);
+        optionViews[2].setVisibility(View.INVISIBLE);
         optionViews[3] = findViewById(R.id.option_4);
+        optionViews[3].setVisibility(View.INVISIBLE);
 
     }
 
@@ -87,8 +99,8 @@ public class CPicMatch_Component extends RelativeLayout implements ILoadableObje
     public void next() {
 
         try {
-            if (dataSource != null) {
-                updateDataSet(dataSource[_dataIndex]);
+            if (_data != null) {
+                updateDataSet(_data.get(_dataIndex));
 
                 _dataIndex++;
 
@@ -99,7 +111,7 @@ public class CPicMatch_Component extends RelativeLayout implements ILoadableObje
     }
 
     public boolean isDataExhausted() {
-        return _dataIndex >= dataSource.length;
+        return _dataIndex >= _data.size();
     }
 
     protected void updateDataSet(CPicMatch_Data data) {
@@ -120,6 +132,7 @@ public class CPicMatch_Component extends RelativeLayout implements ILoadableObje
         layout = data.layout;
         prompt = data.prompt;
         images = data.images;
+        attempts = 0;
     }
 
     /**
@@ -165,6 +178,7 @@ public class CPicMatch_Component extends RelativeLayout implements ILoadableObje
                     .into(optionViews[i]);
                     */
 
+            optionViews[i].setVisibility(View.VISIBLE);
             optionViews[i].setOnClickListener(new StudentChoiceListener(i));
         }
     }
@@ -178,18 +192,26 @@ public class CPicMatch_Component extends RelativeLayout implements ILoadableObje
 
         @Override
         public void onClick(View view) {
+            attempts++;
             retractFeature("FTR_CORRECT");
             retractFeature("FTR_WRONG");
 
             if(prompt.equals(images[_index])) {
                 publishFeature("FTR_CORRECT"); // ALAN_HILL (3) search animator graph for this term
+                trackAndLogPerformance(true, prompt);
             } else {
                 publishFeature("FTR_WRONG"); // ALAN_HILL (3) search animator graph for this term
+                trackAndLogPerformance(false, images[_index]);
             }
 
 
             applyBehavior("STUDENT_CHOICE_EVENT"); // ALAN_HILL (3) search animator graph for this term
         }
+    }
+
+    // Must override in TClass
+    protected void trackAndLogPerformance(boolean correct, String choice) {
+
     }
 
     // Must override in TClass
@@ -211,7 +233,13 @@ public class CPicMatch_Component extends RelativeLayout implements ILoadableObje
     @Override
     public void loadJSON(JSONObject jsonData, IScope scope) {
 
+
         JSON_Helper.parseSelf(jsonData, this, CClassMap.classMap, scope);
+
+        ArrayList<CPicMatch_Data> dataset = new ArrayList<>(Arrays.asList(dataSource));
+        _data = new ArrayList<>();
+        Collections.shuffle(dataset);
+        _data = dataset.subList(0, NUM_PROBLEMS);
         _dataIndex = 0;
     }
 
