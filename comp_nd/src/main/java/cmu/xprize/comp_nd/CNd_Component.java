@@ -504,7 +504,7 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
         publishValue(VALUE_DIGIT_COMPARE, digitLeft == digitRight ?
                 //"is equal to" : "is greater than");
-                "is the same as" : "is more than"); // temporary placeholder
+                "is the same as" : "is bigger than"); // temporary placeholder
 
         publishValue(VALUE_DIGIT_LESS,
                 String.valueOf(digitLeft > digitRight ?

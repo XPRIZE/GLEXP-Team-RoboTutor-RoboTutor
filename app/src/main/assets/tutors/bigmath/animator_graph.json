@@ -24,13 +24,13 @@
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Touch each one to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE&FTR_TAP_CONCRETE"},
 
             {"type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "result:String|one:String", "features": "FTR_ON_DIGIT_ONE&FTR_WRITE_DIGIT"},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please tap.mp3",  "soundpackage":"temp2", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE&FTR_WRITE_DIGIT"},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please tap on the box and write your answer.mp3",  "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE&FTR_WRITE_DIGIT"},
 
             {"type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|ten:String", "features": "FTR_ON_DIGIT_TEN&FTR_TAP_CONCRETE"},
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Touch each ten to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN&FTR_TAP_CONCRETE"},
 
             {"type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "result:String|ten:String", "features": "FTR_ON_DIGIT_TEN&FTR_WRITE_DIGIT"},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please tap.mp3",  "soundpackage":"temp2", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN&FTR_WRITE_DIGIT"},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please tap on the box and write your answer.mp3",  "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN&FTR_WRITE_DIGIT"},
 
             {"type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "triggerHesitationTimer", "parms": ""}
           ]

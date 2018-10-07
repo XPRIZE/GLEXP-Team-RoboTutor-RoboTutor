@@ -35,7 +35,7 @@
             // // COMPARE_AUDIO (0)     Both numbers have the same number of hundreds.mp3
             // // COMPARE_AUDIO (0)    This number has more hundreds than the other number so it is bigger.mp3
             {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitMore}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow"},
-            {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitCompare}}.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"},
+            {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitCompare}}.mp3",            "soundpackage":"nd",        "volume": 1.0, "mode":"flow"},
             {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitLess}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow"},
             {"name": "CHECK HIGHLIGHT NEXT DIGIT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "highlightNextScaffoldDigit"}
 
@@ -52,7 +52,7 @@
             //  // COMPARE_AUDIO (0)    Both numbers have the same number of tens.mp3
             //  // COMPARE_AUDIO (0)    This number has more tens than the other number so it is bigger.mp3
             {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitMore}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow"},
-            {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitCompare}}.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"},
+            {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitCompare}}.mp3",            "soundpackage":"nd",        "volume": 1.0, "mode":"flow"},
             {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitLess}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow"},
             {"name": "CHECK HIGHLIGHT NEXT DIGIT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "highlightNextScaffoldDigit"}
           ]
@@ -67,7 +67,7 @@
             {"name": "NEXT DIGIT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "highlightOnesColumn"},
             //  // COMPARE_AUDIO (0)    This number has more ones than the other number so it is bigger.mp3 (publish feature)
             {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitMore}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow"},
-            {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitCompare}}.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"},
+            {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitCompare}}.mp3",            "soundpackage":"nd",        "volume": 1.0, "mode":"flow"},
             {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitLess}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow"},
             {"name": "CHECK HIGHLIGHT NEXT DIGIT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "highlightNextScaffoldDigit"}
           ]
@@ -84,13 +84,12 @@
             // na
             // {z}
             // is the bigger number
-            {"name": "point at this number", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "so.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"},
+            {"name": "point at this number", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "So the bigger number is.mp3",            "soundpackage":"nd",        "volume": 1.0, "mode":"flow"},
             {"name": "hundy boi", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.hun}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow", "features":"FTR_SAY_HUNS"},
             {"name": "and",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Na.mp3",            "soundpackage":"nd",        "volume": 1.0, "mode":"flow", "features":"FTR_SAY_NA_TENS"},
             {"name": "tenny boi", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.ten}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow", "features":"FTR_SAY_TENS"},
             {"name": "and",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Na.mp3",            "soundpackage":"nd",        "volume": 1.0, "mode":"flow", "features":"FTR_SAY_NA_ONES"},
             {"name": "wunny boi", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.one}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow", "features":"FTR_SAY_ONES"},
-            {"name": "point at this number", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "is the bigger number.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"},
             {"name": "CLEAR HIGHLIGHT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "clearHighlight"},
             {"name": "DISABLE TAPPING", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "enableUserInput"},
             {"name": "SET TIMED HESITATION PROMPT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "triggerHesitationFeedback", "parms": "", "features": ""}
