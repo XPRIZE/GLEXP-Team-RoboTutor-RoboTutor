@@ -1318,6 +1318,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
         _recPending = false;
         _isDrawing  = false;
+//        if(!_sampleExpected.equals(" ")) //amogh added to accomodate the erasing behavior.
         _correct    = false;
 
         // To simplify operation we don't want to leave _drawGlyph invalid as there

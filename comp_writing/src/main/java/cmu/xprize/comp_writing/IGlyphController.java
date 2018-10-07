@@ -23,6 +23,7 @@ public interface IGlyphController {
 
     public void setExpectedChar(String sample);
     public String getExpectedChar();
+    public boolean isCorrect();
 
     public void showEraseButton(boolean show);
 
