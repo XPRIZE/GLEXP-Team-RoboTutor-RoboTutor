@@ -321,6 +321,9 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         mParent.animatePageFlip(true,mCurrViewIndex);
     }
 
+    /**
+     * PICTURE
+     */
     @Override
     //Called by animator graph before flipping the page
     public void setPictureMatch(){
@@ -733,14 +736,14 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         if (show_image_options && picture_match_mode){
             Log.d(TAG, "updateImageButtons: picmatch_answer = "+picmatch_answer);
             if(this.numPicMatch>=2){
-                mMatchImage1.setOnTouchListener(new PicMatchTouchListener(mMatchImage1, mImageFrame1));
-                mMatchImage2.setOnTouchListener(new PicMatchTouchListener(mMatchImage2, mImageFrame2));
+                mMatchImage1.setOnTouchListener(new PicMatchTouchListener(mMatchImage1, mImageFrame1, 0));
+                mMatchImage2.setOnTouchListener(new PicMatchTouchListener(mMatchImage2, mImageFrame2, 1));
             }
             if (this.numPicMatch >=3){
-                mMatchImage3.setOnTouchListener(new PicMatchTouchListener(mMatchImage3, mImageFrame3));
+                mMatchImage3.setOnTouchListener(new PicMatchTouchListener(mMatchImage3, mImageFrame3, 2));
             }
             if(this.numPicMatch==4){
-                mMatchImage4.setOnTouchListener(new PicMatchTouchListener(mMatchImage4, mImageFrame4));
+                mMatchImage4.setOnTouchListener(new PicMatchTouchListener(mMatchImage4, mImageFrame4, 3));
             }
             showImageButtons();
         } else {
@@ -755,10 +758,12 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
 
         ImageView _imageView;
         ViewGroup _frame;
+        int _index;
 
-        PicMatchTouchListener(ImageView imageView, ViewGroup frame) {
+        PicMatchTouchListener(ImageView imageView, ViewGroup frame, int index) {
             this._imageView = imageView;
             this._frame = frame;
+            this._index = index;
         }
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -772,7 +777,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                 case MotionEvent.ACTION_UP:
                     mParent.updateViewAlpha(_imageView, (float) 1.0);
                     disableImageButtons();
-                    if (picmatch_answer == 3){
+                    if (picmatch_answer == _index){
                         mParent.updateViewColor(_frame, Color.GREEN);
                         mParent.publishFeature(TCONST.PICMATCH_CORRECT);
                         mParent.retractFeature(TCONST.PICMATCH_WRONG);
@@ -930,9 +935,9 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
      *
      */
     public void flipPage() {
-        if (mPageCount-mCurrPage <= 3) {
+        if (mPageCount-mCurrPage <= 3) { // PIC_CHOICE this gave me numPicMatch = 4 when it was supposed to be 2 or 3
             // Last 4 images; don't randomize
-            this.numPicMatch = (mPageCount-mCurrPage)+1;
+            this.numPicMatch = (mPageCount-mCurrPage); // PIC_CHOICE this sets to 4 when it shouldn't be. It should be two (numPicMatch too big)
         } else {
             this.numPicMatch = getRandomNumberInRange(2, 4);
         }
@@ -2547,19 +2552,24 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
     }
 
 
+    /**
+     *
+     * PIC_CHOICE look at this!
+     * PIC_CHOICE this should def be refactored
+     */
     @Override
     public void displayPictureMatching(){
         if (numPicMatch==2){
             InputStream in1;
             InputStream in2;
             ArrayList<String> imgs = new ArrayList<>();
-            for (int i = mCurrPage+1; i < data.length-1; i++){
+            for (int i = mCurrPage+1; i < data.length; i++){ // PIC_CHOICE it's not adding the last image (page_09)
                 if (!imgs.contains(data[i].image)){
                     imgs.add(data[i].image);
                 }
             }
             Collections.shuffle(imgs);
-            String randImg1 = imgs.get(0);
+            String randImg1 = imgs.get(0); // PIC_CHOICE this is supposed to be the correct answer
             try {
                 if (assetLocation.equals(TCONST.EXTERN)) {
                     in1 = new FileInputStream(mAsset + data[mCurrPage].image); // ZZZ load image
@@ -2588,7 +2598,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
             InputStream in2;
             InputStream in3;
             ArrayList<String> imgs = new ArrayList<>();
-            for (int i = mCurrPage+1; i < data.length-1; i++){
+            for (int i = mCurrPage+1; i < data.length; i++){
                 if (!imgs.contains(data[i].image)){
                     imgs.add(data[i].image);
                 }
@@ -2634,18 +2644,18 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
             InputStream in3;
             InputStream in4;
             ArrayList<String> imgs = new ArrayList<>();
-            for (int i = mCurrPage+1; i < data.length-1; i++){
+            for (int i = mCurrPage+1; i < data.length; i++){ // PIC_CHOICE should be data.length
                 if (!imgs.contains(data[i].image)){
-                    imgs.add(data[i].image);
+                    imgs.add(data[i].image); // PIC_CHOICE this array might end tooo early
                 }
             }
             Collections.shuffle(imgs);
-            String randImg1 = imgs.get(0);
-            String randImg2 = imgs.get(1);
+            String randImg1 = imgs.get(0); // PIC_CHOICE this may have been wrong?
+            String randImg2 = imgs.get(1); // PIC_CHOICE out of bounds error in story_2
             String randImg3 = imgs.get(2);
             try {
                 if (assetLocation.equals(TCONST.EXTERN)) {
-                    in1 = new FileInputStream(mAsset + data[mCurrPage].image); // ZZZ load image
+                    in1 = new FileInputStream(mAsset + data[mCurrPage].image); // PIC_CHOICE correct image // ZZZ load image
                     in2 = new FileInputStream(mAsset + randImg1); // ZZZ load image
                     in3 = new FileInputStream(mAsset + randImg2);
                     in4 = new FileInputStream(mAsset + randImg3);

@@ -60,13 +60,13 @@ public class CAudioLogThread extends Thread {
                 // Ensure we are recording while the thread is running.
                 //
                 if (!isRecording) {
-                    Log.i("AudioLog", "Resume recording");
+                    Log.v("AudioLog", "Resume recording");
                     recorder.startRecording();
                     isRecording = true;
                     readCount = 0;
                 } else {
                     readCount = recorder.read(buffer, 0, BUFFER_SIZE);
-                    Log.i("AudioLog", "Read from recorder: read_count = " + readCount);
+                    // Log.v("AudioLog", "Read from recorder: read_count = " + readCount);
                 }
 
                 if (readCount == AudioRecord.ERROR_INVALID_OPERATION || readCount == AudioRecord.ERROR_BAD_VALUE) {
@@ -87,13 +87,13 @@ public class CAudioLogThread extends Thread {
 
         } finally {
             try {
-                Log.i("AudioLog", "Stop session");
+                Log.v("AudioLog", "Stop session");
 
                 recorder.stop();
 
                 readCount = recorder.read(buffer, 0, buffer.length);
                 for (int i = 0; i < readCount; i++) writeShort(output, buffer[i]);
-                Log.i("AudioLog", "Final read from recorder: read_count = " + readCount);
+                Log.v("AudioLog", "Final read from recorder: read_count = " + readCount);
 
                 recorder.release();
 
