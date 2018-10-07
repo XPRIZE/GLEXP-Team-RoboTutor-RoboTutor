@@ -10,19 +10,23 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import cmu.xprize.comp_bigmath.BM_CONST;
 import cmu.xprize.comp_bigmath.BigMathMechanic;
 import cmu.xprize.comp_bigmath.CBigMath_Component;
+import cmu.xprize.comp_bigmath.CBigMath_Data;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.comp_logging.ITutorLogger;
+import cmu.xprize.comp_logging.PerformanceLogItem;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
+import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObject;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
@@ -112,6 +116,47 @@ public class TBigMathComponent extends CBigMath_Component implements ITutorObjec
     @Override
     public void setParent(ITutorSceneImpl mParent) {
 
+    }
+
+    @Override
+    public void trackAndLogPerformance(boolean correct, Object expected, Object actual) {
+
+        if (correct) {
+            mTutor.countCorrect();
+        } else {
+            mTutor.countIncorrect();
+        }
+
+        PerformanceLogItem event = new PerformanceLogItem();
+
+        event.setUserId(RoboTutor.STUDENT_ID);
+        event.setSessionId(RoboTutor.SESSION_ID);
+        event.setGameId(mTutor.getUuid().toString());  // a new tutor is generated for each game, so this will be unique
+        event.setLanguage(CTutorEngine.language);
+        event.setTutorName(mTutor.getTutorName());
+        event.setTutorId(mTutor.getTutorId());
+        event.setPromotionMode(RoboTutor.getPromotionMode(event.getMatrixName()));
+        event.setLevelName(level);
+        event.setTaskName(task);
+
+        event.setProblemName(generateProblemName(dataSource[_dataIndex]));
+
+        event.setTotalProblemsCount(mTutor.getTotalQuestions());
+        event.setProblemNumber(_dataIndex);
+        event.setSubstepNumber(1);
+        event.setAttemptNumber(0);
+        event.setExpectedAnswer((String) expected);
+        event.setUserResponse((String) actual);
+        event.setCorrectness(correct ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
+        event.setTimestamp(System.currentTimeMillis());
+
+        RoboTutor.perfLogManager.postPerformanceLog(event);
+
+
+    }
+
+    private String generateProblemName(CBigMath_Data dataset) {
+        return String.format(Locale.US, "bigmath_%d%s%d=%d", dataset.dataset[0], dataset.operation, dataset.dataset[1], dataset.dataset[2]);
     }
 
     @Override

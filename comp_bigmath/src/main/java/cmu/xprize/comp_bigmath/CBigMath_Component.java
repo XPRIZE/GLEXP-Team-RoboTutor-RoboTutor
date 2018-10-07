@@ -27,6 +27,7 @@ import cmu.xprize.ltkplus.CRecognizerPlus;
 import cmu.xprize.ltkplus.GCONST;
 import cmu.xprize.util.IBehaviorManager;
 import cmu.xprize.util.ILoadableObject;
+import cmu.xprize.util.IPerformanceTracker;
 import cmu.xprize.util.IPublisher;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
@@ -47,7 +48,7 @@ import static cmu.xprize.util.MathUtil.getTensDigit;
  * Generated automatically w/ code written by Kevin DeLand
  */
 
-public class CBigMath_Component extends RelativeLayout implements ILoadableObject, IBehaviorManager, IPublisher, IHesitationManager {
+public class CBigMath_Component extends RelativeLayout implements ILoadableObject, IBehaviorManager, IPublisher, IHesitationManager, IPerformanceTracker {
 
     protected final Handler mainHandler  = new Handler(Looper.getMainLooper());
     protected HashMap           queueMap     = new HashMap();
@@ -122,7 +123,7 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
         bManager = LocalBroadcastManager.getInstance(getContext());
 
         // initialize mechanic
-        _mechanic = new BigMathMechanic(getContext(), this, this, this, this);
+        _mechanic = new BigMathMechanic(getContext(), this, this, this, this, this);
         _layout = new BigMathLayoutHelper(getContext(), this);
     }
 
@@ -445,6 +446,12 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
     public void cancelHesitation() {
 
         cancelHesitationTimer();
+    }
+
+    // override in TClass
+    @Override
+    public void trackAndLogPerformance(boolean correct, Object expected, Object actual) {
+
     }
 
     public class Queue implements Runnable {

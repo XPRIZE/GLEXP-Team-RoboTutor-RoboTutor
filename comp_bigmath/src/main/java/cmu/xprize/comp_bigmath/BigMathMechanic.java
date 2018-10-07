@@ -18,6 +18,7 @@ import cmu.xprize.comp_writebox.IGlyphController_Simple;
 import cmu.xprize.comp_writebox.IWritingComponent_Simple;
 import cmu.xprize.ltkplus.CRecResult;
 import cmu.xprize.util.IBehaviorManager;
+import cmu.xprize.util.IPerformanceTracker;
 import cmu.xprize.util.IPublisher;
 
 import static cmu.xprize.comp_bigmath.BM_CONST.ALL_DIGITS;
@@ -52,6 +53,7 @@ public class BigMathMechanic {
     private CBigMath_Data _data;
     private BigMathAnimationHelper _animator;
     private BigMathProblemState _problemState;
+    private final IPerformanceTracker _performance;
 
     private IHesitationManager _hManager;
 
@@ -74,15 +76,16 @@ public class BigMathMechanic {
 
     private StudentActionListener _studentActionListener;
 
-    public BigMathMechanic(Context activity, IBehaviorManager behaviorManager, IPublisher publisher, IHesitationManager hesitationManager, ViewGroup viewGroup) {
+    public BigMathMechanic(Context activity, IBehaviorManager behaviorManager, IPublisher publisher, IHesitationManager hesitationManager, ViewGroup viewGroup, IPerformanceTracker performance) {
         _behaviorManager = behaviorManager;
         _publisher = publisher;
         _activity = activity;
         _viewGroup = viewGroup;
         _layout = new BigMathLayoutHelper(activity, viewGroup);
         _hManager = hesitationManager;
+        _performance = performance;
 
-        _studentActionListener = new StudentActionListenerImpl(_behaviorManager, _publisher, this); // won't always work...
+        _studentActionListener = new StudentActionListenerImpl(_behaviorManager, _publisher, this, _performance); // won't always work...
         _animator = new BigMathAnimationHelper(_activity, _layout, _viewGroup);
     }
 
