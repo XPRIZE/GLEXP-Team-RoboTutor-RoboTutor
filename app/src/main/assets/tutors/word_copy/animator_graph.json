@@ -38,7 +38,7 @@
             {"name": "Disable Input",  "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput",       "parms": "TRUE:Boolean",  "features":"" },
             // Dictation Hesitation
             {"name": "Point at Replay Button", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent", "parms": "POINT_AT_REPLAY_BUTTON:String", "features":"FTR_DICTATION"},
-            {"name": "Tap Prompt", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please tap here to hear the word again.mp3","soundpackage": "default","mode": "flow", "features": "FTR_DICTATION"},
+            {"name": "Tap Prompt", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please tap here to hear the word again.mp3","soundpackage": "default","mode": "flow", "features": "!FTR_SEN&FTR_DICTATION"},
 
 
             // Standard Hesitation
