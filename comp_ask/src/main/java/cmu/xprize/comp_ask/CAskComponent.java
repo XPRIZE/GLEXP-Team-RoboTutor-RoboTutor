@@ -27,7 +27,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 
 import org.json.JSONObject;
 
@@ -195,7 +194,7 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
             if (element == null) break;
             int viewID = getResources().getIdentifier(element.componentID, "id", packageName);
 
-            ImageButton ibView = (ImageButton) findViewById(viewID);
+            CImageButton ibView = (CImageButton) findViewById(viewID);
 
             buttonMap.put(ibView, element.componentID);
             buttonList.add(ibView);
@@ -211,7 +210,7 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
         // first two (or three) buttons are set...
         for(int i = 0; i < nextActivities.length; i++) {
             CAskElement element = mDataSource.items[i];
-            ImageButton ibView = (ImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
+            CImageButton ibView = (CImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
 
             boolean useOldWay = false;
             // get the correct file name
@@ -251,7 +250,7 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
                 int test = getResources().getIdentifier(element.componentID, "id", packageName);
 
-                ImageButton ibView = (ImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
+                CImageButton ibView = (CImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
 
                 ibView.setImageDrawable(null);
             }
@@ -333,7 +332,8 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
             case MotionEvent.ACTION_DOWN:
 
                 startTouch(view);
-                view.setPressed(true);
+                // https://stackoverflow.com/questions/5975168/android-button-setpressed-after-onclick
+                view.setPressed(true); // TAP_BUTTON here we go!
 
                 result = true;
                 break;

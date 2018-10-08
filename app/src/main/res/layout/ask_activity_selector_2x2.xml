@@ -9,7 +9,7 @@
     android:layout_height="match_parent"
     android:background="#F3FAFF">
 
-    <ImageButton
+    <cmu.xprize.comp_ask.CImageButton
         android:id="@+id/SbuttonOption1"
         android:layout_width="match_parent"
         android:scaleType="fitCenter"
@@ -20,7 +20,7 @@
         android:src="@drawable/pentagon"
         />
 
-    <ImageButton
+    <cmu.xprize.comp_ask.CImageButton
         android:id="@+id/SbuttonOption2"
         android:layout_toRightOf="@id/SbuttonOption1"
         android:scaleType="fitCenter"
@@ -32,7 +32,7 @@
         android:src="@drawable/triangle"/>
 
 
-    <ImageButton
+    <cmu.xprize.comp_ask.CImageButton
         android:id="@+id/SbuttonRepeat"
         android:scaleType="fitCenter"
         android:layout_below="@+id/SbuttonOption1"
@@ -45,7 +45,7 @@
         android:src="@drawable/button_repeat_select"
         />
 
-    <ImageButton
+    <cmu.xprize.comp_ask.CImageButton
         android:id="@+id/SbuttonExit"
         android:layout_toRightOf="@id/SbuttonRepeat"
         android:layout_below="@+id/SbuttonOption2"
