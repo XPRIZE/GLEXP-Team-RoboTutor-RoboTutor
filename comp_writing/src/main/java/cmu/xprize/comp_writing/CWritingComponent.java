@@ -1318,7 +1318,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                             //update the indices and text for words in mListWordsInput
 
-                            // if this correct response makes the sentence correct,
+                            // if this correct response makes the sentence correct, go to the next item
                             boolean writtenSentenceIsCorrect = mWrittenSentence.equals(mAnswer);
 
                             //if the written sentence is correct
