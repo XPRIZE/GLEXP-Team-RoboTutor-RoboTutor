@@ -111,8 +111,9 @@ public class CycleMatrixActivityMenu implements IActivityMenu {
         }
         activeLayout.items[0].prompt = prompt;
         activeLayout.items[0].help = prompt;
-        activeLayout.items[1].prompt = prompt;
-        activeLayout.items[1].help = prompt;
+
+        activeLayout.items[1].prompt = "something harder";
+        activeLayout.items[1].help = "something harder";
 
         activeLayout.items[2] =  new CAskElement();
         activeLayout.items[2].componentID = "SbuttonRepeat";
