@@ -206,7 +206,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         // NOTE: Need to include the configuration name when that is fully merged
         String logFilename  = "RoboTutor_" + BuildConfig.BUILD_TYPE + "." +
                 Configuration.configVersion(this) + "_" + sequenceIdString +
-                "_" + initTime + "_" + Build.SERIAL;
+                "_" + initTime + "_" + BuildConfig.VERSION_NAME + "_" + Build.SERIAL;
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "rt: onCreate");
         // Catch all errors and cause a clean exit -

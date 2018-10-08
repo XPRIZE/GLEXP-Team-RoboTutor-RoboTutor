@@ -20,6 +20,8 @@ public class Configuration {
                 .putBoolean(ConfigurationItems.NO_ASR_APPS, configItems.no_asr_apps)
                 .putString(ConfigurationItems.LANGUAGE_FEATURE_ID, configItems.language_feature_id)
                 .putBoolean(ConfigurationItems.SHOW_DEMO_VIDS, configItems.show_demo_vids)
+                .putBoolean(ConfigurationItems.ADMINISTER_PLACEMENT, configItems.administer_placement)
+                .putBoolean(ConfigurationItems.STORE_AUDIO, configItems.store_audio)
                 .apply();
     }
 
@@ -61,5 +63,15 @@ public class Configuration {
     public static boolean showDemoVids(Context context) {
         return context.getSharedPreferences(ROBOTUTOR_CONFIGURATION, MODE_PRIVATE)
                 .getBoolean(ConfigurationItems.SHOW_DEMO_VIDS, true);
+    }
+
+    public static boolean administerPlacement(Context context) {
+        return context.getSharedPreferences(ROBOTUTOR_CONFIGURATION, MODE_PRIVATE)
+                .getBoolean(ConfigurationItems.ADMINISTER_PLACEMENT, false);
+    }
+
+    public static boolean storeAudio(Context context) {
+        return context.getSharedPreferences(ROBOTUTOR_CONFIGURATION, MODE_PRIVATE)
+                .getBoolean(ConfigurationItems.STORE_AUDIO, false);
     }
 }
