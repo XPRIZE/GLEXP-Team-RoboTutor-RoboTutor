@@ -796,6 +796,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     _charValid = false;
                 }
             }
+            else if(activityFeature.contains("FTR_SEN_WRD")){
+
+            }
 
         //amogh ends
 
@@ -943,7 +946,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 mActiveWord = mListWordsInput.get(currentWordIndex);
                 int attempts = mActiveWord.getAttempt();
 
-                //when the word is being written and evaluated for the first time, also making sure that its not the first box
+                //evaluate when the word is being written and evaluated for the first time, also making sure that its not the first box (as we are trying to detect the transition to the next word)
                 if(attempts == 0 && mActiveIndex > 0){
 
                     //if punctuation is written or the previous space is left empty
