@@ -135,7 +135,9 @@
           "reuse": true,
           "tracks": [
               
-            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SPictureMatch", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""}
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SPictureMatch", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""},
+            {"name": "RESET IMAGES", "type": "COMMAND", "id": "SPictureMatch", "method": "unpressImages", "features": ""}
+
     
           ]
         },

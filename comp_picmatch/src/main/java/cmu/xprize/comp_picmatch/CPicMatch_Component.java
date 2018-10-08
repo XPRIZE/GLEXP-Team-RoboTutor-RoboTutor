@@ -6,6 +6,7 @@ import android.graphics.PointF;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -183,6 +184,8 @@ public class CPicMatch_Component extends RelativeLayout implements ILoadableObje
         }
     }
 
+    private int unpressIndex = 0; // for some reason it only lets me change one background opacity at a time...
+
     class StudentChoiceListener implements View.OnClickListener {
 
         int _index;
@@ -196,6 +199,10 @@ public class CPicMatch_Component extends RelativeLayout implements ILoadableObje
             retractFeature("FTR_CORRECT");
             retractFeature("FTR_WRONG");
 
+            unpressIndex = _index;
+            optionViews[_index].getBackground().setAlpha(255);
+            Log.wtf("UNPRESS", "pressing: " + optionViews[_index].getResources().getResourceName(optionViews[_index].getId()));
+
             if(prompt.equals(images[_index])) {
                 publishFeature("FTR_CORRECT"); // ALAN_HILL (3) search animator graph for this term
                 trackAndLogPerformance(true, prompt);
@@ -206,6 +213,19 @@ public class CPicMatch_Component extends RelativeLayout implements ILoadableObje
 
 
             applyBehavior("STUDENT_CHOICE_EVENT"); // ALAN_HILL (3) search animator graph for this term
+        }
+    }
+
+    /**
+     * reset the image to unpressed state
+     */
+    public void unpressImages() {
+        // try only unpressing one???
+        optionViews[unpressIndex].getBackground().setAlpha(63);
+        Log.wtf("UNPRESS", "unpressing images");
+        for (ImageView optionView : optionViews) {
+            Log.wtf("UNPRESS", "unpressing: " + optionView.getResources().getResourceName(optionView.getId()));
+            optionView.getBackground().setAlpha(63); // wtf... why is this not working for all option views?
         }
     }
 

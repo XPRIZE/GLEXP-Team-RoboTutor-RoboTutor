@@ -26,10 +26,11 @@
 
     <ImageView
         android:id="@+id/option_1"
-        android:layout_width="200sp"
+        android:layout_width="250sp"
         android:layout_height="200sp"
-        android:background="@android:color/holo_blue_light"
+        android:background="@android:color/holo_purple"
         android:gravity="center"
+        android:padding="@dimen/picmatchPadding"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/option_2"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -38,10 +39,11 @@
 
     <ImageView
         android:id="@+id/option_2"
-        android:layout_width="200sp"
+        android:layout_width="250sp"
         android:layout_height="200sp"
-        android:background="@android:color/holo_orange_light"
+        android:background="@android:color/holo_purple"
         android:gravity="center"
+        android:padding="@dimen/picmatchPadding"
         app:layout_constraintTop_toBottomOf="@id/option_1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -50,10 +52,11 @@
 
     <ImageView
         android:id="@+id/option_3"
-        android:layout_width="200sp"
+        android:layout_width="250sp"
         android:layout_height="200sp"
-        android:background="@android:color/holo_red_light"
+        android:background="@android:color/holo_purple"
         android:gravity="center"
+        android:padding="@dimen/picmatchPadding"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/option_4"
         app:layout_constraintLeft_toRightOf="@id/option_1"
@@ -62,10 +65,11 @@
 
     <ImageView
         android:id="@+id/option_4"
-        android:layout_width="200sp"
+        android:layout_width="250sp"
         android:layout_height="200sp"
-        android:background="@android:color/holo_green_light"
+        android:background="@android:color/holo_purple"
         android:gravity="center"
+        android:padding="@dimen/picmatchPadding"
         app:layout_constraintTop_toBottomOf="@id/option_3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/option_2"
