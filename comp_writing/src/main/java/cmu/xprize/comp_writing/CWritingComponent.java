@@ -796,6 +796,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     _charValid = false;
                 }
             }
+            else if(activityFeature.contains("FTR_SEN_WRD")){
+
+            }
 
         //amogh ends
 
@@ -943,7 +946,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 mActiveWord = mListWordsInput.get(currentWordIndex);
                 int attempts = mActiveWord.getAttempt();
 
-                //when the word is being written and evaluated for the first time, also making sure that its not the first box
+                //evaluate when the word is being written and evaluated for the first time, also making sure that its not the first box (as we are trying to detect the transition to the next word)
                 if(attempts == 0 && mActiveIndex > 0){
 
                     //if punctuation is written or the previous space is left empty
@@ -1315,7 +1318,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                             //update the indices and text for words in mListWordsInput
 
-                            // if this correct response makes the sentence correct,
+                            // if this correct response makes the sentence correct, go to the next item
                             boolean writtenSentenceIsCorrect = mWrittenSentence.equals(mAnswer);
 
                             //if the written sentence is correct
@@ -2105,6 +2108,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         //if not correct, play replay unless its a space, and update the response, the sentence parameters and the correct status of the glyph
         else {
+
+//            autoScroll(v);
+
             v.eraseGlyph();
 //            String expectedCharString = v.getExpectedChar(); //amogh comment, this needs to change when insert and delete buttons come in, as then the expected character dynamically changing would also mean changing the protoglyph dynamically, but here expected character is just to enable easy writing.
             String expectedCharString = mAnswer.substring(mActiveIndex,mActiveIndex + 1);
@@ -2619,6 +2625,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 v = (CGlyphController) mGlyphList.getChildAt(i1);
 
+                //set the expected character
                 //set the expected character
                 String expectedChar = mAlignedTargetSentence.substring(expectedCharIndex, expectedCharIndex + 1);
                 String recognisedChar = v.getRecognisedChar();
@@ -4106,7 +4113,9 @@ public class EditOperation {
                     case WR_CONST.SHOW_SAMPLE:
 
                         mActiveController = (CGlyphController) mGlyphList.getChildAt(mActiveIndex);
-                        if(mActiveController.getExpectedChar().equals(" ") || mActiveController.getExpectedChar().equals("") || activityFeature.contains("FTR_SEN_LTR") && mActiveController.isCorrect()){
+                        boolean isExpectedCharacterSpace = mActiveController.getExpectedChar().equals(" ") || mActiveController.getExpectedChar().equals("");
+                        boolean isCorrect = activityFeature.contains("FTR_SEN_LTR") && mActiveController.isCorrect();
+                        if(isExpectedCharacterSpace || isCorrect){
                             publishFeature("FTR_SPACE_SAMPLE");
                             break;
                         }
