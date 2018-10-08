@@ -419,7 +419,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         }*/
 
         // the next tutor to be launched
-        CAt_Data tutorToLaunch = menu.getTutorToLaunch(buttonBehavior);
+        CAt_Data tutorToLaunch = menu.getTutorToLaunch(buttonBehavior); // TRACE_PROMOTION the tutorToLaunch isn't saved...
 
         // #Mod 330 Show TutorID in Banner in debug builds
         // DEBUG_TUTORID is used to communicate the active tutor to the Banner in DEBUG mode
@@ -649,6 +649,8 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         Log.wtf("WARRIOR_MAN", "doLaunch: tutorId = " + tutorId);
 
         RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
+
+        // TRACE_PROMOTION tutorToLaunch not saved...
 
         // update the response variable  "<Sresponse>.value"
 

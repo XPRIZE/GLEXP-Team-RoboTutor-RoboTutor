@@ -144,74 +144,101 @@ public class CycleMatrixActivityMenu implements IActivityMenu {
     public CAt_Data getTutorToLaunch(String buttonBehavior) {
 
         //
-        String activeTutorId = "";
+        String zeroIndexedTutorId = ""; // the current tutor in the left-top position
         HashMap transitionMap = null;
         String rootTutor = "";
 
         String activeSkill = null;
+        String chosenTutorId;
 
         Log.d("OH_BEHAVE", "some behavior here should be different...");
 
         if (buttonBehavior.equals(SELECT_REPEAT)) {
             Log.d("REPEAT_ME", "repeating behavior");
             RoboTutor.STUDENT_CHOSE_REPEAT = true;
+            activeSkill = _student.getLastSkill();
+            chosenTutorId = _student.getLastTutor();
+            transitionMap = _matrix.getTransitionMapByContentArea(activeSkill);
+            rootTutor = _matrix.getRootSkillByContentArea(activeSkill);
+
+        } else {
+
+            activeSkill = _student.getActiveSkill();
+            CAt_Data zeroIndexedTutor;
+            String[] nextTutors = new String[3];
+
+            switch(activeSkill) {
+                case SELECT_WRITING:
+                    zeroIndexedTutorId = _student.getWritingTutorID();
+                    Log.d("REPEAT_ME", "writingTutor=" + zeroIndexedTutorId);
+                    break;
+
+                case SELECT_STORIES:
+                    zeroIndexedTutorId = _student.getStoryTutorID();
+                    Log.d("REPEAT_ME", "storyTutor=" + zeroIndexedTutorId);
+                    break;
+
+                case SELECT_MATH:
+                    zeroIndexedTutorId = _student.getMathTutorID();
+                    Log.d("REPEAT_ME", "mathTutor=" + zeroIndexedTutorId);
+                    break;
+            }
+
+            RoboTutor.logManager.postEvent_I(MENU_BUG_TAG, "CycleMatrixActivityMenu: activeSkill=" + activeSkill + " -- activeTutorId=" + zeroIndexedTutorId);
+            transitionMap = _matrix.getTransitionMapByContentArea(activeSkill);
+            rootTutor = _matrix.getRootSkillByContentArea(activeSkill);
+            zeroIndexedTutor = (CAt_Data) transitionMap.get(zeroIndexedTutorId);
+            nextTutors[0] = zeroIndexedTutor.tutor_id;
+            nextTutors[1] = ((CAt_Data) transitionMap.get(zeroIndexedTutor.next)).tutor_id; // next hardest tutor!!!
+
+            switch(buttonBehavior.toUpperCase()) {
+
+                case SELECT_OPTION_0: // TRACE_PROMOTION looks good...
+                    chosenTutorId = nextTutors[0];
+                    break;
+
+                case SELECT_OPTION_1: // TRACE_PROMOTION looks good...
+                    // launch the next tutor
+                    // something like this...
+                    chosenTutorId = nextTutors[1];
+
+                    break;
+
+                case SELECT_OPTION_2:
+                    // launch the next.next tutor
+                    chosenTutorId = nextTutors[2];
+                    break;
+
+                default:
+                    chosenTutorId = zeroIndexedTutorId; // TRACE_PROMOTION does this break anything? // getLastTutor?
+                    break;
+            }
+
+            // If they choose the second option, update our position in thematrix //
+            // will only be updated if SELECT_OPTION_1 or SELECT_OPTION_2 were selected //
+            if (!chosenTutorId.equals(zeroIndexedTutorId)) {
+                switch (activeSkill) {
+                    case SELECT_WRITING:
+                        _student.updateWritingTutorID(chosenTutorId);
+                        break;
+
+                    case SELECT_STORIES:
+                        _student.updateStoryTutorID(chosenTutorId);
+                        break;
+
+                    case SELECT_MATH:
+                        _student.updateMathTutorID(chosenTutorId);
+                        break;
+                }
+            }
+
         }
 
-        CAt_Data activeTutor;
-        String[] nextTutors = new String[3];
 
-        activeSkill = RoboTutor.STUDENT_CHOSE_REPEAT ? _student.getLastSkill() : _student.getActiveSkill();
-
-        switch(activeSkill) {
-            case SELECT_WRITING:
-                activeTutorId = _student.getWritingTutorID();
-                Log.d("REPEAT_ME", "writingTutor=" + activeTutorId);
-                break;
-
-            case SELECT_STORIES:
-                activeTutorId = _student.getStoryTutorID();
-                Log.d("REPEAT_ME", "storyTutor=" + activeTutorId);
-                break;
-
-            case SELECT_MATH:
-                activeTutorId = _student.getMathTutorID();
-                Log.d("REPEAT_ME", "mathTutor=" + activeTutorId);
-                break;
-        }
-
-        RoboTutor.logManager.postEvent_I(MENU_BUG_TAG, "CycleMatrixActivityMenu: activeSkill=" + activeSkill + " -- activeTutorId=" + activeTutorId);
-        transitionMap = _matrix.getTransitionMapByContentArea(activeSkill);
-        activeTutor = (CAt_Data) transitionMap.get(activeTutorId);
-        nextTutors[0] = activeTutor.tutor_id;
-        //nextTutors[0] = ((CAt_Data) transitionMap.get(activeTutor.easier)).tutor_id; // next hardest tutor!!!
-        nextTutors[1] = ((CAt_Data) transitionMap.get(activeTutor.next)).tutor_id; // next hardest tutor!!!
-
-        switch(buttonBehavior.toUpperCase()) {
-
-            case SELECT_OPTION_0:
-                activeTutorId = nextTutors[0];
-                break;
-
-            case SELECT_OPTION_1:
-                // launch the next tutor
-                // something like this...
-                activeTutorId = nextTutors[1];
-
-                break;
-
-            case SELECT_OPTION_2:
-                // launch the next.next tutor
-                activeTutorId = nextTutors[2];
-                break;
-
-            case AS_CONST.SELECT_REPEAT:
-
-                break;
-        }
-
-
+        // TRACE_PROMOTION doesn't save tutorToLaunch when we choose the second option!!!
         // the next tutor to be launched
-        CAt_Data tutorToLaunch = (CAt_Data) transitionMap.get(activeTutorId);
+        CAt_Data tutorToLaunch = (CAt_Data) transitionMap.get(chosenTutorId);
+        Log.wtf(MENU_BUG_TAG, chosenTutorId + " " +  activeSkill);
 
         // This is just to make sure we go somewhere if there is a bad link - which
         // there shuoldn't be :)

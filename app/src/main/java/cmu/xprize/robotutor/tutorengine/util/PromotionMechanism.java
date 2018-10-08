@@ -93,7 +93,7 @@ public class PromotionMechanism {
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
 
-                activeTutorId = _studentModel.getWritingTutorID();
+                activeTutorId = _studentModel.getWritingTutorID(); // TRACE_PROMOTION if we choose second option, this isn't updated
                 transitionMap = _matrix.writeTransitions;
                 useWritingPlacement = _studentModel.getWritingPlacement();
                 placementIndex = _studentModel.getWritingPlacementIndex();
@@ -114,6 +114,7 @@ public class PromotionMechanism {
                 break;
         }
 
+        // TRACE_PROMOTION this might be different...
         RoboTutor.logManager.postEvent_I(MENU_BUG_TAG, String.format("compare lastTutorPlayed=%s == activeTutorId=%s", lastTutorPlayed.getTutorId(), activeTutorId));
         RoboTutor.logManager.postEvent_I(MENU_BUG_TAG, "selectNextTutor -- activeTutorId=" + activeTutorId+ " -- activeSkill=" + lastSkillPlayed);
         RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format(Locale.US, "selectNextTutor -- w=%s -- m=%s",
