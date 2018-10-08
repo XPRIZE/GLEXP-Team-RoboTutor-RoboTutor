@@ -75,6 +75,7 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
     public int rows;
     public int cols;
     public CBigMath_Data[] dataSource;
+    protected CBigMath_Data currentData;
 
 
     // CONST
@@ -181,6 +182,8 @@ public class CBigMath_Component extends RelativeLayout implements ILoadableObjec
     }
 
     protected void updateDataSet(CBigMath_Data data) {
+
+        currentData = data;
 
         // first load dataset into fields
         loadDataSet(data);

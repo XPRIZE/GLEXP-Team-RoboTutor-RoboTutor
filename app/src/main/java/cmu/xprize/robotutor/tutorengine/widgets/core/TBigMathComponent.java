@@ -139,7 +139,7 @@ public class TBigMathComponent extends CBigMath_Component implements ITutorObjec
         event.setLevelName(level);
         event.setTaskName(task);
 
-        event.setProblemName(generateProblemName(dataSource[_dataIndex]));
+        event.setProblemName(generateProblemName(currentData));
 
         event.setTotalProblemsCount(mTutor.getTotalQuestions());
         event.setProblemNumber(_dataIndex);
