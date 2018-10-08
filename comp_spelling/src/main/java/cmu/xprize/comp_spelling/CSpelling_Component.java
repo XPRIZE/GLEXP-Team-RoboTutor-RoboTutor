@@ -198,7 +198,8 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         String current = "" + _word.get(_currentLetterIndex);
 
         // publish the syllable to be pronounced
-        publishValue(SP_CONST.SYLLABLE_STIM, letter);
+        String pronunciation = mapLetterToVerbal(letter);
+        publishValue(SP_CONST.SYLLABLE_STIM, pronunciation);
 
         boolean isCorrect = letter.equalsIgnoreCase(current);
         trackAndLogPerformance(isCorrect, letter);
@@ -229,6 +230,25 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
             _attemptCount++;
         }
 
+    }
+
+    /**
+     * Map a letter to the pronunciation, e.g. to say "mm" instead of "me"
+     *
+     * @param letter
+     * @return
+     */
+    private String mapLetterToVerbal(String letter) {
+        switch (letter) {
+            case "m":
+                return "mm";
+
+            case "n":
+                return "nn";
+
+            default:
+                return letter;
+        }
     }
 
     public void revertColor() {
