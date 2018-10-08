@@ -2105,6 +2105,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         //if not correct, play replay unless its a space, and update the response, the sentence parameters and the correct status of the glyph
         else {
+
+//            autoScroll(v);
+
             v.eraseGlyph();
 //            String expectedCharString = v.getExpectedChar(); //amogh comment, this needs to change when insert and delete buttons come in, as then the expected character dynamically changing would also mean changing the protoglyph dynamically, but here expected character is just to enable easy writing.
             String expectedCharString = mAnswer.substring(mActiveIndex,mActiveIndex + 1);
@@ -2619,6 +2622,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 v = (CGlyphController) mGlyphList.getChildAt(i1);
 
+                //set the expected character
                 //set the expected character
                 String expectedChar = mAlignedTargetSentence.substring(expectedCharIndex, expectedCharIndex + 1);
                 String recognisedChar = v.getRecognisedChar();
@@ -4106,7 +4110,9 @@ public class EditOperation {
                     case WR_CONST.SHOW_SAMPLE:
 
                         mActiveController = (CGlyphController) mGlyphList.getChildAt(mActiveIndex);
-                        if(mActiveController.getExpectedChar().equals(" ") || mActiveController.getExpectedChar().equals("") || activityFeature.contains("FTR_SEN_LTR") && mActiveController.isCorrect()){
+                        boolean isExpectedCharacterSpace = mActiveController.getExpectedChar().equals(" ") || mActiveController.getExpectedChar().equals("");
+                        boolean isCorrect = activityFeature.contains("FTR_SEN_LTR") && mActiveController.isCorrect();
+                        if(isExpectedCharacterSpace || isCorrect){
                             publishFeature("FTR_SPACE_SAMPLE");
                             break;
                         }
