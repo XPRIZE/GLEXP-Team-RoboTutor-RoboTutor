@@ -308,6 +308,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         int j = 0;
         for (String l : _selectedLetters) {
             CLetter_Tile letter = new CLetter_Tile(mContext, l, j, this);
+            letter.markCorrect();
             j++;
             mSelectedLetterHolder.addView(letter);
         }

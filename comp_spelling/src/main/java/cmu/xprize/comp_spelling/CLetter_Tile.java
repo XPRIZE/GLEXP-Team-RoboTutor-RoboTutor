@@ -44,6 +44,7 @@ public class CLetter_Tile extends TextView {
     private int _index;
     private CSpelling_Component _parent;
     private boolean _isLocked;
+    private boolean _isCorrect; // mark true when it's been marked as correct and moved to the top row
 
     //endregion
 
@@ -74,6 +75,7 @@ public class CLetter_Tile extends TextView {
         _index = letterIndex;
         _parent = parent;
         _isLocked = false;
+        _isCorrect = false;
 
         this.setText(_isBlank ? "" : " " + _letter + " ");
         this.setId(letterIndex);
@@ -114,11 +116,13 @@ public class CLetter_Tile extends TextView {
         _isLocked = false;
     }
 
+    protected void markCorrect() { _isCorrect = true; }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             Log.d("ddd", "Touching: " + _isLocked);
-            if (!_isLocked && !_isBlank) {
+            if (!_isLocked && !_isBlank && !_isCorrect) {
                 _parent.onLetterTouch(_letter, _index, this);
             }
         }
