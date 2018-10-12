@@ -424,7 +424,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
                 }
             }
             catch(Exception e) {
-                CErrorManager.logEvent(TAG, "Run Error:", e, false);
+                CErrorManager.logEvent(TAG, "Run Error:", e, true);
             }
         }
     }

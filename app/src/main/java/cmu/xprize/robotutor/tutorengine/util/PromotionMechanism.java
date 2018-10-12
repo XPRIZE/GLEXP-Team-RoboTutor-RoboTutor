@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_session.AS_CONST;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CTutor;
@@ -85,6 +86,7 @@ public class PromotionMechanism {
         //
         String activeTutorId = "";
         HashMap transitionMap = null;
+        String rootTutor = ""; // needed in case our matrix changes for some reason...
         int placementIndex = 0;
         boolean useMathPlacement = false;
         boolean useWritingPlacement = false;
@@ -95,6 +97,7 @@ public class PromotionMechanism {
 
                 activeTutorId = _studentModel.getWritingTutorID(); // TRACE_PROMOTION if we choose second option, this isn't updated
                 transitionMap = _matrix.writeTransitions;
+                rootTutor = _matrix.rootSkillWrite;
                 useWritingPlacement = _studentModel.getWritingPlacement();
                 placementIndex = _studentModel.getWritingPlacementIndex();
                 break;
@@ -103,6 +106,7 @@ public class PromotionMechanism {
 
                 activeTutorId = _studentModel.getStoryTutorID();
                 transitionMap = _matrix.storyTransitions;
+                rootTutor = _matrix.rootSkillStories;
                 break;
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_MATH:
@@ -111,6 +115,7 @@ public class PromotionMechanism {
                 transitionMap = _matrix.mathTransitions;
                 useMathPlacement = _studentModel.getMathPlacement();
                 placementIndex = _studentModel.getMathPlacementIndex();
+                rootTutor = _matrix.rootSkillMath;
                 break;
         }
 
@@ -151,7 +156,7 @@ public class PromotionMechanism {
             nextTutor = getNextPlacementTutor(activeTutorId, useMathPlacement, promotionDecision, transitionMap, placementIndex);
 
         } else {
-            nextTutor = getNextPromotionTutor(activeTutorId, promotionDecision, transitionMap);
+            nextTutor = getNextPromotionTutor(activeTutorId, promotionDecision, transitionMap, rootTutor);
             // MENU_LOGIC:::: nextTutor = "story.hear::story_1";
         }
         return nextTutor; // MENU_LOGIC:::: nextTutor = "story.hear::story_1";
@@ -162,13 +167,19 @@ public class PromotionMechanism {
      * @param activeTutorId the last tutor played
      * @param promotionDecision NEXT, SAME, PREVIOUS, DOUBLE_NEXT...
      * @param transitionMap the transitionMap to get the next tutor from
+     * @param rootTutor needed for "just-in-case"
      * @return
      */
-    private String getNextPromotionTutor(String activeTutorId, PromotionRules.PromotionDecision promotionDecision, HashMap<String, CAt_Data> transitionMap) {
+    private String getNextPromotionTutor(String activeTutorId, PromotionRules.PromotionDecision promotionDecision, HashMap<String, CAt_Data> transitionMap, String rootTutor) {
         // MENU_SOLUTION... Log.info all of these
         RoboTutor.logManager.postEvent_I(MENU_BUG_TAG, "activeTutorId=" + activeTutorId + " -- ");
 
+        // Prevent NPE by setting as rootTutor.
         CAt_Data transitionData = transitionMap.get(activeTutorId);
+        if (transitionData == null) {
+            CErrorManager.logEvent(TAG, "ERROR: no entry found for " + activeTutorId + ". Using rootTutor instead.", false);
+            transitionData = transitionMap.get(rootTutor);
+        }
         switch (promotionDecision) {
             case NEXT:
                 return transitionData.next;
