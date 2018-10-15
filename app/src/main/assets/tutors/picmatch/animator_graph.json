@@ -136,7 +136,7 @@
           "tracks": [
               
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SPictureMatch", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""},
-            {"name": "RESET IMAGES", "type": "COMMAND", "id": "SPictureMatch", "method": "unpressImages", "features": ""}
+            {"name": "RESET IMAGES", "type": "COMMAND", "id": "SPictureMatch", "method": "resetImages", "features": ""}
 
     
           ]
@@ -173,7 +173,8 @@
 
               {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SPictureMatch", "method": "logState", "parms": "type#node,value#PLAYWRONG:String", "features":""},
 
-              {"name":"PLAY",  "type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3", "soundpackage":"replaceme", "mode":"flow", "features": ""} // ALAN_HILL (4) audio is played
+              {"name":"PLAY",  "type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3", "soundpackage":"replaceme", "mode":"flow", "features": ""}, // ALAN_HILL (4) audio is played
+              {"name": "RESET IMAGES", "type": "COMMAND", "id": "SPictureMatch", "method": "resetImages", "features": ""}
 
           ]
         },

@@ -2,6 +2,7 @@ package cmu.xprize.comp_picmatch;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.PointF;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.LocalBroadcastManager;
@@ -200,15 +201,17 @@ public class CPicMatch_Component extends RelativeLayout implements ILoadableObje
             retractFeature("FTR_WRONG");
 
             unpressIndex = _index;
-            optionViews[_index].getBackground().setAlpha(255);
+            // press every incorrect one optionViews[_index].getBackground().setAlpha(255);
             Log.wtf("UNPRESS", "pressing: " + optionViews[_index].getResources().getResourceName(optionViews[_index].getId()));
 
             if(prompt.equals(images[_index])) {
                 publishFeature("FTR_CORRECT"); // ALAN_HILL (3) search animator graph for this term
+                optionViews[_index].setBackgroundColor(Color.parseColor(PM_CONST.HOLO_GREEN));
                 trackAndLogPerformance(true, prompt);
             } else {
                 publishFeature("FTR_WRONG"); // ALAN_HILL (3) search animator graph for this term
                 trackAndLogPerformance(false, images[_index]);
+                optionViews[_index].setBackgroundColor(Color.parseColor(PM_CONST.HOLO_ORANGE));
             }
 
 
@@ -219,12 +222,14 @@ public class CPicMatch_Component extends RelativeLayout implements ILoadableObje
     /**
      * reset the image to unpressed state
      */
-    public void unpressImages() {
+    public void resetImages() {
         // try only unpressing one???
-        optionViews[unpressIndex].getBackground().setAlpha(63);
+        //optionViews[unpressIndex].getBackground().setAlpha(63);
+
         Log.wtf("UNPRESS", "unpressing images");
         for (ImageView optionView : optionViews) {
             Log.wtf("UNPRESS", "unpressing: " + optionView.getResources().getResourceName(optionView.getId()));
+            optionView.setBackgroundColor(Color.parseColor(PM_CONST.HOLO_PURPLE));
             optionView.getBackground().setAlpha(63); // wtf... why is this not working for all option views?
         }
     }
