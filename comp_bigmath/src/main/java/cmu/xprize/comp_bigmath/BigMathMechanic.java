@@ -169,6 +169,11 @@ public class BigMathMechanic {
 
         for (String numLoc : locations) {
 
+            // subtraction doesn't have click listeners in the second row, it just receives
+            if (numLoc.equals(OPB_LOCATION) && _data.operation.equals("-")) {
+                return;
+            }
+
             // BUG_605 waterfall not ready for subtraction
             View.OnClickListener oneListener;
             boolean useWaterfallForOnesDigit = ALL_AT_ONCE && _numDigits >= 2;
