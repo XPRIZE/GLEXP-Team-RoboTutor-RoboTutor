@@ -4473,7 +4473,7 @@
       "cell_column": "2",
       "same": "place.value:pv-11..99.2D.diff0.1",
       "next": "bigmath:add.by.1.0..8.NoCarryBorrow.lev1__it_1",
-      "next_next": "story.hear::math.egma_word_problems__it_1",
+      "next_next": "story.hear::math.word_problem_1__it_1",
       "prev": "numcompare:1d__it_1",
       "harder": "bigmath:sub.by.1.1..9.NoCarryBorrow.lev3__it_1",
       "easier": "numcompare:1d__it_1"
@@ -4488,7 +4488,7 @@
       "cell_column": "6",
       "same": "place.value:pv-11..99.2D.diff0.2",
       "next": "bigmath:add.by.rand.0..8.NoCarryBorrow.lev2__it_1",
-      "next_next": "story.hear::math.hui_word_problems__it_1",
+      "next_next": "story.hear::math.word_problem_2__it_1",
       "prev": "numcompare:2d.by.ten__it_1",
       "harder": "bigmath:sub.by.rand.1..9.NoCarryBorrow.lev4__it_1",
       "easier": "numcompare:2d.by.ten__it_1"
@@ -4503,7 +4503,7 @@
       "cell_column": "2",
       "same": "place.value:pv-11..99.2D.diff0.3",
       "next": "bigmath:sub.by.1.1..9.NoCarryBorrow.lev3__it_1",
-      "next_next": "story.hear::math.simple_addition_1__it_1",
+      "next_next": "story.hear::math.word_problem_3__it_1",
       "prev": "numcompare:2d.compare.mix__it_1",
       "harder": "bigmath:add.by.10.0..80.NoCarryBorrow.lev5__it_1",
       "easier": "numcompare:1d__it_1"
@@ -4518,7 +4518,7 @@
       "cell_column": "6",
       "same": "place.value:pv-11..99.2D.diff0.4",
       "next": "bigmath:sub.by.rand.1..9.NoCarryBorrow.lev4__it_1",
-      "next_next": "story.hear::math.simple_addition_2__it_1",
+      "next_next": "story.hear::math.word_problem_4__it_1",
       "prev": "numcompare:2d.compare.one__it_1",
       "harder": "bigmath:add.by.rand.0..80.NoCarryBorrow.lev6__it_1",
       "easier": "numcompare:2d.by.ten__it_1"
@@ -4533,7 +4533,7 @@
       "cell_column": "2",
       "same": "place.value:pv-11..99.2D.diff0.5",
       "next": "bigmath:add.by.10.0..80.NoCarryBorrow.lev5__it_1",
-      "next_next": "story.hear::math.word_problem_1__it_1",
+      "next_next": "story.hear::math.word_problem_5__it_1",
       "prev": "numcompare:2d.compare.random__it_1",
       "harder": "bigmath:sub.by.10.20..90.NoCarryBorrow.lev7__it_1",
       "easier": "numcompare:2d.compare.mix__it_1"
@@ -4548,7 +4548,7 @@
       "cell_column": "6",
       "same": "place.value:pv-11..99.2D.diff1.6",
       "next": "bigmath:add.by.rand.0..80.NoCarryBorrow.lev6__it_1",
-      "next_next": "story.hear::math.word_problem_2__it_1",
+      "next_next": "story.hear::math.word_problem_6__it_1",
       "prev": "numcompare:2d.compare.ten__it_1",
       "harder": "bigmath:sub.by.rand.20..90.NoCarryBorrow.lev8__it_1",
       "easier": "numcompare:2d.compare.one__it_1"
@@ -4563,10 +4563,40 @@
       "cell_column": "2",
       "same": "place.value:pv-11..99.2D.diff1.7",
       "next": "bigmath:sub.by.10.20..90.NoCarryBorrow.lev7__it_1",
-      "next_next": "story.hear::math.word_problem_3__it_1",
+      "next_next": "story.hear::math.word_problem_1__it_2",
       "prev": "numcompare:3d.by.hun__it_1",
       "harder": "bigmath:add.by.rand.0..9.AllCarryBorrow.lev9.json__it_1",
       "easier": "numcompare:2d.compare.random__it_1"
+    },
+    "story.hear::math.word_problem_1__it_1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "story.hear::math.word_problem_1__it_1",
+      "tutor_desc": "story.hear",
+      "tutor_data": "[wordproblems]math.word_problem_1",
+      "cell_row": "1",
+      "cell_column": "4",
+      "same": "story.hear::math.word_problem_1__it_1",
+      "next": "numcompare:2d.by.ten__it_1",
+      "next_next": "place.value:pv-11..99.2D.diff0.2",
+      "prev": "bigmath:add.by.1.0..8.NoCarryBorrow.lev1__it_1",
+      "harder": "numcompare:2d.compare.one__it_1",
+      "easier": "bigmath:add.by.1.0..8.NoCarryBorrow.lev1__it_1"
+    },
+    "story.hear::math.word_problem_1__it_2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "story.hear::math.word_problem_1__it_2",
+      "tutor_desc": "story.hear",
+      "tutor_data": "[wordproblems]math.word_problem_1",
+      "cell_row": "4",
+      "cell_column": "4",
+      "same": "story.hear::math.word_problem_1__it_2",
+      "next": "numcompare:3d.by.ten__it_1",
+      "next_next": "place.value:pv-11..99.2D.diff1.8",
+      "prev": "bigmath:sub.by.10.20..90.NoCarryBorrow.lev7__it_1",
+      "harder": "numcompare:3d.compare.mix__it_1",
+      "easier": "bigmath:add.by.10.0..80.NoCarryBorrow.lev5__it_1"
     },
     "place.value:pv-11..99.2D.diff1.8": {
       "type": "TRANSITION",
@@ -4578,10 +4608,40 @@
       "cell_column": "6",
       "same": "place.value:pv-11..99.2D.diff1.8",
       "next": "bigmath:sub.by.rand.20..90.NoCarryBorrow.lev8__it_1",
-      "next_next": "story.hear::math.word_problem_4__it_1",
+      "next_next": "story.hear::math.word_problem_2__it_2",
       "prev": "numcompare:3d.by.ten__it_1",
       "harder": "bigmath:add.by.rand.0..9.SomeCarryBorrow.lev10.json__it_1",
       "easier": "numcompare:2d.compare.ten__it_1"
+    },
+    "story.hear::math.word_problem_2__it_1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "story.hear::math.word_problem_2__it_1",
+      "tutor_desc": "story.hear",
+      "tutor_data": "[wordproblems]math.word_problem_2",
+      "cell_row": "1",
+      "cell_column": "8",
+      "same": "story.hear::math.word_problem_2__it_1",
+      "next": "numcompare:2d.compare.mix__it_1",
+      "next_next": "place.value:pv-11..99.2D.diff0.3",
+      "prev": "bigmath:add.by.rand.0..8.NoCarryBorrow.lev2__it_1",
+      "harder": "story.hear::math.word_problem_4__it_1",
+      "easier": "bigmath:add.by.rand.0..8.NoCarryBorrow.lev2__it_1"
+    },
+    "story.hear::math.word_problem_2__it_2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "story.hear::math.word_problem_2__it_2",
+      "tutor_desc": "story.hear",
+      "tutor_data": "[wordproblems]math.word_problem_2",
+      "cell_row": "4",
+      "cell_column": "8",
+      "same": "story.hear::math.word_problem_2__it_2",
+      "next": "numcompare:3d.compare.hun__it_1",
+      "next_next": "place.value:pv-11..99.2D.diff1.9",
+      "prev": "bigmath:sub.by.rand.20..90.NoCarryBorrow.lev8__it_1",
+      "harder": "story.hear::math.word_problem_4__it_2",
+      "easier": "bigmath:add.by.rand.0..80.NoCarryBorrow.lev6__it_1"
     },
     "place.value:pv-11..99.2D.diff1.9": {
       "type": "TRANSITION",
@@ -4593,10 +4653,40 @@
       "cell_column": "2",
       "same": "place.value:pv-11..99.2D.diff1.9",
       "next": "bigmath:add.by.rand.0..9.AllCarryBorrow.lev9.json__it_1",
-      "next_next": "story.hear::math.simple_addition_5__it_1",
+      "next_next": "story.hear::math.word_problem_3__it_2",
       "prev": "numcompare:3d.compare.hun__it_1",
       "harder": "bigmath:add.by.rand.10..99.AllCarryBorrow.lev11.json__it_1",
       "easier": "numcompare:3d.by.hun__it_1"
+    },
+    "story.hear::math.word_problem_3__it_1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "story.hear::math.word_problem_3__it_1",
+      "tutor_desc": "story.hear",
+      "tutor_data": "[wordproblems]math.word_problem_3",
+      "cell_row": "2",
+      "cell_column": "4",
+      "same": "story.hear::math.word_problem_3__it_1",
+      "next": "numcompare:2d.compare.one__it_1",
+      "next_next": "place.value:pv-11..99.2D.diff0.4",
+      "prev": "bigmath:sub.by.1.1..9.NoCarryBorrow.lev3__it_1",
+      "harder": "numcompare:2d.compare.ten__it_1",
+      "easier": "bigmath:add.by.1.0..8.NoCarryBorrow.lev1__it_1"
+    },
+    "story.hear::math.word_problem_3__it_2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "story.hear::math.word_problem_3__it_2",
+      "tutor_desc": "story.hear",
+      "tutor_data": "[wordproblems]math.word_problem_3",
+      "cell_row": "5",
+      "cell_column": "4",
+      "same": "story.hear::math.word_problem_3__it_2",
+      "next": "numcompare:3d.compare.mix__it_1",
+      "next_next": "place.value:pv-11..99.2D.diff1.10",
+      "prev": "bigmath:add.by.rand.0..9.AllCarryBorrow.lev9.json__it_1",
+      "harder": "numcompare:3d.compare.random__it_1",
+      "easier": "bigmath:sub.by.10.20..90.NoCarryBorrow.lev7__it_1"
     },
     "place.value:pv-11..99.2D.diff1.10": {
       "type": "TRANSITION",
@@ -4608,10 +4698,40 @@
       "cell_column": "6",
       "same": "place.value:pv-11..99.2D.diff1.10",
       "next": "bigmath:add.by.rand.0..9.SomeCarryBorrow.lev10.json__it_1",
-      "next_next": "story.hear::math.simple_addition_6__it_1",
+      "next_next": "story.hear::math.word_problem_4__it_2",
       "prev": "numcompare:3d.compare.mix__it_1",
       "harder": "bigmath:add.by.rand.10..99.SomeCarryBorrow.lev12.json__it_1",
       "easier": "numcompare:3d.by.ten__it_1"
+    },
+    "story.hear::math.word_problem_4__it_1": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "story.hear::math.word_problem_4__it_1",
+      "tutor_desc": "story.hear",
+      "tutor_data": "[wordproblems]math.word_problem_4",
+      "cell_row": "2",
+      "cell_column": "8",
+      "same": "story.hear::math.word_problem_4__it_1",
+      "next": "numcompare:2d.compare.random__it_1",
+      "next_next": "place.value:pv-11..99.2D.diff0.5",
+      "prev": "bigmath:sub.by.rand.1..9.NoCarryBorrow.lev4__it_1",
+      "harder": "story.hear::math.word_problem_6__it_1",
+      "easier": "bigmath:add.by.rand.0..8.NoCarryBorrow.lev2__it_1"
+    },
+    "story.hear::math.word_problem_4__it_2": {
+      "type": "TRANSITION",
+      "skill": "numbers",
+      "tutor_id": "story.hear::math.word_problem_4__it_2",
+      "tutor_desc": "story.hear",
+      "tutor_data": "[wordproblems]math.word_problem_4",
+      "cell_row": "5",
+      "cell_column": "8",
+      "same": "story.hear::math.word_problem_4__it_2",
+      "next": "numcompare:3d.compare.one__it_1",
+      "next_next": "place.value:pv-11..99.2D.diff2.11",
+      "prev": "bigmath:add.by.rand.0..9.SomeCarryBorrow.lev10.json__it_1",
+      "harder": "story.hear::math.word_problem_6__it_2",
+      "easier": "bigmath:sub.by.rand.20..90.NoCarryBorrow.lev8__it_1"
     },
     "place.value:pv-11..99.2D.diff2.11": {
       "type": "TRANSITION",
@@ -4623,35 +4743,35 @@
       "cell_column": "2",
       "same": "place.value:pv-11..99.2D.diff2.11",
       "next": "bigmath:add.by.rand.10..99.AllCarryBorrow.lev11.json__it_1",
-      "next_next": "story.hear::math.egma_word_problems__it_2",
+      "next_next": "story.hear::math.word_problem_5__it_2",
       "prev": "numcompare:3d.compare.one__it_1",
       "harder": "bigmath:add.by.1.0..8.NoCarryBorrow.lev1__it_2",
       "easier": "numcompare:3d.compare.hun__it_1"
     },
-    "story.hear::math.egma_word_problems__it_1": {
+    "story.hear::math.word_problem_5__it_1": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "story.hear::math.egma_word_problems__it_1",
+      "tutor_id": "story.hear::math.word_problem_5__it_1",
       "tutor_desc": "story.hear",
-      "tutor_data": "[wordproblems]math.egma_word_problems",
-      "cell_row": "1",
+      "tutor_data": "[wordproblems]math.word_problem_5",
+      "cell_row": "3",
       "cell_column": "4",
-      "same": "story.hear::math.egma_word_problems__it_1",
-      "next": "numcompare:2d.by.ten__it_1",
-      "next_next": "place.value:pv-11..99.2D.diff0.2",
-      "prev": "bigmath:add.by.1.0..8.NoCarryBorrow.lev1__it_1",
-      "harder": "numcompare:2d.compare.one__it_1",
-      "easier": "bigmath:add.by.1.0..8.NoCarryBorrow.lev1__it_1"
+      "same": "story.hear::math.word_problem_5__it_1",
+      "next": "numcompare:2d.compare.ten__it_1",
+      "next_next": "place.value:pv-11..99.2D.diff1.6",
+      "prev": "bigmath:add.by.10.0..80.NoCarryBorrow.lev5__it_1",
+      "harder": "numcompare:3d.by.ten__it_1",
+      "easier": "bigmath:sub.by.1.1..9.NoCarryBorrow.lev3__it_1"
     },
-    "story.hear::math.egma_word_problems__it_2": {
+    "story.hear::math.word_problem_5__it_2": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "story.hear::math.egma_word_problems__it_2",
+      "tutor_id": "story.hear::math.word_problem_5__it_2",
       "tutor_desc": "story.hear",
-      "tutor_data": "[wordproblems]math.egma_word_problems",
+      "tutor_data": "[wordproblems]math.word_problem_5",
       "cell_row": "6",
       "cell_column": "4",
-      "same": "story.hear::math.egma_word_problems__it_2",
+      "same": "story.hear::math.word_problem_5__it_2",
       "next": "numcompare:3d.compare.random__it_1",
       "next_next": "place.value:pv-11..99.2D.diff2.12",
       "prev": "bigmath:add.by.rand.10..99.AllCarryBorrow.lev11.json__it_1",
@@ -4668,39 +4788,39 @@
       "cell_column": "6",
       "same": "place.value:pv-11..99.2D.diff2.12",
       "next": "bigmath:add.by.rand.10..99.SomeCarryBorrow.lev12.json__it_1",
-      "next_next": "story.hear::math.hui_word_problems__it_2",
+      "next_next": "story.hear::math.word_problem_6__it_2",
       "prev": "numcompare:3d.compare.random__it_1",
       "harder": "bigmath:add.by.rand.0..8.NoCarryBorrow.lev2__it_2",
       "easier": "numcompare:3d.compare.mix__it_1"
     },
-    "story.hear::math.hui_word_problems__it_1": {
+    "story.hear::math.word_problem_6__it_1": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "story.hear::math.hui_word_problems__it_1",
+      "tutor_id": "story.hear::math.word_problem_6__it_1",
       "tutor_desc": "story.hear",
-      "tutor_data": "[wordproblems]math.hui_word_problems",
-      "cell_row": "1",
+      "tutor_data": "[wordproblems]math.word_problem_6",
+      "cell_row": "3",
       "cell_column": "8",
-      "same": "story.hear::math.hui_word_problems__it_1",
-      "next": "numcompare:2d.compare.mix__it_1",
-      "next_next": "place.value:pv-11..99.2D.diff0.3",
-      "prev": "bigmath:add.by.rand.0..8.NoCarryBorrow.lev2__it_1",
-      "harder": "story.hear::math.simple_addition_2__it_1",
-      "easier": "bigmath:add.by.rand.0..8.NoCarryBorrow.lev2__it_1"
+      "same": "story.hear::math.word_problem_6__it_1",
+      "next": "numcompare:3d.by.hun__it_1",
+      "next_next": "place.value:pv-11..99.2D.diff1.7",
+      "prev": "bigmath:add.by.rand.0..80.NoCarryBorrow.lev6__it_1",
+      "harder": "story.hear::math.word_problem_2__it_2",
+      "easier": "bigmath:sub.by.rand.1..9.NoCarryBorrow.lev4__it_1"
     },
-    "story.hear::math.hui_word_problems__it_2": {
+    "story.hear::math.word_problem_6__it_2": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "story.hear::math.hui_word_problems__it_2",
+      "tutor_id": "story.hear::math.word_problem_6__it_2",
       "tutor_desc": "story.hear",
-      "tutor_data": "[wordproblems]math.hui_word_problems",
+      "tutor_data": "[wordproblems]math.word_problem_6",
       "cell_row": "6",
       "cell_column": "8",
-      "same": "story.hear::math.hui_word_problems__it_2",
+      "same": "story.hear::math.word_problem_6__it_2",
       "next": "numcompare:3d.compare.ten__it_1",
       "next_next": "place.value:pv-11..99.2D.diff2.13",
       "prev": "bigmath:add.by.rand.10..99.SomeCarryBorrow.lev12.json__it_1",
-      "harder": "story.hear::math.simple_addition_2__it_2",
+      "harder": "story.hear::math.word_problem_2__it_3",
       "easier": "bigmath:add.by.rand.0..9.SomeCarryBorrow.lev10.json__it_1"
     },
     "place.value:pv-11..99.2D.diff2.13": {
@@ -4713,7 +4833,7 @@
       "cell_column": "2",
       "same": "place.value:pv-11..99.2D.diff2.13",
       "next": "bigmath:add.by.1.0..8.NoCarryBorrow.lev1__it_2",
-      "next_next": "story.hear::math.simple_addition_1__it_2",
+      "next_next": "story.hear::math.word_problem_1__it_3",
       "prev": "numcompare:3d.compare.ten__it_1",
       "harder": "bigmath:sub.by.1.1..9.NoCarryBorrow.lev3__it_2",
       "easier": "numcompare:3d.compare.one__it_1"
@@ -4727,10 +4847,10 @@
       "cell_row": "1",
       "cell_column": "3",
       "same": "bigmath:add.by.1.0..8.NoCarryBorrow.lev1__it_1",
-      "next": "story.hear::math.egma_word_problems__it_1",
+      "next": "story.hear::math.word_problem_1__it_1",
       "next_next": "numcompare:2d.by.ten__it_1",
       "prev": "place.value:pv-11..99.2D.diff0.1",
-      "harder": "story.hear::math.simple_addition_1__it_1",
+      "harder": "story.hear::math.word_problem_3__it_1",
       "easier": "place.value:pv-11..99.2D.diff0.1"
     },
     "bigmath:add.by.1.0..8.NoCarryBorrow.lev1__it_2": {
@@ -4742,36 +4862,21 @@
       "cell_row": "7",
       "cell_column": "3",
       "same": "bigmath:add.by.1.0..8.NoCarryBorrow.lev1__it_2",
-      "next": "story.hear::math.simple_addition_1__it_2",
+      "next": "story.hear::math.word_problem_1__it_3",
       "next_next": "numcompare:1d__it_2",
       "prev": "place.value:pv-11..99.2D.diff2.13",
-      "harder": "story.hear::math.word_problem_1__it_2",
+      "harder": "story.hear::math.word_problem_3__it_3",
       "easier": "place.value:pv-11..99.2D.diff2.11"
     },
-    "story.hear::math.simple_addition_1__it_1": {
+    "story.hear::math.word_problem_1__it_3": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "story.hear::math.simple_addition_1__it_1",
+      "tutor_id": "story.hear::math.word_problem_1__it_3",
       "tutor_desc": "story.hear",
-      "tutor_data": "[wordproblems]math.simple_addition_1",
-      "cell_row": "2",
-      "cell_column": "4",
-      "same": "story.hear::math.simple_addition_1__it_1",
-      "next": "numcompare:2d.compare.one__it_1",
-      "next_next": "place.value:pv-11..99.2D.diff0.4",
-      "prev": "bigmath:sub.by.1.1..9.NoCarryBorrow.lev3__it_1",
-      "harder": "numcompare:2d.compare.ten__it_1",
-      "easier": "bigmath:add.by.1.0..8.NoCarryBorrow.lev1__it_1"
-    },
-    "story.hear::math.simple_addition_1__it_2": {
-      "type": "TRANSITION",
-      "skill": "numbers",
-      "tutor_id": "story.hear::math.simple_addition_1__it_2",
-      "tutor_desc": "story.hear",
-      "tutor_data": "[wordproblems]math.simple_addition_1",
+      "tutor_data": "[wordproblems]math.word_problem_1",
       "cell_row": "7",
       "cell_column": "4",
-      "same": "story.hear::math.simple_addition_1__it_2",
+      "same": "story.hear::math.word_problem_1__it_3",
       "next": "numcompare:1d__it_2",
       "next_next": "place.value:pv-11..99.2D.diff2.14",
       "prev": "bigmath:add.by.1.0..8.NoCarryBorrow.lev1__it_2",
@@ -4791,7 +4896,7 @@
       "next_next": "bigmath:add.by.1.0..8.NoCarryBorrow.lev1__it_1",
       "prev": "numcompare:1d__it_1",
       "harder": "place.value:pv-11..99.2D.diff0.3",
-      "easier": "story.hear::math.hui_word_problems__it_1"
+      "easier": "story.hear::math.word_problem_2__it_1"
     },
     "numcompare:1d__it_2": {
       "type": "TRANSITION",
@@ -4804,9 +4909,9 @@
       "same": "numcompare:1d__it_2",
       "next": "place.value:pv-11..99.2D.diff2.14",
       "next_next": "bigmath:add.by.rand.0..8.NoCarryBorrow.lev2__it_2",
-      "prev": "story.hear::math.simple_addition_1__it_2",
+      "prev": "story.hear::math.word_problem_1__it_3",
       "harder": "place.value:pv-100..499.3D.diff0.16",
-      "easier": "story.hear::math.egma_word_problems__it_2"
+      "easier": "story.hear::math.word_problem_5__it_2"
     },
     "place.value:pv-11..99.2D.diff2.14": {
       "type": "TRANSITION",
@@ -4818,7 +4923,7 @@
       "cell_column": "6",
       "same": "place.value:pv-11..99.2D.diff2.14",
       "next": "bigmath:add.by.rand.0..8.NoCarryBorrow.lev2__it_2",
-      "next_next": "story.hear::math.simple_addition_2__it_2",
+      "next_next": "story.hear::math.word_problem_2__it_3",
       "prev": "numcompare:1d__it_2",
       "harder": "bigmath:sub.by.rand.1..9.NoCarryBorrow.lev4__it_2",
       "easier": "numcompare:3d.compare.random__it_1"
@@ -4832,10 +4937,10 @@
       "cell_row": "1",
       "cell_column": "7",
       "same": "bigmath:add.by.rand.0..8.NoCarryBorrow.lev2__it_1",
-      "next": "story.hear::math.hui_word_problems__it_1",
+      "next": "story.hear::math.word_problem_2__it_1",
       "next_next": "numcompare:2d.compare.mix__it_1",
       "prev": "place.value:pv-11..99.2D.diff0.2",
-      "harder": "story.hear::math.simple_addition_2__it_1",
+      "harder": "story.hear::math.word_problem_4__it_1",
       "easier": "place.value:pv-11..99.2D.diff0.2"
     },
     "bigmath:add.by.rand.0..8.NoCarryBorrow.lev2__it_2": {
@@ -4847,40 +4952,25 @@
       "cell_row": "7",
       "cell_column": "7",
       "same": "bigmath:add.by.rand.0..8.NoCarryBorrow.lev2__it_2",
-      "next": "story.hear::math.simple_addition_2__it_2",
+      "next": "story.hear::math.word_problem_2__it_3",
       "next_next": "numcompare:2d.by.ten__it_2",
       "prev": "place.value:pv-11..99.2D.diff2.14",
-      "harder": "story.hear::math.word_problem_2__it_2",
+      "harder": "story.hear::math.word_problem_4__it_3",
       "easier": "place.value:pv-11..99.2D.diff2.12"
     },
-    "story.hear::math.simple_addition_2__it_1": {
+    "story.hear::math.word_problem_2__it_3": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "story.hear::math.simple_addition_2__it_1",
+      "tutor_id": "story.hear::math.word_problem_2__it_3",
       "tutor_desc": "story.hear",
-      "tutor_data": "[wordproblems]math.simple_addition_2",
-      "cell_row": "2",
-      "cell_column": "8",
-      "same": "story.hear::math.simple_addition_2__it_1",
-      "next": "numcompare:2d.compare.random__it_1",
-      "next_next": "place.value:pv-11..99.2D.diff0.5",
-      "prev": "bigmath:sub.by.rand.1..9.NoCarryBorrow.lev4__it_1",
-      "harder": "story.hear::math.word_problem_2__it_1",
-      "easier": "bigmath:add.by.rand.0..8.NoCarryBorrow.lev2__it_1"
-    },
-    "story.hear::math.simple_addition_2__it_2": {
-      "type": "TRANSITION",
-      "skill": "numbers",
-      "tutor_id": "story.hear::math.simple_addition_2__it_2",
-      "tutor_desc": "story.hear",
-      "tutor_data": "[wordproblems]math.simple_addition_2",
+      "tutor_data": "[wordproblems]math.word_problem_2",
       "cell_row": "7",
       "cell_column": "8",
-      "same": "story.hear::math.simple_addition_2__it_2",
+      "same": "story.hear::math.word_problem_2__it_3",
       "next": "numcompare:2d.by.ten__it_2",
       "next_next": "place.value:pv-11..99.2D.diff2.15",
       "prev": "bigmath:add.by.rand.0..8.NoCarryBorrow.lev2__it_2",
-      "harder": "story.hear::math.word_problem_2__it_2",
+      "harder": "story.hear::math.word_problem_4__it_3",
       "easier": "bigmath:add.by.rand.10..99.SomeCarryBorrow.lev12.json__it_1"
     },
     "numcompare:2d.by.ten__it_1": {
@@ -4894,9 +4984,9 @@
       "same": "numcompare:2d.by.ten__it_1",
       "next": "place.value:pv-11..99.2D.diff0.2",
       "next_next": "bigmath:add.by.rand.0..8.NoCarryBorrow.lev2__it_1",
-      "prev": "story.hear::math.egma_word_problems__it_1",
+      "prev": "story.hear::math.word_problem_1__it_1",
       "harder": "place.value:pv-11..99.2D.diff0.4",
-      "easier": "story.hear::math.egma_word_problems__it_1"
+      "easier": "story.hear::math.word_problem_1__it_1"
     },
     "numcompare:2d.by.ten__it_2": {
       "type": "TRANSITION",
@@ -4909,9 +4999,9 @@
       "same": "numcompare:2d.by.ten__it_2",
       "next": "place.value:pv-11..99.2D.diff2.15",
       "next_next": "bigmath:sub.by.1.1..9.NoCarryBorrow.lev3__it_2",
-      "prev": "story.hear::math.simple_addition_2__it_2",
+      "prev": "story.hear::math.word_problem_2__it_3",
       "harder": "place.value:pv-100..499.3D.diff0.17",
-      "easier": "story.hear::math.simple_addition_2__it_2"
+      "easier": "story.hear::math.word_problem_2__it_3"
     },
     "place.value:pv-11..99.2D.diff2.15": {
       "type": "TRANSITION",
@@ -4923,7 +5013,7 @@
       "cell_column": "2",
       "same": "place.value:pv-11..99.2D.diff2.15",
       "next": "bigmath:sub.by.1.1..9.NoCarryBorrow.lev3__it_2",
-      "next_next": "story.hear::math.word_problem_1__it_2",
+      "next_next": "story.hear::math.word_problem_3__it_3",
       "prev": "numcompare:2d.by.ten__it_2",
       "harder": "bigmath:add.by.10.0..80.NoCarryBorrow.lev5__it_2",
       "easier": "numcompare:3d.compare.ten__it_1"
@@ -4937,10 +5027,10 @@
       "cell_row": "2",
       "cell_column": "3",
       "same": "bigmath:sub.by.1.1..9.NoCarryBorrow.lev3__it_1",
-      "next": "story.hear::math.simple_addition_1__it_1",
+      "next": "story.hear::math.word_problem_3__it_1",
       "next_next": "numcompare:2d.compare.one__it_1",
       "prev": "place.value:pv-11..99.2D.diff0.3",
-      "harder": "story.hear::math.word_problem_1__it_1",
+      "harder": "story.hear::math.word_problem_5__it_1",
       "easier": "place.value:pv-11..99.2D.diff0.1"
     },
     "bigmath:sub.by.1.1..9.NoCarryBorrow.lev3__it_2": {
@@ -4952,36 +5042,21 @@
       "cell_row": "8",
       "cell_column": "3",
       "same": "bigmath:sub.by.1.1..9.NoCarryBorrow.lev3__it_2",
-      "next": "story.hear::math.word_problem_1__it_2",
+      "next": "story.hear::math.word_problem_3__it_3",
       "next_next": "numcompare:2d.compare.mix__it_2",
       "prev": "place.value:pv-11..99.2D.diff2.15",
-      "harder": "story.hear::math.word_problem_3__it_2",
+      "harder": "story.hear::math.word_problem_5__it_3",
       "easier": "place.value:pv-11..99.2D.diff2.13"
     },
-    "story.hear::math.word_problem_1__it_1": {
+    "story.hear::math.word_problem_3__it_3": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "story.hear::math.word_problem_1__it_1",
+      "tutor_id": "story.hear::math.word_problem_3__it_3",
       "tutor_desc": "story.hear",
-      "tutor_data": "[wordproblems]math.word_problem_1",
-      "cell_row": "3",
-      "cell_column": "4",
-      "same": "story.hear::math.word_problem_1__it_1",
-      "next": "numcompare:2d.compare.ten__it_1",
-      "next_next": "place.value:pv-11..99.2D.diff1.6",
-      "prev": "bigmath:add.by.10.0..80.NoCarryBorrow.lev5__it_1",
-      "harder": "numcompare:3d.by.ten__it_1",
-      "easier": "bigmath:sub.by.1.1..9.NoCarryBorrow.lev3__it_1"
-    },
-    "story.hear::math.word_problem_1__it_2": {
-      "type": "TRANSITION",
-      "skill": "numbers",
-      "tutor_id": "story.hear::math.word_problem_1__it_2",
-      "tutor_desc": "story.hear",
-      "tutor_data": "[wordproblems]math.word_problem_1",
+      "tutor_data": "[wordproblems]math.word_problem_3",
       "cell_row": "8",
       "cell_column": "4",
-      "same": "story.hear::math.word_problem_1__it_2",
+      "same": "story.hear::math.word_problem_3__it_3",
       "next": "numcompare:2d.compare.mix__it_2",
       "next_next": "place.value:pv-100..499.3D.diff0.16",
       "prev": "bigmath:sub.by.1.1..9.NoCarryBorrow.lev3__it_2",
@@ -4999,9 +5074,9 @@
       "same": "numcompare:2d.compare.mix__it_1",
       "next": "place.value:pv-11..99.2D.diff0.3",
       "next_next": "bigmath:sub.by.1.1..9.NoCarryBorrow.lev3__it_1",
-      "prev": "story.hear::math.hui_word_problems__it_1",
+      "prev": "story.hear::math.word_problem_2__it_1",
       "harder": "place.value:pv-11..99.2D.diff0.5",
-      "easier": "story.hear::math.hui_word_problems__it_1"
+      "easier": "story.hear::math.word_problem_2__it_1"
     },
     "numcompare:2d.compare.mix__it_2": {
       "type": "TRANSITION",
@@ -5014,9 +5089,9 @@
       "same": "numcompare:2d.compare.mix__it_2",
       "next": "place.value:pv-100..499.3D.diff0.16",
       "next_next": "bigmath:sub.by.rand.1..9.NoCarryBorrow.lev4__it_2",
-      "prev": "story.hear::math.word_problem_1__it_2",
+      "prev": "story.hear::math.word_problem_3__it_3",
       "harder": "place.value:pv-100..499.3D.diff0.18",
-      "easier": "story.hear::math.simple_addition_1__it_2"
+      "easier": "story.hear::math.word_problem_1__it_3"
     },
     "place.value:pv-100..499.3D.diff0.16": {
       "type": "TRANSITION",
@@ -5028,7 +5103,7 @@
       "cell_column": "6",
       "same": "place.value:pv-100..499.3D.diff0.16",
       "next": "bigmath:sub.by.rand.1..9.NoCarryBorrow.lev4__it_2",
-      "next_next": "story.hear::math.word_problem_2__it_2",
+      "next_next": "story.hear::math.word_problem_4__it_3",
       "prev": "numcompare:2d.compare.mix__it_2",
       "harder": "bigmath:add.by.rand.0..80.NoCarryBorrow.lev6__it_2",
       "easier": "numcompare:1d__it_2"
@@ -5042,10 +5117,10 @@
       "cell_row": "2",
       "cell_column": "7",
       "same": "bigmath:sub.by.rand.1..9.NoCarryBorrow.lev4__it_1",
-      "next": "story.hear::math.simple_addition_2__it_1",
+      "next": "story.hear::math.word_problem_4__it_1",
       "next_next": "numcompare:2d.compare.random__it_1",
       "prev": "place.value:pv-11..99.2D.diff0.4",
-      "harder": "story.hear::math.word_problem_2__it_1",
+      "harder": "story.hear::math.word_problem_6__it_1",
       "easier": "place.value:pv-11..99.2D.diff0.2"
     },
     "bigmath:sub.by.rand.1..9.NoCarryBorrow.lev4__it_2": {
@@ -5057,40 +5132,25 @@
       "cell_row": "8",
       "cell_column": "7",
       "same": "bigmath:sub.by.rand.1..9.NoCarryBorrow.lev4__it_2",
-      "next": "story.hear::math.word_problem_2__it_2",
+      "next": "story.hear::math.word_problem_4__it_3",
       "next_next": "numcompare:2d.compare.one__it_2",
       "prev": "place.value:pv-100..499.3D.diff0.16",
-      "harder": "story.hear::math.word_problem_4__it_2",
+      "harder": "story.hear::math.word_problem_6__it_3",
       "easier": "place.value:pv-11..99.2D.diff2.14"
     },
-    "story.hear::math.word_problem_2__it_1": {
+    "story.hear::math.word_problem_4__it_3": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "story.hear::math.word_problem_2__it_1",
+      "tutor_id": "story.hear::math.word_problem_4__it_3",
       "tutor_desc": "story.hear",
-      "tutor_data": "[wordproblems]math.word_problem_2",
-      "cell_row": "3",
-      "cell_column": "8",
-      "same": "story.hear::math.word_problem_2__it_1",
-      "next": "numcompare:3d.by.hun__it_1",
-      "next_next": "place.value:pv-11..99.2D.diff1.7",
-      "prev": "bigmath:add.by.rand.0..80.NoCarryBorrow.lev6__it_1",
-      "harder": "story.hear::math.word_problem_4__it_1",
-      "easier": "bigmath:sub.by.rand.1..9.NoCarryBorrow.lev4__it_1"
-    },
-    "story.hear::math.word_problem_2__it_2": {
-      "type": "TRANSITION",
-      "skill": "numbers",
-      "tutor_id": "story.hear::math.word_problem_2__it_2",
-      "tutor_desc": "story.hear",
-      "tutor_data": "[wordproblems]math.word_problem_2",
+      "tutor_data": "[wordproblems]math.word_problem_4",
       "cell_row": "8",
       "cell_column": "8",
-      "same": "story.hear::math.word_problem_2__it_2",
+      "same": "story.hear::math.word_problem_4__it_3",
       "next": "numcompare:2d.compare.one__it_2",
       "next_next": "place.value:pv-100..499.3D.diff0.17",
       "prev": "bigmath:sub.by.rand.1..9.NoCarryBorrow.lev4__it_2",
-      "harder": "story.hear::math.word_problem_4__it_2",
+      "harder": "story.hear::math.word_problem_6__it_3",
       "easier": "bigmath:add.by.rand.0..8.NoCarryBorrow.lev2__it_2"
     },
     "numcompare:2d.compare.one__it_1": {
@@ -5104,9 +5164,9 @@
       "same": "numcompare:2d.compare.one__it_1",
       "next": "place.value:pv-11..99.2D.diff0.4",
       "next_next": "bigmath:sub.by.rand.1..9.NoCarryBorrow.lev4__it_1",
-      "prev": "story.hear::math.simple_addition_1__it_1",
+      "prev": "story.hear::math.word_problem_3__it_1",
       "harder": "place.value:pv-11..99.2D.diff1.6",
-      "easier": "story.hear::math.egma_word_problems__it_1"
+      "easier": "story.hear::math.word_problem_1__it_1"
     },
     "numcompare:2d.compare.one__it_2": {
       "type": "TRANSITION",
@@ -5119,9 +5179,9 @@
       "same": "numcompare:2d.compare.one__it_2",
       "next": "place.value:pv-100..499.3D.diff0.17",
       "next_next": "bigmath:add.by.10.0..80.NoCarryBorrow.lev5__it_2",
-      "prev": "story.hear::math.word_problem_2__it_2",
+      "prev": "story.hear::math.word_problem_4__it_3",
       "harder": "place.value:pv-100..499.3D.diff0.19",
-      "easier": "story.hear::math.word_problem_2__it_2"
+      "easier": "story.hear::math.word_problem_4__it_3"
     },
     "place.value:pv-100..499.3D.diff0.17": {
       "type": "TRANSITION",
@@ -5133,7 +5193,7 @@
       "cell_column": "2",
       "same": "place.value:pv-100..499.3D.diff0.17",
       "next": "bigmath:add.by.10.0..80.NoCarryBorrow.lev5__it_2",
-      "next_next": "story.hear::math.word_problem_3__it_2",
+      "next_next": "story.hear::math.word_problem_5__it_3",
       "prev": "numcompare:2d.compare.one__it_2",
       "harder": "bigmath:sub.by.10.20..90.NoCarryBorrow.lev7__it_2",
       "easier": "numcompare:2d.by.ten__it_2"
@@ -5147,10 +5207,10 @@
       "cell_row": "3",
       "cell_column": "3",
       "same": "bigmath:add.by.10.0..80.NoCarryBorrow.lev5__it_1",
-      "next": "story.hear::math.word_problem_1__it_1",
+      "next": "story.hear::math.word_problem_5__it_1",
       "next_next": "numcompare:2d.compare.ten__it_1",
       "prev": "place.value:pv-11..99.2D.diff0.5",
-      "harder": "story.hear::math.word_problem_3__it_1",
+      "harder": "story.hear::math.word_problem_1__it_2",
       "easier": "place.value:pv-11..99.2D.diff0.3"
     },
     "bigmath:add.by.10.0..80.NoCarryBorrow.lev5__it_2": {
@@ -5162,36 +5222,21 @@
       "cell_row": "9",
       "cell_column": "3",
       "same": "bigmath:add.by.10.0..80.NoCarryBorrow.lev5__it_2",
-      "next": "story.hear::math.word_problem_3__it_2",
+      "next": "story.hear::math.word_problem_5__it_3",
       "next_next": "numcompare:2d.compare.random__it_2",
       "prev": "place.value:pv-100..499.3D.diff0.17",
-      "harder": "story.hear::math.simple_addition_5__it_2",
+      "harder": "story.hear::math.word_problem_1__it_4",
       "easier": "place.value:pv-11..99.2D.diff2.15"
     },
-    "story.hear::math.word_problem_3__it_1": {
+    "story.hear::math.word_problem_5__it_3": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "story.hear::math.word_problem_3__it_1",
+      "tutor_id": "story.hear::math.word_problem_5__it_3",
       "tutor_desc": "story.hear",
-      "tutor_data": "[wordproblems]math.word_problem_3",
-      "cell_row": "4",
-      "cell_column": "4",
-      "same": "story.hear::math.word_problem_3__it_1",
-      "next": "numcompare:3d.by.ten__it_1",
-      "next_next": "place.value:pv-11..99.2D.diff1.8",
-      "prev": "bigmath:sub.by.10.20..90.NoCarryBorrow.lev7__it_1",
-      "harder": "numcompare:3d.compare.mix__it_1",
-      "easier": "bigmath:add.by.10.0..80.NoCarryBorrow.lev5__it_1"
-    },
-    "story.hear::math.word_problem_3__it_2": {
-      "type": "TRANSITION",
-      "skill": "numbers",
-      "tutor_id": "story.hear::math.word_problem_3__it_2",
-      "tutor_desc": "story.hear",
-      "tutor_data": "[wordproblems]math.word_problem_3",
+      "tutor_data": "[wordproblems]math.word_problem_5",
       "cell_row": "9",
       "cell_column": "4",
-      "same": "story.hear::math.word_problem_3__it_2",
+      "same": "story.hear::math.word_problem_5__it_3",
       "next": "numcompare:2d.compare.random__it_2",
       "next_next": "place.value:pv-100..499.3D.diff0.18",
       "prev": "bigmath:add.by.10.0..80.NoCarryBorrow.lev5__it_2",
@@ -5209,9 +5254,9 @@
       "same": "numcompare:2d.compare.random__it_1",
       "next": "place.value:pv-11..99.2D.diff0.5",
       "next_next": "bigmath:add.by.10.0..80.NoCarryBorrow.lev5__it_1",
-      "prev": "story.hear::math.simple_addition_2__it_1",
+      "prev": "story.hear::math.word_problem_4__it_1",
       "harder": "place.value:pv-11..99.2D.diff1.7",
-      "easier": "story.hear::math.simple_addition_2__it_1"
+      "easier": "story.hear::math.word_problem_4__it_1"
     },
     "numcompare:2d.compare.random__it_2": {
       "type": "TRANSITION",
@@ -5224,9 +5269,9 @@
       "same": "numcompare:2d.compare.random__it_2",
       "next": "place.value:pv-100..499.3D.diff0.18",
       "next_next": "bigmath:add.by.rand.0..80.NoCarryBorrow.lev6__it_2",
-      "prev": "story.hear::math.word_problem_3__it_2",
+      "prev": "story.hear::math.word_problem_5__it_3",
       "harder": "place.value:pv-100..499.3D.diff0.20",
-      "easier": "story.hear::math.word_problem_1__it_2"
+      "easier": "story.hear::math.word_problem_3__it_3"
     },
     "place.value:pv-100..499.3D.diff0.18": {
       "type": "TRANSITION",
@@ -5238,7 +5283,7 @@
       "cell_column": "6",
       "same": "place.value:pv-100..499.3D.diff0.18",
       "next": "bigmath:add.by.rand.0..80.NoCarryBorrow.lev6__it_2",
-      "next_next": "story.hear::math.word_problem_4__it_2",
+      "next_next": "story.hear::math.word_problem_6__it_3",
       "prev": "numcompare:2d.compare.random__it_2",
       "harder": "bigmath:sub.by.rand.20..90.NoCarryBorrow.lev8__it_2",
       "easier": "numcompare:2d.compare.mix__it_2"
@@ -5252,10 +5297,10 @@
       "cell_row": "3",
       "cell_column": "7",
       "same": "bigmath:add.by.rand.0..80.NoCarryBorrow.lev6__it_1",
-      "next": "story.hear::math.word_problem_2__it_1",
+      "next": "story.hear::math.word_problem_6__it_1",
       "next_next": "numcompare:3d.by.hun__it_1",
       "prev": "place.value:pv-11..99.2D.diff1.6",
-      "harder": "story.hear::math.word_problem_4__it_1",
+      "harder": "story.hear::math.word_problem_2__it_2",
       "easier": "place.value:pv-11..99.2D.diff0.4"
     },
     "bigmath:add.by.rand.0..80.NoCarryBorrow.lev6__it_2": {
@@ -5267,40 +5312,25 @@
       "cell_row": "9",
       "cell_column": "7",
       "same": "bigmath:add.by.rand.0..80.NoCarryBorrow.lev6__it_2",
-      "next": "story.hear::math.word_problem_4__it_2",
+      "next": "story.hear::math.word_problem_6__it_3",
       "next_next": "numcompare:2d.compare.ten__it_2",
       "prev": "place.value:pv-100..499.3D.diff0.18",
-      "harder": "story.hear::math.simple_addition_6__it_2",
+      "harder": "story.hear::math.word_problem_2__it_4",
       "easier": "place.value:pv-100..499.3D.diff0.16"
     },
-    "story.hear::math.word_problem_4__it_1": {
+    "story.hear::math.word_problem_6__it_3": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "story.hear::math.word_problem_4__it_1",
+      "tutor_id": "story.hear::math.word_problem_6__it_3",
       "tutor_desc": "story.hear",
-      "tutor_data": "[wordproblems]math.word_problem_4",
-      "cell_row": "4",
-      "cell_column": "8",
-      "same": "story.hear::math.word_problem_4__it_1",
-      "next": "numcompare:3d.compare.hun__it_1",
-      "next_next": "place.value:pv-11..99.2D.diff1.9",
-      "prev": "bigmath:sub.by.rand.20..90.NoCarryBorrow.lev8__it_1",
-      "harder": "story.hear::math.simple_addition_6__it_1",
-      "easier": "bigmath:add.by.rand.0..80.NoCarryBorrow.lev6__it_1"
-    },
-    "story.hear::math.word_problem_4__it_2": {
-      "type": "TRANSITION",
-      "skill": "numbers",
-      "tutor_id": "story.hear::math.word_problem_4__it_2",
-      "tutor_desc": "story.hear",
-      "tutor_data": "[wordproblems]math.word_problem_4",
+      "tutor_data": "[wordproblems]math.word_problem_6",
       "cell_row": "9",
       "cell_column": "8",
-      "same": "story.hear::math.word_problem_4__it_2",
+      "same": "story.hear::math.word_problem_6__it_3",
       "next": "numcompare:2d.compare.ten__it_2",
       "next_next": "place.value:pv-100..499.3D.diff0.19",
       "prev": "bigmath:add.by.rand.0..80.NoCarryBorrow.lev6__it_2",
-      "harder": "story.hear::math.simple_addition_6__it_2",
+      "harder": "story.hear::math.word_problem_2__it_4",
       "easier": "bigmath:sub.by.rand.1..9.NoCarryBorrow.lev4__it_2"
     },
     "numcompare:2d.compare.ten__it_1": {
@@ -5314,9 +5344,9 @@
       "same": "numcompare:2d.compare.ten__it_1",
       "next": "place.value:pv-11..99.2D.diff1.6",
       "next_next": "bigmath:add.by.rand.0..80.NoCarryBorrow.lev6__it_1",
-      "prev": "story.hear::math.word_problem_1__it_1",
+      "prev": "story.hear::math.word_problem_5__it_1",
       "harder": "place.value:pv-11..99.2D.diff1.8",
-      "easier": "story.hear::math.simple_addition_1__it_1"
+      "easier": "story.hear::math.word_problem_3__it_1"
     },
     "numcompare:2d.compare.ten__it_2": {
       "type": "TRANSITION",
@@ -5329,9 +5359,9 @@
       "same": "numcompare:2d.compare.ten__it_2",
       "next": "place.value:pv-100..499.3D.diff0.19",
       "next_next": "bigmath:sub.by.10.20..90.NoCarryBorrow.lev7__it_2",
-      "prev": "story.hear::math.word_problem_4__it_2",
+      "prev": "story.hear::math.word_problem_6__it_3",
       "harder": "place.value:pv-100..499.3D.diff1.21",
-      "easier": "story.hear::math.word_problem_4__it_2"
+      "easier": "story.hear::math.word_problem_6__it_3"
     },
     "place.value:pv-100..499.3D.diff0.19": {
       "type": "TRANSITION",
@@ -5343,7 +5373,7 @@
       "cell_column": "2",
       "same": "place.value:pv-100..499.3D.diff0.19",
       "next": "bigmath:sub.by.10.20..90.NoCarryBorrow.lev7__it_2",
-      "next_next": "story.hear::math.simple_addition_5__it_2",
+      "next_next": "story.hear::math.word_problem_1__it_4",
       "prev": "numcompare:2d.compare.ten__it_2",
       "harder": "bigmath:add.by.rand.0..9.AllCarryBorrow.lev9.json__it_2",
       "easier": "numcompare:2d.compare.one__it_2"
@@ -5357,10 +5387,10 @@
       "cell_row": "4",
       "cell_column": "3",
       "same": "bigmath:sub.by.10.20..90.NoCarryBorrow.lev7__it_1",
-      "next": "story.hear::math.word_problem_3__it_1",
+      "next": "story.hear::math.word_problem_1__it_2",
       "next_next": "numcompare:3d.by.ten__it_1",
       "prev": "place.value:pv-11..99.2D.diff1.7",
-      "harder": "story.hear::math.simple_addition_5__it_1",
+      "harder": "story.hear::math.word_problem_3__it_2",
       "easier": "place.value:pv-11..99.2D.diff0.5"
     },
     "bigmath:sub.by.10.20..90.NoCarryBorrow.lev7__it_2": {
@@ -5372,36 +5402,21 @@
       "cell_row": "10",
       "cell_column": "3",
       "same": "bigmath:sub.by.10.20..90.NoCarryBorrow.lev7__it_2",
-      "next": "story.hear::math.simple_addition_5__it_2",
+      "next": "story.hear::math.word_problem_1__it_4",
       "next_next": "numcompare:3d.by.hun__it_2",
       "prev": "place.value:pv-100..499.3D.diff0.19",
-      "harder": "story.hear::math.egma_word_problems__it_3",
+      "harder": "story.hear::math.word_problem_3__it_4",
       "easier": "place.value:pv-100..499.3D.diff0.17"
     },
-    "story.hear::math.simple_addition_5__it_1": {
+    "story.hear::math.word_problem_1__it_4": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "story.hear::math.simple_addition_5__it_1",
+      "tutor_id": "story.hear::math.word_problem_1__it_4",
       "tutor_desc": "story.hear",
-      "tutor_data": "[wordproblems]math.simple_addition_5",
-      "cell_row": "5",
-      "cell_column": "4",
-      "same": "story.hear::math.simple_addition_5__it_1",
-      "next": "numcompare:3d.compare.mix__it_1",
-      "next_next": "place.value:pv-11..99.2D.diff1.10",
-      "prev": "bigmath:add.by.rand.0..9.AllCarryBorrow.lev9.json__it_1",
-      "harder": "numcompare:3d.compare.random__it_1",
-      "easier": "bigmath:sub.by.10.20..90.NoCarryBorrow.lev7__it_1"
-    },
-    "story.hear::math.simple_addition_5__it_2": {
-      "type": "TRANSITION",
-      "skill": "numbers",
-      "tutor_id": "story.hear::math.simple_addition_5__it_2",
-      "tutor_desc": "story.hear",
-      "tutor_data": "[wordproblems]math.simple_addition_5",
+      "tutor_data": "[wordproblems]math.word_problem_1",
       "cell_row": "10",
       "cell_column": "4",
-      "same": "story.hear::math.simple_addition_5__it_2",
+      "same": "story.hear::math.word_problem_1__it_4",
       "next": "numcompare:3d.by.hun__it_2",
       "next_next": "place.value:pv-100..499.3D.diff0.20",
       "prev": "bigmath:sub.by.10.20..90.NoCarryBorrow.lev7__it_2",
@@ -5419,9 +5434,9 @@
       "same": "numcompare:3d.by.hun__it_1",
       "next": "place.value:pv-11..99.2D.diff1.7",
       "next_next": "bigmath:sub.by.10.20..90.NoCarryBorrow.lev7__it_1",
-      "prev": "story.hear::math.word_problem_2__it_1",
+      "prev": "story.hear::math.word_problem_6__it_1",
       "harder": "place.value:pv-11..99.2D.diff1.9",
-      "easier": "story.hear::math.word_problem_2__it_1"
+      "easier": "story.hear::math.word_problem_6__it_1"
     },
     "numcompare:3d.by.hun__it_2": {
       "type": "TRANSITION",
@@ -5434,9 +5449,9 @@
       "same": "numcompare:3d.by.hun__it_2",
       "next": "place.value:pv-100..499.3D.diff0.20",
       "next_next": "bigmath:sub.by.rand.20..90.NoCarryBorrow.lev8__it_2",
-      "prev": "story.hear::math.simple_addition_5__it_2",
+      "prev": "story.hear::math.word_problem_1__it_4",
       "harder": "place.value:pv-100..499.3D.diff1.22",
-      "easier": "story.hear::math.word_problem_3__it_2"
+      "easier": "story.hear::math.word_problem_5__it_3"
     },
     "place.value:pv-100..499.3D.diff0.20": {
       "type": "TRANSITION",
@@ -5448,7 +5463,7 @@
       "cell_column": "6",
       "same": "place.value:pv-100..499.3D.diff0.20",
       "next": "bigmath:sub.by.rand.20..90.NoCarryBorrow.lev8__it_2",
-      "next_next": "story.hear::math.simple_addition_6__it_2",
+      "next_next": "story.hear::math.word_problem_2__it_4",
       "prev": "numcompare:3d.by.hun__it_2",
       "harder": "bigmath:add.by.rand.0..9.SomeCarryBorrow.lev10.json__it_2",
       "easier": "numcompare:2d.compare.random__it_2"
@@ -5462,10 +5477,10 @@
       "cell_row": "4",
       "cell_column": "7",
       "same": "bigmath:sub.by.rand.20..90.NoCarryBorrow.lev8__it_1",
-      "next": "story.hear::math.word_problem_4__it_1",
+      "next": "story.hear::math.word_problem_2__it_2",
       "next_next": "numcompare:3d.compare.hun__it_1",
       "prev": "place.value:pv-11..99.2D.diff1.8",
-      "harder": "story.hear::math.simple_addition_6__it_1",
+      "harder": "story.hear::math.word_problem_4__it_2",
       "easier": "place.value:pv-11..99.2D.diff1.6"
     },
     "bigmath:sub.by.rand.20..90.NoCarryBorrow.lev8__it_2": {
@@ -5477,40 +5492,25 @@
       "cell_row": "10",
       "cell_column": "7",
       "same": "bigmath:sub.by.rand.20..90.NoCarryBorrow.lev8__it_2",
-      "next": "story.hear::math.simple_addition_6__it_2",
+      "next": "story.hear::math.word_problem_2__it_4",
       "next_next": "numcompare:3d.by.ten__it_2",
       "prev": "place.value:pv-100..499.3D.diff0.20",
-      "harder": "story.hear::math.hui_word_problems__it_3",
+      "harder": "story.hear::math.word_problem_4__it_4",
       "easier": "place.value:pv-100..499.3D.diff0.18"
     },
-    "story.hear::math.simple_addition_6__it_1": {
+    "story.hear::math.word_problem_2__it_4": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "story.hear::math.simple_addition_6__it_1",
+      "tutor_id": "story.hear::math.word_problem_2__it_4",
       "tutor_desc": "story.hear",
-      "tutor_data": "[wordproblems]math.simple_addition_6",
-      "cell_row": "5",
-      "cell_column": "8",
-      "same": "story.hear::math.simple_addition_6__it_1",
-      "next": "numcompare:3d.compare.one__it_1",
-      "next_next": "place.value:pv-11..99.2D.diff2.11",
-      "prev": "bigmath:add.by.rand.0..9.SomeCarryBorrow.lev10.json__it_1",
-      "harder": "story.hear::math.hui_word_problems__it_2",
-      "easier": "bigmath:sub.by.rand.20..90.NoCarryBorrow.lev8__it_1"
-    },
-    "story.hear::math.simple_addition_6__it_2": {
-      "type": "TRANSITION",
-      "skill": "numbers",
-      "tutor_id": "story.hear::math.simple_addition_6__it_2",
-      "tutor_desc": "story.hear",
-      "tutor_data": "[wordproblems]math.simple_addition_6",
+      "tutor_data": "[wordproblems]math.word_problem_2",
       "cell_row": "10",
       "cell_column": "8",
-      "same": "story.hear::math.simple_addition_6__it_2",
+      "same": "story.hear::math.word_problem_2__it_4",
       "next": "numcompare:3d.by.ten__it_2",
       "next_next": "place.value:pv-100..499.3D.diff1.21",
       "prev": "bigmath:sub.by.rand.20..90.NoCarryBorrow.lev8__it_2",
-      "harder": "story.hear::math.hui_word_problems__it_3",
+      "harder": "story.hear::math.word_problem_4__it_4",
       "easier": "bigmath:add.by.rand.0..80.NoCarryBorrow.lev6__it_2"
     },
     "numcompare:3d.by.ten__it_1": {
@@ -5524,9 +5524,9 @@
       "same": "numcompare:3d.by.ten__it_1",
       "next": "place.value:pv-11..99.2D.diff1.8",
       "next_next": "bigmath:sub.by.rand.20..90.NoCarryBorrow.lev8__it_1",
-      "prev": "story.hear::math.word_problem_3__it_1",
+      "prev": "story.hear::math.word_problem_1__it_2",
       "harder": "place.value:pv-11..99.2D.diff1.10",
-      "easier": "story.hear::math.word_problem_1__it_1"
+      "easier": "story.hear::math.word_problem_5__it_1"
     },
     "numcompare:3d.by.ten__it_2": {
       "type": "TRANSITION",
@@ -5539,9 +5539,9 @@
       "same": "numcompare:3d.by.ten__it_2",
       "next": "place.value:pv-100..499.3D.diff1.21",
       "next_next": "bigmath:add.by.rand.0..9.AllCarryBorrow.lev9.json__it_2",
-      "prev": "story.hear::math.simple_addition_6__it_2",
+      "prev": "story.hear::math.word_problem_2__it_4",
       "harder": "place.value:pv-100..499.3D.diff1.23",
-      "easier": "story.hear::math.simple_addition_6__it_2"
+      "easier": "story.hear::math.word_problem_2__it_4"
     },
     "place.value:pv-100..499.3D.diff1.21": {
       "type": "TRANSITION",
@@ -5553,7 +5553,7 @@
       "cell_column": "2",
       "same": "place.value:pv-100..499.3D.diff1.21",
       "next": "bigmath:add.by.rand.0..9.AllCarryBorrow.lev9.json__it_2",
-      "next_next": "story.hear::math.egma_word_problems__it_3",
+      "next_next": "story.hear::math.word_problem_3__it_4",
       "prev": "numcompare:3d.by.ten__it_2",
       "harder": "bigmath:add.by.rand.10..99.AllCarryBorrow.lev11.json__it_2",
       "easier": "numcompare:2d.compare.ten__it_2"
@@ -5567,10 +5567,10 @@
       "cell_row": "5",
       "cell_column": "3",
       "same": "bigmath:add.by.rand.0..9.AllCarryBorrow.lev9.json__it_1",
-      "next": "story.hear::math.simple_addition_5__it_1",
+      "next": "story.hear::math.word_problem_3__it_2",
       "next_next": "numcompare:3d.compare.mix__it_1",
       "prev": "place.value:pv-11..99.2D.diff1.9",
-      "harder": "story.hear::math.egma_word_problems__it_2",
+      "harder": "story.hear::math.word_problem_5__it_2",
       "easier": "place.value:pv-11..99.2D.diff1.7"
     },
     "bigmath:add.by.rand.0..9.AllCarryBorrow.lev9.json__it_2": {
@@ -5582,21 +5582,21 @@
       "cell_row": "11",
       "cell_column": "3",
       "same": "bigmath:add.by.rand.0..9.AllCarryBorrow.lev9.json__it_2",
-      "next": "story.hear::math.egma_word_problems__it_3",
+      "next": "story.hear::math.word_problem_3__it_4",
       "next_next": "numcompare:3d.compare.hun__it_2",
       "prev": "place.value:pv-100..499.3D.diff1.21",
-      "harder": "story.hear::math.simple_addition_1__it_3",
+      "harder": "story.hear::math.word_problem_5__it_4",
       "easier": "place.value:pv-100..499.3D.diff0.19"
     },
-    "story.hear::math.egma_word_problems__it_3": {
+    "story.hear::math.word_problem_3__it_4": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "story.hear::math.egma_word_problems__it_3",
+      "tutor_id": "story.hear::math.word_problem_3__it_4",
       "tutor_desc": "story.hear",
-      "tutor_data": "[wordproblems]math.egma_word_problems",
+      "tutor_data": "[wordproblems]math.word_problem_3",
       "cell_row": "11",
       "cell_column": "4",
-      "same": "story.hear::math.egma_word_problems__it_3",
+      "same": "story.hear::math.word_problem_3__it_4",
       "next": "numcompare:3d.compare.hun__it_2",
       "next_next": "place.value:pv-100..499.3D.diff1.22",
       "prev": "bigmath:add.by.rand.0..9.AllCarryBorrow.lev9.json__it_2",
@@ -5614,9 +5614,9 @@
       "same": "numcompare:3d.compare.hun__it_1",
       "next": "place.value:pv-11..99.2D.diff1.9",
       "next_next": "bigmath:add.by.rand.0..9.AllCarryBorrow.lev9.json__it_1",
-      "prev": "story.hear::math.word_problem_4__it_1",
+      "prev": "story.hear::math.word_problem_2__it_2",
       "harder": "place.value:pv-11..99.2D.diff2.11",
-      "easier": "story.hear::math.word_problem_4__it_1"
+      "easier": "story.hear::math.word_problem_2__it_2"
     },
     "numcompare:3d.compare.hun__it_2": {
       "type": "TRANSITION",
@@ -5629,9 +5629,9 @@
       "same": "numcompare:3d.compare.hun__it_2",
       "next": "place.value:pv-100..499.3D.diff1.22",
       "next_next": "bigmath:add.by.rand.0..9.SomeCarryBorrow.lev10.json__it_2",
-      "prev": "story.hear::math.egma_word_problems__it_3",
+      "prev": "story.hear::math.word_problem_3__it_4",
       "harder": "place.value:pv-100..499.3D.diff1.24",
-      "easier": "story.hear::math.simple_addition_5__it_2"
+      "easier": "story.hear::math.word_problem_1__it_4"
     },
     "place.value:pv-100..499.3D.diff1.22": {
       "type": "TRANSITION",
@@ -5643,7 +5643,7 @@
       "cell_column": "6",
       "same": "place.value:pv-100..499.3D.diff1.22",
       "next": "bigmath:add.by.rand.0..9.SomeCarryBorrow.lev10.json__it_2",
-      "next_next": "story.hear::math.hui_word_problems__it_3",
+      "next_next": "story.hear::math.word_problem_4__it_4",
       "prev": "numcompare:3d.compare.hun__it_2",
       "harder": "bigmath:add.by.rand.10..99.SomeCarryBorrow.lev12.json__it_2",
       "easier": "numcompare:3d.by.hun__it_2"
@@ -5657,10 +5657,10 @@
       "cell_row": "5",
       "cell_column": "7",
       "same": "bigmath:add.by.rand.0..9.SomeCarryBorrow.lev10.json__it_1",
-      "next": "story.hear::math.simple_addition_6__it_1",
+      "next": "story.hear::math.word_problem_4__it_2",
       "next_next": "numcompare:3d.compare.one__it_1",
       "prev": "place.value:pv-11..99.2D.diff1.10",
-      "harder": "story.hear::math.hui_word_problems__it_2",
+      "harder": "story.hear::math.word_problem_6__it_2",
       "easier": "place.value:pv-11..99.2D.diff1.8"
     },
     "bigmath:add.by.rand.0..9.SomeCarryBorrow.lev10.json__it_2": {
@@ -5672,25 +5672,25 @@
       "cell_row": "11",
       "cell_column": "7",
       "same": "bigmath:add.by.rand.0..9.SomeCarryBorrow.lev10.json__it_2",
-      "next": "story.hear::math.hui_word_problems__it_3",
+      "next": "story.hear::math.word_problem_4__it_4",
       "next_next": "numcompare:3d.compare.mix__it_2",
       "prev": "place.value:pv-100..499.3D.diff1.22",
-      "harder": "story.hear::math.simple_addition_2__it_3",
+      "harder": "story.hear::math.word_problem_6__it_4",
       "easier": "place.value:pv-100..499.3D.diff0.20"
     },
-    "story.hear::math.hui_word_problems__it_3": {
+    "story.hear::math.word_problem_4__it_4": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "story.hear::math.hui_word_problems__it_3",
+      "tutor_id": "story.hear::math.word_problem_4__it_4",
       "tutor_desc": "story.hear",
-      "tutor_data": "[wordproblems]math.hui_word_problems",
+      "tutor_data": "[wordproblems]math.word_problem_4",
       "cell_row": "11",
       "cell_column": "8",
-      "same": "story.hear::math.hui_word_problems__it_3",
+      "same": "story.hear::math.word_problem_4__it_4",
       "next": "numcompare:3d.compare.mix__it_2",
       "next_next": "place.value:pv-100..499.3D.diff1.23",
       "prev": "bigmath:add.by.rand.0..9.SomeCarryBorrow.lev10.json__it_2",
-      "harder": "story.hear::math.simple_addition_2__it_3",
+      "harder": "story.hear::math.word_problem_6__it_4",
       "easier": "bigmath:sub.by.rand.20..90.NoCarryBorrow.lev8__it_2"
     },
     "numcompare:3d.compare.mix__it_1": {
@@ -5704,9 +5704,9 @@
       "same": "numcompare:3d.compare.mix__it_1",
       "next": "place.value:pv-11..99.2D.diff1.10",
       "next_next": "bigmath:add.by.rand.0..9.SomeCarryBorrow.lev10.json__it_1",
-      "prev": "story.hear::math.simple_addition_5__it_1",
+      "prev": "story.hear::math.word_problem_3__it_2",
       "harder": "place.value:pv-11..99.2D.diff2.12",
-      "easier": "story.hear::math.word_problem_3__it_1"
+      "easier": "story.hear::math.word_problem_1__it_2"
     },
     "numcompare:3d.compare.mix__it_2": {
       "type": "TRANSITION",
@@ -5719,9 +5719,9 @@
       "same": "numcompare:3d.compare.mix__it_2",
       "next": "place.value:pv-100..499.3D.diff1.23",
       "next_next": "bigmath:add.by.rand.10..99.AllCarryBorrow.lev11.json__it_2",
-      "prev": "story.hear::math.hui_word_problems__it_3",
+      "prev": "story.hear::math.word_problem_4__it_4",
       "harder": "place.value:pv-100..499.3D.diff1.25",
-      "easier": "story.hear::math.hui_word_problems__it_3"
+      "easier": "story.hear::math.word_problem_4__it_4"
     },
     "place.value:pv-100..499.3D.diff1.23": {
       "type": "TRANSITION",
@@ -5733,7 +5733,7 @@
       "cell_column": "2",
       "same": "place.value:pv-100..499.3D.diff1.23",
       "next": "bigmath:add.by.rand.10..99.AllCarryBorrow.lev11.json__it_2",
-      "next_next": "story.hear::math.simple_addition_1__it_3",
+      "next_next": "story.hear::math.word_problem_5__it_4",
       "prev": "numcompare:3d.compare.mix__it_2",
       "harder": "bigmath:add.by.1.0..8.NoCarryBorrow.lev1__it_3",
       "easier": "numcompare:3d.by.ten__it_2"
@@ -5747,10 +5747,10 @@
       "cell_row": "6",
       "cell_column": "3",
       "same": "bigmath:add.by.rand.10..99.AllCarryBorrow.lev11.json__it_1",
-      "next": "story.hear::math.egma_word_problems__it_2",
+      "next": "story.hear::math.word_problem_5__it_2",
       "next_next": "numcompare:3d.compare.random__it_1",
       "prev": "place.value:pv-11..99.2D.diff2.11",
-      "harder": "story.hear::math.simple_addition_1__it_2",
+      "harder": "story.hear::math.word_problem_1__it_3",
       "easier": "place.value:pv-11..99.2D.diff1.9"
     },
     "bigmath:add.by.rand.10..99.AllCarryBorrow.lev11.json__it_2": {
@@ -5762,21 +5762,21 @@
       "cell_row": "12",
       "cell_column": "3",
       "same": "bigmath:add.by.rand.10..99.AllCarryBorrow.lev11.json__it_2",
-      "next": "story.hear::math.simple_addition_1__it_3",
+      "next": "story.hear::math.word_problem_5__it_4",
       "next_next": "numcompare:3d.compare.one__it_2",
       "prev": "place.value:pv-100..499.3D.diff1.23",
-      "harder": "story.hear::math.word_problem_1__it_3",
+      "harder": "story.hear::math.word_problem_1__it_5",
       "easier": "place.value:pv-100..499.3D.diff1.21"
     },
-    "story.hear::math.simple_addition_1__it_3": {
+    "story.hear::math.word_problem_5__it_4": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "story.hear::math.simple_addition_1__it_3",
+      "tutor_id": "story.hear::math.word_problem_5__it_4",
       "tutor_desc": "story.hear",
-      "tutor_data": "[wordproblems]math.simple_addition_1",
+      "tutor_data": "[wordproblems]math.word_problem_5",
       "cell_row": "12",
       "cell_column": "4",
-      "same": "story.hear::math.simple_addition_1__it_3",
+      "same": "story.hear::math.word_problem_5__it_4",
       "next": "numcompare:3d.compare.one__it_2",
       "next_next": "place.value:pv-100..499.3D.diff1.24",
       "prev": "bigmath:add.by.rand.10..99.AllCarryBorrow.lev11.json__it_2",
@@ -5794,9 +5794,9 @@
       "same": "numcompare:3d.compare.one__it_1",
       "next": "place.value:pv-11..99.2D.diff2.11",
       "next_next": "bigmath:add.by.rand.10..99.AllCarryBorrow.lev11.json__it_1",
-      "prev": "story.hear::math.simple_addition_6__it_1",
+      "prev": "story.hear::math.word_problem_4__it_2",
       "harder": "place.value:pv-11..99.2D.diff2.13",
-      "easier": "story.hear::math.simple_addition_6__it_1"
+      "easier": "story.hear::math.word_problem_4__it_2"
     },
     "numcompare:3d.compare.one__it_2": {
       "type": "TRANSITION",
@@ -5809,9 +5809,9 @@
       "same": "numcompare:3d.compare.one__it_2",
       "next": "place.value:pv-100..499.3D.diff1.24",
       "next_next": "bigmath:add.by.rand.10..99.SomeCarryBorrow.lev12.json__it_2",
-      "prev": "story.hear::math.simple_addition_1__it_3",
+      "prev": "story.hear::math.word_problem_5__it_4",
       "harder": "place.value:pv-100..499.3D.diff2.26",
-      "easier": "story.hear::math.egma_word_problems__it_3"
+      "easier": "story.hear::math.word_problem_3__it_4"
     },
     "place.value:pv-100..499.3D.diff1.24": {
       "type": "TRANSITION",
@@ -5823,7 +5823,7 @@
       "cell_column": "6",
       "same": "place.value:pv-100..499.3D.diff1.24",
       "next": "bigmath:add.by.rand.10..99.SomeCarryBorrow.lev12.json__it_2",
-      "next_next": "story.hear::math.simple_addition_2__it_3",
+      "next_next": "story.hear::math.word_problem_6__it_4",
       "prev": "numcompare:3d.compare.one__it_2",
       "harder": "bigmath:add.by.rand.0..8.NoCarryBorrow.lev2__it_3",
       "easier": "numcompare:3d.compare.hun__it_2"
@@ -5837,10 +5837,10 @@
       "cell_row": "6",
       "cell_column": "7",
       "same": "bigmath:add.by.rand.10..99.SomeCarryBorrow.lev12.json__it_1",
-      "next": "story.hear::math.hui_word_problems__it_2",
+      "next": "story.hear::math.word_problem_6__it_2",
       "next_next": "numcompare:3d.compare.ten__it_1",
       "prev": "place.value:pv-11..99.2D.diff2.12",
-      "harder": "story.hear::math.simple_addition_2__it_2",
+      "harder": "story.hear::math.word_problem_2__it_3",
       "easier": "place.value:pv-11..99.2D.diff1.10"
     },
     "bigmath:add.by.rand.10..99.SomeCarryBorrow.lev12.json__it_2": {
@@ -5852,25 +5852,25 @@
       "cell_row": "12",
       "cell_column": "7",
       "same": "bigmath:add.by.rand.10..99.SomeCarryBorrow.lev12.json__it_2",
-      "next": "story.hear::math.simple_addition_2__it_3",
+      "next": "story.hear::math.word_problem_6__it_4",
       "next_next": "numcompare:3d.compare.random__it_2",
       "prev": "place.value:pv-100..499.3D.diff1.24",
-      "harder": "story.hear::math.word_problem_2__it_3",
+      "harder": "story.hear::math.word_problem_2__it_5",
       "easier": "place.value:pv-100..499.3D.diff1.22"
     },
-    "story.hear::math.simple_addition_2__it_3": {
+    "story.hear::math.word_problem_6__it_4": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "story.hear::math.simple_addition_2__it_3",
+      "tutor_id": "story.hear::math.word_problem_6__it_4",
       "tutor_desc": "story.hear",
-      "tutor_data": "[wordproblems]math.simple_addition_2",
+      "tutor_data": "[wordproblems]math.word_problem_6",
       "cell_row": "12",
       "cell_column": "8",
-      "same": "story.hear::math.simple_addition_2__it_3",
+      "same": "story.hear::math.word_problem_6__it_4",
       "next": "numcompare:3d.compare.random__it_2",
       "next_next": "place.value:pv-100..499.3D.diff1.25",
       "prev": "bigmath:add.by.rand.10..99.SomeCarryBorrow.lev12.json__it_2",
-      "harder": "story.hear::math.word_problem_2__it_3",
+      "harder": "story.hear::math.word_problem_2__it_5",
       "easier": "bigmath:add.by.rand.0..9.SomeCarryBorrow.lev10.json__it_2"
     },
     "numcompare:3d.compare.random__it_1": {
@@ -5884,9 +5884,9 @@
       "same": "numcompare:3d.compare.random__it_1",
       "next": "place.value:pv-11..99.2D.diff2.12",
       "next_next": "bigmath:add.by.rand.10..99.SomeCarryBorrow.lev12.json__it_1",
-      "prev": "story.hear::math.egma_word_problems__it_2",
+      "prev": "story.hear::math.word_problem_5__it_2",
       "harder": "place.value:pv-11..99.2D.diff2.14",
-      "easier": "story.hear::math.simple_addition_5__it_1"
+      "easier": "story.hear::math.word_problem_3__it_2"
     },
     "numcompare:3d.compare.random__it_2": {
       "type": "TRANSITION",
@@ -5899,9 +5899,9 @@
       "same": "numcompare:3d.compare.random__it_2",
       "next": "place.value:pv-100..499.3D.diff1.25",
       "next_next": "bigmath:add.by.1.0..8.NoCarryBorrow.lev1__it_3",
-      "prev": "story.hear::math.simple_addition_2__it_3",
+      "prev": "story.hear::math.word_problem_6__it_4",
       "harder": "place.value:pv-100..499.3D.diff2.27",
-      "easier": "story.hear::math.simple_addition_2__it_3"
+      "easier": "story.hear::math.word_problem_6__it_4"
     },
     "place.value:pv-100..499.3D.diff1.25": {
       "type": "TRANSITION",
@@ -5913,7 +5913,7 @@
       "cell_column": "2",
       "same": "place.value:pv-100..499.3D.diff1.25",
       "next": "bigmath:add.by.1.0..8.NoCarryBorrow.lev1__it_3",
-      "next_next": "story.hear::math.word_problem_1__it_3",
+      "next_next": "story.hear::math.word_problem_1__it_5",
       "prev": "numcompare:3d.compare.random__it_2",
       "harder": "bigmath:sub.by.1.1..9.NoCarryBorrow.lev3__it_3",
       "easier": "numcompare:3d.compare.mix__it_2"
@@ -5927,21 +5927,21 @@
       "cell_row": "13",
       "cell_column": "3",
       "same": "bigmath:add.by.1.0..8.NoCarryBorrow.lev1__it_3",
-      "next": "story.hear::math.word_problem_1__it_3",
+      "next": "story.hear::math.word_problem_1__it_5",
       "next_next": "numcompare:3d.compare.ten__it_2",
       "prev": "place.value:pv-100..499.3D.diff1.25",
-      "harder": "story.hear::math.word_problem_3__it_3",
+      "harder": "story.hear::math.word_problem_3__it_5",
       "easier": "place.value:pv-100..499.3D.diff1.23"
     },
-    "story.hear::math.word_problem_1__it_3": {
+    "story.hear::math.word_problem_1__it_5": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "story.hear::math.word_problem_1__it_3",
+      "tutor_id": "story.hear::math.word_problem_1__it_5",
       "tutor_desc": "story.hear",
       "tutor_data": "[wordproblems]math.word_problem_1",
       "cell_row": "13",
       "cell_column": "4",
-      "same": "story.hear::math.word_problem_1__it_3",
+      "same": "story.hear::math.word_problem_1__it_5",
       "next": "numcompare:3d.compare.ten__it_2",
       "next_next": "place.value:pv-100..499.3D.diff2.26",
       "prev": "bigmath:add.by.1.0..8.NoCarryBorrow.lev1__it_3",
@@ -5959,9 +5959,9 @@
       "same": "numcompare:3d.compare.ten__it_1",
       "next": "place.value:pv-11..99.2D.diff2.13",
       "next_next": "bigmath:add.by.1.0..8.NoCarryBorrow.lev1__it_2",
-      "prev": "story.hear::math.hui_word_problems__it_2",
+      "prev": "story.hear::math.word_problem_6__it_2",
       "harder": "place.value:pv-11..99.2D.diff2.15",
-      "easier": "story.hear::math.hui_word_problems__it_2"
+      "easier": "story.hear::math.word_problem_6__it_2"
     },
     "numcompare:3d.compare.ten__it_2": {
       "type": "TRANSITION",
@@ -5974,9 +5974,9 @@
       "same": "numcompare:3d.compare.ten__it_2",
       "next": "place.value:pv-100..499.3D.diff2.26",
       "next_next": "bigmath:add.by.rand.0..8.NoCarryBorrow.lev2__it_3",
-      "prev": "story.hear::math.word_problem_1__it_3",
+      "prev": "story.hear::math.word_problem_1__it_5",
       "harder": "place.value:pv-100..499.3D.diff2.28",
-      "easier": "story.hear::math.simple_addition_1__it_3"
+      "easier": "story.hear::math.word_problem_5__it_4"
     },
     "place.value:pv-100..499.3D.diff2.26": {
       "type": "TRANSITION",
@@ -5988,7 +5988,7 @@
       "cell_column": "6",
       "same": "place.value:pv-100..499.3D.diff2.26",
       "next": "bigmath:add.by.rand.0..8.NoCarryBorrow.lev2__it_3",
-      "next_next": "story.hear::math.word_problem_2__it_3",
+      "next_next": "story.hear::math.word_problem_2__it_5",
       "prev": "numcompare:3d.compare.ten__it_2",
       "harder": "bigmath:sub.by.rand.1..9.NoCarryBorrow.lev4__it_3",
       "easier": "numcompare:3d.compare.one__it_2"
@@ -6002,25 +6002,25 @@
       "cell_row": "13",
       "cell_column": "7",
       "same": "bigmath:add.by.rand.0..8.NoCarryBorrow.lev2__it_3",
-      "next": "story.hear::math.word_problem_2__it_3",
+      "next": "story.hear::math.word_problem_2__it_5",
       "next_next": "numcompare:1d__it_3",
       "prev": "place.value:pv-100..499.3D.diff2.26",
-      "harder": "story.hear::math.word_problem_4__it_3",
+      "harder": "story.hear::math.word_problem_4__it_5",
       "easier": "place.value:pv-100..499.3D.diff1.24"
     },
-    "story.hear::math.word_problem_2__it_3": {
+    "story.hear::math.word_problem_2__it_5": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "story.hear::math.word_problem_2__it_3",
+      "tutor_id": "story.hear::math.word_problem_2__it_5",
       "tutor_desc": "story.hear",
       "tutor_data": "[wordproblems]math.word_problem_2",
       "cell_row": "13",
       "cell_column": "8",
-      "same": "story.hear::math.word_problem_2__it_3",
+      "same": "story.hear::math.word_problem_2__it_5",
       "next": "numcompare:1d__it_3",
       "next_next": "place.value:pv-100..499.3D.diff2.27",
       "prev": "bigmath:add.by.rand.0..8.NoCarryBorrow.lev2__it_3",
-      "harder": "story.hear::math.word_problem_4__it_3",
+      "harder": "story.hear::math.word_problem_4__it_5",
       "easier": "bigmath:add.by.rand.10..99.SomeCarryBorrow.lev12.json__it_2"
     },
     "numcompare:1d__it_3": {
@@ -6034,9 +6034,9 @@
       "same": "numcompare:1d__it_3",
       "next": "place.value:pv-100..499.3D.diff2.27",
       "next_next": "bigmath:sub.by.1.1..9.NoCarryBorrow.lev3__it_3",
-      "prev": "story.hear::math.word_problem_2__it_3",
+      "prev": "story.hear::math.word_problem_2__it_5",
       "harder": "place.value:pv-100..499.3D.diff2.29",
-      "easier": "story.hear::math.word_problem_2__it_3"
+      "easier": "story.hear::math.word_problem_2__it_5"
     },
     "place.value:pv-100..499.3D.diff2.27": {
       "type": "TRANSITION",
@@ -6048,7 +6048,7 @@
       "cell_column": "2",
       "same": "place.value:pv-100..499.3D.diff2.27",
       "next": "bigmath:sub.by.1.1..9.NoCarryBorrow.lev3__it_3",
-      "next_next": "story.hear::math.word_problem_3__it_3",
+      "next_next": "story.hear::math.word_problem_3__it_5",
       "prev": "numcompare:1d__it_3",
       "harder": "bigmath:add.by.10.0..80.NoCarryBorrow.lev5__it_3",
       "easier": "numcompare:3d.compare.random__it_2"
@@ -6062,21 +6062,21 @@
       "cell_row": "14",
       "cell_column": "3",
       "same": "bigmath:sub.by.1.1..9.NoCarryBorrow.lev3__it_3",
-      "next": "story.hear::math.word_problem_3__it_3",
+      "next": "story.hear::math.word_problem_3__it_5",
       "next_next": "numcompare:2d.by.ten__it_3",
       "prev": "place.value:pv-100..499.3D.diff2.27",
-      "harder": "story.hear::math.simple_addition_5__it_3",
+      "harder": "story.hear::math.word_problem_5__it_5",
       "easier": "place.value:pv-100..499.3D.diff1.25"
     },
-    "story.hear::math.word_problem_3__it_3": {
+    "story.hear::math.word_problem_3__it_5": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "story.hear::math.word_problem_3__it_3",
+      "tutor_id": "story.hear::math.word_problem_3__it_5",
       "tutor_desc": "story.hear",
       "tutor_data": "[wordproblems]math.word_problem_3",
       "cell_row": "14",
       "cell_column": "4",
-      "same": "story.hear::math.word_problem_3__it_3",
+      "same": "story.hear::math.word_problem_3__it_5",
       "next": "numcompare:2d.by.ten__it_3",
       "next_next": "place.value:pv-100..499.3D.diff2.28",
       "prev": "bigmath:sub.by.1.1..9.NoCarryBorrow.lev3__it_3",
@@ -6094,9 +6094,9 @@
       "same": "numcompare:2d.by.ten__it_3",
       "next": "place.value:pv-100..499.3D.diff2.28",
       "next_next": "bigmath:sub.by.rand.1..9.NoCarryBorrow.lev4__it_3",
-      "prev": "story.hear::math.word_problem_3__it_3",
+      "prev": "story.hear::math.word_problem_3__it_5",
       "harder": "place.value:pv-100..499.3D.diff2.30",
-      "easier": "story.hear::math.word_problem_1__it_3"
+      "easier": "story.hear::math.word_problem_1__it_5"
     },
     "place.value:pv-100..499.3D.diff2.28": {
       "type": "TRANSITION",
@@ -6108,7 +6108,7 @@
       "cell_column": "6",
       "same": "place.value:pv-100..499.3D.diff2.28",
       "next": "bigmath:sub.by.rand.1..9.NoCarryBorrow.lev4__it_3",
-      "next_next": "story.hear::math.word_problem_4__it_3",
+      "next_next": "story.hear::math.word_problem_4__it_5",
       "prev": "numcompare:2d.by.ten__it_3",
       "harder": "bigmath:add.by.rand.0..80.NoCarryBorrow.lev6__it_3",
       "easier": "numcompare:3d.compare.ten__it_2"
@@ -6122,25 +6122,25 @@
       "cell_row": "14",
       "cell_column": "7",
       "same": "bigmath:sub.by.rand.1..9.NoCarryBorrow.lev4__it_3",
-      "next": "story.hear::math.word_problem_4__it_3",
+      "next": "story.hear::math.word_problem_4__it_5",
       "next_next": "numcompare:2d.compare.mix__it_3",
       "prev": "place.value:pv-100..499.3D.diff2.28",
-      "harder": "story.hear::math.simple_addition_6__it_3",
+      "harder": "story.hear::math.word_problem_6__it_5",
       "easier": "place.value:pv-100..499.3D.diff2.26"
     },
-    "story.hear::math.word_problem_4__it_3": {
+    "story.hear::math.word_problem_4__it_5": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "story.hear::math.word_problem_4__it_3",
+      "tutor_id": "story.hear::math.word_problem_4__it_5",
       "tutor_desc": "story.hear",
       "tutor_data": "[wordproblems]math.word_problem_4",
       "cell_row": "14",
       "cell_column": "8",
-      "same": "story.hear::math.word_problem_4__it_3",
+      "same": "story.hear::math.word_problem_4__it_5",
       "next": "numcompare:2d.compare.mix__it_3",
       "next_next": "place.value:pv-100..499.3D.diff2.29",
       "prev": "bigmath:sub.by.rand.1..9.NoCarryBorrow.lev4__it_3",
-      "harder": "story.hear::math.simple_addition_6__it_3",
+      "harder": "story.hear::math.word_problem_6__it_5",
       "easier": "bigmath:add.by.rand.0..8.NoCarryBorrow.lev2__it_3"
     },
     "numcompare:2d.compare.mix__it_3": {
@@ -6154,9 +6154,9 @@
       "same": "numcompare:2d.compare.mix__it_3",
       "next": "place.value:pv-100..499.3D.diff2.29",
       "next_next": "bigmath:add.by.10.0..80.NoCarryBorrow.lev5__it_3",
-      "prev": "story.hear::math.word_problem_4__it_3",
+      "prev": "story.hear::math.word_problem_4__it_5",
       "harder": "place.value:pv-100..499.3D.diff2.29",
-      "easier": "story.hear::math.word_problem_4__it_3"
+      "easier": "story.hear::math.word_problem_4__it_5"
     },
     "place.value:pv-100..499.3D.diff2.29": {
       "type": "TRANSITION",
@@ -6168,7 +6168,7 @@
       "cell_column": "2",
       "same": "place.value:pv-100..499.3D.diff2.29",
       "next": "bigmath:add.by.10.0..80.NoCarryBorrow.lev5__it_3",
-      "next_next": "story.hear::math.simple_addition_5__it_3",
+      "next_next": "story.hear::math.word_problem_5__it_5",
       "prev": "numcompare:2d.compare.mix__it_3",
       "harder": "bigmath:add.by.10.0..80.NoCarryBorrow.lev5__it_3",
       "easier": "numcompare:1d__it_3"
@@ -6182,21 +6182,21 @@
       "cell_row": "15",
       "cell_column": "3",
       "same": "bigmath:add.by.10.0..80.NoCarryBorrow.lev5__it_3",
-      "next": "story.hear::math.simple_addition_5__it_3",
+      "next": "story.hear::math.word_problem_5__it_5",
       "next_next": "numcompare:2d.compare.one__it_3",
       "prev": "place.value:pv-100..499.3D.diff2.29",
-      "harder": "story.hear::math.simple_addition_5__it_3",
+      "harder": "story.hear::math.word_problem_5__it_5",
       "easier": "place.value:pv-100..499.3D.diff2.27"
     },
-    "story.hear::math.simple_addition_5__it_3": {
+    "story.hear::math.word_problem_5__it_5": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "story.hear::math.simple_addition_5__it_3",
+      "tutor_id": "story.hear::math.word_problem_5__it_5",
       "tutor_desc": "story.hear",
-      "tutor_data": "[wordproblems]math.simple_addition_5",
+      "tutor_data": "[wordproblems]math.word_problem_5",
       "cell_row": "15",
       "cell_column": "4",
-      "same": "story.hear::math.simple_addition_5__it_3",
+      "same": "story.hear::math.word_problem_5__it_5",
       "next": "numcompare:2d.compare.one__it_3",
       "next_next": "place.value:pv-100..499.3D.diff2.30",
       "prev": "bigmath:add.by.10.0..80.NoCarryBorrow.lev5__it_3",
@@ -6214,9 +6214,9 @@
       "same": "numcompare:2d.compare.one__it_3",
       "next": "place.value:pv-100..499.3D.diff2.30",
       "next_next": "bigmath:add.by.rand.0..80.NoCarryBorrow.lev6__it_3",
-      "prev": "story.hear::math.simple_addition_5__it_3",
+      "prev": "story.hear::math.word_problem_5__it_5",
       "harder": "place.value:pv-100..499.3D.diff2.30",
-      "easier": "story.hear::math.word_problem_3__it_3"
+      "easier": "story.hear::math.word_problem_3__it_5"
     },
     "place.value:pv-100..499.3D.diff2.30": {
       "type": "TRANSITION",
@@ -6228,7 +6228,7 @@
       "cell_column": "6",
       "same": "place.value:pv-100..499.3D.diff2.30",
       "next": "bigmath:add.by.rand.0..80.NoCarryBorrow.lev6__it_3",
-      "next_next": "story.hear::math.simple_addition_6__it_3",
+      "next_next": "story.hear::math.word_problem_6__it_5",
       "prev": "numcompare:2d.compare.one__it_3",
       "harder": "bigmath:add.by.rand.0..80.NoCarryBorrow.lev6__it_3",
       "easier": "numcompare:2d.by.ten__it_3"
@@ -6242,23 +6242,23 @@
       "cell_row": "15",
       "cell_column": "7",
       "same": "bigmath:add.by.rand.0..80.NoCarryBorrow.lev6__it_3",
-      "next": "story.hear::math.simple_addition_6__it_3",
+      "next": "story.hear::math.word_problem_6__it_5",
       "next_next": "bigmath:add.by.rand.0..80.NoCarryBorrow.lev6__it_3",
       "prev": "place.value:pv-100..499.3D.diff2.30",
-      "harder": "story.hear::math.simple_addition_6__it_3",
+      "harder": "story.hear::math.word_problem_6__it_5",
       "easier": "place.value:pv-100..499.3D.diff2.28"
     },
-    "story.hear::math.simple_addition_6__it_3": {
+    "story.hear::math.word_problem_6__it_5": {
       "type": "TRANSITION",
       "skill": "numbers",
-      "tutor_id": "story.hear::math.simple_addition_6__it_3",
+      "tutor_id": "story.hear::math.word_problem_6__it_5",
       "tutor_desc": "story.hear",
-      "tutor_data": "[wordproblems]math.simple_addition_6",
+      "tutor_data": "[wordproblems]math.word_problem_6",
       "cell_row": "15",
       "cell_column": "8",
-      "same": "story.hear::math.simple_addition_6__it_3",
-      "next": "story.hear::math.simple_addition_6__it_3",
-      "next_next": "story.hear::math.simple_addition_6__it_3",
+      "same": "story.hear::math.word_problem_6__it_5",
+      "next": "story.hear::math.word_problem_6__it_5",
+      "next_next": "story.hear::math.word_problem_6__it_5",
       "prev": "bigmath:add.by.rand.0..80.NoCarryBorrow.lev6__it_3",
       "harder": "numcompare:2d.compare.mix__it_3",
       "easier": "bigmath:sub.by.rand.1..9.NoCarryBorrow.lev4__it_3"
