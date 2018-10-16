@@ -786,7 +786,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         //amogh add begins
             //changing _charValid for sentence writing activities
             if(activityFeature.contains("FTR_SEN_LTR")){
-                String correctString = mStimulus.substring(mActiveIndex,mActiveIndex + 1);
+                String correctString = mAnswer.substring(mActiveIndex,mActiveIndex + 1);
                 boolean isCorrect = mResponse.equals(correctString);
                 if(isCorrect) //amogh comment, this will change when insert and delete buttons will be there(then comparison has to be done using the aligned strings.).
                 {
