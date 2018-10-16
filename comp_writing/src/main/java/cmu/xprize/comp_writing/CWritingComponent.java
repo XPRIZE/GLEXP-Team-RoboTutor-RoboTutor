@@ -866,7 +866,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             CStimulusController resp = (CStimulusController) mResponseViewList.getChildAt(mActiveIndex);
             String charExpected = gController.getExpectedChar();
             resp.setStimulusChar(mResponse, false);
-
+            
             //update the controller's correct status
             mActiveController.updateCorrectStatus(_isValid); //sets the _correct in CGlyphInputController, would change for the different sentence level activities.
 
@@ -913,6 +913,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 else {
                     //when not valid
                     if (!_isValid) {
+
+                        //auto erase if not valid.
+                            gController.eraseGlyph();
+                            resp.setStimulusChar(" ",false);
 
                         // lots of fun feature updating here
                         publishFeature(WR_CONST.FTR_HAD_ERRORS);
@@ -1204,6 +1208,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 else{
                     //when not valid
                     if (!_isValid) {
+
+                        //auto erase if not valid.
+                            gController.eraseGlyph();
+                            resp.setStimulusChar(" ",false);
 
                         // lots of fun feature updating here
                         publishFeature(WR_CONST.FTR_HAD_ERRORS);
