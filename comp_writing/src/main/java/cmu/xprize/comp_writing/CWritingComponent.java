@@ -1857,7 +1857,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             int sw = mDrawnScroll.getWidth();
 
             int gx = (int) view.getX();
-            int gw = view.getWidth() * 2;
+            int gw = view.getWidth() * 3;
 
             // If the glyph to the right of the current glyph is partially obscurred then calc
             // the offset to bring it on screen - with some padding (i.e. multiple glyph widths)
