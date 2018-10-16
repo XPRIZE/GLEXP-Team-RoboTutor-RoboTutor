@@ -2093,7 +2093,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 return;
             }
 
-            //else increment mActiveIndex and call the fn again
+            //if correct, but not yet complete, increment mActiveIndex and call the fn again
             else if(mActiveIndex < mGlyphList.getChildCount() - 1){
                 mActiveIndex++;
                 rippleReplayActiveIndex();
@@ -2108,11 +2108,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
         //if not correct, play replay unless its a space, and update the response, the sentence parameters and the correct status of the glyph
         else {
-
-//            autoScroll(v);
-
             v.eraseGlyph();
-//            String expectedCharString = v.getExpectedChar(); //amogh comment, this needs to change when insert and delete buttons come in, as then the expected character dynamically changing would also mean changing the protoglyph dynamically, but here expected character is just to enable easy writing.
+//            String expectedCharString = v.getExpectedChar(); //comment, this needs to change when insert and delete buttons come in, as then the expected character dynamically changing would also mean changing the protoglyph dynamically, but here expected character is just to enable easy writing.
             String expectedCharString = mAnswer.substring(mActiveIndex,mActiveIndex + 1);
 
             boolean isSpaceExpected = expectedCharString.equals(" ");
@@ -2149,8 +2146,24 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
     }
 
+    //for playing the animation without affecting the response (for hesitation)
+    public void rippleReplayActiveIndexHesitation() {
+        CGlyphController v = (CGlyphController) mGlyphList.getChildAt(mActiveIndex);
+//        v.eraseGlyph();
+        String expectedCharString = mAnswer.substring(mActiveIndex,mActiveIndex + 1);
+        boolean isSpaceExpected = expectedCharString.equals(" ");
+        if (!isSpaceExpected) {
+            v.post(WR_CONST.RIPPLE_PROTO);
+        }
+        else{
+//                applyBehavior(WR_CONST.FIELD_REPLAY_COMPLETE);
+            publishFeature("FTR_SPACE_REPLAY");
+            applyBehavior(WR_CONST.ON_STOP_WRITING); //added to restart hesitation.
+        }
+    }
+
     public void rippleReplayWordContinued(){
-        //amogh comment, this might be wrong for the cases when the word is not written at the place it should've been, so to accommodate that, the indices from the answer and not the written part should be received, the glyphs at wrong places(all listindicesanswer) be erased and the correct ones(from listwordsanswer) replaced.
+        //  comment, this might be wrong for the cases when the word is not written at the place it should've been, so to accommodate that, the indices from the answer and not the written part should be received, the glyphs at wrong places(all listindicesanswer) be erased and the correct ones(from listwordsanswer) replaced.
         ArrayList<Integer> activeWordIndices = mActiveWord.listIndicesAnswer;
         int  max = activeWordIndices.get(activeWordIndices.size() - 1);
         if(_fieldIndex <= max) {
@@ -2160,9 +2173,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             v = (CGlyphController) mGlyphList.getChildAt(_fieldIndex);
             v.post(WR_CONST.RIPPLE_PROTO);
             v.setRecognisedChar(v.getExpectedChar()); //the recognised character is set to the expected character (since the animation).
-            //amogh added to set the valid character in response.
+            //  added to set the valid character in response.
 
-            //amogh comment move to the animator graph -> call update letters word response,
+            //  comment move to the animator graph -> call update letters word response,
             CStimulusController resp = (CStimulusController) mResponseViewList.getChildAt(_fieldIndex);
             resp.setStimulusChar(mAnswer.substring(_fieldIndex, _fieldIndex + 1), false);
             resp.updateResponseState(true);
@@ -2189,17 +2202,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             rippleReplayWordContinued();
         }
 
-        //in case of sentence writing letter level feedback, it plays for just one letter
-        else if(activityFeature.contains("FTR_SEN_LTR")){
-            CGlyphController v = (CGlyphController) mGlyphList.getChildAt(mActiveIndex);
-            v.setIsPlaying(false);
-//            v.eraseReplayGlyph();
-//            invalidate();
-
-            return;
-        }
-
-        //mainly for non sentence writing activities, when it plays the whole stimulus
+        //for non sentence writing activities, when it plays the whole stimulus
         else {
             CStimulusController r;
             CGlyphController v;
@@ -2394,17 +2397,17 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     public void updateText(CWr_Data data) {
         CStimulusController r;
         CGlyphController    v;
-        CStimulusController resp; //amogh added
+        CStimulusController resp; //  added
 
         boolean isStory = data.isStory;
         mStimulus = data.stimulus;
         mAudioStimulus = data.audioStimulus;
         mAnswer = data.answer;
-        //amogh comments
+        //  comments
             //remember to empty the containers when new word arrives
-        //amogh comments end
+        //  comments end
 
-        //amogh added to initialise words, ideally should be initialised for only the sentence writing activities.
+        //  added to initialise words, ideally should be initialised for only the sentence writing activities.
         currentWordIndex = 0; //setting to 0 initially
         mWrittenSentence = "";
         mSentenceAttempts = 0;
@@ -2414,7 +2417,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         //
         _spaceIndices.clear();
         mRecogList.removeAllViews();
-        mResponseViewList.removeAllViews(); //amogh added
+        mResponseViewList.removeAllViews(); //  added
 
         //LOADING THE STIMULUS
         if(!singleStimulus) {
@@ -2526,7 +2529,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 // Last is used for display updates - limits the extent of the baseline
                 v.setIsLast(i1 ==  mStimulus.length()-1);
 
-                //amogh comment - need to check conditions. eg see the next if else.
+                //  comment - need to check conditions. eg see the next if else.
                 String stimulusChar = mStimulus.substring(i1,i1+1);
 
                 //set the stimulus character as the recognised character
@@ -2554,7 +2557,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
             //mSentenceAttempts++;
             updateSentenceAttemptFeature();
-            //amogh add finish
+            //  add finish
         }
 
         else {
@@ -2585,16 +2588,16 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 v.setLinkedScroll(mDrawnScroll);
                 v.setWritingController(this);
                 v.setResponseView(mResponseViewList);
-                //amogh added
+                //  added
                 resp = (CStimulusController)LayoutInflater.from(getContext())
                         .inflate(R.layout.recog_resp_comp, null, false);
                 mResponseViewList.addView(resp);
                 resp.setLinkedScroll(mDrawnScroll);
                 resp.setWritingController(this);
-                //amogh add finish
+                //  add finish
             }
-//            initialiseCorrectionHashMap(); //amogh added
-//            initialiseWordIndices(); //amogh added
+//            initialiseCorrectionHashMap(); //  added
+//            initialiseWordIndices(); //  added
         }
 
         //initialise the mListWordsAnswer for sentence writing activities
@@ -2653,7 +2656,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 expectedCharIndex++;
             }
 
-            //amogh comment move this to the animator graph
+            //  comment move this to the animator graph
             //shows all buttons.
 //            activateEditModeValidOnly(); //edit buttons removed for code drop 2 in tanzania
         }
@@ -2683,7 +2686,29 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         switch(event) {
 
             case WR_CONST.FIELD_REPLAY_COMPLETE:
-                replayNext();
+                // This is executed when the glyph replay animation ends. We want to play replayNext when not letter level feedback in sentence writing activities; other relevant behaviors
+                if(activityFeature.contains("FTR_SEN")){
+                    //letter level feedback, sentence activity
+                    if(activityFeature.contains("FTR_SEN_LTR")){
+                        //in case of sentence writing letter level feedback, it plays for just one letter
+                        CGlyphController v = (CGlyphController) mGlyphList.getChildAt(mActiveIndex);
+                        v.setIsPlaying(false);
+                        //if mercy, then release stop writing behavior, else just restart hesitation.
+                        //applyBehavior(WR_CONST.ON_STOP_WRITING);
+                        //vs
+                        applyBehavior(WR_CONST.ON_ANIMATION_COMPLETE);
+                        // apply animation complete behavior which maps to stop hesitaiton
+                    }
+                    //word and sentence level feedback, sentence activity
+                    else {
+                        applyBehavior(WR_CONST.ON_STOP_WRITING);
+                        replayNext();
+                    }
+                }
+                // not a sentence level activity
+                else{
+                    replayNext();
+                }
                 break;
         }
 
@@ -2699,7 +2724,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     public void applyBehaviorNode(String nodeName) {
     }
 
-    //amogh added custom pointing behaviors for sentence writing tutors
+    //  added custom pointing behaviors for sentence writing tutors
 
 //    public void pointAtFirstEdit(){
 //        EditOperation = firstEdit = getFirstEditOperation()
@@ -2723,7 +2748,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
     }
 
-    //amogh added ends
+    //  added ends
 
     public void pointAtEraseButton() {
 
@@ -2878,7 +2903,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         }
     }
 
-    //amogh added
+    //  added
     private ArrayList<Word> getListWords(String answer){
 //        String[] wordsStimulus = mStimulus.split(" ");
         String[] words = answer.split(" ");
@@ -2946,7 +2971,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
 
 
-    //amogh added place for sentence level functions and ideas
+    //  added place for sentence level functions and ideas
     public class Sentence{
         // should have the mAnswer ie the main sentence
         // should have the response sentence.
@@ -3094,7 +3119,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         return newListWords;
     }
 
-    //amogh added function to get user written sentence.
+    //  added function to get user written sentence.
     public String getWrittenSentence(){
         String sen = "";
         for (int i = 0; i < mGlyphList.getChildCount(); i++){
@@ -3124,7 +3149,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         return String.valueOf(replacementTargetString);
     }
 
-    //amogh added functions to test the edits.
+    //  added functions to test the edits.
 
     //to update the mEditSequence, mAlignedSourceSentence and mAlignedTargetSentence after every change
     public void updateSentenceEditSequence(){
@@ -3176,7 +3201,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         boolean isInsert = editSequence.charAt(index) == 'I';
         return isInsert;
     }
-    //amogh add ends
+    //  add ends
 
 
     public class Word{
@@ -3310,8 +3335,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //
 //                return wordIsCorrect;
 //
-////            updateWordStimulus(); //amogh this is here only for debugging purposes, actually will be called from the animator graph
-////            inhibitWordInput(); // amogh added - this is here only for debugging purposes, actually will be called by the animator graph.
+////            updateWordStimulus(); //  this is here only for debugging purposes, actually will be called from the animator graph
+////            inhibitWordInput(); //   added - this is here only for debugging purposes, actually will be called by the animator graph.
 //        }
 
         public void updateWordResponse(){
@@ -3441,7 +3466,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
             // if insert at index i -> set the box left (centre of view at i-1); set the box right (centre of view at i).
             if(firstEditOperation.equals("I")){
-                //amogh comment add the case when the index is not first or last.
+                //  comment add the case when the index is not first or last.
                 left = (mResponseViewList.getChildAt(firstEditIndex - 1).getLeft() + mResponseViewList.getChildAt(firstEditIndex - 1).getRight())/2;
                 int right = (mResponseViewList.getChildAt(firstEditIndex).getLeft() + mResponseViewList.getChildAt(firstEditIndex).getRight())/2;
 //                int wid = right-left;
@@ -3572,7 +3597,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     }
     //Word class ends
 
-    //amogh added functions for highlight box
+    //  added functions for highlight box
     public EditOperation getFirstEditOperation(String source, String target){
         ArrayList<StringBuilder> edits = computeEditsAndAlignedStrings(source, target);
         StringBuilder alignedSource = edits.get(0);
@@ -3726,9 +3751,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
 //    public void
 
-    //amogh added ends
+    //  added ends
 
-//amogh added class to handle string computation
+//  added class to handle string computation
     //Some changes to https://codereview.stackexchange.com/questions/126236/levenshtein-distance-with-edit-sequence-and-alignment-in-java
 public class EditOperation {
 
@@ -3781,7 +3806,7 @@ public class EditOperation {
         int left;
         // if insert at index i -> set the box left (centre of view at i-1); set the box right (centre of view at i).
         if(operation.equals("I")){
-            //amogh comment add the case when the index is not first or last.
+            //  comment add the case when the index is not first or last.
             left = (mResponseViewList.getChildAt(index - 1).getLeft() + mResponseViewList.getChildAt(index - 1).getRight())/2;
             int right = (mResponseViewList.getChildAt(index).getLeft() + mResponseViewList.getChildAt(index).getRight())/2;
 //                int wid = right-left;
@@ -3970,7 +3995,7 @@ public class EditOperation {
     }
 
 
-    //amogh added ends
+    //  added ends
 
     //************************************************************************
     //************************************************************************
@@ -4068,7 +4093,7 @@ public class EditOperation {
                         //
                         clearAttemptFeatures();
                         break;
-                    //amogh added
+                    //  added
                     case WR_CONST.CLEAR_HESITATION:
                         //clear the hesitation number in feedback
                         clearHesitationFeatures();
@@ -4082,7 +4107,7 @@ public class EditOperation {
                     case WR_CONST.INC_HESITATION:
                         updateHesitationFeature();
                         break;
-                    //amogh added ends
+                    //  added ends
 
                     case TCONST.APPLY_BEHAVIOR:
 
