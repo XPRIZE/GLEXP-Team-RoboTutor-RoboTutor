@@ -1626,8 +1626,8 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
 
         // Reconstitute the path in the correct orientation after LTK+ post-processing
         //
-        rebuildGlyph();
-        invalidate();
+            rebuildGlyph();
+            invalidate();
 
         return isValid;
     }

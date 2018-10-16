@@ -248,8 +248,10 @@ public class CRecognizerPlus implements IGlyphSink {
             logManager.postEvent_D(LTKPLUS_MSG, "target:CRecognizer,type:lipiTK" + logMsg);
 
 
+            //try catch added to prevent crashes.
+            try {
+                _sampleIndex = ltkPlusProcessor(_nextGlyph._source);
 
-            _sampleIndex = ltkPlusProcessor(_nextGlyph._source );
 
             logMsg = "";
             for (int i = 0; i < _ltkPlusCandidates.length; i++) {
@@ -259,7 +261,8 @@ public class CRecognizerPlus implements IGlyphSink {
                 logMsg = logMsg + ",confidence_" + _ltkPlusCandidates[i].getRecChar() + ":" + _ltkPlusCandidates[i].Confidence;
             }
             logManager.postEvent_D(LTKPLUS_MSG, "target:CRecognizer,type:LTKPlus" + logMsg);
-
+            }
+            catch(Exception e){}
             return null;
         }
 
@@ -279,16 +282,21 @@ public class CRecognizerPlus implements IGlyphSink {
 
                 // If the result is not valid - flush the queue - this implements Immediate Feedback
                 //
-                if(!_nextGlyph._source.recCallBack(_ltkCandidates, _ltkPlusCandidates, _sampleIndex)) {
 
-                    flushQueue();
-                }
+                //added to prevent crashes
+                try {
+                    if (!_nextGlyph._source.recCallBack(_ltkCandidates, _ltkPlusCandidates, _sampleIndex)) {
 
-                // Check if any more recognizer requests are queued
-                //
-                else {
-                    nextQueued();
+                        flushQueue();
+                    }
+
+                    // Check if any more recognizer requests are queued
+                    //
+                    else {
+                        nextQueued();
+                    }
                 }
+                catch(Exception e){}
             }
         }
 
