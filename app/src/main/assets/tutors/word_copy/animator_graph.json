@@ -118,6 +118,8 @@
             //letter level feedback
             {"name": "Please continue writing", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please continue writing.mp3","soundpackage": "sentence","mode": "flow", "features": "FTR_SEN_LTR&FTR_HESITATION_1"},
             {"name": "point to the next glyph", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "pointAtNextGlyph", "parms": "", "features":"FTR_SEN_LTR&FTR_HESITATION_1"},
+                  //comment need to include punctuation also
+            {"name": "letter prompt", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audioLetter}}.mp3","soundpackage": "letters",  "mode":"flow", "features": "FTR_SEN&FTR_SEN_LTR&FTR_AUDIO_LTR&FTR_HESITATION_1"},
 
             //word level feedback
             {"name": "point on the first letter of the word", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "pointAtActiveWord", "parms": "", "features":"!FTR_AUDIO_SPACE&!FTR_AUDIO_PUNC&FTR_SEN_WRD&FTR_HESITATION_2"},
