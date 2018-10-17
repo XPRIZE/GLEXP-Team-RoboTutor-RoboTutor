@@ -1,0 +1,24 @@
+{
+	"bootFeatures": "FTR_DEMO_SUB",
+
+	"dataSource": [
+	
+		{"type": "Asm_Data", "level": "demo", "task": "Count down by 10", "dataset": [90,10,80], "operation": "-", "image": "square"},
+
+		{"type": "Asm_Data", "level": "demo", "task": "Count down by 10", "dataset": [80,10,70], "operation": "-", "image": "square"},
+
+		{"type": "Asm_Data", "level": "demo", "task": "Count down by 10", "dataset": [70,10,60], "operation": "-", "image": "square"},
+
+		{"type": "Asm_Data", "level": "demo", "task": "Count down by 10", "dataset": [60,10,50], "operation": "-", "image": "square"},
+
+		{"type": "Asm_Data", "level": "demo", "task": "Count down by 10", "dataset": [50,10,40], "operation": "-", "image": "square"},
+
+		{"type": "Asm_Data", "level": "demo", "task": "Count down by 10", "dataset": [40,10,30], "operation": "-", "image": "square"},
+
+		{"type": "Asm_Data", "level": "demo", "task": "Count down by 10", "dataset": [30,10,20], "operation": "-", "image": "square"},
+
+		{"type": "Asm_Data", "level": "demo", "task": "Count down by 10", "dataset": [20,10,10], "operation": "-", "image": "square"},
+
+		{"type": "Asm_Data", "level": "demo", "task": "Count down by 10", "dataset": [10,10,0], "operation": "-", "image": "square"}]
+
+}

@@ -1,0 +1,24 @@
+{
+  "bootFeatures":"FTR_DEMO_SUB_ZERO",
+
+  "dataSource": [
+
+    {"type":"Asm_Data", "level":"asm_12", "task":"Add or subtract 0", "dataset":[7, 0, 7], "operation":"-", "image": "star"},
+
+    {"type":"Asm_Data", "level":"asm_12", "task":"Add or subtract 0", "dataset":[6, 0, 6], "operation":"+", "image": "hexagon"},
+
+    {"type":"Asm_Data", "level":"asm_12", "task":"Add or subtract 0", "dataset":[8, 0, 8], "operation":"+", "image": "square"},
+
+    {"type":"Asm_Data", "level":"asm_12", "task":"Add or subtract 0", "dataset":[5, 0, 5], "operation":"+", "image": "triangle"},
+
+    {"type":"Asm_Data", "level":"asm_12", "task":"Add or subtract 0", "dataset":[1, 0, 1], "operation":"-", "image": "circle"},
+
+    {"type":"Asm_Data", "level":"asm_12", "task":"Add or subtract 0", "dataset":[2, 0, 2], "operation":"+", "image": "pentagon"},
+
+    {"type":"Asm_Data", "level":"asm_12", "task":"Add or subtract 0", "dataset":[7, 0, 7], "operation":"+", "image": "hexagon"},
+
+    {"type":"Asm_Data", "level":"asm_12", "task":"Add or subtract 0", "dataset":[1, 0, 1], "operation":"-", "image": "star"},
+
+    {"type":"Asm_Data", "level":"asm_12", "task":"Add or subtract 0", "dataset":[4, 0, 4], "operation":"-", "image": "circle"}
+  ]
+}
