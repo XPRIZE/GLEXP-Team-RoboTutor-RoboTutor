@@ -261,6 +261,12 @@ public class TCountXComponent extends CCountX_Component implements ITutorObject,
     @Override
     protected void trackAndLogPerformance(String expected,String actual,String movement,String cor) {
 
+        if (expected.equals(actual)) {
+            mTutor.countCorrect();
+        } else {
+            mTutor.countIncorrect();
+        }
+
         String tutorName = mTutor.getTutorName();
         PerformanceLogItem event = new PerformanceLogItem();
 
