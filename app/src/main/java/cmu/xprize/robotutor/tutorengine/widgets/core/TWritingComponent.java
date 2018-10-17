@@ -155,7 +155,11 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         mGlyphList.setClipChildren(false);
 
         mReplayButton = (ImageButton) findViewById(R.id.Sreplay);
-
+//        mDrawnScroll.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+//
+//            }
+//            @Override
+//            public void onScrollChanged() {
         //scrolling buttons
 //        mScrollRightButton = (ImageButton) findViewById(R.id.buttonright);
 //        mScrollLeftButton = (ImageButton) findViewById(R.id.buttonleft);

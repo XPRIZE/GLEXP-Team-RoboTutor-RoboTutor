@@ -1164,7 +1164,7 @@
           "mapname": "DEMO_SELECT_MODULE",
 
 //          Use this to enable metric constraints on glyphs
-          "preenter":["SET_VERSION","SET_DATASOURCE","SET_CONSTRAINT3"],
+          "preenter":["SET_VERSION","SET_DATASOURCE","SET_CONSTRAINT4"],
           "preexit" :[],
           "edges": [
             {"constraint": "FTR_DEMO", "edge": "DEMO_INIT"},
@@ -1736,6 +1736,7 @@
         "SET_CONSTRAINT1":{"name":"",  "type": "COMMAND", "id": "SWordCopy", "method": "setConstraint", "parms": "H,0.15;W,0.15;Y,0.10;X,0.15:String", "features":""},
         "SET_CONSTRAINT2":{"name":"",  "type": "COMMAND", "id": "SWordCopy", "method": "setConstraint", "parms": "H,0.20;W,0.20;Y,0.15;X,0.20:String", "features":""},
         "SET_CONSTRAINT3":{"name":"",  "type": "COMMAND", "id": "SWordCopy", "method": "setConstraint", "parms": "H,0.25;W,0.25;Y,0.20;X,0.25:String", "features":""},
+        "SET_CONSTRAINT4":{"name":"",  "type": "COMMAND", "id": "SWordCopy", "method": "setConstraint", "parms": "H,0.30;W,0.30;Y,0.25;X,0.35:String", "features":""},
 
         //"GETRESPONSE":{"name":"",  "type": "COMMAND", "id": "Sresponse", "method": "???" ,"features":""},
         //get the recognized character from the recognizer???
