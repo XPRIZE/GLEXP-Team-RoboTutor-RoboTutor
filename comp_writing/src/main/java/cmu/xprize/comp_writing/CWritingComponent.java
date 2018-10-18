@@ -2560,6 +2560,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 resp = (CStimulusController)LayoutInflater.from(getContext())
                         .inflate(R.layout.recog_resp_comp, null, false);
                 resp.setStimulusChar(stimulusChar,true);
+                resp.setUnderlineVisible(false);
                 mResponseViewList.addView(resp);
                 resp.setLinkedScroll(mDrawnScroll);
                 resp.setWritingController(this);
@@ -2602,6 +2603,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 resp = (CStimulusController)LayoutInflater.from(getContext())
                         .inflate(R.layout.recog_resp_comp, null, false);
                 mResponseViewList.addView(resp);
+                resp.setUnderlineVisible(false);
                 resp.setLinkedScroll(mDrawnScroll);
                 resp.setWritingController(this);
                 //  add finish
@@ -2674,6 +2676,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //        else if (activityFeature.contains("FTR_SEN")){
 ////            activateEditMode(); //edit buttons removed for code drop 2 in tanzania
 //        }
+
+        //setting the linking lines to be visible when everything loaded.
         mWritingBoxLink.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
