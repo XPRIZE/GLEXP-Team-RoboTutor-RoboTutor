@@ -1474,7 +1474,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
     /**
      * This is where we process words being narrated
-     *
+     * VMC_QA why does this get called twice for the last word???
      */
     @Override
     public void onUpdate(String[] heardWords) {
@@ -1489,7 +1489,7 @@ public class CRt_ViewManagerASB implements ICRt_ViewManager, ILoadableObject {
 
         while (mHeardWord < heardWords.length) {
 
-            if (wordsToSpeak[mCurrWord].equals(heardWords[mHeardWord])) {
+            if (wordsToSpeak[mCurrWord].equals(heardWords[mHeardWord])) { // VMC_QA these are not equal. one of these is out of bounds (probably wordsToSpeak)
 
                 nextWord();
                 mHeardWord++;

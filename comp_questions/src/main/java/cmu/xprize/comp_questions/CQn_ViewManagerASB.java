@@ -2415,20 +2415,8 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
             File[] allfiles = dir.listFiles();*/
 
             String[] genericQuestions =
-            { "Has this happened to you",
-            "What part of the story are you reading now",
-            "What could you learn from this",
-            "When does this take place",
-            "What do you think this story will be about",
-            "Where does this story happen",
-            "What do you think will happen next",
-            "Where does this take place",
-            "What does this story teach you",
-            "Who does this talk about",
-            "What happens in this story",
-            "Who is this story about",
+            {"Who is this story about",
             "What has happened so far",
-            "Whom did you like best in this story",
             "What is this story about"};
 
             Log.wtf("COMPREHEND", "files: " + genericQuestions.length);
