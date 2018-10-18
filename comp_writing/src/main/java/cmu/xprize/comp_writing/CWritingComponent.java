@@ -34,6 +34,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -103,6 +104,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
     protected RelativeLayout    mResponseScrollLayout;
 
     protected View mHighlightErrorBoxView;
+    protected CWritingBoxLink mWritingBoxLink;
 
     protected int               mMaxLength   = 0; //GCONST.ALPHABET.length();                // Maximum string length
 
@@ -2672,6 +2674,17 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //        else if (activityFeature.contains("FTR_SEN")){
 ////            activateEditMode(); //edit buttons removed for code drop 2 in tanzania
 //        }
+        mWritingBoxLink.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                // This is a async callback. get the view size here.
+                mWritingBoxLink.setResponse(mResponseViewList);
+                mWritingBoxLink.setGlyphList(mGlyphList);
+                mWritingBoxLink.invalidate();
+            }
+        });
+
+
     }
 
 

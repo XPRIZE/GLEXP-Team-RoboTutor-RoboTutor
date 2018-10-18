@@ -21,6 +21,7 @@ package cmu.xprize.comp_writing;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.percent.PercentLayoutHelper;
@@ -394,6 +395,11 @@ public class CGlyphController extends PercentRelativeLayout implements View.OnTo
     }
     public void showDeleteSpaceButton(boolean show){
         mDeleteSpaceBut.setVisibility(show? VISIBLE:INVISIBLE);
+    }
+
+    public Rect getBoxRect(){
+        Rect drawnBox = mGlyphInput.getViewBnds();
+        return drawnBox;
     }
 
     @Override
