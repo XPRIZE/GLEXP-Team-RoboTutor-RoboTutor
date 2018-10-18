@@ -10,6 +10,7 @@ import cmu.xprize.comp_ask.CAsk_Data;
 import cmu.xprize.comp_session.AS_CONST;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.util.CAt_Data;
+import cmu.xprize.util.CPlacementTest_Tutor;
 import cmu.xprize.util.TCONST;
 
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_MATH;
@@ -51,14 +52,25 @@ public class CycleMatrixActivityMenu implements IActivityMenu {
         CAt_Data[] nextTutors = new CAt_Data[2];
         HashMap transitionMap = _matrix.storyTransitions;
         String tutorId = "";
+
+        CPlacementTest_Tutor[] placement = null;
         boolean isPlacementMode = false;
+        int placementIndex = 0;
+
 
         // active skill dependent...
         switch(_student.getActiveSkill()) {
             case SELECT_WRITING:
                 transitionMap = _matrix.writeTransitions;
-                tutorId = _student.getWritingTutorID();
+
                 isPlacementMode = _student.getWritingPlacement();
+                if (isPlacementMode) {
+                    placement = _matrix.writePlacement;
+                    placementIndex = _student.getWritingPlacementIndex();
+                    tutorId = placement[placementIndex].tutor;
+                } else {
+                    tutorId = _student.getWritingTutorID();
+                }
                 break;
 
             case SELECT_STORIES:
@@ -69,14 +81,28 @@ public class CycleMatrixActivityMenu implements IActivityMenu {
 
             case SELECT_MATH:
                 transitionMap = _matrix.mathTransitions;
-                tutorId = _student.getMathTutorID();
+
                 isPlacementMode = _student.getMathPlacement();
+                if (isPlacementMode) {
+                    placement = _matrix.mathPlacement;
+                    placementIndex = _student.getMathPlacementIndex();
+                    tutorId = placement[placementIndex].tutor;
+                } else {
+                    tutorId = _student.getMathTutorID();
+                }
                 break;
         }
 
         // iff in placement mode... show the same tutor twice
-        nextTutors[0] = (CAt_Data) transitionMap.get(tutorId); // N
-        nextTutors[1] = isPlacementMode ? nextTutors[0] : (CAt_Data) transitionMap.get(nextTutors[0].next); // N or N + 1
+        // SUPER_PLACEMENT if the same, do two different icons
+        if (isPlacementMode && placement != null) {
+            Log.e("SUPER_PLACEMENT", "not ready yet");
+            nextTutors[0] = (CAt_Data) transitionMap.get(tutorId);
+            nextTutors[1] = nextTutors[0];
+        } else {
+            nextTutors[0] = (CAt_Data) transitionMap.get(tutorId); // N
+            nextTutors[1] = isPlacementMode ? nextTutors[0] : (CAt_Data) transitionMap.get(nextTutors[0].next); // N or N + 1
+        }
 
         return nextTutors;
     }

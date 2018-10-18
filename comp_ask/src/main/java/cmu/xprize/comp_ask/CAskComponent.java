@@ -46,6 +46,7 @@ import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
+import static cmu.xprize.util.TCONST.Thumb.BPOP_LTR;
 
 
 public class CAskComponent extends FrameLayout implements ILoadableObject, View.OnTouchListener {
@@ -207,6 +208,10 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
         Log.wtf("NEW_MENU", nextActivities[0].tutor_id + " " + nextActivities[1].tutor_id );// + " " + nextActivities[2].tutor_id);
 
+        // This is a pain...
+        TCONST.Thumb[] thumbs = new TCONST.Thumb[nextActivities.length];
+        String[] icons = new String[nextActivities.length];
+
         // first two (or three) buttons are set...
         for(int i = 0; i < nextActivities.length; i++) {
             CAskElement element = mDataSource.items[i];
@@ -214,7 +219,8 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
             boolean useOldWay = false;
             // get the correct file name
-            String tutorIcon = CTutorData_Metadata.getThumbName(nextActivities[i]);
+            String tutorIcon = CTutorData_Metadata.getThumbName(nextActivities[i]); // SUPER_PLACEMENT if the same, do two different icons
+            icons[i] = tutorIcon;
             if (tutorIcon == null) {
                 useOldWay = true;
             } else {
@@ -226,6 +232,7 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                     useOldWay = true;
+                    icons[i] = null;
                 }
             }
 
@@ -234,7 +241,27 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
                 TCONST.Thumb resource = CTutorData_Metadata.getThumbImage(nextActivities[i]); // NEW_THUMBS (0) home screen
                 Log.wtf("NEW_MENU", resource.toString());
 
+                thumbs[i] = resource;
+
                 ibView.setImageResource(CDebugComponent.getThumbId(resource)); // NEW_THUMBS (2) setImageResource
+            }
+
+        }
+
+        /// check for duplicates
+        if (thumbs[0] == thumbs[1]) {
+
+            CAskElement element = mDataSource.items[1];
+            CImageButton ibView = (CImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
+
+            switch(thumbs[0]) {
+                case BPOP_NUM:
+                    ibView.setImageResource(R.drawable.thumb_bpop_num_2);
+                    break;
+
+                case BPOP_LTR:
+                    ibView.setImageResource(R.drawable.thumb_bpop_ltr_lc_2);
+                    break;
             }
 
         }

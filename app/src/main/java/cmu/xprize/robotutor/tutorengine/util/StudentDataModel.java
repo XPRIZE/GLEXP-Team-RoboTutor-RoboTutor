@@ -50,7 +50,7 @@ public class StudentDataModel {
 
 
     // new way cycles through skills
-    private static final boolean NEW_WAY = true;
+    private static final boolean CYCLE_MATRIX = true;
     private static final String SKILL_SELECTED_KEY = "SKILL_SELECTED";
     // sets to true when student selects repeat
     private static final String IS_REPEATING_LAST_KEY = "IS_REPEATING_LAST";
@@ -87,7 +87,7 @@ public class StudentDataModel {
         _editor.putBoolean(StudentDataModel.MATH_PLACEMENT_KEY, CTutorEngine.language.equals(LANG_SW) &&  !RoboTutor.TURN_OFF_PLACEMENT_FOR_QA);
         _editor.putInt(StudentDataModel.MATH_PLACEMENT_INDEX_KEY, 0);
 
-        if(NEW_WAY) {
+        if(CYCLE_MATRIX) {
             _editor.putString(StudentDataModel.SKILL_SELECTED_KEY, SELECT_WRITING);
         }
 

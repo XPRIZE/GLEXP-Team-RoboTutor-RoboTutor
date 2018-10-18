@@ -7,7 +7,6 @@ import android.support.percent.PercentRelativeLayout;
 import android.text.Html;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -624,11 +623,11 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
                 break;
 
             case BPOP_NUM:
-                thumbId = R.drawable.thumb_bpop_num;
+                thumbId = R.drawable.thumb_bpop_num_1;
                 break;
 
             case BPOP_LTR:
-                thumbId = R.drawable.thumb_bpop_ltr_lc;
+                thumbId = R.drawable.thumb_bpop_ltr_lc_1;
                 break;
 
             case MN:

@@ -129,7 +129,7 @@ public class PromotionMechanism {
         // YYY if placement, we will go by different rules
         PromotionRules rules;
         if(useWritingPlacement || useMathPlacement) {
-            rules = new PlacementPromotionRules();
+            rules = new PlacementPromotionRules(); // SUPER_PLACEMENT
         } else {
             rules = new PerformancePromotionRules();
         }
@@ -153,7 +153,7 @@ public class PromotionMechanism {
         // YYY use placement logic
         String nextTutor;
         if (useWritingPlacement || useMathPlacement) {
-            nextTutor = getNextPlacementTutor(activeTutorId, useMathPlacement, promotionDecision, transitionMap, placementIndex);
+            nextTutor = getNextPlacementTutor(activeTutorId, useMathPlacement, promotionDecision, transitionMap, placementIndex); // SUPER_PLACEMENT
 
         } else {
             nextTutor = getNextPromotionTutor(activeTutorId, promotionDecision, transitionMap, rootTutor);
