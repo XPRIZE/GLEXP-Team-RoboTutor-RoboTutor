@@ -1544,9 +1544,13 @@
 
 
             //sentence writing activities
+//            {"name": "Refresh the view for links",   "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "refreshWritingBoxLink",       "parms": "",  "features":"FTR_SEN"},
 
             //copy
             {"name":"Play - please copy the sentence", "type": "AUDIO", "command": "PLAY", "soundsource": "Please copy the sentence.mp3","soundpackage": "sentence","mode":"flow", "features": "FTR_SEN_COPY&!FTR_DICTATION"},
+
+            //refresh links view
+            {"name": "Refresh the view for links",   "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "refreshWritingBoxLink",       "parms": "",  "features":"FTR_SEN"},
 
             //play prompt
             {"name":"Play - .audiostimulus", "type": "AUDIO", "command": "PLAY", "soundsource": "{{SWordCopy.audiostim1}}.mp3","soundpackage": "story","mode":"flow", "features": "FTR_SEN"},

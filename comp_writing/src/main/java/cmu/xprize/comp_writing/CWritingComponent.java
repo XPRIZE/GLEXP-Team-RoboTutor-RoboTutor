@@ -2684,11 +2684,15 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 // This is a async callback. get the view size here.
                 mWritingBoxLink.setResponse(mResponseViewList);
                 mWritingBoxLink.setGlyphList(mGlyphList);
-                mWritingBoxLink.invalidate();
+//                mWritingBoxLink.invalidate();
             }
         });
 
 
+    }
+
+    public void refreshWritingBoxLink(){
+        mWritingBoxLink.invalidate();
     }
 
 
