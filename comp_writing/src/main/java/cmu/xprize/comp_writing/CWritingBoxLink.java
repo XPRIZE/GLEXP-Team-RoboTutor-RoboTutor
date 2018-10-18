@@ -59,7 +59,7 @@ public class CWritingBoxLink extends View {
         mLinkPaint = new Paint();
         mLinkPaint.setStyle(Paint.Style.FILL);
         mLinkPaint.setColor(0x44A5C4D4);
-        mLinkPaint.setStrokeWidth(3);
+        mLinkPaint.setStrokeWidth(5);
         mLinkPaint.setAntiAlias(true);
     }
 
@@ -108,9 +108,10 @@ public class CWritingBoxLink extends View {
 
                 int endX = glyphBoxCoordinates[0] + (glyphControllerWidth/2);
                 int endY = glyphBoxCoordinates[1] + drawingBoxOffset*3/4;
-
-                if(endX > 0 && endX < screenWidth) {
+                boolean hasGlyph = ((CGlyphController) mGlyphList.getChildAt(i)).hasGlyph();
+                if(!hasGlyph && endX > 0 && endX < screenWidth) {
                     canvas.drawLine(startX, startY, endX, endY, mLinkPaint);
+                    canvas.drawLine(responseLetterCoordinates[0], startY, responseLetterCoordinates[0] + responseLetterWidth*4/5, startY, mLinkPaint);
                 }
             }
         }

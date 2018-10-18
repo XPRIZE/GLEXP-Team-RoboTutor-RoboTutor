@@ -916,10 +916,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     //when not valid
                     if (!_isValid) {
 
-                        //auto erase if not valid.
-                            gController.eraseGlyph();
-                            resp.setStimulusChar(" ",false);
-
                         // lots of fun feature updating here
                         publishFeature(WR_CONST.FTR_HAD_ERRORS);
 
@@ -1211,9 +1207,6 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                     //when not valid
                     if (!_isValid) {
 
-                        //auto erase if not valid.
-                            gController.eraseGlyph();
-                            resp.setStimulusChar(" ",false);
 
                         // lots of fun feature updating here
                         publishFeature(WR_CONST.FTR_HAD_ERRORS);
@@ -1410,6 +1403,15 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         return _isValid;
     }
 
+
+    public void autoErase(){
+        //auto erase if not valid.
+        CGlyphController gController = (CGlyphController) mGlyphList.getChildAt(mActiveIndex);
+        gController.eraseGlyph();
+
+        CStimulusController resp = (CStimulusController) mResponseViewList.getChildAt(mActiveIndex);
+        resp.setStimulusChar(" ",false);
+    }
 
     //activating edit mode for sentence
     public void activateEditMode(){
@@ -4214,6 +4216,10 @@ public class EditOperation {
                     case WR_CONST.GLYPH_HIGHLIGHT:
 
                         highlightGlyph();
+                        break;
+
+                    case WR_CONST.AUTO_ERASE:
+                        autoErase();
                         break;
 
                     default:

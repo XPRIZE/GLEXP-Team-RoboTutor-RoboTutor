@@ -126,6 +126,8 @@ public class WR_CONST {
     public static final String WRITE_BEHAVIOR           = "WRITE_BEHAVIOR";
     public static final String CANCEL_POINTAT           = "CANCEL_POINTAT";
 
+    public static final String AUTO_ERASE               = "AUTO_ERASE";
+
     //amogh added audio features
     public static final String FTR_AUDIO_CAP = "FTR_AUDIO_CAP";
     public static final String FTR_AUDIO_PUNC = "FTR_AUDIO_PUNC";
