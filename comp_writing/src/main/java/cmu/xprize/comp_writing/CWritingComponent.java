@@ -2680,15 +2680,17 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 //        }
 
         //setting the linking lines to be visible when everything loaded.
-        mWritingBoxLink.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                // This is a async callback. get the view size here.
-                mWritingBoxLink.setResponse(mResponseViewList);
-                mWritingBoxLink.setGlyphList(mGlyphList);
+        if(activityFeature.contains("FTR_SEN")) {
+            mWritingBoxLink.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    // This is a async callback. get the view size here.
+                    mWritingBoxLink.setResponse(mResponseViewList);
+                    mWritingBoxLink.setGlyphList(mGlyphList);
 //                mWritingBoxLink.invalidate();
-            }
-        });
+                }
+            });
+        }
 
 
     }

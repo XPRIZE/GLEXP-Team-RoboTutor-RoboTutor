@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
+import cmu.xprize.util.TCONST;
+
 public class CWritingBoxLink extends View {
 
     private Paint mLinkPaint;
@@ -77,6 +79,29 @@ public class CWritingBoxLink extends View {
         int glyphControllerHeight = firstController.getHeight();
         drawingBoxOffset = (glyphControllerHeight - (firstController.getBoxRect().height()))/2;
 //        invalidate();
+    }
+
+    public void setVisibility(String visible) {
+
+        int visibleFlag;
+
+        switch (visible) {
+
+            case TCONST.VISIBLE:
+                visibleFlag = View.VISIBLE;
+                break;
+
+            case TCONST.INVISIBLE:
+                visibleFlag = View.INVISIBLE;
+                break;
+
+            default:
+                visibleFlag = View.GONE;
+                break;
+
+        }
+
+        this.setVisibility(visibleFlag);
     }
 
 

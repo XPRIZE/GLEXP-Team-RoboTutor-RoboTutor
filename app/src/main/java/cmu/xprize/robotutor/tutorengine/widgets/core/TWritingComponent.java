@@ -236,6 +236,8 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 //            };
 //        });
 //
+        //toggle buttons visibility and refresh writing box links upon scrolling.
+        if(activityFeature.contains("FTR_SEN")){
         mDrawnScroll.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
             public void onScrollChanged() {
@@ -261,6 +263,7 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 //                }
             }
         });
+        }
 
 //
 //        if (activityFeature.contains("FTR_SEN")){
