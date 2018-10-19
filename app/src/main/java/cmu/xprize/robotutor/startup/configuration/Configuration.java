@@ -20,6 +20,7 @@ public class Configuration {
                 .putBoolean(ConfigurationItems.NO_ASR_APPS, configItems.no_asr_apps)
                 .putString(ConfigurationItems.LANGUAGE_FEATURE_ID, configItems.language_feature_id)
                 .putBoolean(ConfigurationItems.SHOW_DEMO_VIDS, configItems.show_demo_vids)
+                .putBoolean(ConfigurationItems.USE_PLACEMENT, configItems.use_placement)
                 .apply();
     }
 
@@ -61,5 +62,10 @@ public class Configuration {
     public static boolean showDemoVids(Context context) {
         return context.getSharedPreferences(ROBOTUTOR_CONFIGURATION, MODE_PRIVATE)
                 .getBoolean(ConfigurationItems.SHOW_DEMO_VIDS, true);
+    }
+
+    public static boolean usePlacement(Context context) {
+        return context.getSharedPreferences(ROBOTUTOR_CONFIGURATION, MODE_PRIVATE)
+                .getBoolean(ConfigurationItems.USE_PLACEMENT, true);
     }
 }
