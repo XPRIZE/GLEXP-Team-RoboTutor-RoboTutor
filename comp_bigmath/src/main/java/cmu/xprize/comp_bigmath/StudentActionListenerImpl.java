@@ -367,6 +367,55 @@ public class StudentActionListenerImpl implements StudentActionListener{
 
     }
 
+    //oct 18 start
+    public int getExpectedInt(String selection) {
+
+        int expectedInput = 0; //oct18 comment expected input might not be set somewhere(please check)
+        switch (selection) {
+
+            // digit names are the selection
+            case "symbol_result_hun":
+                expectedInput = getHunsDigit(_expectedResult);
+                break;
+
+            case "symbol_result_ten":
+                expectedInput = getTensDigit(_expectedResult);
+                break;
+
+            case "symbol_result_one":
+                expectedInput = getOnesDigit(_expectedResult);
+                break;
+
+            case "symbol_carry_ten":
+                expectedInput = _isCarryOne ? 1 : 0; //  the zero won't get used..
+                break;
+
+            case "symbol_carry_hun":
+
+                expectedInput = _isCarryTen ? 1 : 0; // the zero won't get used...
+                break;
+
+            case "symbol_borrow_one_1":
+                expectedInput = 1; // it's always one, that's the most we can borrow
+                break;
+
+            case "symbol_borrow_one_2":
+                expectedInput = getOnesDigit(operandA);
+                break;
+
+            case "symbol_borrow_one":
+                // maybe make all feedback come through me???
+                break;
+
+            case "symbol_borrow_ten":
+                expectedInput = getTensDigit(operandA) - 1;
+                break;
+        }
+
+        return expectedInput;
+    }
+    //end
+
     int _borrowState;
     /**
      * for setting the tutor state...

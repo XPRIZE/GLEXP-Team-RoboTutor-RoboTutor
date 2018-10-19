@@ -110,10 +110,16 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 //    private static final String debugTutorVariant = "placevalue";
 //    private static final String debugTutorId = "place.value:1";
 //    private static final String debugTutorFile = "[file]place.value__pv-11..99.2D.diff0.3.json";
+    //    private static final boolean QUICK_DEBUG = true;
+//    private static final String debugTutorVariant = "write.sen.copy.ltr";
+//    private static final String debugTutorId = "write.wrd:story_1_1";
+//    private static final String debugTutorFile = "[encfolder]write.sen.corr.ltr.nostim_story_3.punc.3.json";
+
+    private static final String debugTutorVariant = "bigmath"; // spelling
     private static final boolean QUICK_DEBUG = true;
-    private static final String debugTutorVariant = "write.sen.copy.ltr";
-    private static final String debugTutorId = "write.wrd:story_1_1";
-    private static final String debugTutorFile = "[encfolder]write.sen.corr.ltr.nostim_story_3.punc.3.json";
+    private static final String debugTutorId = "don't mattah";
+    private static final String debugTutorFile = "[file]bigmath_sub.by.rand.20..90.NoCarryBorrow.lev8.json";
+
 
     //amogh missing letter
 //    private static final String debugTutorFile = "[file]write.missingLtr_0.1.2.fin.s.json";
