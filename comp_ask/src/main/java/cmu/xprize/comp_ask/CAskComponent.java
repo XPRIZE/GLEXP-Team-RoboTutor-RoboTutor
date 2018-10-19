@@ -249,7 +249,7 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
         }
 
         /// check for duplicates
-        if (thumbs[0] == thumbs[1]) {
+        if (thumbs[0] != null && thumbs[0] == thumbs[1]) {
 
             CAskElement element = mDataSource.items[1];
             CImageButton ibView = (CImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
