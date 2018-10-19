@@ -203,8 +203,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         String initTime     = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss", Locale.US).format(calendar.getTime());
         String sequenceIdString = String.format(Locale.US, "%06d", getNextLogSequenceId());
         // NOTE: Need to include the configuration name when that is fully merged
-        String logFilename  = "RoboTutor_" + BuildConfig.BUILD_TYPE + "." +
-                Configuration.configVersion(this) + "_" + sequenceIdString +
+        String logFilename  = "RoboTutor_" + // TODO TODO TODO there should be a version name in here!!!
+                Configuration.configVersion(this) + "_" + BuildConfig.VERSION_NAME + "_" + sequenceIdString +
                 "_" + initTime + "_" + Build.SERIAL;
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "rt: onCreate");
