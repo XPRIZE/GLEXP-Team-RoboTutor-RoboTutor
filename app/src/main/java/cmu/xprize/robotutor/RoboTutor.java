@@ -101,16 +101,60 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 //    private static final String debugTutorVariant = "placevalue";
 //    private static final String debugTutorId = "place.value:1";
 //    private static final String debugTutorFile = "[file]place.value__pv-11..99.2D.diff0.3.json";
-    private static final String debugTutorVariant = "spelling"; // spelling
+    //private static final String debugTutorVariant = "story.pic.hear"; // spelling
+    //private static final String debugTutorVariant = "story.hear"; // spelling
+    //private static final String debugTutorVariant = "story.clo.hear";
+    //private static final String debugTutorVariant = "picmatch";
+    //private static final String debugTutorVariant = "numcompare";
+    private static final String debugTutorVariant = "spelling";
     private static final boolean QUICK_DEBUG = false;
     private static final String debugTutorId = "don't mattah";
-    private static final String debugTutorFile = "[file]spelling_datasource_2.json"; // spelling_datasource_1
+    //private static final String debugTutorFile = "[file]bigmath_add.by.rand.0..9.AllCarryBorrow.lev9.json"; // spelling_datasource_1
+    // private static final String debugTutorFile = "[encfolder]story_1";
+
+    //private static final String debugTutorFile = "[wordproblems]math.word_problem_3";
+    //private static final String debugTutorFile = "[file]picmatch_people.json";
+    //private static final String debugTutorFile ="[file]place.value_pv-100..499.3D.diff1.23.json";
+    //private static final String debugTutorFile = "[encfolder]write.sen.copy.ltr_story_1.noerror.1.1.json";
+    private static final String debugTutorFile = "[file]spelling_datasource_2.json";
+    //private static final String debugTutorFile = "[encfolder]story_38";
+
+    // DEBUG LIST 10/12
+
+    // ??? not-reproducible
+    // picmatch_people.json -- no photos
+
+    // $$ moderately easy fixes
+    // story.hear::math_word_problem_3 -- (activity gets stuck in loop)
+
+
+    // $$$ medium fixes
+    // math: -- bigmath don't play
+    // bigmath:add.by.rand.0..9.AllCarryBorrow.lev9.json
+    // bigmath:add.by.rand.10..99.AllCarryBorrow.lev11.json
+
+
+    // $$$ hesitation prompt fixes
+    // math:x -- "audio may double up if answer is entered quickly"
+    // numcompare:x -- looping audio will overlap other audio in Numcompare
+    // story.clo.hear -- hesitation prompt
+    // spelling -- hesitation prompt
+
+
+
+    // $$$$ moderately difficult fixes
+    // story.clo.x... -- when audio is reading "fill in the blank" sentence, the end of audio may
+    // -- cut off, or read what's in blank
+
+    // $$$$ solution not clear
+    // story.clo.hear::story_38 - some answers appear twice
+
 
     // MATH_MISC (2)... make subtract behavior correct. bigmath_sub.by.rand.20..90.NoCarryBorrow.lev8.json
 
 
     //private static final String debugTutorFile = "[file]math_10..80.SUB-2D-V-S.rand.12.json";
-    public static final String MATRIX_FILE = "dev_data.beta.json"; // "dev_data.json";
+    public static final String MATRIX_FILE = "dev_data.cd2.json"; // "dev_data.json"; // SUPER_PLACEMENT
 
     private static final String LOG_SEQUENCE_ID = "LOG_SEQUENCE_ID";
 
@@ -250,7 +294,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         Log.v(TAG, "External_Download:" + DOWNLOAD_PATH);
 
         if (RECORD_AUDIO) {
-            audioLogThread = new CAudioLogThread(audioLogPath, logFilename);
+            audioLogThread = new CAudioLogThread(audioLogPath, logFilename, Configuration.recordAudio(this));
             audioLogThread.start();
         }
 
