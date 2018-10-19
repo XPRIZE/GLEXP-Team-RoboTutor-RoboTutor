@@ -22,7 +22,8 @@ public class ConfigurationItems implements ILoadableObject {
     public static final String NO_ASR_APPS = "NO_ASR_APPS";
     public static final String LANGUAGE_FEATURE_ID = "LANGUAGE_FEATURE_ID";
     public static final String SHOW_DEMO_VIDS = "SHOW_DEMO_VIDS";
-    public static final String USE_PLACEMENT = "USE_PLACEMENT"; // SUPER_PLACEMENT
+    public static final String USE_PLACEMENT = "USE_PLACEMENT";
+    public static final String RECORD_AUDIO = "RECORD_AUDIO";
 
     public String config_version;
     public boolean language_override;
@@ -33,6 +34,7 @@ public class ConfigurationItems implements ILoadableObject {
     public String language_feature_id;
     public boolean show_demo_vids;
     public boolean use_placement;
+    public boolean record_audio;
 
     public ConfigurationItems() {
         String dataPath = TCONST.DOWNLOAD_PATH + "/config.json";
@@ -57,6 +59,7 @@ public class ConfigurationItems implements ILoadableObject {
         language_feature_id = "LANG_SW";
         show_demo_vids = true;
         use_placement = true;
+        record_audio = false;
     }
 
     @Override
