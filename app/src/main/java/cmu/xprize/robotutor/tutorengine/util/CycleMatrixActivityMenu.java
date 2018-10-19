@@ -194,10 +194,13 @@ public class CycleMatrixActivityMenu implements IActivityMenu {
             CAt_Data zeroIndexedTutor;
             String[] nextTutors = new String[3];
 
+            boolean inPlacementMode = false;
+
             switch(activeSkill) {
                 case SELECT_WRITING:
                     zeroIndexedTutorId = _student.getWritingTutorID();
                     Log.d("REPEAT_ME", "writingTutor=" + zeroIndexedTutorId);
+                    inPlacementMode = _student.getWritingPlacement();
                     break;
 
                 case SELECT_STORIES:
@@ -208,15 +211,17 @@ public class CycleMatrixActivityMenu implements IActivityMenu {
                 case SELECT_MATH:
                     zeroIndexedTutorId = _student.getMathTutorID();
                     Log.d("REPEAT_ME", "mathTutor=" + zeroIndexedTutorId);
+                    inPlacementMode = _student.getMathPlacement();
                     break;
             }
+
 
             RoboTutor.logManager.postEvent_I(MENU_BUG_TAG, "CycleMatrixActivityMenu: activeSkill=" + activeSkill + " -- activeTutorId=" + zeroIndexedTutorId);
             transitionMap = _matrix.getTransitionMapByContentArea(activeSkill);
             rootTutor = _matrix.getRootSkillByContentArea(activeSkill);
             zeroIndexedTutor = (CAt_Data) transitionMap.get(zeroIndexedTutorId);
             nextTutors[0] = zeroIndexedTutor.tutor_id;
-            nextTutors[1] = ((CAt_Data) transitionMap.get(zeroIndexedTutor.next)).tutor_id; // next hardest tutor!!!
+            nextTutors[1] = inPlacementMode ? nextTutors[0] : ((CAt_Data) transitionMap.get(zeroIndexedTutor.next)).tutor_id; // next hardest tutor!!! (I don't know WHY this is implemented twice)
 
             switch(buttonBehavior.toUpperCase()) {
 

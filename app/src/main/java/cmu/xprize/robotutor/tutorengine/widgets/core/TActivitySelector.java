@@ -420,7 +420,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         }*/
 
         // the next tutor to be launched
-        CAt_Data tutorToLaunch = menu.getTutorToLaunch(buttonBehavior); // TRACE_PROMOTION the tutorToLaunch isn't saved...
+        CAt_Data tutorToLaunch = menu.getTutorToLaunch(buttonBehavior); // SUPER_PLACEMENT change this TRACE_PROMOTION the tutorToLaunch isn't saved...
 
         // #Mod 330 Show TutorID in Banner in debug builds
         // DEBUG_TUTORID is used to communicate the active tutor to the Banner in DEBUG mode

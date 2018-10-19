@@ -47,13 +47,19 @@ public class PromotionMechanism {
 
         String lastSkillPlayed = wasRepeat ? _studentModel.getLastSkill() : _studentModel.getActiveSkill();
 
-        String nextTutor = selectNextTutor(lastTutorPlayed, lastSkillPlayed);
+        String nextTutor = selectNextTutor(lastTutorPlayed, lastSkillPlayed, wasRepeat);
         RoboTutor.logManager.postEvent_I(TCONST.PLACEMENT_TAG, "nextTutor = " + nextTutor);
 
 
         // 3. Set SELECTOR_MODE
         RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
 
+        _studentModel.updateLastTutor(lastTutorPlayed.getTutorId());
+
+        // this will only happen if (wasRepeat && placement)
+        if (nextTutor == null) {
+            return;
+        }
         switch (lastSkillPlayed) { // √
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
@@ -69,8 +75,6 @@ public class PromotionMechanism {
                 break;
         }
 
-        _studentModel.updateLastTutor(lastTutorPlayed.getTutorId());
-
         if (!wasRepeat) {
             _studentModel.incrementActiveSkill(); // MENU_LOGIC... activeSkill should be incremented after assessment
         }
@@ -81,7 +85,7 @@ public class PromotionMechanism {
      * select Next Tutor
      * MENU_LOGIC note that in some cases, "activeSkill" doesn't match "lastTutor"... (NEXT NEXT NEXT)
      */
-    private String selectNextTutor(CTutor lastTutorPlayed, String lastSkillPlayed) {
+    private String selectNextTutor(CTutor lastTutorPlayed, String lastSkillPlayed, boolean wasRepeat) {
 
         //
         String activeTutorId = "";
@@ -119,6 +123,10 @@ public class PromotionMechanism {
                 break;
         }
 
+        // SUPER_PLACEMENT (***) if the student already did the placement test, then we can just skip the whole process
+        // SUPER_PLACEMENT (edge case): if the student backs out on the first try... they won't be assessed again until after they stop repeating
+        if (wasRepeat && (useMathPlacement || useWritingPlacement)) return null;
+
         // TRACE_PROMOTION this might be different...
         RoboTutor.logManager.postEvent_I(MENU_BUG_TAG, String.format("compare lastTutorPlayed=%s == activeTutorId=%s", lastTutorPlayed.getTutorId(), activeTutorId));
         RoboTutor.logManager.postEvent_I(MENU_BUG_TAG, "selectNextTutor -- activeTutorId=" + activeTutorId+ " -- activeSkill=" + lastSkillPlayed);
@@ -153,7 +161,7 @@ public class PromotionMechanism {
         // YYY use placement logic
         String nextTutor;
         if (useWritingPlacement || useMathPlacement) {
-            nextTutor = getNextPlacementTutor(activeTutorId, useMathPlacement, promotionDecision, transitionMap, placementIndex); // SUPER_PLACEMENT
+            nextTutor = getNextPlacementTutor(activeTutorId, useMathPlacement, promotionDecision, transitionMap, placementIndex, wasRepeat); // SUPER_PLACEMENT how to know if it was a repeat???
 
         } else {
             nextTutor = getNextPromotionTutor(activeTutorId, promotionDecision, transitionMap, rootTutor);
@@ -230,8 +238,10 @@ public class PromotionMechanism {
 
     /**
      * get next tutor using Placement Logic
+     * SUPER_PLACEMENT --- if they keep repeating the first placement, it will keep pushing them through. Solution: only increment if this is their first time.
+     * // WRITING_PLACEMENT_INDEX=5;
      */
-    private String getNextPlacementTutor(String activeTutorId, boolean useMathPlacement, PromotionRules.PromotionDecision promotionDecision, HashMap<String, CAt_Data> transitionMap, int placementIndex) {
+    private String getNextPlacementTutor(String activeTutorId, boolean useMathPlacement, PromotionRules.PromotionDecision promotionDecision, HashMap<String, CAt_Data> transitionMap, int placementIndex, boolean wasRepeat) {
         RoboTutor.logManager.postEvent_V(TCONST.PLACEMENT_TAG, "using placement logic");
 
         switch(promotionDecision) {
@@ -241,16 +251,26 @@ public class PromotionMechanism {
             /// YYY if (placement) {placementMap.get(activeTutorId)} else {transitionMap.get(activeTutorId)}
             // NEXT is equivalent to passing the placement test and moving to next placement test
 
+            // SUPER_PLACEMENT... thought-experiment. Call this method twice. Second time it will be a repeat.
+            // NEXT->NEXT. NEXT->SAME. NEXT->FAIL.
+            // SAME->NEXT. SAME->SAME. SAME->FAIL.
+            // FAIL->NEXT. FAIL->SAME. FAIL->FAIL.
+            // if (wasRepeat)... can we just return the currentWriting/Math tutor???
+
             case NEXT:
                 // pass to next
                 //
                 if(useMathPlacement) {
-                    int mathPlacementIndex = placementIndex;
+                    // SUPER_PLACEMENT try this NEXT NEXT NEXT
+                    if (wasRepeat) {
+                        return _studentModel.getMathTutorID();
+                    }
 
+                    int mathPlacementIndex = placementIndex;
 
                     if (mathPlacementIndex == _matrix.mathPlacement.length) {
                         // student has made it to the end
-                        CPlacementTest_Tutor lastPlacementTest = _matrix.mathPlacement[mathPlacementIndex];
+                        CPlacementTest_Tutor lastPlacementTest = _matrix.mathPlacement[mathPlacementIndex]; // off-by-one??? they'll never reach it :)
                         // update our preferences to exit PLACEMENT mode
                         _studentModel.updateMathPlacement(false);
                         _studentModel.updateMathPlacementIndex(null);
@@ -258,6 +278,7 @@ public class PromotionMechanism {
 
                         return lastPlacementTest.fail;
                     } else {
+                        // SUPER_PLACEMENT should only increment if they did a new one
                         mathPlacementIndex++; // passing means incrementing by one
                         CPlacementTest_Tutor nextPlacementTest = _matrix.mathPlacement[mathPlacementIndex];
 
@@ -268,11 +289,15 @@ public class PromotionMechanism {
                 }
                 // writingPlacement is only other option
                 else {
+                    // SUPER_PLACEMENT try this NEXT NEXT NEXT trace this...
+                    if (wasRepeat) {
+                        return _studentModel.getWritingTutorID();
+                    }
                     int writingPlacementIndex = placementIndex;
 
                     if (writingPlacementIndex == _matrix.writePlacement.length) {
                         // student has made it to the end
-                        CPlacementTest_Tutor lastPlacementTest = _matrix.writePlacement[writingPlacementIndex];
+                        CPlacementTest_Tutor lastPlacementTest = _matrix.writePlacement[writingPlacementIndex]; // off-by-one??? they'll never reach it :)
                         // update our preferences to exit PLACEMENT mode
 
                         _studentModel.updateWritingPlacement(false);
@@ -281,6 +306,7 @@ public class PromotionMechanism {
 
                         return lastPlacementTest.fail; // go to beginning of last level
                     } else {
+                        // SUPER_PLACEMENT should only increment if they did a new one
                         writingPlacementIndex++; // passing means incrementing by one
                         CPlacementTest_Tutor nextPlacementTest = _matrix.writePlacement[writingPlacementIndex];
 
