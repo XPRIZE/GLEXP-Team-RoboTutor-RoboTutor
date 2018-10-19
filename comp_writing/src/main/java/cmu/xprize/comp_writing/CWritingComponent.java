@@ -447,7 +447,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
     public void onErase(int eraseIndex){
             updateSentenceEditSequence();
-            updateExpectedCharacters();
+//            updateExpectedCharacters();
             publishOnEraseState();
             CGlyphController c = (CGlyphController) mGlyphList.getChildAt(eraseIndex);
             if(activityFeature.contains("FTR_SEN_LTR")){
@@ -590,7 +590,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         mActiveWord = mListWordsInput.get(currentWordIndex);
 
         //update the expected characters
-        updateExpectedCharacters();
+//        updateExpectedCharacters();
 
         if(activityFeature.contains("FTR_SEN_CORR")){
 
@@ -675,7 +675,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         mListWordsInput = getUpdatedListWordsInput(mListWordsInput, mAlignedSourceSentence, mAlignedTargetSentence); //sets the list of written word objects using mAlignedSourceSentence, mAlignedTargetSentence and then gets the number of attempts from the previous list.
 
         //update the expected characters
-        updateExpectedCharacters();
+//        updateExpectedCharacters();
 
         if (activityFeature.contains("FTR_SEN_CORR")) {
 
@@ -895,9 +895,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                 //update the expected characters according to string edit distance.
 
-                if(!mResponse.equals(charExpected)) {
-                    updateExpectedCharacters();
-                }
+//                if(!mResponse.equals(charExpected)) {
+//                    updateExpectedCharacters();
+//                }
 
                 inhibitInput(mActiveController, !_isValid);
                 mActiveController.inhibitInput(_isValid);
