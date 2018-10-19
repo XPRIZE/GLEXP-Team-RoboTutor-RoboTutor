@@ -500,6 +500,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
                 // bpop, write, akira, story, math, etc
                 final int timesPlayedActivity = studentModel.getTimesPlayedTutor(videoId);
                 boolean playDemoVid = timesPlayedActivity < 2; // only play video twice
+                Log.d("VID_LAUNCH", videoId + ": " + timesPlayedActivity + " compare to " + 2);
 
                 String pathToFile = VideoHelper.getVideoPathById(videoId);
 
@@ -565,7 +566,10 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
                     langToggle.setVisibility(View.VISIBLE); // prevent from changing language
                 }
 
-                studentModel.updateTimesPlayedTutor(timesPlayedId, timesPlayedActivity + 1); // increment to let them know we watched the video
+
+                int increment = timesPlayedActivity + 1;
+                studentModel.updateTimesPlayedTutor(timesPlayedId, increment); // increment to let them know we watched the video
+                Log.d("VID_LAUNCH", timesPlayedId + ": " + timesPlayedActivity + " --> " + increment);
 
                 CLogManager.setTutor(tutorToLaunch.tutor_id);
                 doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data, tutorToLaunch.tutor_id);

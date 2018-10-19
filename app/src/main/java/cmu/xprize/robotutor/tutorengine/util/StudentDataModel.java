@@ -295,14 +295,18 @@ public class StudentDataModel {
      * @return
      */
     public int getTimesPlayedTutor(String tutor) {
-        String key = tutor + "_TIMES_PLAYED";
+        String key = getTimesPlayedKey(tutor);
         return _preferences.getInt(key, 0);
     }
 
     public void updateTimesPlayedTutor(String tutor, int i) {
         _editor = _preferences.edit();
-        _editor.putInt(tutor, i);
+        _editor.putInt(getTimesPlayedKey(tutor), i);
         _editor.apply();
+    }
+
+    private String getTimesPlayedKey(String tutor) {
+        return tutor + "_TIMES_PLAYED";
     }
 
 
