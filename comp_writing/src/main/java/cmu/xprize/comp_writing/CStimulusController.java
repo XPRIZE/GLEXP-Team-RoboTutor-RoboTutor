@@ -246,13 +246,13 @@ public class CStimulusController extends RelativeLayout implements IEventListene
 
         if(!match) {
             charColor = TCONST.colorMap.get(TCONST.COLORWRONG);
-            mUnderline.setVisibility(View.VISIBLE);
+            mUnderline.setVisibility(View.INVISIBLE);
             mUnderlineDrawable.setStroke(TCONST.STROKE_STIM_UNDERLINE, charColor);
         }
         else {
             if(mStimulusString.equals(" ") || mStimulusString.equals(" ")){
                 charColor = TCONST.colorMap.get(TCONST.COLORRIGHT);
-                mUnderline.setVisibility(View.VISIBLE);
+                mUnderline.setVisibility(View.INVISIBLE);
                 mUnderlineDrawable.setStroke(TCONST.STROKE_STIM_UNDERLINE, TCONST.colorMap.get(TCONST.COLORNORMAL));
             }
             else {
@@ -265,6 +265,16 @@ public class CStimulusController extends RelativeLayout implements IEventListene
         _Paint.setColor(borderColor);
 
         invalidate();
+    }
+
+    public void setUnderlineVisible(boolean visible){
+        if(visible){
+            mUnderline.setVisibility(View.VISIBLE);
+        }
+        else{
+            mUnderline.setVisibility(View.INVISIBLE);
+            int a = 0;
+        }
     }
     //amogh added ends
 

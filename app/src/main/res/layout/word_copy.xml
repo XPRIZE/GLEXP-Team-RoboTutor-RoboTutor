@@ -165,6 +165,7 @@
         android:elevation="5dp"
         android:src="@drawable/arrow_right"/>
 
+
     <cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView
         android:id="@+id/SfingerWriter"
         android:layout_below="@id/SresponseviewBG"
@@ -190,6 +191,14 @@
     </cmu.xprize.robotutor.tutorengine.widgets.core.TLinkedScrollView>
 
 
+    <cmu.xprize.comp_writing.CWritingBoxLink
+        android:id="@+id/SWritingBoxLink"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        android:background="@null"/>
+
+
     <cmu.xprize.robotutor.tutorengine.widgets.core.THandAnimation
         android:id="@+id/ShandAnimator"
         android:layout_width="match_parent"
@@ -197,6 +206,5 @@
         android:clipChildren="false"
         app:scale_factor="0.3"
         android:background="@null"/>
-
 
 </cmu.xprize.robotutor.tutorengine.widgets.core.TWritingComponent>

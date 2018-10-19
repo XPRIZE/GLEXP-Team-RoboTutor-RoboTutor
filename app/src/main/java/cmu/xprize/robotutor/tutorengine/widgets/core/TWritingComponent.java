@@ -45,6 +45,7 @@ import java.util.Map;
 import cmu.xprize.comp_logging.ITutorLogger;
 import cmu.xprize.comp_writing.CWr_Data;
 import cmu.xprize.comp_logging.PerformanceLogItem;
+import cmu.xprize.comp_writing.CWritingBoxLink;
 import cmu.xprize.comp_writing.CWritingComponent;
 import cmu.xprize.comp_writing.WR_CONST;
 import cmu.xprize.ltkplus.CRecognizerPlus;
@@ -155,7 +156,13 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         mGlyphList.setClipChildren(false);
 
         mReplayButton = (ImageButton) findViewById(R.id.Sreplay);
+        mWritingBoxLink = (CWritingBoxLink) findViewById(R.id.SWritingBoxLink);
 
+//        mDrawnScroll.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+//
+//            }
+//            @Override
+//            public void onScrollChanged() {
         //scrolling buttons
 //        mScrollRightButton = (ImageButton) findViewById(R.id.buttonright);
 //        mScrollLeftButton = (ImageButton) findViewById(R.id.buttonleft);
@@ -229,9 +236,15 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 //            };
 //        });
 //
-//        mDrawnScroll.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-//            @Override
-//            public void onScrollChanged() {
+        //toggle buttons visibility and refresh writing box links upon scrolling.
+        if(activityFeature.contains("FTR_SEN")){
+        mDrawnScroll.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+//                mWritingBoxLink.setGlyphList(mGlyphList);
+                mWritingBoxLink.invalidate();
+
+                //code below is to enable or disable the arrows
 //                int scrollX = mDrawnScroll.getScrollX(); // For HorizontalScrollView
 ////                int maxScrollX = mDrawnScroll.getChildAt(0).getWidth();
 //                int maxScrollX = 5000;
@@ -248,8 +261,10 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
 //                else{
 //                    mScrollRightButton.setVisibility(View.INVISIBLE);
 //                }
-//            }
-//        });
+            }
+        });
+        }
+
 //
 //        if (activityFeature.contains("FTR_SEN")){
 //            mScrollRightButton.setVisibility(View.VISIBLE);
@@ -263,6 +278,9 @@ public class TWritingComponent extends CWritingComponent implements IBehaviorMan
         mResponseViewScroll.setLinkedScroll(mDrawnScroll);
         mRecognizedScroll.setLinkedScroll(mDrawnScroll);
         mDrawnScroll.setLinkedScroll(mRecognizedScroll);
+
+
+
 
         // Iniitalize the static behaviors
         //

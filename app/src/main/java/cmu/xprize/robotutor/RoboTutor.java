@@ -119,39 +119,9 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     private static final String debugTutorFile = "[file]spelling_datasource_2.json";
     //private static final String debugTutorFile = "[encfolder]story_38";
 
-    // DEBUG LIST 10/12
-
-    // ??? not-reproducible
-    // picmatch_people.json -- no photos
-
-    // $$ moderately easy fixes
-    // story.hear::math_word_problem_3 -- (activity gets stuck in loop)
-
-
-    // $$$ medium fixes
-    // math: -- bigmath don't play
-    // bigmath:add.by.rand.0..9.AllCarryBorrow.lev9.json
-    // bigmath:add.by.rand.10..99.AllCarryBorrow.lev11.json
-
-
-    // $$$ hesitation prompt fixes
-    // math:x -- "audio may double up if answer is entered quickly"
-    // numcompare:x -- looping audio will overlap other audio in Numcompare
-    // story.clo.hear -- hesitation prompt
-    // spelling -- hesitation prompt
-
-
-
-    // $$$$ moderately difficult fixes
-    // story.clo.x... -- when audio is reading "fill in the blank" sentence, the end of audio may
-    // -- cut off, or read what's in blank
-
-    // $$$$ solution not clear
-    // story.clo.hear::story_38 - some answers appear twice
 
 
     // MATH_MISC (2)... make subtract behavior correct. bigmath_sub.by.rand.20..90.NoCarryBorrow.lev8.json
-
 
     //private static final String debugTutorFile = "[file]math_10..80.SUB-2D-V-S.rand.12.json";
     public static final String MATRIX_FILE = "dev_data.cd2.json"; // "dev_data.json"; // SUPER_PLACEMENT

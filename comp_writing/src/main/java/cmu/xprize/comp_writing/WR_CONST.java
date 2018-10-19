@@ -59,6 +59,7 @@ public class WR_CONST {
     public static final String RIPPLE_DEMO              = "RIPPLE_DEMO";
     public static final String FIELD_REPLAY_COMPLETE    = "FIELD_REPLAY_COMPLETE";
     public static final String REPLAY_COMPLETE          = "REPLAY_COMPLETE";
+    public static final String ON_ANIMATION_COMPLETE    = "ON_ANIMATION_COMPLETE";
     public static final String ON_START_WRITING         = "ON_START_WRITING";
     public static final String ON_STOP_WRITING          = "ON_STOP_WRITING";
 
@@ -124,6 +125,8 @@ public class WR_CONST {
     public static final String ON_REPLAY_COMMAND        = "ON_REPLAY_COMMAND";
     public static final String WRITE_BEHAVIOR           = "WRITE_BEHAVIOR";
     public static final String CANCEL_POINTAT           = "CANCEL_POINTAT";
+
+    public static final String AUTO_ERASE               = "AUTO_ERASE";
 
     //amogh added audio features
     public static final String FTR_AUDIO_CAP = "FTR_AUDIO_CAP";
