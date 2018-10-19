@@ -490,33 +490,31 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         String activeTutorId = tutorToLaunch.tutor_id;
         // Update the tutor id shown in the log stream
 
-        if(Configuration.showDemoVids(getContext()) && false) {
+        if(Configuration.showDemoVids(getContext())) {
 
-            String whichActivityIsNext = parseActiveTutorForTutorName(activeTutorId);
+            String videoId = VideoHelper.getVideoIdByTutor(tutorToLaunch);
+            Log.d("VID_LAUNCH", "videoId=" + videoId);
 
-            // bpop, write, akira, story, math, etc
-            final int timesPlayedActivity = studentModel.getTimesPlayedTutor(whichActivityIsNext);
-            boolean playDemoVid = timesPlayedActivity < 1; // only play video once
+            if (videoId != null) {
 
-            String pathToFile = VideoHelper.getTutorInstructionalVideoPath(activeTutorId);
+                // bpop, write, akira, story, math, etc
+                final int timesPlayedActivity = studentModel.getTimesPlayedTutor(videoId);
+                boolean playDemoVid = timesPlayedActivity < 2; // only play video twice
 
-            if(playDemoVid && pathToFile != null) {
+                String pathToFile = VideoHelper.getVideoPathById(videoId);
 
-                playTutorDemoVid(activeTutorId, tutorToLaunch, whichActivityIsNext, timesPlayedActivity, pathToFile);
+                if(playDemoVid && pathToFile != null) {
 
-            } else {
-
-                CLogManager.setTutor(activeTutorId);
-
-                doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data, tutorToLaunch.tutor_id);
-
+                    // VID_LAUNCH there is redundant information here...
+                    playTutorDemoVid(tutorToLaunch, videoId, timesPlayedActivity, pathToFile);
+                    // The tutor will be launched upon video completion, so we must return before we launch the tutor.
+                    return;
+                }
             }
-        } else {
-
-            CLogManager.setTutor(activeTutorId);
-
-            doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data, tutorToLaunch.tutor_id);
         }
+
+        CLogManager.setTutor(activeTutorId);
+        doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data, tutorToLaunch.tutor_id);
     }
 
     /**
@@ -527,7 +525,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
      * @param timesPlayedActivity
      * @param pathToFile
      */
-    private void playTutorDemoVid(final String activeTutorId, final CAt_Data tutorToLaunch, final String whichActivityIsNext, final int timesPlayedActivity, String pathToFile) {
+    private void playTutorDemoVid(final CAt_Data tutorToLaunch, final String timesPlayedId, final int timesPlayedActivity, String pathToFile) {
         // load SurfaceView to hold the video
         final SurfaceView fullscreenView = (SurfaceView) findViewById(R.id.SvideoSurface);
         fullscreenView.setVisibility(View.VISIBLE);
@@ -548,7 +546,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
             e.printStackTrace();
 
             // if an error occurs with media player, we don't want to freeze the app completely
-            CLogManager.setTutor(activeTutorId);
+            CLogManager.setTutor(tutorToLaunch.tutor_id);
 
             doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data, tutorToLaunch.tutor_id);
         }
@@ -563,40 +561,16 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
             public void onCompletion(MediaPlayer mediaPlayer) {
                 mp.release();
                 fullscreenView.setVisibility(View.INVISIBLE);
-                langToggle.setVisibility(View.VISIBLE); // prevent from changing language
+                if (Configuration.getLanguageSwitcher(getContext())) {
+                    langToggle.setVisibility(View.VISIBLE); // prevent from changing language
+                }
 
-                studentModel.updateTimesPlayedTutor(whichActivityIsNext, timesPlayedActivity + 1); // increment to let them know we watched the video
+                studentModel.updateTimesPlayedTutor(timesPlayedId, timesPlayedActivity + 1); // increment to let them know we watched the video
 
-                CLogManager.setTutor(activeTutorId);
-
+                CLogManager.setTutor(tutorToLaunch.tutor_id);
                 doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data, tutorToLaunch.tutor_id);
             }
         });
-    }
-
-    /**
-     * Parses tutor for its core tutor name
-     * e.g. bpop.num:s2n_say_show_mc --> bpop
-     * akira:10_2 --> akira
-     *
-     * @param tutor
-     * @return
-     */
-    private String parseActiveTutorForTutorName(String tutor) {
-
-        // deals with format of tutor names....
-        // math:10, read.echo:1, read.hear:2, bpop.ltr.uc:2, etc
-        String whichActivityIsNext = tutor;
-        int colonIndex = tutor.indexOf(':');
-        if(colonIndex > 0) {
-            whichActivityIsNext = tutor.substring(0, colonIndex);
-        }
-        int periodIndex = whichActivityIsNext.indexOf('.');
-        if(periodIndex > 0) {
-            whichActivityIsNext = whichActivityIsNext.substring(0, periodIndex);
-        }
-
-        return whichActivityIsNext;
     }
 
     // Everything demo video related END
