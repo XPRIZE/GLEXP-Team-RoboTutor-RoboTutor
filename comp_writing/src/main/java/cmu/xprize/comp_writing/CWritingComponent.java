@@ -372,6 +372,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         firstEditOperationSentence.showHighlightBox();
     }
 
+//    public void show
+
     public void showHighlightBoxOnFirstEditGroup(){
 //        EditOperation firstEditOperationSentence = getFirstEditOperation(mWrittenSentence, mAnswer);
 //        firstEditOperationSentence.showHighlightBox();
