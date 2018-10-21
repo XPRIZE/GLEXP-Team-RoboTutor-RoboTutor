@@ -1861,23 +1861,68 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             int sw = mDrawnScroll.getWidth();
 
             int gx = (int) view.getX();
-            int gw = view.getWidth() * 3;
+            int gw = view.getWidth() * 2;
 
             // If the glyph to the right of the current glyph is partially obscurred then calc
             // the offset to bring it on screen - with some padding (i.e. multiple glyph widths)
             // Capture the initiator status to force the tracker to update in the stimulus field
-            //
-            if((gx+gw) > (sx + sw)) {
+            //Imagine the scroll as a longer than screen strip. gx+gw represents the distance bwn start of scroll and end of the view(controller). sx+sw is the distance bwn the start of the scroll and the end of the screen.
+            if((gx + gw) > (sx + sw)) {
 
                 mDrawnScroll.captureInitiatorStatus();
                 mDrawnScroll.smoothScrollTo(calcOffsetToMakeGlyphVisible(sx, padding), 0);
                 mDrawnScroll.releaseInitiatorStatus();
             }
+
+            //else if the start of the screen is ahead of the start of the view, scroll to the start of the view.
             else if(sx > gx) {
 
                 mDrawnScroll.captureInitiatorStatus();
                 mDrawnScroll.smoothScrollTo(gx, 0);
                 mDrawnScroll.releaseInitiatorStatus();
+            }
+
+        }
+    }
+
+    public void autoScrollAndPoint(IGlyphController glyphController) {
+
+        CGlyphController view    = (CGlyphController) glyphController;
+        int              padding = 2;
+
+        if(view != null) {
+
+            int sx = mDrawnScroll.getScrollX();
+            int sw = mDrawnScroll.getWidth();
+
+            int gx = (int) view.getX();
+            int viewWidth = view.getWidth();
+            int gw = viewWidth * 2;
+
+            // If the glyph to the right of the current glyph is partially obscurred then calc
+            // the offset to bring it on screen - with some padding (i.e. multiple glyph widths)
+            // Capture the initiator status to force the tracker to update in the stimulus field
+            //Imagine the scroll as a longer than screen strip. gx+gw represents the distance bwn start of scroll and end of the view(controller). sx+sw is the distance bwn the start of the scroll and the end of the screen.
+            if((gx+gw) > (sx + sw)) {
+
+                mDrawnScroll.captureInitiatorStatus();
+                int newScroll = calcOffsetToMakeGlyphVisible(sx,padding);
+                mDrawnScroll.smoothScrollTo(gx, 0);
+                mDrawnScroll.releaseInitiatorStatus();
+                Intent msg = new Intent(TCONST.POINTAT);
+                msg.putExtra(TCONST.SCREENPOINT, new float[]{viewWidth/2, (float) ((CGlyphController) glyphController).getBottom()});
+                bManager.sendBroadcast(msg);
+            }
+
+            //else if the start of the screen is ahead of the start of the view, scroll to the start of the view.
+            else if(sx > gx) {
+
+                mDrawnScroll.captureInitiatorStatus();
+                mDrawnScroll.smoothScrollTo(gx, 0);
+                mDrawnScroll.releaseInitiatorStatus();
+                Intent msg = new Intent(TCONST.POINTAT);
+                msg.putExtra(TCONST.SCREENPOINT, new float[]{viewWidth/2, (float) ((CGlyphController) glyphController).getBottom()});
+                bManager.sendBroadcast(msg);
             }
 
         }
@@ -2774,7 +2819,8 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         for (int i = 0; i < mGlyphList.getChildCount(); i++){
             g = (CGlyphController) mGlyphList.getChildAt(i);
             if(!g.isCorrect()&&!g.getExpectedChar().equals(" ")) {
-                g.pointAtGlyph();
+//                g.pointAtGlyph();
+                autoScrollAndPoint(g);
 //                autoScroll(g);
                 break;
             }

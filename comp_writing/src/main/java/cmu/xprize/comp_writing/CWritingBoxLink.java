@@ -53,6 +53,7 @@ public class CWritingBoxLink extends View {
 
     public int setScreenWidth(Context context){
         int width = getContext().getResources().getDisplayMetrics().widthPixels;
+
         screenWidth = width;
         return width;
     }
@@ -137,6 +138,7 @@ public class CWritingBoxLink extends View {
                 if(!hasGlyph && endX > 0 && endX < screenWidth) {
                     canvas.drawLine(startX, startY, endX, endY, mLinkPaint);
                     canvas.drawLine(responseLetterCoordinates[0], startY, responseLetterCoordinates[0] + responseLetterWidth*4/5, startY, mLinkPaint);
+//                    canvas.drawLine(responseLetterCoordinates[0], startY, responseLetterCoordinates[0] + responseLetterWidth*4/5, startY, mLinkPaint);
                 }
             }
         }
