@@ -365,6 +365,12 @@ public class BigMathMechanic {
             this._controllerName = _activity.getResources().getResourceEntryName(_controller.getId());
             this._digit = digit;
             this._digitName = _activity.getResources().getResourceEntryName(_digit.getId());
+
+            //compute the expected answer and set the controller's expected character
+            int expectedInt = _studentActionListener.getExpectedInt(_digitName);
+            String expectedString = Integer.toString(expectedInt);
+            _controller.setExpectedChar(expectedString);
+            //set the expected character.
         }
 
         /**
