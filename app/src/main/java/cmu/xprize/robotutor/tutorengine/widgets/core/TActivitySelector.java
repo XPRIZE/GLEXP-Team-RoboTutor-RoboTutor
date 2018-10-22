@@ -443,8 +443,8 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
                 doTutorLaunchWithVideosAndStuff(tutorToLaunch);
             }
         } catch (Exception e) {
-            CErrorManager.logEvent(REPEAT_DEBUG_TAG, "StudentModel--" + studentModel.toLogString(), e,true);
-            CErrorManager.logEvent(REPEAT_DEBUG_TAG, Log.getStackTraceString(e), true);
+            CErrorManager.logEvent(REPEAT_DEBUG_TAG + "_CRASH", "StudentModel--" + studentModel.toLogString(), e,true);
+            CErrorManager.logEvent(REPEAT_DEBUG_TAG + "_CRASH", Log.getStackTraceString(e), true);
         }
     }
 
