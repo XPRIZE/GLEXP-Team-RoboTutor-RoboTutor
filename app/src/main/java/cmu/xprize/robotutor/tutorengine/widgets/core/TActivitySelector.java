@@ -499,8 +499,9 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
                 // bpop, write, akira, story, math, etc
                 final int timesPlayedActivity = studentModel.getTimesPlayedTutor(videoId);
-                boolean playDemoVid = timesPlayedActivity < 2; // only play video twice
-                Log.d("VID_LAUNCH", videoId + ": " + timesPlayedActivity + " compare to " + 2);
+                final int TIMES_TO_PLAY_DEMO = 1;
+                boolean playDemoVid = timesPlayedActivity < TIMES_TO_PLAY_DEMO; // only play video twice
+                Log.d("VID_LAUNCH", videoId + ": " + timesPlayedActivity + " compare to " + TIMES_TO_PLAY_DEMO);
 
                 String pathToFile = VideoHelper.getVideoPathById(videoId);
 
