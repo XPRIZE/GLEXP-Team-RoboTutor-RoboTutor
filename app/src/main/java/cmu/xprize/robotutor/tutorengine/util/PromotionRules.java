@@ -9,7 +9,7 @@ package cmu.xprize.robotutor.tutorengine.util;
 public abstract class PromotionRules {
 
     // note that "NEXT" is a different meaning from "Next"... NEXT means sequential (i.e. L, T+1)
-    public enum SelectedActivity {SAME, NEXT, PREVIOUS, DOUBLE_NEXT, OLD_EASIER, OLD_HARDER};
+    public enum PromotionDecision {SAME, NEXT, PREVIOUS, DOUBLE_NEXT, OLD_EASIER, OLD_HARDER};
 
-    public abstract SelectedActivity selectActivityByPerformance(PerformanceData performance);
+    public abstract PromotionDecision assessPerformance(PerformanceData performance);
 }

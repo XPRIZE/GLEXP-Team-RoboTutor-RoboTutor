@@ -55,6 +55,7 @@ public class ImageLoader {
 
     public static BitmapLoader makeBitmapLoader() { return new BitmapLoader();}
 
+    // NEW_THUMBS (3) copy this BitmapLoader. Use it to load images.
     static class BitmapLoader {
         // how to make language variable???
         private static final String IMAGE_SOURCE_PATH = TCONST.ROBOTUTOR_ASSETS + "/" + TCONST.STORY_ASSETS + "/sw/" + TCONST.SHARED_LITERACY_IMAGE_FOLDER + "/";

@@ -258,7 +258,9 @@ public class PerformanceLogItem {
     private boolean isAlwaysMathTutor(String tutorName) {
         return tutorName.startsWith("num.scale")
                 || tutorName.startsWith("math")
-                || tutorName.startsWith("countingx");
+                || tutorName.startsWith("countingx")
+                || tutorName.startsWith("place.value")
+                || tutorName.startsWith("placevalue");
     }
 
     public String getUserId() {

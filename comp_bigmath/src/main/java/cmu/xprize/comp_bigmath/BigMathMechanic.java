@@ -1,22 +1,16 @@
 package cmu.xprize.comp_bigmath;
 
-import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import cmu.xprize.comp_writebox.CGlyphController_Simple;
 import cmu.xprize.comp_writebox.CGlyphInputContainer_Simple;
@@ -24,6 +18,7 @@ import cmu.xprize.comp_writebox.IGlyphController_Simple;
 import cmu.xprize.comp_writebox.IWritingComponent_Simple;
 import cmu.xprize.ltkplus.CRecResult;
 import cmu.xprize.util.IBehaviorManager;
+import cmu.xprize.util.IPerformanceTracker;
 import cmu.xprize.util.IPublisher;
 
 import static cmu.xprize.comp_bigmath.BM_CONST.ALL_DIGITS;
@@ -35,7 +30,6 @@ import static cmu.xprize.comp_bigmath.BM_CONST.OPB_LOCATION;
 import static cmu.xprize.comp_bigmath.BM_CONST.RESULT_LOCATION;
 import static cmu.xprize.comp_bigmath.BM_CONST.TEN_CARRY_DIGIT;
 import static cmu.xprize.comp_bigmath.BM_CONST.TEN_DIGIT;
-import static cmu.xprize.comp_bigmath.BM_CONST.WATERFALL_DELAY;
 import static cmu.xprize.util.MathUtil.getHunsDigit;
 import static cmu.xprize.util.MathUtil.getOnesDigit;
 import static cmu.xprize.util.MathUtil.getTensDigit;
@@ -57,69 +51,21 @@ public class BigMathMechanic {
     private BigMathLayoutHelper _layout;
     private StudentActionListener _sai;
     private CBigMath_Data _data;
+    private BigMathAnimationHelper _animator;
+    private BigMathProblemState _problemState;
+    private final IPerformanceTracker _performance;
+
+    private IHesitationManager _hManager;
 
     // MATH_BEHAVIOR (1) add case for each digit into SAI receiver
     public String _currentDigit;
 
-
     private int _numDigits;
-
-    //
-    private boolean EXPAND_HIT_BOX = false;
     private boolean ALL_AT_ONCE = true;
-
-    // used to track UI state
-    private int currentOpAHun;
-    private int currentOpATen;
-    private int currentOpAOne;
-    private int currentOpBHun;
-    private int currentOpBTen;
-    private int currentOpBOne;
-
-
-    private int resultHun = 0;
-    private int resultTen = 0;
-    private int resultOne = 0;
-
-    // tracking UI for subtraction
-    private int subtrahendHun = 0;
-    private int subtrahendTen = 0;
-    private int subtrahendOne = 0;
-
-    private int minuendHun;
-    private int minuendTen;
-    private int minuendOne;
-
-    // state values
-    private boolean isCarrying = false; // prevent other things from happening during animation
-
-    private boolean isBorrowing = false; // prevent other things from happening during animation
-    private boolean hasBorrowedHun = false;
-    private boolean hasBorrowedTen = false;
-
 
     private static final String BASE_TEN_TAG = "BaseTen";
 
     public static String APP_PRIVATE_FILES;
-
-    /** hiding these for now
-     // carry digit writing
-     CGlyphController_Simple _controller_hun_carry;
-    CGlyphInputContainer_Simple _inputContainer_hun_carry;
-    // you do need these
-    CGlyphController_Simple _controller_ten_carry;
-    CGlyphInputContainer_Simple _inputContainer_ten_carry;
-
-    // result digit writing
-    CGlyphController_Simple _controller_hun;
-    CGlyphInputContainer_Simple _inputContainer_hun;
-    // you do need these
-    CGlyphController_Simple _controller_ten;
-    CGlyphInputContainer_Simple _inputContainer_ten;
-    // you do need these
-    CGlyphController_Simple _controller_one;
-    CGlyphInputContainer_Simple _inputContainer_one;
-    uncomment in case of design change**/
 
     // master writing box
     CGlyphController_Simple _controller_master;
@@ -130,15 +76,21 @@ public class BigMathMechanic {
 
     private StudentActionListener _studentActionListener;
 
-    public BigMathMechanic(Context activity, IBehaviorManager behaviorManager, IPublisher publisher, ViewGroup viewGroup) {
+    public BigMathMechanic(Context activity, IBehaviorManager behaviorManager, IPublisher publisher, IHesitationManager hesitationManager, ViewGroup viewGroup, IPerformanceTracker performance) {
         _behaviorManager = behaviorManager;
         _publisher = publisher;
         _activity = activity;
         _viewGroup = viewGroup;
         _layout = new BigMathLayoutHelper(activity, viewGroup);
+        _hManager = hesitationManager;
+        _performance = performance;
 
-        _studentActionListener = new StudentActionListenerImpl(_behaviorManager, _publisher, this); // won't always work...
+        _studentActionListener = new StudentActionListenerImpl(_behaviorManager, _publisher, this, _performance); // won't always work...
+        _animator = new BigMathAnimationHelper(_activity, _layout, _viewGroup);
+    }
 
+    public BigMathProblemState getProblemState() {
+        return _problemState;
     }
 
 
@@ -156,9 +108,22 @@ public class BigMathMechanic {
         if (String.valueOf(_data.dataset[2]).length() > _numDigits)
             _numDigits = String.valueOf(_data.dataset[2]).length();
 
+        // initialize problem state
+        _problemState = new BigMathProblemState(data);
+        _animator.setProblemState(_problemState);
+
         _studentActionListener.setData(data, _numDigits);
 
         _currentDigit = ONE_DIGIT;
+    }
+
+    // needed in SAI???
+    public void moveMinuendToResult() {
+        _animator.moveMinuendToResult();
+    }
+
+    public void borrowTen() {
+        _animator.borrowTen();
     }
 
     /**
@@ -172,21 +137,6 @@ public class BigMathMechanic {
 
         initializeWriteInputs();
 
-        resetState();
-
-        Log.wtf("DATA", _data.toString());
-        Log.wtf("DATA", _data.operation);
-        switch (_data.operation) {
-            case "+":
-                resetResultsAdd();
-                break;
-
-            case "-":
-                resetResultsSubtract();
-                break;
-        }
-
-        initializeNumValues();
         initializeDigitDisplay();
         hideCarryAndBorrowConcrete();
         hideCarryAndBorrowSymbols();
@@ -200,7 +150,6 @@ public class BigMathMechanic {
                 initializeBaseTensForSubtraction();
                 break;
         }
-
     }
 
     private void initializeLayout() {
@@ -220,15 +169,24 @@ public class BigMathMechanic {
 
         for (String numLoc : locations) {
 
+            // subtraction doesn't have click listeners in the second row, it just receives
+            if (numLoc.equals(OPB_LOCATION) && _data.operation.equals("-")) {
+                return;
+            }
+
             // BUG_605 waterfall not ready for subtraction
             View.OnClickListener oneListener;
-            boolean useWaterfallForOnesDigit = ALL_AT_ONCE && _numDigits >= 2 && _data.operation.equals("+");
+            boolean useWaterfallForOnesDigit = ALL_AT_ONCE && _numDigits >= 2;
             if (useWaterfallForOnesDigit) {
-                oneListener  = new BaseTenOnClickAnimateWaterfall(numLoc, ONE_DIGIT);
+                if (_data.operation.equals("+")) {
+                    oneListener = _animator.generateWaterfallClickListener(numLoc, ONE_DIGIT); // MATH_MISC (1) don't allow ghost dots to move
+                } else {
+                    oneListener = _animator.generateWaterfallSubtractClickListener(ONE_DIGIT);
+                }
             } else if (!ALL_AT_ONCE && _numDigits >= 2) {
-                oneListener = new BaseTenOnClickAnimateMe(ONE_DIGIT);
+                oneListener = _animator.generateSingleClickListener(ONE_DIGIT);
             } else {
-                oneListener = new BaseTenOnClickAnimateMe(ONE_DIGIT);
+                oneListener = _animator.generateSingleClickListener(ONE_DIGIT);
             }
 
             // add listeners to Ones
@@ -239,7 +197,7 @@ public class BigMathMechanic {
                 oneView.setOnClickListener(oneListener);
             }
 
-            // BUG_605 waterfall not ready for subtraction
+            // BUG_605 next: can we make waterfall not ready for subtraction?
             boolean useWaterfallForMultiDigit = ALL_AT_ONCE && _data.operation.equals("+");
 
             // add listeners to Tens
@@ -247,7 +205,7 @@ public class BigMathMechanic {
                 for (int i=1; i <= 10; i++) {
 
                     MovableImageView tenView = _layout.getBaseTenConcreteUnitView(numLoc, TEN_DIGIT, i);
-                    tenView.setOnClickListener(useWaterfallForMultiDigit ? new BaseTenOnClickAnimateWaterfall(numLoc, TEN_DIGIT) : new BaseTenOnClickAnimateMe(TEN_DIGIT));
+                    tenView.setOnClickListener(ALL_AT_ONCE ? _animator.generateWaterfallClickListener(numLoc, TEN_DIGIT, _data.operation) : _animator.generateSingleClickListener(TEN_DIGIT));
                 }
 
             // add listeners to Hundreds
@@ -255,17 +213,18 @@ public class BigMathMechanic {
                 for (int i=1; i <= 5; i++) {
 
                     MovableImageView hunView = _layout.getBaseTenConcreteUnitView(numLoc, HUN_DIGIT, i);
-                    hunView.setOnClickListener(useWaterfallForMultiDigit ? new BaseTenOnClickAnimateWaterfall(numLoc, HUN_DIGIT) : new BaseTenOnClickAnimateMe(HUN_DIGIT));
+                    hunView.setOnClickListener(ALL_AT_ONCE ? _animator.generateWaterfallClickListener(numLoc, HUN_DIGIT, _data.operation) : _animator.generateSingleClickListener(HUN_DIGIT));
                 }
 
             // PART 2 (BOX) for (one, ten, hun) will move sequential ones. These may or may not (but probably will) be used.
-            _layout.getContainingBox(numLoc, ONE_DIGIT).setOnClickListener(useWaterfallForOnesDigit ? new BaseTenOnClickAnimateWaterfall(numLoc, ONE_DIGIT) : new BaseTenOnClickAnimateSequential(ONE_DIGIT));
+            if (_numDigits >= 2) // containing box doesn't need to be moved
+                _layout.getContainingBox(numLoc, ONE_DIGIT).setOnClickListener(ALL_AT_ONCE ? _animator.generateWaterfallClickListener(numLoc, ONE_DIGIT, _data.operation) : _animator.generateSequentialClickListener(ONE_DIGIT));
 
             if (_numDigits >= 2)
-                _layout.getContainingBox(numLoc, TEN_DIGIT).setOnClickListener(useWaterfallForMultiDigit ? new BaseTenOnClickAnimateWaterfall(numLoc, TEN_DIGIT) :  new BaseTenOnClickAnimateSequential(TEN_DIGIT));
+                _layout.getContainingBox(numLoc, TEN_DIGIT).setOnClickListener(ALL_AT_ONCE ? _animator.generateWaterfallClickListener(numLoc, TEN_DIGIT, _data.operation) :  _animator.generateSequentialClickListener(TEN_DIGIT));
 
             if (_numDigits >= 3)
-                _layout.getContainingBox(numLoc, HUN_DIGIT).setOnClickListener(useWaterfallForMultiDigit ? new BaseTenOnClickAnimateWaterfall(numLoc, HUN_DIGIT) : new BaseTenOnClickAnimateSequential(HUN_DIGIT));
+                _layout.getContainingBox(numLoc, HUN_DIGIT).setOnClickListener(ALL_AT_ONCE ? _animator.generateWaterfallClickListener(numLoc, HUN_DIGIT, _data.operation) : _animator.generateSequentialClickListener(HUN_DIGIT));
 
         }
 
@@ -274,7 +233,7 @@ public class BigMathMechanic {
             _layout.getCarryConcreteUnitView(TEN_DIGIT).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    moveTenCarry(v);
+                    _animator.moveTenCarry(v);
                 }
             });
 
@@ -282,7 +241,7 @@ public class BigMathMechanic {
             _layout.getCarryConcreteUnitView(HUN_DIGIT).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    moveHunCarry(v);
+                    _animator.moveHunCarry(v);
                 }
             });
 
@@ -293,7 +252,7 @@ public class BigMathMechanic {
                 _layout.getBorrowConcreteUnitView(ONE_DIGIT, i).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        moveOneBorrow(v);
+                        _animator.moveOneBorrow(v);
                     }
                 });
 
@@ -301,7 +260,7 @@ public class BigMathMechanic {
                 _layout.getBorrowConcreteUnitView(TEN_DIGIT, i).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        moveTenBorrow(v);
+                        _animator.moveTenBorrow(v);
                     }
                 });
         }
@@ -359,54 +318,7 @@ public class BigMathMechanic {
         view.setTextColor(_activity.getResources().getColor(R.color.correctDigit));
     }
 
-    /**
-     * Click Listener that moves clicked View to the next available space.
-     */
-    class BaseTenOnClickAnimateMe implements View.OnClickListener {
 
-        private final String _digit;
-
-        BaseTenOnClickAnimateMe(String digit) {
-            this._digit = digit;
-        }
-        @Override
-        public void onClick(View v) {
-            Log.wtf("YELLOW", "y u no move?");
-            animateMe(this._digit, (MovableImageView) v);
-        }
-    }
-
-    /**
-     * Click Listener that moves next available View to next available space.
-     */
-    class BaseTenOnClickAnimateSequential implements View.OnClickListener {
-
-        private final String _digit;
-
-        BaseTenOnClickAnimateSequential(String digit) {
-            this._digit = digit;
-        }
-        @Override
-        public void onClick(View v) {
-            animateNextSequential(this._digit, v);
-        }
-    }
-
-    class BaseTenOnClickAnimateWaterfall implements View.OnClickListener {
-
-        private final String _numLoc;
-        private final String _digit;
-
-        public BaseTenOnClickAnimateWaterfall(String _numLoc, String _digit) {
-            this._numLoc = _numLoc;
-            this._digit = _digit;
-        }
-
-        @Override
-        public void onClick(View view) {
-            waterfall(_numLoc, _digit);
-        }
-    }
 
     /**
      * Define and initialize the WriteBox inputs.
@@ -428,68 +340,6 @@ public class BigMathMechanic {
         _controller_left.setIsLast(true);
         _controller_left.showBaseLine(false);
         _controller_left.setVisibility(View.GONE); // it's a LinearLayout, so we make room to center the other guy
-
-
-        // carrys
-        // tens
-        /** no longer needed, with master controller
-        if (_numDigits >= 2) {
-            _controller_ten_carry = (CGlyphController_Simple) findViewById(R.id.glyph_controller_ten_carry);
-            _inputContainer_ten_carry = (CGlyphInputContainer_Simple) findViewById(R.id.drawn_box_ten_carry);
-
-            _controller_ten_carry.setInputContainer(_inputContainer_ten_carry);
-            _controller_ten_carry.setIsLast(true);
-            _controller_ten_carry.showBaseLine(false);
-            _controller_ten_carry.setVisibility(View.INVISIBLE);
-            _controller_ten_carry.setWritingController(new OnCharacterRecognizedListener(_controller_ten_carry, (DigitView) findViewById(R.id.symbol_carry_ten)));
-        }
-
-        // hundreds
-        if (_numDigits >= 3) {
-            _controller_hun_carry = (CGlyphController_Simple) findViewById(R.id.glyph_controller_hun_carry);
-            _inputContainer_hun_carry = (CGlyphInputContainer_Simple) findViewById(R.id.drawn_box_hun_carry);
-
-            _controller_hun_carry.setInputContainer(_inputContainer_hun_carry);
-            _controller_hun_carry.setIsLast(true);
-            _controller_hun_carry.showBaseLine(false);
-            _controller_hun_carry.setVisibility(View.INVISIBLE);
-            _controller_hun_carry.setWritingController(new OnCharacterRecognizedListener(_controller_hun_carry, (DigitView) findViewById(R.id.symbol_carry_hun)));
-        }
-
-        // ones
-        _controller_one = (CGlyphController_Simple) findViewById(R.id.glyph_controller_one);
-        _inputContainer_one = (CGlyphInputContainer_Simple) findViewById(R.id.drawn_box_one);
-
-        _controller_one.setInputContainer(_inputContainer_one);
-        _controller_one.setIsLast(true);
-        _controller_one.showBaseLine(false);
-        _controller_one.setVisibility(View.INVISIBLE);
-        _controller_one.setWritingController(new OnCharacterRecognizedListener(_controller_one, (DigitView) findViewById(R.id.symbol_result_one)));
-
-        // tens
-        if (_numDigits >= 2) {
-            _controller_ten = (CGlyphController_Simple) findViewById(R.id.glyph_controller_ten);
-            _inputContainer_ten = (CGlyphInputContainer_Simple) findViewById(R.id.drawn_box_ten);
-
-            _controller_ten.setInputContainer(_inputContainer_ten);
-            _controller_ten.setIsLast(true);
-            _controller_ten.showBaseLine(false);
-            _controller_ten.setVisibility(View.INVISIBLE);
-            _controller_ten.setWritingController(new OnCharacterRecognizedListener(_controller_ten, (DigitView) findViewById(R.id.symbol_result_ten)));
-        }
-
-        // hundreds
-        if (_numDigits >= 3) {
-            _controller_hun = (CGlyphController_Simple) findViewById(R.id.glyph_controller_hun);
-            _inputContainer_hun = (CGlyphInputContainer_Simple) findViewById(R.id.drawn_box_hun);
-
-            _controller_hun.setInputContainer(_inputContainer_hun);
-            _controller_hun.setIsLast(true);
-            _controller_hun.showBaseLine(false);
-            _controller_hun.setVisibility(View.INVISIBLE);
-            _controller_hun.setWritingController(new OnCharacterRecognizedListener(_controller_hun, (DigitView) findViewById(R.id.symbol_result_hun)));
-        }
-         uncomment in case of design change? **/
     }
 
     /**
@@ -547,52 +397,10 @@ public class BigMathMechanic {
         }
     }
 
-    /**
-     * Reset some variables used to control logic.
-     */
-    private void resetState() {
-        isBorrowing = false;
-        isCarrying = false;
-        hasBorrowedHun = false;
-        hasBorrowedTen = false;
 
-        _currentDigit = ONE_DIGIT;
-    }
-
-    /**
-     * Reset result values to 0
-     */
-    private void resetResultsAdd() {
-        resultOne = 0;
-        resultTen = 0;
-        resultHun = 0;
-    }
-
-    /**
-     * Reset subtract values.
-     */
-    private void resetResultsSubtract() {
-        subtrahendOne = 0;
-        subtrahendTen = 0;
-        subtrahendHun = 0;
-
-        minuendOne = getOnesDigit(_data.dataset[0]);
-        minuendTen = getTensDigit(_data.dataset[0]);
-        minuendHun = getHunsDigit(_data.dataset[0]);
-    }
-
-    /**
-     * Initialize field values needed for BaseTen
-     */
-    private void initializeNumValues() {
-        currentOpAHun = getHunsDigit(_data.dataset[0]);
-        currentOpATen = getTensDigit(_data.dataset[0]);
-        currentOpAOne = getOnesDigit(_data.dataset[0]);
-
-        currentOpBHun = getHunsDigit(_data.dataset[1]);
-        currentOpBTen = getTensDigit(_data.dataset[1]);
-        currentOpBOne = getOnesDigit(_data.dataset[1]);
-    }
+    // ---------------------------------
+    // ---- UI/LAYOUT MANIPULATION  ----
+    // ---------------------------------
 
     /**
      * Initialize the symbolic number display for BaseTen ASM.
@@ -612,6 +420,7 @@ public class BigMathMechanic {
                 public void onClick(View v) {
                     _controller_master.setWritingController(new OnCharacterRecognizedListener(_controller_master, carryHun)); // ROBO_MATH (5-WAIT)
                     _controller_master.setVisibility(View.VISIBLE);
+                    _hManager.cancelHesitation();
                     carryHun.setText(""); // erase text
                 }
             });
@@ -626,6 +435,7 @@ public class BigMathMechanic {
                 public void onClick(View v) {
                     _controller_master.setVisibility(View.VISIBLE);
                     _controller_master.setWritingController(new OnCharacterRecognizedListener(_controller_master, carryTen)); // ROBO_MATH (5-WAIT)
+                    _hManager.cancelHesitation();
                     carryTen.setText("");
                 }
             });
@@ -634,14 +444,14 @@ public class BigMathMechanic {
         // set each digit separately
         // don't set leading zeros
         int digitsInOpA = String.valueOf(_data.dataset[0]).length();
-        if (_numDigits >= 3) ((TextView) findViewById(R.id.symbol_opA_hun)).setText(digitsInOpA >= 3 ? String.valueOf(currentOpAHun) : "");
-        if (_numDigits >= 2) ((TextView) findViewById(R.id.symbol_opA_ten)).setText(digitsInOpA >= 2 ? String.valueOf(currentOpATen) : "");
-        if (_numDigits >= 1) ((TextView) findViewById(R.id.symbol_opA_one)).setText(digitsInOpA >= 1 ? String.valueOf(currentOpAOne) : "");
+        if (_numDigits >= 3) ((TextView) findViewById(R.id.symbol_opA_hun)).setText(digitsInOpA >= 3 ? String.valueOf(_problemState.getCurrentOpAHun()) : "");
+        if (_numDigits >= 2) ((TextView) findViewById(R.id.symbol_opA_ten)).setText(digitsInOpA >= 2 ? String.valueOf(_problemState.getCurrentOpATen()) : "");
+        if (_numDigits >= 1) ((TextView) findViewById(R.id.symbol_opA_one)).setText(digitsInOpA >= 1 ? String.valueOf(_problemState.getCurrentOpAOne()) : "");
 
         int digitsInOpB = String.valueOf(_data.dataset[1]).length();
-        if (_numDigits >= 3) ((TextView) findViewById(R.id.symbol_opB_hun)).setText(digitsInOpB >= 3 ? String.valueOf(currentOpBHun): "");
-        if (_numDigits >= 2) ((TextView) findViewById(R.id.symbol_opB_ten)).setText(digitsInOpB >= 2 ? String.valueOf(currentOpBTen): "");
-        if (_numDigits >= 1) ((TextView) findViewById(R.id.symbol_opB_one)).setText(digitsInOpB >= 1 ? String.valueOf(currentOpBOne): "");
+        if (_numDigits >= 3) ((TextView) findViewById(R.id.symbol_opB_hun)).setText(digitsInOpB >= 3 ? String.valueOf(_problemState.getCurrentOpBHun()): "");
+        if (_numDigits >= 2) ((TextView) findViewById(R.id.symbol_opB_ten)).setText(digitsInOpB >= 2 ? String.valueOf(_problemState.getCurrentOpBTen()): "");
+        if (_numDigits >= 1) ((TextView) findViewById(R.id.symbol_opB_one)).setText(digitsInOpB >= 1 ? String.valueOf(_problemState.getCurrentOpBOne()): "");
 
         if (_numDigits >= 3) {
             final DigitView hunsResult = ((DigitView) findViewById(R.id.symbol_result_hun));
@@ -652,6 +462,7 @@ public class BigMathMechanic {
                 public void onClick(View v) {
                     _controller_master.setVisibility(View.VISIBLE);
                     _controller_master.setWritingController(new OnCharacterRecognizedListener(_controller_master, hunsResult)); // ROBO_MATH (5-WAIT)
+                    _hManager.cancelHesitation();
                     hunsResult.setText("");
                 }
             });
@@ -666,6 +477,7 @@ public class BigMathMechanic {
                 public void onClick(View v) {
                     _controller_master.setVisibility(View.VISIBLE);
                     _controller_master.setWritingController(new OnCharacterRecognizedListener(_controller_master, tensResult)); // ROBO_MATH (5-WAIT)
+                    _hManager.cancelHesitation();
                     tensResult.setText("");
                 }
             });
@@ -680,6 +492,7 @@ public class BigMathMechanic {
                 public void onClick(View v) {
                     _controller_master.setVisibility(View.VISIBLE);
                     _controller_master.setWritingController(new OnCharacterRecognizedListener(_controller_master, onesResult)); // ROBO_MATH (5-WAIT)
+                    _hManager.cancelHesitation();
                     onesResult.setText("");
                 }
             });
@@ -760,7 +573,7 @@ public class BigMathMechanic {
                 hun = _layout.getBaseTenConcreteUnitView(numberLoc, HUN_DIGIT, i);
                 //hun.setVisibility( i <= hunsDigit ? View.VISIBLE : View.INVISIBLE);
                 hun.setImageDrawable(getDrawable(i <= hunsDigit ? (ghost ? R.drawable.blue_ghost_100 : R.drawable.blue_100 ): R.drawable.empty_100));
-                hun.isMovable = i <= hunsDigit;
+                hun.isMovable = i <= hunsDigit; // MATH_MISC (tap)
             }
         }
 
@@ -770,7 +583,7 @@ public class BigMathMechanic {
             for (int i = 1; i <= 10; i++) {
                 ten = _layout.getBaseTenConcreteUnitView(numberLoc, TEN_DIGIT, i);
                 ten.setImageDrawable(getDrawable(i <= tensDigit ? (ghost ? R.drawable.blue_ghost_10_h : R.drawable.blue_10_h ) : R.drawable.empty_10_h));
-                ten.isMovable = i <= tensDigit;
+                ten.isMovable = i <= tensDigit;  // MATH_MISC (tap)
             }
         }
 
@@ -778,7 +591,12 @@ public class BigMathMechanic {
         for (int i = 1; i <= 10; i++) {
             one = _layout.getBaseTenConcreteUnitView(numberLoc, ONE_DIGIT, i);
             one.setImageDrawable(getDrawable(i <= onesDigit ? (ghost ? R.drawable.blue_ghost_1 : R.drawable.blue_1 ) : R.drawable.empty_1));
-            one.isMovable = i <= onesDigit;
+            one.isMovable = i <= onesDigit;  // MATH_MISC (tap) (next... why are ghost ones tapping??)
+
+            Log.wtf("YELLOW", "setting childOf=" + one.getResources().getResourceEntryName(((LinearLayout) one.getParent()).getId()));
+            Log.wtf("YELLOW", "setting id ==\t" + one.getResources().getResourceEntryName(one.getId()));
+            Log.wtf("YELLOW", "movable? ==\t" + ((MovableImageView) one).isMovable);
+            Log.wtf("YELLOW", "one:" + i + " isMovable=" + one.isMovable);
         }
 
 
@@ -788,21 +606,21 @@ public class BigMathMechanic {
             //one.setVisibility(View.INVISIBLE); // only gets revealed by student action
             one.setVisibility(View.VISIBLE);
             one.setImageDrawable(getDrawable(R.drawable.empty_1));
-            one.isMovable = false;
+            one.isMovable = false;  // MATH_MISC (tap)
 
             if (_numDigits >= 2) {
                 ten = _layout.getBaseTenConcreteUnitView(numberLoc, TEN_DIGIT, 10);
                 //ten.setVisibility(View.INVISIBLE); // only gets revealed by student action
                 ten.setVisibility(View.VISIBLE);
                 ten.setImageDrawable(getDrawable(R.drawable.empty_10_h));
-                ten.isMovable = false;
+                ten.isMovable = false;  // MATH_MISC (tap)
             }
 
             if (_numDigits >= 3) {
                 hun = _layout.getBaseTenConcreteUnitView(numberLoc, HUN_DIGIT, 10);
                 hun.setVisibility(View.VISIBLE);
                 hun.setImageDrawable(getDrawable(R.drawable.empty_100));
-                hun.isMovable = false;
+                hun.isMovable = false;  // MATH_MISC (tap)
             }
         }
 
@@ -852,11 +670,35 @@ public class BigMathMechanic {
 
     }
 
+    // -------------------------------------
+    // ---- END UI/LAYOUT MANIPULATION  ----
+    // -------------------------------------
+
     /**
      * prevent other rows from being tapped on
      * @param digit
      */
     public void disableConcreteUnitTappingForOtherRows(String digit) {
+
+        // MATH_MISC (tap)
+        switch (digit) {
+            case ONE_DIGIT:
+                _problemState.setCanTapOnes(true);
+                _problemState.setCanTapTens(false);
+                _problemState.setCanTapHuns(false);
+                break;
+            case TEN_DIGIT:
+                _problemState.setCanTapOnes(false);
+                _problemState.setCanTapTens(true);
+                _problemState.setCanTapHuns(false);
+                break;
+            case HUN_DIGIT:
+                _problemState.setCanTapOnes(false);
+                _problemState.setCanTapTens(false);
+                _problemState.setCanTapHuns(true);
+                break;
+        }
+
 
         String[] numberLocations = {OPA_LOCATION, OPB_LOCATION, RESULT_LOCATION};
 
@@ -875,800 +717,13 @@ public class BigMathMechanic {
                 int numUnits = column.equals(HUN_DIGIT) ? (numberLoc.equals(RESULT_LOCATION) ? 10 : 5) : 10;
 
                 for (int i=1; i <=numUnits; i++) {
-                    _layout.getBaseTenConcreteUnitView(numberLoc, column, i).isMovable = enableThisColumn;
+                    MovableImageView unit = _layout.getBaseTenConcreteUnitView(numberLoc, column, i);
+                    unit.isMovable = unit.isMovable && enableThisColumn; // TODO this may break individual behavior for tens... but since it's in waterfall mode, it will work
                 }
-
-                //_layout.getBaseTenDigitView(numberLoc, column);
             }
 
         }
     }
-
-
-    /* ===================== */
-    /* == BEGIN ANIMATION == */
-    /* ===================== */
-
-    /**
-     * Move this view to next available location in specified digit column.
-     *
-     * @param digit
-     * @param v
-     */
-    public void animateMe(String digit, MovableImageView v) {
-
-        Log.wtf("YELLOW", "y u no move?");
-        if (EXPAND_HIT_BOX) return; // might be redundant?
-
-        Log.wtf("YELLOW", "y u no move?");
-        if (v.isMoving || !v.isMovable) return;
-
-        Log.wtf("YELLOW", "y u no move?");
-        switch(_data.operation) {
-            case "+":
-                moveForAddition(v, digit);
-                break;
-
-            case "-":
-                moveForSubtraction(v, digit);
-        }
-    }
-
-    /**
-     *
-     * @param digit
-     * @param v
-     */
-    public void animateNextSequential(String digit, View v) {
-
-        if (!EXPAND_HIT_BOX) return; // might be redundant?
-
-        String numberLoc = v.getTag().toString();
-        moveSequential(numberLoc, digit, _data.operation.equals("-"));
-    }
-
-
-    /**
-     * this animation is lit
-     *
-     * BUG_605... waterfall subtract
-     * BUG_605... waterfall should not happen if digit is not highlighted
-     * @param digit
-     */
-    private void waterfall(final String numLoc, final String digit) {
-
-        // try this???
-        for (int i = 0; i < getOnesDigit(_data.dataset[0]); i++)
-            (new Handler(Looper.getMainLooper())).postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    moveSequential(numLoc, digit, _data.operation.equals("-"));
-                }
-            }, WATERFALL_DELAY * i);
-    }
-
-    /**
-     *
-     * Move this view to the next available location in the tens column of the sum row.
-     *
-     * @param v the view clicked.
-     */
-    public void moveTenCarry(View v) {
-
-        if(((MovableImageView) v).isMoving || !((MovableImageView) v).isMovable) return;
-
-        moveForAddition(v, TEN_DIGIT);
-
-    }
-
-    /**
-     *
-     * Move this view to the next available location in the tens column of the subtrahend row.
-     *
-     * @param v
-     */
-    public void moveTenBorrow(View v) {
-        if (((MovableImageView) v).isMoving || !((MovableImageView) v).isMovable) return;
-
-        moveForSubtraction(v, TEN_DIGIT);
-    }
-
-    /**
-     *
-     * Move this view to the next available location in the ones column of the subtrahend row.
-     *
-     * @param v
-     */
-    public void moveOneBorrow(View v) {
-        if (((MovableImageView) v).isMoving || !((MovableImageView) v).isMovable) return;
-
-        moveForSubtraction(v, ONE_DIGIT);
-    }
-
-    /**
-     *
-     * Move this view to the next available location in the hundreds column of the sum row.
-     *
-     * @param v the view clicked.
-     */
-    public void moveHunCarry(View v) {
-
-        if(((MovableImageView) v).isMoving || !((MovableImageView) v).isMovable) return;
-
-        moveForAddition(v, HUN_DIGIT);
-
-    }
-
-    /**
-     * UI-details
-     * Moves a BaseTen ImageView of the type digitPlace.
-     *
-     * TODO make separate types for one, ten, hun
-     * @param v the view to move
-     * @param digitPlace the column to move to.
-     */
-    private void moveForAddition(View v, final String digitPlace) {
-
-        Log.wtf("YELLOW", "y u no move?");
-        // CARRY... prevent tapping while in carry mode
-        if(isCarrying) {
-            return;
-        }
-
-        final MovableImageView oldView = (MovableImageView) v;
-        Log.wtf("YELLOW", "oldView id ==\t" + oldView.getResources().getResourceEntryName(oldView.getId()));
-        final MovableImageView newView = determineNextResultView(digitPlace, false);
-
-        // an animation helper
-        final MovableImageView helperView = determineNextResultView(digitPlace, true);
-
-        int[] oldLocation = new int[2], newLocation = new int[2];
-
-        oldView.getLocationOnScreen(oldLocation);
-        newView.getLocationOnScreen(newLocation);
-        float dy = newLocation[1] - oldLocation[1];
-        Log.d("YELLOW X translation\t", "" + oldLocation[0] + " --> " + newLocation[0]);
-        float dx = newLocation[0] - oldLocation[0];
-        Log.d("YELLOW Y translation\t", "" + oldLocation[1] + " --> " + newLocation[1]);
-
-        newView.setTranslationX(-dx);
-        newView.setTranslationY(-dy);
-
-
-        ObjectAnimator animX = ObjectAnimator.ofFloat(newView, "translationX", 0);
-        ObjectAnimator animY = ObjectAnimator.ofFloat(newView, "translationY", 0);
-        AnimatorSet animSet = new AnimatorSet();
-        animSet.playTogether(animX, animY);
-        animSet.setDuration(1000);
-
-        animSet.addListener(new Animator.AnimatorListener() {
-
-            boolean isCarry = false;
-
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-                // once moved, it can't move again
-                oldView.isMovable = false;
-
-                // show both newView (destination) and helperView (temporary placeholder)
-                newView.setVisibility(View.VISIBLE);
-                if (helperView != null) {
-                    helperView.setVisibility(View.VISIBLE);
-                }
-
-                switch(digitPlace) {
-                    case HUN_DIGIT:
-                        oldView.setImageDrawable(getDrawable(R.drawable.empty_100));
-                        newView.setImageDrawable(getDrawable(R.drawable.blue_100));
-
-                        resultHun += 1;
-                        break;
-
-                    case TEN_DIGIT:
-                        oldView.setImageDrawable(getDrawable(R.drawable.empty_10_h));
-                        newView.setImageDrawable(getDrawable(R.drawable.blue_10_h));
-
-                        // if this is the tenth ten, prepare a carry!
-                        // MATHFIX_LAYOUT (1) NEXT NEXT NEXT populate the second row instead!!
-                        if (resultTen == 9) {
-                            this.isCarry = true;
-                            isCarrying = true; // prevent other animations...
-                            resultTen = 0;
-                        } else{
-                            resultTen += 1;
-                        }
-                        break;
-
-                    case ONE_DIGIT:
-                        oldView.setImageDrawable(getDrawable(R.drawable.empty_1));
-                        newView.setImageDrawable(getDrawable(R.drawable.blue_1));
-
-                        // if this is the tenth one, prepare a carry!
-                        // MATHFIX_LAYOUT (1) NEXT NEXT NEXT populate the second row instead!!
-                        if (resultOne == 9) {
-                            this.isCarry = true;
-                            isCarrying = true; // prevent other animations
-                            resultOne = 0;
-                        } else {
-                            resultOne += 1;
-                        }
-                        break;
-                }
-
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-
-
-                switch(digitPlace) {
-                    case HUN_DIGIT:
-
-                        // to show when animating
-                        final MovableImageView helperView = determineNextResultView(digitPlace, true);
-                        if (helperView != null) {
-                            helperView.setVisibility(View.INVISIBLE);
-                        }
-                        break;
-
-                    case TEN_DIGIT:
-
-                        if(isCarry) {
-                            startCarryAnimation(TEN_DIGIT);
-                        }
-                        break;
-
-                    case ONE_DIGIT:
-
-                        if(isCarry) {
-                            startCarryAnimation(ONE_DIGIT);
-                        }
-                        break;
-
-                }
-
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-
-        animSet.start();
-
-    }
-
-    /**
-     * UI-details
-     * Moves a BaseTen ImageView of the type digitPlace.
-     *
-     * @param v
-     * @param digitPlace hun, ten, or one
-     */
-    private void moveForSubtraction(View v, final String digitPlace) {
-
-        // this statement checks if we have already tapped enough to fill the subtrahend
-        // for example, if the subtrahend is 304 and we have already filled 3 hundreds spaces, return.
-        switch(digitPlace) {
-            case HUN_DIGIT:
-                if (subtrahendHun == getHunsDigit(_data.dataset[1])) {
-                    return;
-                }
-                break;
-
-            case TEN_DIGIT:
-                if (subtrahendTen == getTensDigit(_data.dataset[1])) {
-                    return;
-                }
-                break;
-
-            case ONE_DIGIT:
-                if (subtrahendOne == getOnesDigit(_data.dataset[1])) {
-                    return;
-                }
-        }
-
-        final MovableImageView oldView = (MovableImageView) v;
-        final MovableImageView newView = determineNextSubtrahendView(digitPlace, false);
-        // helper for better animation
-        final MovableImageView helperView = determineNextSubtrahendView(digitPlace, true);
-
-
-        int[] oldLocation = new int[2], newLocation = new int[2];
-        oldView.getLocationOnScreen(oldLocation);
-        newView.getLocationOnScreen(newLocation);
-        float dy = newLocation[1] - oldLocation[1];
-        Log.d("YELLOW X translation\t", "" + oldLocation[0] + " --> " + newLocation[0]);
-        float dx = newLocation[0] - oldLocation[0];
-        Log.d("YELLOW Y translation\t", "" + oldLocation[1] + " --> " + newLocation[1]);
-
-        newView.setTranslationX(-dx);
-        newView.setTranslationY(-dy);
-
-
-        ObjectAnimator animX = ObjectAnimator.ofFloat(newView, "translationX", 0);
-        ObjectAnimator animY = ObjectAnimator.ofFloat(newView, "translationY", 0);
-        AnimatorSet animSet = new AnimatorSet();
-        animSet.playTogether(animX, animY);
-        animSet.setDuration(1000);
-
-        animSet.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-
-                // once moved, it can't move again
-                oldView.isMovable = false;
-
-                // show both newView (destination) and helperView (temporary placeholder)
-                newView.setVisibility(View.VISIBLE);
-                helperView.setVisibility(View.VISIBLE);
-
-                switch(digitPlace)  {
-                    case HUN_DIGIT:
-                        helperView.setImageDrawable(getDrawable(R.drawable.blue_ghost_100));
-                        oldView.setImageDrawable(getDrawable(R.drawable.empty_100));
-                        newView.setImageDrawable(getDrawable(R.drawable.blue_100));
-
-                        subtrahendHun += 1;
-                        break;
-
-                    case TEN_DIGIT:
-                        helperView.setImageDrawable(getDrawable(R.drawable.blue_ghost_10_h));
-                        oldView.setImageDrawable(getDrawable(R.drawable.empty_10_h));
-                        newView.setImageDrawable(getDrawable(R.drawable.blue_10_h));
-
-                        subtrahendTen += 1;
-                        break;
-
-                    case ONE_DIGIT:
-                        helperView.setImageDrawable(getDrawable(R.drawable.blue_ghost_1));
-                        oldView.setImageDrawable(getDrawable(R.drawable.empty_1));
-                        newView.setImageDrawable(getDrawable(R.drawable.blue_1));
-
-                        subtrahendOne += 1;
-                        break;
-                }
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-
-        animSet.start();
-    }
-
-    /**
-     * Instead of moving the clicked View, move the next available view in this row
-     *
-     * @param numberLoc
-     * @param digit
-     */
-    private void moveSequential(final String numberLoc, final String digit, boolean subtract) {
-
-        if (isCarrying) {
-            return;
-        }
-
-        final MovableImageView oldView = determineNextTopView(numberLoc, digit);
-        // if we're at zero, this will return null
-        if(oldView == null) {
-            return;
-        }
-        final MovableImageView newView = determineNextResultView(digit, false);
-        final MovableImageView helperView = determineNextResultView(digit, true);
-
-        int[] oldLocation = new int[2], newLocation = new int[2];
-        oldView.getLocationOnScreen(oldLocation);
-        newView.getLocationOnScreen(newLocation);
-        float dy = newLocation[1] - oldLocation[1];
-        Log.d("YELLOW X translation\t", "" + oldLocation[0] + " --> " + newLocation[0]);
-        float dx = newLocation[0] - oldLocation[0];
-        Log.d("YELLOW Y translation\t", "" + oldLocation[1] + " --> " + newLocation[1]);
-
-        newView.setTranslationX(-dx);
-        newView.setTranslationY(-dy);
-
-        ObjectAnimator animX = ObjectAnimator.ofFloat(newView, "translationX", 0);
-        ObjectAnimator animY = ObjectAnimator.ofFloat(newView, "translationY", 0);
-        AnimatorSet animSet = new AnimatorSet();
-        animSet.playTogether(animX, animY);
-        animSet.setDuration(1000);
-
-        animSet.addListener(new Animator.AnimatorListener() {
-
-            boolean isCarry = false;
-
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-                switch(digit) {
-                    case HUN_DIGIT:
-                        oldView.setImageDrawable(getDrawable(R.drawable.empty_100));
-                        oldView.isMovable = false;
-                        newView.setVisibility(View.VISIBLE);
-                        newView.setImageDrawable(getDrawable(R.drawable.blue_100));
-
-                        // don't forget to decrement
-                        switch(numberLoc) {
-                            case OPA_LOCATION:
-                                currentOpAHun--;
-                                break;
-
-                            case OPB_LOCATION:
-                                currentOpBHun--;
-                                break;
-                        }
-
-                        // to show when animating
-                        if (helperView != null) {
-                            helperView.setVisibility(View.VISIBLE);
-                        }
-
-                        resultHun += 1;
-                        break;
-
-                    case TEN_DIGIT:
-                        oldView.setImageDrawable(getDrawable(R.drawable.empty_10_h));
-                        oldView.isMovable = false;
-                        newView.setVisibility(View.VISIBLE);
-                        newView.setImageDrawable(getDrawable(R.drawable.blue_10_h));
-
-                        // don't forget to decrement
-                        switch(numberLoc) {
-                            case OPA_LOCATION:
-                                currentOpATen--;
-                                break;
-
-                            case OPB_LOCATION:
-                                currentOpBTen--;
-                                break;
-                        }
-
-                        // to show when animating
-                        if (helperView != null) {
-                            helperView.setVisibility(View.VISIBLE);
-                        }
-
-                        // if this is the tenth ten, prepare a carry!
-                        if (resultTen == 9) {
-                            this.isCarry = true;
-                            isCarrying = true; // prevent other animations...
-                            resultTen = 0;
-                        } else{
-                            resultTen += 1;
-                        }
-                        break;
-
-                    case ONE_DIGIT:
-                        oldView.setImageDrawable(getDrawable(R.drawable.empty_1));
-                        oldView.isMovable = false;
-                        newView.setVisibility(View.VISIBLE);
-                        newView.setImageDrawable(getDrawable(R.drawable.blue_1));
-
-                        // don't forget to decrement
-                        switch(numberLoc) {
-                            case OPA_LOCATION:
-                                currentOpAOne--;
-                                break;
-
-                            case OPB_LOCATION:
-                                currentOpBOne--;
-                                break;
-                        }
-
-
-                        // to show when animating
-                        if (helperView != null) {
-                            helperView.setVisibility(View.VISIBLE);
-                        }
-
-                        // if this is the tenth one, prepare a carry!
-                        if (resultOne == 9) {
-                            this.isCarry = true;
-                            isCarrying = true; // prevent other animations
-                            resultOne = 0;
-                        } else {
-                            resultOne += 1;
-                        }
-                        break;
-                }
-
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-
-
-                switch(digit) {
-                    case HUN_DIGIT:
-
-                        // to show when animating
-                        final MovableImageView helperView = determineNextResultView(digit, true);
-                        if (helperView != null) {
-                            helperView.setVisibility(View.INVISIBLE);
-                        }
-                        break;
-
-                    case TEN_DIGIT:
-
-                        if(isCarry) {
-                            startCarryAnimation(TEN_DIGIT);
-                        }
-                        break;
-
-                    case ONE_DIGIT:
-
-                        if(isCarry) {
-                            startCarryAnimation(ONE_DIGIT);
-                        }
-                        break;
-
-                }
-
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-
-        animSet.start();
-
-    }
-
-    /**
-     * Start the carry animation from 10 ones to 1 ten, or 10 tens to 1 hun.
-     * @param digit can be "one" or "ten"
-     */
-    private void startCarryAnimation(final String digit) {
-
-        Log.i("TURN THE LIGHTS OFF", "CARRY ME HOME");
-        final MovableImageView oldView, newView;
-
-        switch (digit) {
-            case ONE_DIGIT:
-                oldView = (MovableImageView) _layout.getBaseTenConcreteUnitView(RESULT_LOCATION, ONE_DIGIT, 1);
-                newView = (MovableImageView) findViewById(R.id.carry_ten);
-                break;
-
-
-            case TEN_DIGIT:
-            default:
-                oldView = (MovableImageView) _layout.getBaseTenConcreteUnitView(RESULT_LOCATION, TEN_DIGIT, 1);
-                newView = (MovableImageView) findViewById(R.id.carry_hun);
-                break;
-        }
-
-        int[] oldLocation = new int[2], newLocation = new int[2];
-        oldView.getLocationOnScreen(oldLocation);
-        newView.getLocationOnScreen(newLocation);
-        float dy = newLocation[1] - oldLocation[1];
-        Log.d("YELLOW X translation\t", "" + oldLocation[0] + " --> " + newLocation[0]);
-        float dx = newLocation[0] - oldLocation[0];
-        Log.d("YELLOW Y translation\t", "" + oldLocation[1] + " --> " + newLocation[1]);
-
-        newView.setTranslationX(-dx);
-        newView.setTranslationY(-dy);
-
-
-        ObjectAnimator animX = ObjectAnimator.ofFloat(newView, "translationX", 0);
-        ObjectAnimator animY = ObjectAnimator.ofFloat(newView, "translationY", 0);
-        AnimatorSet animSet = new AnimatorSet();
-        animSet.playTogether(animX, animY);
-        animSet.setDuration(1500);
-
-        animSet.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                Log.wtf("TURN THE LIGHTS OFF", "CARRY ME HOME");
-                newView.isMoving = true;
-                newView.setVisibility(View.VISIBLE);
-
-                switch(digit) {
-
-                    case ONE_DIGIT:
-
-                        MovableImageView[] ones = new MovableImageView[10];
-                        for (int i = 1; i <= 10; i++) {
-                            ones[i-1] = _layout.getBaseTenConcreteUnitView(RESULT_LOCATION, ONE_DIGIT, i);
-                            //ones[i-1].setVisibility(View.INVISIBLE);
-                            ones[i-1].setImageDrawable(getDrawable(R.drawable.empty_1));
-                        }
-                        break;
-
-                    case TEN_DIGIT:
-                        MovableImageView[] ten = new MovableImageView[10];
-                        for (int i = 1; i <= 10; i++) {
-                            ten[i-1] = _layout.getBaseTenConcreteUnitView(RESULT_LOCATION, TEN_DIGIT, i);
-                            //ten[i-1].setVisibility(View.INVISIBLE);
-                            ten[i-1].setImageDrawable(getDrawable(R.drawable.empty_10_h));
-                        }
-                    default:
-                        break;
-
-                }
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                newView.isMoving = false;
-                isCarrying = false;
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-
-        animSet.start();
-    }
-
-    /* ===================== */
-    /* === END ANIMATION === */
-    /* ===================== */
-
-    /**
-     * Determines the next open spot in the sum row.
-     *
-     * @param digitPlace either one, ten, or hun
-     * @return the next open View
-     */
-    private MovableImageView determineNextResultView(String digitPlace, boolean helper) {
-
-        int currentDigit, nextDigit;
-
-        switch (digitPlace) {
-            case HUN_DIGIT:
-                currentDigit = resultHun;
-                break;
-
-            case TEN_DIGIT:
-                currentDigit = resultTen;
-                break;
-
-            case ONE_DIGIT:
-                currentDigit = resultOne;
-                break;
-
-            default:
-                return null;
-
-        }
-
-        nextDigit = currentDigit + 1;
-
-        return _layout.getBaseTenConcreteUnitView(RESULT_LOCATION, digitPlace, nextDigit, helper);
-    }
-
-    /**
-     * Determines the next open spot in the subtrahend row (opB).
-     *
-     * @param digitPlace either one, ten, or hun
-     * @param helper
-     * @return the next View
-     */
-    private MovableImageView determineNextSubtrahendView(String digitPlace, boolean helper) {
-
-        int currentDigit, nextDigit;
-
-        switch(digitPlace) {
-            case HUN_DIGIT:
-                currentDigit = subtrahendHun;
-                break;
-
-            case TEN_DIGIT:
-                currentDigit = subtrahendTen;
-                break;
-
-            case ONE_DIGIT:
-                currentDigit = subtrahendOne;
-                break;
-
-            default:
-                return null;
-        }
-
-
-        nextDigit = currentDigit + 1;
-
-        return _layout.getBaseTenConcreteUnitView(OPB_LOCATION, digitPlace, nextDigit, helper);
-    }
-
-    /**
-     * Instead of moving clicked View, move the right-most View.
-     *
-     * Returns null when there are none left in the row.
-     *
-     * @param digit
-     * @param numberLoc
-     * @return
-     */
-    private MovableImageView determineNextTopView(String numberLoc, String digit) {
-
-        int currentDigit = 0;
-
-        // this could be neater... but it works
-        switch(digit) {
-            case HUN_DIGIT:
-
-                switch(numberLoc) {
-                    case OPA_LOCATION:
-                        currentDigit = currentOpAHun;
-                        break;
-
-                    case OPB_LOCATION:
-                        currentDigit = currentOpBHun;
-                        break;
-                }
-
-                break;
-
-            case TEN_DIGIT:
-
-                switch(numberLoc) {
-                    case OPA_LOCATION:
-                        currentDigit = currentOpATen;
-                        break;
-
-                    case OPB_LOCATION:
-                        currentDigit = currentOpBTen;
-                        break;
-                }
-
-                break;
-
-            case ONE_DIGIT:
-
-                switch(numberLoc) {
-                    case OPA_LOCATION:
-                        currentDigit = currentOpAOne;
-                        break;
-
-                    case OPB_LOCATION:
-                        currentDigit = currentOpBOne;
-                        break;
-                }
-                break;
-        }
-
-        return _layout.getBaseTenConcreteUnitView(numberLoc, digit, currentDigit);
-    }
-
 
     /* DEBUG BUTTONS */
 
@@ -1820,214 +875,6 @@ public class BigMathMechanic {
                 });
             }
         });
-    }
-
-    /**
-     *
-     * Move the minuend BaseTenobjects to the result row.
-     * This will only occur if all the items have been tapped.
-     * MATH_FEEDBACK (8) this should be called again
-     */
-    public void moveMinuendToResult() {
-        if (subtrahendHun != getHunsDigit(_data.dataset[1]) ||
-                subtrahendTen != getTensDigit(_data.dataset[1]) ||
-                subtrahendOne != getOnesDigit(_data.dataset[1])) {
-
-            Toast.makeText(_activity, "Please subtract until you fill the subtrahend", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        // do hundreds
-        for (int i = 5; i > 0; i--) {
-            MovableImageView hun = _layout.getBaseTenConcreteUnitView(OPA_LOCATION, HUN_DIGIT, i);
-            if(hun.isMovable) {
-                moveForAddition(hun, HUN_DIGIT); // MATH_SUBTRACT this ain't right. Rename or make new method.
-            }
-        }
-
-        // do tens
-        for (int i = 10; i > 0; i--) {
-            MovableImageView ten = _layout.getBaseTenConcreteUnitView(OPA_LOCATION, TEN_DIGIT, i);
-            if(ten.isMovable) {
-                moveForAddition(ten, TEN_DIGIT); // MATH_SUBTRACT this ain't right. Rename or make new method.
-            }
-        }
-        // borrowed tens
-        if (hasBorrowedHun) {
-            for (int i = 10; i > 0; i --) {
-                MovableImageView ten = _layout.getBaseTenConcreteUnitView("borrow", TEN_DIGIT, i);
-                if (ten.isMovable) {
-                    moveForAddition(ten, TEN_DIGIT); // MATH_SUBTRACT this ain't right. Rename or make new method.
-                }
-            }
-        }
-
-        // do ones
-        for (int i = 10; i > 0; i--) {
-            MovableImageView one = _layout.getBaseTenConcreteUnitView(OPA_LOCATION, ONE_DIGIT, i);
-            if(one.isMovable) {
-                moveForAddition(one, ONE_DIGIT); // MATH_SUBTRACT this ain't right. Rename or make new method.
-            }
-        }
-        // borrowed ones
-        if (hasBorrowedTen) {
-            for (int i = 10; i > 0; i --) {
-                MovableImageView one = _layout.getBaseTenConcreteUnitView("borrow", ONE_DIGIT, i);
-                if (one.isMovable) {
-                    moveForAddition(one, ONE_DIGIT); // MATH_SUBTRACT this ain't right. Rename or make new method.
-                }
-            }
-        }
-    }
-
-    /**
-     *
-     * Animate the borrowing of a hundred into the tens column.
-     */
-    public void borrowHun() {
-        if (hasBorrowedHun) return;
-
-        isBorrowing = true;
-
-        final MovableImageView oldView = determineNextTopView(OPA_LOCATION, HUN_DIGIT);
-        final MovableImageView newView = (MovableImageView) findViewById(R.id.borrow_hun_helper);
-
-        if (!oldView.isMovable && currentOpAHun == 0) {
-            // MATH_SUBTRACT this should be able to take from the borrow column...
-            Toast.makeText(_activity, "You have no hundreds to borrow!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        int[] oldLocation = new int[2], newLocation = new int[2];
-        oldView.getLocationOnScreen(oldLocation);
-        newView.getLocationOnScreen(newLocation);
-        float dy = newLocation[1] - oldLocation[1];
-        Log.d("YELLOW X translation\t", "" + oldLocation[0] + " --> " + newLocation[0]);
-        float dx = newLocation[0] - oldLocation[0];
-        Log.d("YELLOW Y translation\t", "" + oldLocation[1] + " --> " + newLocation[1]);
-
-        newView.setTranslationX(-dx);
-        newView.setTranslationY(-dy);
-
-
-        ObjectAnimator animX = ObjectAnimator.ofFloat(newView, "translationX", 0);
-        ObjectAnimator animY = ObjectAnimator.ofFloat(newView, "translationY", 0);
-        AnimatorSet animSet = new AnimatorSet();
-        animSet.playTogether(animX, animY);
-        animSet.setDuration(1000);
-
-        animSet.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                newView.isMoving = true;
-                newView.setVisibility(View.VISIBLE);
-                newView.setImageDrawable(getDrawable(R.drawable.blue_100));
-
-                // our hundred is accounted for
-                oldView.setImageDrawable(getDrawable(R.drawable.empty_100));
-                oldView.isMovable = false;
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                newView.setVisibility(View.INVISIBLE);
-                isBorrowing = false;
-                hasBorrowedHun = true;
-
-                for(int i=1; i <= 10; i++) {
-                    MovableImageView ten = _layout.getBaseTenConcreteUnitView("borrow", TEN_DIGIT, i);
-                    ten.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-
-        animSet.start();
-    }
-
-    /**
-     *
-     * An interaction placeholder. Borrow Ten Ones from the Ten Column.
-     */
-    public void borrowTen() {
-        if (hasBorrowedTen) return;
-
-        isBorrowing = true;
-
-        final MovableImageView oldView = determineNextTopView(OPA_LOCATION, TEN_DIGIT);
-        // special case...
-        if (!oldView.isMovable && currentOpATen == 0) {
-            // MATH_SUBTRACT this should be able to take from the borrow column...
-            Toast.makeText(_activity, "You have no tens to borrow!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        final MovableImageView newView = (MovableImageView) findViewById(R.id.borrow_ten_helper);
-
-        int[] oldLocation = new int[2], newLocation = new int[2];
-        oldView.getLocationOnScreen(oldLocation);
-        newView.getLocationOnScreen(newLocation);
-        float dy = newLocation[1] - oldLocation[1];
-        Log.d("YELLOW X translation\t", "" + oldLocation[0] + " --> " + newLocation[0]);
-        float dx = newLocation[0] - oldLocation[0];
-        Log.d("YELLOW Y translation\t", "" + oldLocation[1] + " --> " + newLocation[1]);
-
-        newView.setTranslationX(-dx);
-        newView.setTranslationY(-dy);
-
-
-        ObjectAnimator animX = ObjectAnimator.ofFloat(newView, "translationX", 0);
-        ObjectAnimator animY = ObjectAnimator.ofFloat(newView, "translationY", 0);
-        AnimatorSet animSet = new AnimatorSet();
-        animSet.playTogether(animX, animY);
-        animSet.setDuration(1000);
-
-        animSet.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                newView.isMoving = true;
-                newView.setVisibility(View.VISIBLE);
-                newView.setImageDrawable(getDrawable(R.drawable.blue_10_h));
-
-                oldView.setImageDrawable(getDrawable(R.drawable.empty_10_h));
-                oldView.isMovable = false;
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                // hide the ten that moved and...
-                newView.setVisibility(View.INVISIBLE);
-                isBorrowing = false;
-                hasBorrowedTen = true;
-
-                // ... replace it with ten ones
-                for(int i=1; i <= 10; i++) {
-                    MovableImageView one = _layout.getBaseTenConcreteUnitView("borrow", ONE_DIGIT, i);
-                    one.setVisibility(View.VISIBLE);
-                }
-
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-
-        animSet.start();
     }
 
     /**

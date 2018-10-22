@@ -15,19 +15,19 @@ public interface IActivityMenu {
 
     /**
      * The name of the layout file to inflate
-     * @return
+     * @return name of the layout file to inflate
      */
     String getLayoutName();
 
     /**
      * Which tutors are shown as menu options for the students to choose.
-     * @return
+     * @return the tutors to be shown
      */
     CAt_Data[] getTutorsToShow();
 
     /**
      * What do the menu buttons look like?
-     * @return
+     * @return a layout configuration
      */
     CAsk_Data initializeActiveLayout();
 
@@ -37,6 +37,17 @@ public interface IActivityMenu {
      */
     Map<String, String> getButtonBehaviorMap();
 
+    /**
+     *
+     * @param buttonBehavior what was the button pressed?
+     * @return tutor to launch
+     */
     CAt_Data getTutorToLaunch(String buttonBehavior);
+
+    /**
+     * Get the matrix of the debug menu
+     * @return stories, writing, math, etc
+     */
+    String getDebugMenuSkill();
 
 }

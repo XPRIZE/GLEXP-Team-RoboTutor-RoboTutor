@@ -1,22 +1,20 @@
 package cmu.xprize.robotutor.tutorengine.util;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_session.AS_CONST;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CTutor;
-import cmu.xprize.robotutor.tutorengine.graph.vars.TScope;
 import cmu.xprize.util.CAt_Data;
 import cmu.xprize.util.CPlacementTest_Tutor;
 import cmu.xprize.util.TCONST;
 
-import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;
+import static cmu.xprize.util.TCONST.MENU_BUG_TAG;
 import static cmu.xprize.util.TCONST.PLACEMENT_TAG;
 
 /**
@@ -42,34 +40,77 @@ public class PromotionMechanism {
     /**
      *
      * Adjust the student's position in _matrix based on their last performance
+     * MENU_LOGIC: weird behavior observed... "WRITE" is the only one that doesn't increment on BACKBUTTON. MATH and STORIES both increment
      *
      */
-    public void adjustPositionFromPreviousPerformance(CTutor tutor) {
+    public void assessPerformanceAndAdjustPosition(CTutor lastTutorPlayed, boolean wasRepeat) {
 
-        boolean useMathPlacement = false;
-        boolean useWritingPlacement = false;
+        String lastSkillPlayed = wasRepeat ? _studentModel.getLastSkill() : _studentModel.getActiveSkill();
+
+        String nextTutor = selectNextTutor(lastTutorPlayed, lastSkillPlayed, wasRepeat);
+        RoboTutor.logManager.postEvent_I(TCONST.PLACEMENT_TAG, "nextTutor = " + nextTutor);
+
+
+        // 3. Set SELECTOR_MODE
+        RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
+
+        _studentModel.updateLastTutor(lastTutorPlayed.getTutorId());
+
+        // this will only happen if (wasRepeat && placement)
+        if (nextTutor == null) {
+            return;
+        }
+        switch (lastSkillPlayed) { // √
+
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
+                _studentModel.updateWritingTutorID(nextTutor);
+                break;
+
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES:
+                _studentModel.updateStoryTutorID(nextTutor);
+                break;
+
+            case AS_CONST.BEHAVIOR_KEYS.SELECT_MATH:
+                _studentModel.updateMathTutorID(nextTutor);
+                break;
+        }
+
+        if (!wasRepeat) {
+            _studentModel.incrementActiveSkill(); // MENU_LOGIC... activeSkill should be incremented after assessment
+        }
+    }
+
+
+    /**
+     * select Next Tutor
+     * MENU_LOGIC note that in some cases, "activeSkill" doesn't match "lastTutor"... (NEXT NEXT NEXT)
+     */
+    private String selectNextTutor(CTutor lastTutorPlayed, String lastSkillPlayed, boolean wasRepeat) {
 
         //
         String activeTutorId = "";
         HashMap transitionMap = null;
-        // look up activeSkill every time?
-        String activeSkill = _studentModel.getActiveSkill();
+        String rootTutor = ""; // needed in case our matrix changes for some reason...
         int placementIndex = 0;
-        switch (activeSkill) { // √
+        boolean useMathPlacement = false;
+        boolean useWritingPlacement = false;
+
+        switch (lastSkillPlayed) { // √
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
 
-                activeTutorId = _studentModel.getWritingTutorID();
+                activeTutorId = _studentModel.getWritingTutorID(); // TRACE_PROMOTION if we choose second option, this isn't updated
                 transitionMap = _matrix.writeTransitions;
+                rootTutor = _matrix.rootSkillWrite;
                 useWritingPlacement = _studentModel.getWritingPlacement();
                 placementIndex = _studentModel.getWritingPlacementIndex();
-
                 break;
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES:
 
                 activeTutorId = _studentModel.getStoryTutorID();
                 transitionMap = _matrix.storyTransitions;
+                rootTutor = _matrix.rootSkillStories;
                 break;
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_MATH:
@@ -78,71 +119,25 @@ public class PromotionMechanism {
                 transitionMap = _matrix.mathTransitions;
                 useMathPlacement = _studentModel.getMathPlacement();
                 placementIndex = _studentModel.getMathPlacementIndex();
-                break;
-
-        }
-
-        // this should be broken up appropriately...
-        String nextTutor = selectNextTutor(tutor, activeTutorId, activeSkill, useWritingPlacement, useMathPlacement, transitionMap, placementIndex); // √
-
-        RoboTutor.logManager.postEvent_I(TCONST.PLACEMENT_TAG, "nextTutor = " + nextTutor);
-
-
-        // 3. Set SELECTOR_MODE
-        RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
-
-        // Update the active skill
-        //
-        // look up activeSkill every time?
-        String writingTutorID = null, storiesTutorID = null, mathTutorID = null;
-        switch (activeSkill) { // √
-
-            case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
-
-                writingTutorID = nextTutor;
-                break;
-
-            case AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES:
-
-                storiesTutorID = nextTutor;
-                break;
-
-            case AS_CONST.BEHAVIOR_KEYS.SELECT_MATH:
-
-                mathTutorID = nextTutor;
+                rootTutor = _matrix.rootSkillMath;
                 break;
         }
 
-        // Serialize the new state
-        // #Mod 329 language switch capability
-        //
+        // SUPER_PLACEMENT (***) if the student already did the placement test, then we can just skip the whole process
+        // SUPER_PLACEMENT (edge case): if the student backs out on the first try... they won't be assessed again until after they stop repeating
+        if (wasRepeat && (useMathPlacement || useWritingPlacement)) return null;
 
-
-        //editor.putString(TCONST.SKILL_SELECTED, AS_CONST.SELECT_NONE); // √√√ √√√
-        //Log.wtf("REPEAT_STUFF", "(difficultySelectMode) setting SKILL_SELECTED... " + AS_CONST.SELECT_NONE);
-
-        // only one will have been changed but update all
-        //
-        if (writingTutorID != null) _studentModel.updateWritingTutorID(writingTutorID);
-        if (storiesTutorID != null) _studentModel.updateStoryTutorID(storiesTutorID);
-        if (mathTutorID != null) _studentModel.updateMathTutorID(mathTutorID);
-
-        _studentModel.updateLastTutor(activeTutorId);
-    }
-
-
-    /**
-     * select Next Tutor
-     */
-    private String selectNextTutor(CTutor lastTutor, String activeTutorId, String activeSkill, boolean useWritingPlacement, boolean useMathPlacement, HashMap transitionMap, int placementIndex) {
-        RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format(Locale.US, "selectNextTutor, w=%s, m=%s",
+        // TRACE_PROMOTION this might be different...
+        RoboTutor.logManager.postEvent_I(MENU_BUG_TAG, String.format("compare lastTutorPlayed=%s == activeTutorId=%s", lastTutorPlayed.getTutorId(), activeTutorId));
+        RoboTutor.logManager.postEvent_I(MENU_BUG_TAG, "selectNextTutor -- activeTutorId=" + activeTutorId+ " -- activeSkill=" + lastSkillPlayed);
+        RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format(Locale.US, "selectNextTutor -- w=%s -- m=%s",
                 String.valueOf(useWritingPlacement),
                 String.valueOf(useMathPlacement)));
         // 1. pick the next tutor
         // YYY if placement, we will go by different rules
         PromotionRules rules;
         if(useWritingPlacement || useMathPlacement) {
-            rules = new PlacementPromotionRules();
+            rules = new PlacementPromotionRules(); // SUPER_PLACEMENT
         } else {
             rules = new PerformancePromotionRules();
         }
@@ -150,39 +145,50 @@ public class PromotionMechanism {
         PerformanceData performance = new PerformanceData();
         performance.setActivityType(activeTutorId);
         // look up activeSkill every time?
-        performance.setActiveSkill(activeSkill);
+        performance.setActiveSkill(lastSkillPlayed);
 
 
         // can this work from last tutor???
-        performance.setNumberCorrect(lastTutor.getScore());
-        performance.setNumberWrong(lastTutor.getIncorrect());
-        performance.setNumberAttempts(lastTutor.getAttempts());
-        performance.setTotalNumberQuestions(lastTutor.getTotalQuestions());
+        performance.setNumberCorrect(lastTutorPlayed.getScore());
+        performance.setNumberWrong(lastTutorPlayed.getIncorrect());
+        performance.setNumberAttempts(lastTutorPlayed.getAttempts());
+        performance.setTotalNumberQuestions(lastTutorPlayed.getTotalQuestions());
 
 
-        PromotionRules.SelectedActivity selectedActivity = rules.selectActivityByPerformance(performance);
-        Log.d(TAG, "PerformancePromotionRules result: " + selectedActivity);
+        PromotionRules.PromotionDecision promotionDecision = rules.assessPerformance(performance);
+        RoboTutor.logManager.postEvent_I(MENU_BUG_TAG, "PerformancePromotionRules result = " + promotionDecision);
 
         // YYY use placement logic
         String nextTutor;
         if (useWritingPlacement || useMathPlacement) {
-            nextTutor = getNextPlacementTutor(activeTutorId, useMathPlacement, selectedActivity, transitionMap, placementIndex);
+            nextTutor = getNextPlacementTutor(activeTutorId, useMathPlacement, promotionDecision, transitionMap, placementIndex, wasRepeat); // SUPER_PLACEMENT how to know if it was a repeat???
 
         } else {
-            nextTutor = getNextPromotionTutor(activeTutorId, selectedActivity, transitionMap);
+            nextTutor = getNextPromotionTutor(activeTutorId, promotionDecision, transitionMap, rootTutor);
+            // MENU_LOGIC:::: nextTutor = "story.hear::story_1";
         }
-        return nextTutor;
+        return nextTutor; // MENU_LOGIC:::: nextTutor = "story.hear::story_1";
     }
 
     /**
      * get next tutor using Promotion Logic
-     * @param selectedActivity
+     * @param activeTutorId the last tutor played
+     * @param promotionDecision NEXT, SAME, PREVIOUS, DOUBLE_NEXT...
+     * @param transitionMap the transitionMap to get the next tutor from
+     * @param rootTutor needed for "just-in-case"
      * @return
      */
-    private String getNextPromotionTutor(String activeTutorId, PromotionRules.SelectedActivity selectedActivity, HashMap<String, CAt_Data> transitionMap) {
-        // this is
+    private String getNextPromotionTutor(String activeTutorId, PromotionRules.PromotionDecision promotionDecision, HashMap<String, CAt_Data> transitionMap, String rootTutor) {
+        // MENU_SOLUTION... Log.info all of these
+        RoboTutor.logManager.postEvent_I(MENU_BUG_TAG, "activeTutorId=" + activeTutorId + " -- ");
+
+        // Prevent NPE by setting as rootTutor.
         CAt_Data transitionData = transitionMap.get(activeTutorId);
-        switch (selectedActivity) {
+        if (transitionData == null) {
+            CErrorManager.logEvent(TAG, "ERROR: no entry found for " + activeTutorId + ". Using rootTutor instead.", false);
+            transitionData = transitionMap.get(rootTutor);
+        }
+        switch (promotionDecision) {
             case NEXT:
                 return transitionData.next;
 
@@ -232,27 +238,39 @@ public class PromotionMechanism {
 
     /**
      * get next tutor using Placement Logic
+     * SUPER_PLACEMENT --- if they keep repeating the first placement, it will keep pushing them through. Solution: only increment if this is their first time.
+     * // WRITING_PLACEMENT_INDEX=5;
      */
-    private String getNextPlacementTutor(String activeTutorId, boolean useMathPlacement, PromotionRules.SelectedActivity selectedActivity, HashMap<String, CAt_Data> transitionMap, int placementIndex) {
+    private String getNextPlacementTutor(String activeTutorId, boolean useMathPlacement, PromotionRules.PromotionDecision promotionDecision, HashMap<String, CAt_Data> transitionMap, int placementIndex, boolean wasRepeat) {
         RoboTutor.logManager.postEvent_V(TCONST.PLACEMENT_TAG, "using placement logic");
 
-        switch(selectedActivity) {
+        switch(promotionDecision) {
 
             /// YYY it might be better to keep the placement tutors in a map instead of in an array
             /// YYY logic might be more symmetrical
             /// YYY if (placement) {placementMap.get(activeTutorId)} else {transitionMap.get(activeTutorId)}
             // NEXT is equivalent to passing the placement test and moving to next placement test
 
+            // SUPER_PLACEMENT... thought-experiment. Call this method twice. Second time it will be a repeat.
+            // NEXT->NEXT. NEXT->SAME. NEXT->FAIL.
+            // SAME->NEXT. SAME->SAME. SAME->FAIL.
+            // FAIL->NEXT. FAIL->SAME. FAIL->FAIL.
+            // if (wasRepeat)... can we just return the currentWriting/Math tutor???
+
             case NEXT:
                 // pass to next
                 //
                 if(useMathPlacement) {
-                    int mathPlacementIndex = placementIndex;
+                    // SUPER_PLACEMENT try this NEXT NEXT NEXT
+                    if (wasRepeat) {
+                        return _studentModel.getMathTutorID();
+                    }
 
+                    int mathPlacementIndex = placementIndex;
 
                     if (mathPlacementIndex == _matrix.mathPlacement.length) {
                         // student has made it to the end
-                        CPlacementTest_Tutor lastPlacementTest = _matrix.mathPlacement[mathPlacementIndex];
+                        CPlacementTest_Tutor lastPlacementTest = _matrix.mathPlacement[mathPlacementIndex]; // off-by-one??? they'll never reach it :)
                         // update our preferences to exit PLACEMENT mode
                         _studentModel.updateMathPlacement(false);
                         _studentModel.updateMathPlacementIndex(null);
@@ -260,6 +278,7 @@ public class PromotionMechanism {
 
                         return lastPlacementTest.fail;
                     } else {
+                        // SUPER_PLACEMENT should only increment if they did a new one
                         mathPlacementIndex++; // passing means incrementing by one
                         CPlacementTest_Tutor nextPlacementTest = _matrix.mathPlacement[mathPlacementIndex];
 
@@ -270,11 +289,15 @@ public class PromotionMechanism {
                 }
                 // writingPlacement is only other option
                 else {
+                    // SUPER_PLACEMENT try this NEXT NEXT NEXT trace this...
+                    if (wasRepeat) {
+                        return _studentModel.getWritingTutorID();
+                    }
                     int writingPlacementIndex = placementIndex;
 
                     if (writingPlacementIndex == _matrix.writePlacement.length) {
                         // student has made it to the end
-                        CPlacementTest_Tutor lastPlacementTest = _matrix.writePlacement[writingPlacementIndex];
+                        CPlacementTest_Tutor lastPlacementTest = _matrix.writePlacement[writingPlacementIndex]; // off-by-one??? they'll never reach it :)
                         // update our preferences to exit PLACEMENT mode
 
                         _studentModel.updateWritingPlacement(false);
@@ -283,6 +306,7 @@ public class PromotionMechanism {
 
                         return lastPlacementTest.fail; // go to beginning of last level
                     } else {
+                        // SUPER_PLACEMENT should only increment if they did a new one
                         writingPlacementIndex++; // passing means incrementing by one
                         CPlacementTest_Tutor nextPlacementTest = _matrix.writePlacement[writingPlacementIndex];
 

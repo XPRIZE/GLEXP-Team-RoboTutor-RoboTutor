@@ -19,48 +19,47 @@ import java.util.Map;
 
 import cmu.xprize.comp_ask.CAskElement;
 import cmu.xprize.comp_debug.CDebugComponent;
+import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_logging.CLogManager;
+import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.comp_logging.ITutorLogger;
 import cmu.xprize.comp_session.AS_CONST;
 import cmu.xprize.comp_session.CActivitySelector;
-import cmu.xprize.robotutor.tutorengine.CTutorEngine;
-import cmu.xprize.robotutor.tutorengine.util.CycleMatrixActivityMenu;
-import cmu.xprize.robotutor.tutorengine.util.IActivityMenu;
-import cmu.xprize.robotutor.tutorengine.util.StudentChooseMatrixActivityMenu;
-import cmu.xprize.robotutor.tutorengine.util.StudentDataModel;
-import cmu.xprize.robotutor.tutorengine.util.TransitionMatrixModel;
-import cmu.xprize.util.CAt_Data;
-import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.RoboTutor;
+import cmu.xprize.robotutor.startup.configuration.Configuration;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CSceneDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
+import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
 import cmu.xprize.robotutor.tutorengine.graph.scene_descriptor;
 import cmu.xprize.robotutor.tutorengine.graph.vars.IScriptable2;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TInteger;
 import cmu.xprize.robotutor.tutorengine.graph.vars.TString;
-import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.robotutor.tutorengine.util.CycleMatrixActivityMenu;
+import cmu.xprize.robotutor.tutorengine.util.IActivityMenu;
+import cmu.xprize.robotutor.tutorengine.util.StudentChooseMatrixActivityMenu;
+import cmu.xprize.robotutor.tutorengine.util.StudentDataModel;
+import cmu.xprize.robotutor.tutorengine.util.TransitionMatrixModel;
+import cmu.xprize.robotutor.tutorengine.util.VideoHelper;
+import cmu.xprize.util.CAt_Data;
 import cmu.xprize.util.IEventSource;
-import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.util.IPublisher;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.comp_session.AS_CONST.ACTIONMAP_KEYS.CLEAR_HESITATION_BEHAVIOR;
+import static cmu.xprize.comp_session.AS_CONST.ACTIONMAP_KEYS.SET_HESITATION_FEEDBACK;
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_MATH;
-import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_OPTION_0;
-import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_OPTION_1;
-import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_OPTION_2;
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING;
-import static cmu.xprize.comp_session.AS_CONST.SELECT_REPEAT;
-import static cmu.xprize.comp_session.AS_CONST.VAR_TUTOR_ID;
 import static cmu.xprize.comp_session.AS_CONST.VAR_DATASOURCE;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENT;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENTDATA;
+import static cmu.xprize.comp_session.AS_CONST.VAR_TUTOR_ID;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_AKIRA;
 import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_ASM;
@@ -138,7 +137,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
         // Set the debug launcher based on the variant built
         //
-        if (BuildConfig.SHOW_DEBUGLAUNCHER) {
+        if (Configuration.showDebugLauncher(getContext())) {
             DEBUG_LANCHER = true;
         }
 
@@ -148,7 +147,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         // Hide the language toggle on the release builds
         // TODO : Use build Variant to ensure release configurations
         //
-        if(!BuildConfig.LANGUAGE_SWITCH) {
+        if (!Configuration.getLanguageSwitcher(getContext())) {
 
             mLangButton.setVisibility(INVISIBLE);
             requestLayout(); // https://stackoverflow.com/questions/13856180/usage-of-forcelayout-requestlayout-and-invalidate
@@ -208,7 +207,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         String rootTutor = "";
 
         // look up activeSkill every time?
-        String activeSkill = studentModel.getActiveSkill();
+        String activeSkill = menu.getDebugMenuSkill();
         switch (activeSkill) { // √
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
@@ -238,21 +237,12 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
     }
 
     /**
-     * moving this from JSON... because we need to make it more dynamic...
-     * how will this affect the English version???
-     */
-    private void initializeActiveLayout() {
-
-    }
-
-
-    /**
      * Replaces animator graph so we can trace variables
      */
     public void setAllStickyBehavior() {
         setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.DESCRIBE_BEHAVIOR, AS_CONST.QUEUEMAP_KEYS.BUTTON_DESCRIPTION);
-        setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.DESCRIBE_COMPLETE, "SET_HESITATION_FEEDBACK");
-        setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_BEHAVIOR, "CLEAR_HESITATION_BEHAVIOR");
+        setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.DESCRIBE_COMPLETE, SET_HESITATION_FEEDBACK);
+        setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.SELECT_BEHAVIOR, CLEAR_HESITATION_BEHAVIOR);
         //setStickyBehavior(AS_CONST.BEHAVIOR_KEYS.LAUNCH_EVENT, "LAUNCH_BEHAVIOR"); // (2.7) collapsed into one function
 
         Map<String, String> buttonBehavior = menu.getButtonBehaviorMap();
@@ -346,12 +336,11 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
         // look up activeSkill every time?
         // if student chose repeat, use last skill instead
-        String activeSkill = RoboTutor.STUDENT_CHOSE_REPEAT ? studentModel.getLastSkill() : studentModel.getActiveSkill();
-        switch (activeSkill) { // √
+        switch (menu.getDebugMenuSkill()) {  // this is dependent on which debug menu we're in
 
             case AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING:
 
-                studentModel.updateWritingTutorID(debugTutor);
+                studentModel.updateWritingTutorID(debugTutor); // DEBUG_MENU_LOGIC (x) this might be wrong...
                 rootTutor     = matrix.getRootSkillByContentArea(SELECT_WRITING);
                 transitionMap = matrix.getTransitionMapByContentArea(SELECT_WRITING);
                 break;
@@ -376,7 +365,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         // Special Flavor processing to exclude ASR apps - this was a constraint for BETA trials
         // reenable the ASK buttons if we don't execute the story_tutor
         //
-        /*if (BuildConfig.NO_ASR_APPS && transitionMap == matrix.storyTransitions) {
+        /*if (Configuration.noAsrApps(getContext()) && transitionMap == matrix.storyTransitions) {
             SaskActivity.enableButtons(true);
             return;
         }*/
@@ -394,7 +383,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         // #Mod 330 Show TutorID in Banner in debug builds
         // DEBUG_TUTORID is used to communicate the active tutor to the Banner in DEBUG mode
         //
-        if (BuildConfig.SHOW_TUTORVERSION) {
+        if (Configuration.showTutorVersion(getContext())) {
             DEBUG_TUTORID = debugTutor;
         }
 
@@ -425,18 +414,18 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         // Special Flavor processing to exclude ASR apps - this was a constraint for BETA trials
         // reenable the ASK buttons if we don't execute the story_tutor
         //
-        /*if (BuildConfig.NO_ASR_APPS && transitionMap == matrix.storyTransitions) {
+        /*if (Configuration.noAsrApps(getContext()) && transitionMap == matrix.storyTransitions) {
             SaskActivity.enableButtons(true);
             return;
         }*/
 
         // the next tutor to be launched
-        CAt_Data tutorToLaunch = menu.getTutorToLaunch(buttonBehavior);
+        CAt_Data tutorToLaunch = menu.getTutorToLaunch(buttonBehavior); // SUPER_PLACEMENT change this TRACE_PROMOTION the tutorToLaunch isn't saved...
 
         // #Mod 330 Show TutorID in Banner in debug builds
         // DEBUG_TUTORID is used to communicate the active tutor to the Banner in DEBUG mode
         //
-        if (BuildConfig.SHOW_TUTORVERSION) {
+        if (Configuration.showTutorVersion(getContext())) {
             DEBUG_TUTORID = tutorToLaunch.tutor_id;
         }
 
@@ -501,33 +490,32 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         String activeTutorId = tutorToLaunch.tutor_id;
         // Update the tutor id shown in the log stream
 
-        if(BuildConfig.SHOW_DEMO_VIDS && false) {
+        if(Configuration.showDemoVids(getContext())) {
 
-            String whichActivityIsNext = parseActiveTutorForTutorName(activeTutorId);
+            String videoId = VideoHelper.getVideoIdByTutor(tutorToLaunch);
+            Log.d("VID_LAUNCH", "videoId=" + videoId);
 
-            // bpop, write, akira, story, math, etc
-            final int timesPlayedActivity = studentModel.getTimesPlayedTutor(whichActivityIsNext);
-            boolean playDemoVid = timesPlayedActivity < 1; // only play video once
+            if (videoId != null) {
 
-            String pathToFile = getTutorInstructionalVideoPath(activeTutorId, whichActivityIsNext);
+                // bpop, write, akira, story, math, etc
+                final int timesPlayedActivity = studentModel.getTimesPlayedTutor(videoId);
+                boolean playDemoVid = timesPlayedActivity < 2; // only play video twice
+                Log.d("VID_LAUNCH", videoId + ": " + timesPlayedActivity + " compare to " + 2);
 
-            if(playDemoVid && pathToFile != null) {
+                String pathToFile = VideoHelper.getVideoPathById(videoId);
 
-                playTutorDemoVid(activeTutorId, tutorToLaunch, whichActivityIsNext, timesPlayedActivity, pathToFile);
+                if(playDemoVid && pathToFile != null) {
 
-            } else {
-
-                CLogManager.setTutor(activeTutorId);
-
-                doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data, tutorToLaunch.tutor_id);
-
+                    // VID_LAUNCH there is redundant information here...
+                    playTutorDemoVid(tutorToLaunch, videoId, timesPlayedActivity, pathToFile);
+                    // The tutor will be launched upon video completion, so we must return before we launch the tutor.
+                    return;
+                }
             }
-        } else {
-
-            CLogManager.setTutor(activeTutorId);
-
-            doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data, tutorToLaunch.tutor_id);
         }
+
+        CLogManager.setTutor(activeTutorId);
+        doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data, tutorToLaunch.tutor_id);
     }
 
     /**
@@ -538,7 +526,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
      * @param timesPlayedActivity
      * @param pathToFile
      */
-    private void playTutorDemoVid(final String activeTutorId, final CAt_Data tutorToLaunch, final String whichActivityIsNext, final int timesPlayedActivity, String pathToFile) {
+    private void playTutorDemoVid(final CAt_Data tutorToLaunch, final String timesPlayedId, final int timesPlayedActivity, String pathToFile) {
         // load SurfaceView to hold the video
         final SurfaceView fullscreenView = (SurfaceView) findViewById(R.id.SvideoSurface);
         fullscreenView.setVisibility(View.VISIBLE);
@@ -559,7 +547,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
             e.printStackTrace();
 
             // if an error occurs with media player, we don't want to freeze the app completely
-            CLogManager.setTutor(activeTutorId);
+            CLogManager.setTutor(tutorToLaunch.tutor_id);
 
             doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data, tutorToLaunch.tutor_id);
         }
@@ -574,74 +562,19 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
             public void onCompletion(MediaPlayer mediaPlayer) {
                 mp.release();
                 fullscreenView.setVisibility(View.INVISIBLE);
-                langToggle.setVisibility(View.VISIBLE); // prevent from changing language
+                if (Configuration.getLanguageSwitcher(getContext())) {
+                    langToggle.setVisibility(View.VISIBLE); // prevent from changing language
+                }
 
-                studentModel.updateTimesPlayedTutor(whichActivityIsNext, timesPlayedActivity + 1); // increment to let them know we watched the video
 
-                CLogManager.setTutor(activeTutorId);
+                int increment = timesPlayedActivity + 1;
+                studentModel.updateTimesPlayedTutor(timesPlayedId, increment); // increment to let them know we watched the video
+                Log.d("VID_LAUNCH", timesPlayedId + ": " + timesPlayedActivity + " --> " + increment);
 
+                CLogManager.setTutor(tutorToLaunch.tutor_id);
                 doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data, tutorToLaunch.tutor_id);
             }
         });
-    }
-
-    /**
-     * Parses tutor for its core tutor name
-     * e.g. bpop.num:s2n_say_show_mc --> bpop
-     * akira:10_2 --> akira
-     *
-     * @param tutor
-     * @return
-     */
-    private String parseActiveTutorForTutorName(String tutor) {
-
-        // deals with format of tutor names....
-        // math:10, read.echo:1, read.hear:2, bpop.ltr.uc:2, etc
-        String whichActivityIsNext = tutor;
-        int colonIndex = tutor.indexOf(':');
-        if(colonIndex > 0) {
-            whichActivityIsNext = tutor.substring(0, colonIndex);
-        }
-        int periodIndex = whichActivityIsNext.indexOf('.');
-        if(periodIndex > 0) {
-            whichActivityIsNext = whichActivityIsNext.substring(0, periodIndex);
-        }
-
-        return whichActivityIsNext;
-    }
-
-
-    /**
-     * Gets the video resource to play based on tutor.
-     *
-     * @param tutor
-     * @return
-     */
-    private String getTutorInstructionalVideoPath(String activeTutorId, String tutor) {
-
-        String PATH_TO_FILE = TCONST.ROBOTUTOR_ASSETS + "/" + "video" + "/";
-
-        // note that this was initially done w/ a "substring" check, but each tutor has a different
-        // naming format e.g. math:10 vs. story.hear:1 vs. story.echo:1
-        if (activeTutorId.startsWith("bpop")) {
-            PATH_TO_FILE += "bpop_demo.mp4";
-        } else if (activeTutorId.startsWith("akira")) {
-            PATH_TO_FILE += "akira_demo.mp4";
-        } else if (activeTutorId.startsWith("math")) {
-            PATH_TO_FILE += "asm_demo.mp4";
-        } else if (activeTutorId.startsWith("write")) {
-            PATH_TO_FILE += "write_demo.mp4";
-        } else if (activeTutorId.startsWith("story.read") || activeTutorId.startsWith("story.echo")) {
-            PATH_TO_FILE += "read_demo.mp4";
-        } else if (activeTutorId.startsWith("numscale") || activeTutorId.startsWith("num.scale")) {
-            PATH_TO_FILE += "numscale_demo.mp4";
-        } else if (activeTutorId.startsWith("countingx")) {
-            PATH_TO_FILE += "countingx_demo.mp4";
-        } else {
-            return null;
-        }
-
-        return PATH_TO_FILE;
     }
 
     // Everything demo video related END
@@ -661,6 +594,8 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         Log.wtf("WARRIOR_MAN", "doLaunch: tutorId = " + tutorId);
 
         RoboTutor.SELECTOR_MODE = TCONST.FTR_TUTOR_SELECT;
+
+        // TRACE_PROMOTION tutorToLaunch not saved...
 
         // update the response variable  "<Sresponse>.value"
 
@@ -697,7 +632,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
             String QA_MATRIX_TAG = "QA_MATRIX";
             Log.wtf(QA_MATRIX_TAG, "key=" + entry.getKey().toString());
             String key   = entry.getKey().toString();
-            String value = "#" + entry.getValue().toString();
+            String value = "#" + entry.getValue() != null ? entry.getValue().toString() : "null";
 
             builder.append(key);
             builder.append(value);

@@ -395,7 +395,10 @@ public class TAsmComponent extends CAsm_Component implements ITutorObject, IData
 
                 dataNameDescriptor = dataNameDescriptor.substring(TCONST.SOURCEFILE.length());
 
-                String jsonData = JSON_Helper.cacheData(TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS + "/" + dataNameDescriptor);
+                String dataPath = TCONST.TUTORROOT + "/" + mTutor.getTutorName() + "/" + TCONST.TASSETS;
+                dataPath += "/" +  TCONST.DATA_PATH + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
+
+                String jsonData = JSON_Helper.cacheData(dataPath);
                 // Load the datasource in the component module - i.e. the superclass
                 loadJSON(new JSONObject(jsonData), null);
 

@@ -1,0 +1,24 @@
+{
+  "bootFeatures":"FTR_DEMO_ZERO_ADD",
+
+  "dataSource": [
+
+    {"type":"Asm_Data", "level":"asm_11", "task":"Add to 0", "dataset":[0, 2, 2], "operation":"+", "image": "circle"},
+
+    {"type":"Asm_Data", "level":"asm_11", "task":"Add to 0", "dataset":[0, 1, 1], "operation":"+", "image": "star"},
+
+    {"type":"Asm_Data", "level":"asm_11", "task":"Add to 0", "dataset":[0, 1, 1], "operation":"+", "image": "hexagon"},
+
+    {"type":"Asm_Data", "level":"asm_11", "task":"Add to 0", "dataset":[0, 7, 7], "operation":"+", "image": "triangle"},
+
+    {"type":"Asm_Data", "level":"asm_11", "task":"Add to 0", "dataset":[0, 6, 6], "operation":"+", "image": "pentagon"},
+
+    {"type":"Asm_Data", "level":"asm_11", "task":"Add to 0", "dataset":[0, 7, 7], "operation":"+", "image": "star"},
+
+    {"type":"Asm_Data", "level":"asm_11", "task":"Add to 0", "dataset":[0, 4, 4], "operation":"+", "image": "pentagon"},
+
+    {"type":"Asm_Data", "level":"asm_11", "task":"Add to 0", "dataset":[0, 3, 3], "operation":"+", "image": "hexagon"},
+
+    {"type":"Asm_Data", "level":"asm_11", "task":"Add to 0", "dataset":[0, 6, 6], "operation":"+", "image": "hexagon"}
+  ]
+}

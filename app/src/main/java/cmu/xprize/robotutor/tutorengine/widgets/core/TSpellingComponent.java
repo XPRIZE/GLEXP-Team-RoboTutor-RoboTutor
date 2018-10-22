@@ -141,10 +141,6 @@ public class TSpellingComponent extends CSpelling_Component implements ITutorObj
 
         Log.wtf("LEBRON", "next");
         super.next();
-
-        if (dataExhausted()) {
-            publishFeature(TCONST.FTR_EOD);
-        }
     }
 
     @Override
@@ -346,7 +342,7 @@ public class TSpellingComponent extends CSpelling_Component implements ITutorObj
         extractFeatureContents(builder, _FeatureMap);
 
 
-        RoboTutor.logManager.postTutorState(TCONST.TUTOR_STATE_MSG, "target#spelling," + logData);
+        RoboTutor.logManager.postTutorState(TCONST.TUTOR_STATE_MSG, "target#spelling," + logData + builder.toString());
     }
 
     //***********************************************************

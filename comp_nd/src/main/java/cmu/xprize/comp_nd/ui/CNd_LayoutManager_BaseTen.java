@@ -183,6 +183,8 @@ public class CNd_LayoutManager_BaseTen implements CNd_LayoutManagerInterface {
         View chooseLeft = _component.findViewById(R.id.symbol_left_num);
         chooseLeft.setOnClickListener(enable ? new ChooseListener("left"): null);
 
+        // FIX_COMPARE (1) make tapping on dotbag an option
+
         View chooseRight = _component.findViewById(R.id.symbol_right_num);
         chooseRight.setOnClickListener(enable ? new ChooseListener("right"): null);
     }

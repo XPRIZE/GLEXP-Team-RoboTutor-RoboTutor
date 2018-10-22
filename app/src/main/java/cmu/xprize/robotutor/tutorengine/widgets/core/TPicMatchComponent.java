@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import cmu.xprize.comp_logging.PerformanceLogItem;
 import cmu.xprize.comp_picmatch.CPicMatch_Component;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_logging.ILogManager;
@@ -21,6 +22,7 @@ import cmu.xprize.robotutor.tutorengine.CMediaController;
 import cmu.xprize.robotutor.tutorengine.CMediaManager;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
 import cmu.xprize.robotutor.tutorengine.CTutor;
+import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObject;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
@@ -42,7 +44,7 @@ import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 
 public class TPicMatchComponent extends CPicMatch_Component implements ITutorObject, IDataSink, IPublisher, ITutorLogger, IBehaviorManager, IEventSource {
 
-    private CTutor          mTutor;
+    protected CTutor          mTutor;
     private CObjectDelegate mSceneObject;
     private CMediaManager mMediaManager;
 
@@ -145,6 +147,40 @@ public class TPicMatchComponent extends CPicMatch_Component implements ITutorObj
         if (isDataExhausted()) {
             publishFeature(TCONST.FTR_EOD);
         }
+    }
+
+    @Override
+    protected void trackAndLogPerformance(boolean correct, String choice) {
+
+        if (correct) {
+            mTutor.countCorrect();
+        } else {
+            mTutor.countIncorrect();
+        }
+
+        PerformanceLogItem event = new PerformanceLogItem();
+
+        event.setUserId(RoboTutor.STUDENT_ID);
+        event.setSessionId(RoboTutor.SESSION_ID);
+        event.setGameId(mTutor.getUuid().toString());  // a new tutor is generated for each game, so this will be unique
+        event.setLanguage(CTutorEngine.language);
+        event.setTutorName(mTutor.getTutorName());
+        event.setTutorId(mTutor.getTutorId());
+        event.setPromotionMode(RoboTutor.getPromotionMode(event.getMatrixName()));
+        event.setLevelName(level);
+        event.setTaskName(task);
+        event.setProblemName(prompt);
+        event.setTotalProblemsCount(mTutor.getTotalQuestions());
+        event.setProblemNumber(_dataIndex);
+        event.setSubstepNumber(1);
+        event.setAttemptNumber(attempts);
+        event.setExpectedAnswer(prompt);
+        event.setUserResponse(choice);
+        event.setCorrectness(correct ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
+        event.setTimestamp(System.currentTimeMillis());
+
+        RoboTutor.perfLogManager.postPerformanceLog(event);
+
     }
 
 
@@ -324,6 +360,8 @@ public class TPicMatchComponent extends CPicMatch_Component implements ITutorObj
 
     public void loadJSON(JSONObject jsonObj, IScope scope) {
         super.loadJSON(jsonObj, scope);
+
+        mTutor.setTotalQuestions(NUM_PROBLEMS);
     }
 
     @Override

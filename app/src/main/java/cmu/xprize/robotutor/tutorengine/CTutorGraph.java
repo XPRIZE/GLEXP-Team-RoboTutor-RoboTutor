@@ -215,7 +215,7 @@ public class CTutorGraph implements ITutorGraph, ILoadableObject2, Animation.Ani
                             event.setLanguage(CTutorEngine.language);
                             event.setTaskName("ENDTUTOR");
                             event.setTimestamp(System.currentTimeMillis());
-                            RoboTutor.perfLogManager.postPerformanceLogWithoutContext(event);
+                            RoboTutor.perfLogManager.postPerformanceLogWithoutContext(event); // EVELYN_BUG_9_27 can we get the last tutor?
 
                             mTutor.post(TCONST.ENDTUTOR);
                         }

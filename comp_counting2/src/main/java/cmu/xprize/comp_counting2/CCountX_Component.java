@@ -227,7 +227,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
      * @param data the current element in the DataSource array.
      */
     protected void loadDataSet(CCountX_Data data) {
-        level = data.level;
+        level = Integer.toString(data.difficulty);
         task = data.task;
         layout = data.layout; // NOV_1 make this consistent w/ Anthony
         countStart = data.dataset[0];
@@ -287,7 +287,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
 
         }
-        trackAndLogPerformance("START","START","tap");
+        trackAndLogPerformance("START","START","tap","CORRECT");
 
 
         Log.d(TCONST.COUNTING_DEBUG_LOG, "target=" + countTarget + ";index=" + _dataIndex);
@@ -432,6 +432,11 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         }
 
     }
+
+    public void stopQueue(){
+        surfaceView.tapped = true;
+    }
+
 
 //    public void playTenIns(){
 //        if(mode == "placevalue" && !surfaceView.tapped){
@@ -590,14 +595,14 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
     }
 
     public void demonstrateTenFrame() {
-        trackAndLogPerformance("END","END","tap");
+        trackAndLogPerformance("END","END","tap","CORRECT");
 
 
         if (mode == "placevalue"){
             checkHundred.setVisibility(View.INVISIBLE);
             checkTen.setVisibility(View.INVISIBLE);
             checkOne.setVisibility(View.INVISIBLE);
-            trackAndLogPerformance("STARTWRITING",String.valueOf(difficulty),"tap");
+            trackAndLogPerformance("STARTWRITING",String.valueOf(difficulty),"tap","CORRECT");
 
             if (difficulty == 0) {
                 String[] displayOptions = {"hundred","ten","one"};
@@ -623,7 +628,8 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
                     surfaceView.displayAddition("hundred");
                     surfaceView.displayAddition("ten");
                     surfaceView.displayAddition("one");
-                    playTwoAddition();
+                    surfaceView.displayAddition("result");
+                    playThreeAddition();
                 }
 
             } else if (difficulty == 1){
@@ -675,12 +681,14 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
                     changeWritePosition(0);
                     surfaceView.pickedBox = 0;
                 }
+                surfaceView.startWrite();
                 if(countTarget<=100){
                     new java.util.Timer().schedule(
                             new java.util.TimerTask() {
                                 @Override
                                 public void run() {
                                     displayWrittingIns();
+
                                 }
                             },
                             2500
@@ -749,11 +757,15 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
     }
     public void highlightThird(){
         surfaceView.updateHighlight(2);
+        if(twoAddition){
+            surfaceView.startWrite();
+        }
 
     }
 
     public void highlightForth(){
         surfaceView.updateHighlight(3);
+        surfaceView.startWrite();
 
     }
 
@@ -770,7 +782,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
     }
 
-    protected void trackAndLogPerformance(String expected,String actual,String movement) {}
+    protected void trackAndLogPerformance(String expected,String actual,String movement,String cor) {}
 
 
 

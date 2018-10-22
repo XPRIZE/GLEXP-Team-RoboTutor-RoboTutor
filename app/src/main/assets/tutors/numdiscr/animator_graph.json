@@ -12,16 +12,30 @@
 
       "queueMap": {
 
+        "INPUT_HESITATION_FEEDBACK": {
+          "type": "QUEUE",
+          "COMMENT": "provide prompt after student hesitates",
+          "tracks": [
+
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "tap the larger number.mp3",            "soundpackage":"nd",        "volume": 1.0, "mode":"flow"},
+
+            {"name": "RESET TIMED HESITATION PROMPT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "triggerHesitationFeedback", "parms": "", "features": ""}
+          ]
+        },
+
         // scaffold highlighting
         "HIGHLIGHT_HUNS": {
           "type": "QUEUE",
           "COMMENT": "highlight the hundreds column and explain how to compare numbers",
           "tracks": [
-            {"name": "DISABLE TAPPING", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "lockUserInput"},
-            {"name": "first compare hundreds", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "first compare the hundreds.mp3", "soundpackage": "proto", "volume": 1.0, "mode":"flow"},
+            // deprecated -- don't lock user input anymore
+            // {"name": "DISABLE TAPPING", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "lockUserInput"},
+            {"name": "first compare hundreds", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "first compare the hundreds.mp3", "soundpackage": "nd", "volume": 1.0, "mode":"flow"},
             {"name": "HIGHLIGHT_UNITS", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "highlightHunsColumn"},
+            // // COMPARE_AUDIO (0)     Both numbers have the same number of hundreds.mp3
+            // // COMPARE_AUDIO (0)    This number has more hundreds than the other number so it is bigger.mp3
             {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitMore}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow"},
-            {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitCompare}}.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"},
+            {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitCompare}}.mp3",            "soundpackage":"nd",        "volume": 1.0, "mode":"flow"},
             {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitLess}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow"},
             {"name": "CHECK HIGHLIGHT NEXT DIGIT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "highlightNextScaffoldDigit"}
 
@@ -32,10 +46,13 @@
           "type": "QUEUE",
           "COMMENT": "highlight the tens column and explain how to compare numbers",
           "tracks": [
-            {"name": "compare tens", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "now compare the tens.mp3", "soundpackage": "proto", "volume": 1.0, "mode":"flow"},
+            {"name": "compare tens", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "now compare the tens.mp3", "soundpackage": "nd", "volume": 1.0, "mode":"flow", "features":"!FTR_TEN_FIRST"},
+            {"name": "compare tens", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "first compare the tens.mp3", "soundpackage": "nd", "volume": 1.0, "mode":"flow", "features":"FTR_TEN_FIRST"},
             {"name": "NEXT DIGIT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "highlightTensColumn"},
+            //  // COMPARE_AUDIO (0)    Both numbers have the same number of tens.mp3
+            //  // COMPARE_AUDIO (0)    This number has more tens than the other number so it is bigger.mp3
             {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitMore}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow"},
-            {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitCompare}}.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"},
+            {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitCompare}}.mp3",            "soundpackage":"nd",        "volume": 1.0, "mode":"flow"},
             {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitLess}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow"},
             {"name": "CHECK HIGHLIGHT NEXT DIGIT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "highlightNextScaffoldDigit"}
           ]
@@ -45,10 +62,12 @@
           "type": "QUEUE",
           "COMMENT": "highlight the ones column and explain how to compare numbers",
           "tracks": [
-            {"name": "now compare ones", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "now compare the ones.mp3", "soundpackage": "proto", "volume": 1.0, "mode":"flow"},
+            {"name": "now compare ones", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "now compare the ones.mp3", "soundpackage": "nd", "volume": 1.0, "mode":"flow", "features":"!FTR_ONE_FIRST"},
+            {"name": "first compare ones", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "first compare the ones.mp3", "soundpackage": "nd", "volume": 1.0, "mode":"flow", "features":"FTR_ONE_FIRST"},
             {"name": "NEXT DIGIT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "highlightOnesColumn"},
+            //  // COMPARE_AUDIO (0)    This number has more ones than the other number so it is bigger.mp3 (publish feature)
             {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitMore}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow"},
-            {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitCompare}}.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"},
+            {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitCompare}}.mp3",            "soundpackage":"nd",        "volume": 1.0, "mode":"flow"},
             {"name": "compare digits", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.digitLess}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow"},
             {"name": "CHECK HIGHLIGHT NEXT DIGIT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "highlightNextScaffoldDigit"}
           ]
@@ -58,13 +77,6 @@
           "type": "QUEUE",
           "tracks": [
             {"name": "POINT AT CORRECT DIGIT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "pointAtCorrectDigit"},
-            {"name": "point at this number", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "so.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"},
-            // ND_SCAFFOLD NEXT(1) make sure to check for correct features
-            {"name": "hundy boi", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.hun}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow"},
-            {"name": "and",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Na.mp3",            "soundpackage":"xprize",        "volume": 1.0, "mode":"flow"},
-            {"name": "tenny boi", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.ten}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow"},
-            {"name": "and",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Na.mp3",            "soundpackage":"xprize",        "volume": 1.0, "mode":"flow"},
-            {"name": "wunny boi", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.one}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow"},
             // so
             // {mia x}
             // na
@@ -72,9 +84,15 @@
             // na
             // {z}
             // is the bigger number
-            {"name": "point at this number", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "is the bigger number.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"},
+            {"name": "point at this number", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "So the bigger number is.mp3",            "soundpackage":"nd",        "volume": 1.0, "mode":"flow"},
+            {"name": "hundy boi", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.hun}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow", "features":"FTR_SAY_HUNS"},
+            {"name": "and",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Na.mp3",            "soundpackage":"nd",        "volume": 1.0, "mode":"flow", "features":"FTR_SAY_NA_TENS"},
+            {"name": "tenny boi", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.ten}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow", "features":"FTR_SAY_TENS"},
+            {"name": "and",       "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Na.mp3",            "soundpackage":"nd",        "volume": 1.0, "mode":"flow", "features":"FTR_SAY_NA_ONES"},
+            {"name": "wunny boi", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{SNumDiscr.one}}.mp3",            "soundpackage":"numbers",        "volume": 1.0, "mode":"flow", "features":"FTR_SAY_ONES"},
             {"name": "CLEAR HIGHLIGHT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "clearHighlight"},
-            {"name": "DISABLE TAPPING", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "enableUserInput"}
+            {"name": "DISABLE TAPPING", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "enableUserInput"},
+            {"name": "SET TIMED HESITATION PROMPT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "triggerHesitationFeedback", "parms": "", "features": ""}
           ]
         }
 
@@ -188,7 +206,7 @@
           "tracks": [
               
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#PLAYINTRO:String", "features":""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Lets compare numbers.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Lets compare numbers.mp3",            "soundpackage":"nd",        "volume": 1.0, "mode":"flow"}
 
 
             ]
@@ -201,7 +219,8 @@
               
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""},
             {"name": "UPDATE_STIMULUS", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "updateStimulus"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "tap on the bigger number.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "tap the larger number.mp3",            "soundpackage":"nd",        "volume": 1.0, "mode":"flow"},
+            {"type": "COMMAND", "id": "SNumDiscr", "method": "playWorkedExampleOrSetHesitation", "parms": "" ,"features":""}
     
           ]
         },
@@ -220,11 +239,10 @@
         "ND_PLAYCORRECT": {
           "type": "MODULE",
           "COMMENT": "Feedback for Correct",
-          "preenter": [],
           "reuse": true,
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#ND_PLAYCORRECT:String", "features":""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Correct.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3",            "soundpackage":"nd",        "volume": 1.0, "mode":"flow"},
             {"name": "ND_WRONG", "type": "COMMAND", "id": "SNumDiscr", "method": "doTheRightThing", "parms": "", "features":""},
             // ND_SCAFFOLD say the correct number
             {"type": "COMMAND", "cmd": "WAIT"  }
@@ -241,7 +259,7 @@
           "reuse": true,
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#ND_PLAYWRONG:String", "features":""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3",            "soundpackage":"proto",        "volume": 1.0, "mode":"flow"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Try again.mp3",            "soundpackage":"nd",        "volume": 1.0, "mode":"flow"},
             {"name": "ND_WRONG", "type": "COMMAND", "id": "SNumDiscr", "method": "doTheWrongThing", "parms": "", "features":""},
             {"type": "COMMAND", "cmd": "WAIT"  }
 
@@ -270,7 +288,6 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SNumDiscr", "method": "logState", "parms": "type#node,value#WAIT_FOR_INPUT:String", "features":""},
 
             {"type": "COMMAND", "id": "SNumDiscr", "method": "setVolatileBehavior", "parms": "SELECT_ANSWER_EVENT:String|NEXTNODE:String" ,"features":""},
-            {"type": "COMMAND", "id": "SNumDiscr", "method": "playWorkedExample", "parms": "" ,"features":""},
 
 
             {"type": "COMMAND", "cmd": "WAIT"}
@@ -294,6 +311,12 @@
         "COMMENT": "@@@@@  CActions @@@@@ ",
 
         "SET_VERSION":{"type": "COMMAND", "id": "Sbanner", "method": "setVersionID", "parms": "v.0.0.1:String","features":""},
+
+        // these are applied directly (see ND_CONST)
+        "CANCEL_HIGHLIGHT_HUNS":  {"type": "COMMAND", "id": "HIGHLIGHT_HUNS", "method": "cancelNode", "parms": "", "features":""},
+        "CANCEL_HIGHLIGHT_TENS":  {"type": "COMMAND", "id": "HIGHLIGHT_TENS", "method": "cancelNode", "parms": "", "features":""},
+        "CANCEL_HIGHLIGHT_ONES":  {"type": "COMMAND", "id": "HIGHLIGHT_ONES", "method": "cancelNode", "parms": "", "features":""},
+        "CANCEL_INDICATE_CORRECT":{"type": "COMMAND", "id": "INDICATE_CORRECT", "method": "cancelNode", "parms": "", "features":""},
 
         // this is so unnecessary
         "SET_WRONG_BEHAVIOR": {"type": "COMMAND", "id": "SNumDiscr", "method": "setStickyBehavior", "parms": "ND_WRONG:String|ND_WRONG:String" ,"features":""},

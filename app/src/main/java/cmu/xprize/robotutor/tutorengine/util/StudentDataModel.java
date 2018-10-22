@@ -8,17 +8,16 @@ import com.google.gson.Gson;
 
 import java.util.Map;
 
-import cmu.xprize.comp_session.AS_CONST;
 import cmu.xprize.robotutor.RoboTutor;
+import cmu.xprize.robotutor.startup.configuration.Configuration;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.util.CPlacementTest_Tutor;
-import cmu.xprize.util.TCONST;
 
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_MATH;
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING;
 import static cmu.xprize.util.TCONST.LANG_SW;
-import static cmu.xprize.util.TCONST.LAST_TUTOR;
+import static cmu.xprize.util.TCONST.MENU_BUG_TAG;
 import static cmu.xprize.util.TCONST.PLACEMENT_TAG;
 
 /**
@@ -43,8 +42,16 @@ public class StudentDataModel {
     private final static String WRITING_PLACEMENT_KEY = "WRITING_PLACEMENT";
     private final static String WRITING_PLACEMENT_INDEX_KEY = "WRITING_PLACEMENT_INDEX";
 
+    // these match TCONST
+    private static final String CURRENT_WRITING_TUTOR_KEY   = "letters";
+    private static final String CURRENT_STORIES_TUTOR_KEY    = "stories";
+    private static final String CURRENT_MATH_TUTOR_KEY       = "numbers";
+
+    private  static final String LAST_TUTOR_PLAYED_KEY = "LAST_TUTOR_PLAYED";
+
+
     // new way cycles through skills
-    private static final boolean NEW_WAY = true;
+    private static final boolean CYCLE_MATRIX = true;
     private static final String SKILL_SELECTED_KEY = "SKILL_SELECTED";
     // sets to true when student selects repeat
     private static final String IS_REPEATING_LAST_KEY = "IS_REPEATING_LAST";
@@ -71,18 +78,18 @@ public class StudentDataModel {
      */
     public static void createNewStudent() {
         _editor = _preferences.edit();
-        _editor.putString(HAS_PLAYED_KEY, String.valueOf(true));
+        _editor.putString(StudentDataModel.HAS_PLAYED_KEY, String.valueOf(true));
 
         // writing: Placement = true. Placement Index starts at 0
-        _editor.putBoolean(StudentDataModel.WRITING_PLACEMENT_KEY, CTutorEngine.language.equals(LANG_SW) && !RoboTutor.TURN_OFF_PLACEMENT_FOR_QA);
+        _editor.putBoolean(StudentDataModel.WRITING_PLACEMENT_KEY, CTutorEngine.language.equals(LANG_SW) && Configuration.usePlacement(RoboTutor.ACTIVITY));
         _editor.putInt(StudentDataModel.WRITING_PLACEMENT_INDEX_KEY, 0);
 
         // math: Placement = true. Placement Index starts at 0
-        _editor.putBoolean(StudentDataModel.MATH_PLACEMENT_KEY, CTutorEngine.language.equals(LANG_SW) &&  !RoboTutor.TURN_OFF_PLACEMENT_FOR_QA);
+        _editor.putBoolean(StudentDataModel.MATH_PLACEMENT_KEY, CTutorEngine.language.equals(LANG_SW) &&  Configuration.usePlacement(RoboTutor.ACTIVITY));
         _editor.putInt(StudentDataModel.MATH_PLACEMENT_INDEX_KEY, 0);
 
-        if(NEW_WAY) {
-            _editor.putString(SKILL_SELECTED_KEY, SELECT_WRITING);
+        if(CYCLE_MATRIX) {
+            _editor.putString(StudentDataModel.SKILL_SELECTED_KEY, SELECT_WRITING);
         }
 
         _editor.apply();
@@ -95,7 +102,7 @@ public class StudentDataModel {
     public void initializeTutorPositions(TransitionMatrixModel matrix) {
 
         // initialize math placement
-        boolean useMathPlacement = getMathPlacement() && CTutorEngine.language.equals(LANG_SW) &&  !RoboTutor.TURN_OFF_PLACEMENT_FOR_QA;
+        boolean useMathPlacement = getMathPlacement() && CTutorEngine.language.equals(LANG_SW) &&  Configuration.usePlacement(RoboTutor.ACTIVITY);
 
         RoboTutor.logManager.postEvent_V(PLACEMENT_TAG, String.format("useMathPlacement = %s", useMathPlacement));
         if(useMathPlacement) {
@@ -110,17 +117,17 @@ public class StudentDataModel {
         }
 
         // initialize writing placement
-        boolean useWritingPlacement = getWritingPlacement() && CTutorEngine.language.equals(LANG_SW) &&  !RoboTutor.TURN_OFF_PLACEMENT_FOR_QA;
+        boolean useWritingPlacement = getWritingPlacement() && CTutorEngine.language.equals(LANG_SW) &&  Configuration.usePlacement(RoboTutor.ACTIVITY);
         RoboTutor.logManager.postEvent_V(PLACEMENT_TAG, String.format("useWritingPlacement = %s", useWritingPlacement));
         if (useWritingPlacement) {
             int writingPlacementIndex = getWritingPlacementIndex();
             CPlacementTest_Tutor writePlacementTutor = matrix.writePlacement[writingPlacementIndex];
             RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("writePlacementIndex = %d", writingPlacementIndex));
             String writingTutorID = writePlacementTutor.tutor;
-            updateWritingTutorID(writingTutorID);
+            updateWritingTutorID(writingTutorID); // MENU_LOGIC (XXX) why is updateWritingTutorID("story.hear::story_1")
             RoboTutor.logManager.postEvent_I(PLACEMENT_TAG, String.format("writingTutorID = %s", writingTutorID));
         } else {
-            updateWritingTutorID(matrix.rootSkillWrite);
+            updateWritingTutorID(matrix.rootSkillWrite); // MENU_LOGIC (XXX) why is updateWritingTutorID("story.hear::story_1")
         }
 
         // stories doesn't have placement testing, so initialize at root
@@ -140,44 +147,61 @@ public class StudentDataModel {
     }
 
     public String getWritingTutorID() {
-        return _preferences.getString(TCONST.SKILL_WRITING, null);
+        return _preferences.getString(CURRENT_WRITING_TUTOR_KEY, null);
     }
 
+    // MENU_SOLUTION
+    // (1) add useful logs https://stackoverflow.com/questions/6891348/is-there-any-way-to-automatically-log-the-method-name-in-android
+    // (2) fix wacky logic
+    // (3) ship it...
+    // MENU_LOGIC id = "story.hear::story_1" ?
     public void updateWritingTutorID(String id) {
+        String Method = Thread.currentThread().getStackTrace()[2].getMethodName();
+        String Method2 = Thread.currentThread().getStackTrace()[3].getMethodName();
+        RoboTutor.logManager.postEvent_I(MENU_BUG_TAG, Method2 + " --> " + Method + "(" + id + ")");
+
         _editor = _preferences.edit();
-        _editor.putString(TCONST.SKILL_WRITING, id);
+        _editor.putString(StudentDataModel.CURRENT_WRITING_TUTOR_KEY, id);
         _editor.apply();
     }
 
     public String getStoryTutorID() {
-        return _preferences.getString(TCONST.SKILL_STORIES, null);
+        return _preferences.getString(CURRENT_STORIES_TUTOR_KEY, null);
     }
 
     public void updateStoryTutorID(String id) {
+        String Method = Thread.currentThread().getStackTrace()[2].getMethodName();
+        String Method2 = Thread.currentThread().getStackTrace()[3].getMethodName();
+        RoboTutor.logManager.postEvent_I(MENU_BUG_TAG, Method2 + " --> " + Method + "(" + id + ")");
+
         _editor = _preferences.edit();
-        _editor.putString(TCONST.SKILL_STORIES, id);
+        _editor.putString(StudentDataModel.CURRENT_STORIES_TUTOR_KEY, id);
         _editor.apply();
     }
 
     public String getMathTutorID() {
-        return _preferences.getString(TCONST.SKILL_MATH, null);
+        return _preferences.getString(CURRENT_MATH_TUTOR_KEY, null);
     }
 
     public void updateMathTutorID(String id) {
+        String Method = Thread.currentThread().getStackTrace()[2].getMethodName();
+        String Method2 = Thread.currentThread().getStackTrace()[3].getMethodName();
+        RoboTutor.logManager.postEvent_I(MENU_BUG_TAG, Method2 + " --> " + Method + "(" + id + ")");
+
         _editor = _preferences.edit();
-        _editor.putString(TCONST.SKILL_MATH, id);
+        _editor.putString(StudentDataModel.CURRENT_MATH_TUTOR_KEY, id);
         _editor.apply();
     }
 
     public String getActiveSkill() {
-        String activeSkill = _preferences.getString(SKILL_SELECTED_KEY, SELECT_STORIES);
+        String activeSkill = _preferences.getString(SKILL_SELECTED_KEY, SELECT_WRITING); // MENU_LOGIC should this have a default???
         Log.wtf("ACTIVE_SKILL", "get=" + activeSkill);
         return activeSkill;
     }
 
     public void updateActiveSkill(String skill) {
         _editor = _preferences.edit();
-        _editor.putString(SKILL_SELECTED_KEY, skill);
+        _editor.putString(StudentDataModel.SKILL_SELECTED_KEY, skill);
         _editor.apply();
         Log.wtf("ACTIVE_SKILL", "update=" + skill);
     }
@@ -201,7 +225,7 @@ public class StudentDataModel {
 
         int index = SKILL_INDEX == 0 ? SKILL_CYCLE.length -1 : SKILL_INDEX - 1;
 
-        Log.d("REPEAT_ME", "SKILL_INDEX=" + SKILL_INDEX + ", new_index=" + index);
+        Log.d("REPEAT_ME", "SKILL_INDEX=" + SKILL_INDEX + ", new_index=" + index); // MENU_LOGIC "0", "3"
         return SKILL_CYCLE[index];
     }
 
@@ -221,44 +245,46 @@ public class StudentDataModel {
         return  _preferences.getInt(MATH_PLACEMENT_INDEX_KEY, 0);
     }
 
+
     void updateLastTutor(String activeTutorId) {
         _editor = _preferences.edit();
-        _editor.putString (TCONST.LAST_TUTOR, activeTutorId);
+        _editor.putString (StudentDataModel.LAST_TUTOR_PLAYED_KEY, activeTutorId);
         _editor.apply();
     }
 
+    // MENU_LOGIC only called once
     public String getLastTutor() {
-        return _preferences.getString(LAST_TUTOR, null);
+        return _preferences.getString(LAST_TUTOR_PLAYED_KEY, null);
     }
 
     void updateMathPlacement(boolean b) {
         _editor = _preferences.edit();
-        _editor.putBoolean(MATH_PLACEMENT_KEY, b);
+        _editor.putBoolean(StudentDataModel.MATH_PLACEMENT_KEY, b);
         _editor.apply();
     }
 
     void updateMathPlacementIndex(Integer i) {
         _editor = _preferences.edit();
         if (i == null) {
-            _editor.remove(MATH_PLACEMENT_INDEX_KEY);
+            _editor.remove(StudentDataModel.MATH_PLACEMENT_INDEX_KEY);
         } else {
-            _editor.putInt(MATH_PLACEMENT_INDEX_KEY, i);
+            _editor.putInt(StudentDataModel.MATH_PLACEMENT_INDEX_KEY, i);
         }
         _editor.apply();
     }
 
     void updateWritingPlacement(boolean b) {
         _editor = _preferences.edit();
-        _editor.putBoolean("WRITING_PLACEMENT", b);
+        _editor.putBoolean(StudentDataModel.WRITING_PLACEMENT_KEY, b);
         _editor.apply();
     }
 
     void updateWritingPlacementIndex(Integer i) {
         _editor = _preferences.edit();
         if (i == null) {
-            _editor.remove(WRITING_PLACEMENT_INDEX_KEY);
+            _editor.remove(StudentDataModel.WRITING_PLACEMENT_INDEX_KEY);
         } else {
-            _editor.putInt(WRITING_PLACEMENT_INDEX_KEY, i);
+            _editor.putInt(StudentDataModel.WRITING_PLACEMENT_INDEX_KEY, i);
         }
         _editor.apply();
     }
@@ -269,14 +295,18 @@ public class StudentDataModel {
      * @return
      */
     public int getTimesPlayedTutor(String tutor) {
-        String key = tutor + "_TIMES_PLAYED";
+        String key = getTimesPlayedKey(tutor);
         return _preferences.getInt(key, 0);
     }
 
     public void updateTimesPlayedTutor(String tutor, int i) {
         _editor = _preferences.edit();
-        _editor.putInt(tutor, i);
+        _editor.putInt(getTimesPlayedKey(tutor), i);
         _editor.apply();
+    }
+
+    private String getTimesPlayedKey(String tutor) {
+        return tutor + "_TIMES_PLAYED";
     }
 
 

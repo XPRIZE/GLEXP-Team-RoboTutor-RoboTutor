@@ -45,25 +45,24 @@ public class PerformancePromotionRules extends PromotionRules {
 
 
     @Override
-    public SelectedActivity selectActivityByPerformance(PerformanceData performance) {
+    public PromotionDecision assessPerformance(PerformanceData performance) {
         RoboTutor.logManager.postEvent_D(TAG, performance.toString());
 
         // if they want to play again, repeat no matter what
         if (performance.getSelfAssessment() == PerformanceData.StudentSelfAssessment.PLAY_AGAIN) {
-            return SelectedActivity.SAME;
+            return PromotionDecision.SAME;
         }
 
-        // make it so if in story.hear... the smiley face actually does something? They may have gotten used to being able to navigate...
-        // if student is in the "stories" skill, then give them ability to navigate. Otherwise they could never repeat a story again without cycling through end.
-        if (performance.getActiveSkill().equals(AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES)) {
-            return SelectedActivity.NEXT;
+
+        if (performance.getActiveSkill().equals(AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES) && !RoboTutor.STUDENT_CHOSE_REPEAT) {
+            return PromotionDecision.NEXT;
         }
 
         // test Non-assessable activities
         if (performance.getActivityType() != null) {
             for (String type : nonAssessableActivities) {
                 if (performance.getActivityType().startsWith(type)) {
-                    return SelectedActivity.NEXT;
+                    return PromotionDecision.NEXT;
                 }
             }
         }
@@ -73,7 +72,7 @@ public class PerformancePromotionRules extends PromotionRules {
         // if they start an activity but don't like it.... what do?
         if (performance.getNumberAttempts() <= MIN_NUM_ATTEMPTS && performance.getTotalNumberQuestions() > 3) {
             // equiprobably go to next or previous
-            return Math.random() > 0.5 ? SelectedActivity.NEXT : SelectedActivity.PREVIOUS;
+            return Math.random() > 0.5 ? PromotionDecision.NEXT : PromotionDecision.PREVIOUS;
         }
 
         // prevent divide by zero
@@ -101,16 +100,16 @@ public class PerformancePromotionRules extends PromotionRules {
 
         if (percentCorrect >= high_threshold) {
             // 50/50 probability
-            return Math.random() > 0.5 ? SelectedActivity.NEXT : SelectedActivity.DOUBLE_NEXT;
+            return Math.random() > 0.5 ? PromotionDecision.NEXT : PromotionDecision.DOUBLE_NEXT;
         } else if (percentCorrect >= mid_threshold) {
             // pass to next
-            return SelectedActivity.NEXT;
+            return PromotionDecision.NEXT;
         } else if (percentCorrect >= low_threshold) {
             // repeat
-            return SelectedActivity.SAME;
+            return PromotionDecision.SAME;
         } else {
             // drop down to lower level
-            return SelectedActivity.PREVIOUS;
+            return PromotionDecision.PREVIOUS;
         }
     }
 

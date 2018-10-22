@@ -32,7 +32,7 @@
         android:layout_height="0dp"
         android:id="@+id/imageBottom"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5"/>
+        app:layout_constraintGuide_percent="0.6"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/keyboardBottom"
@@ -51,8 +51,8 @@
     <!-- NAPOL add image -->
     <ImageView
         android:id="@+id/imageStimulus"
-        android:layout_width="400dp"
-        android:layout_height="400dp"
+        android:layout_width="500dp"
+        android:layout_height="500dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/imageBottom"

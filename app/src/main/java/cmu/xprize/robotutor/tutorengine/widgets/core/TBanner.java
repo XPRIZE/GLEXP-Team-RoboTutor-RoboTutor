@@ -20,22 +20,21 @@ package cmu.xprize.robotutor.tutorengine.widgets.core;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
 import cmu.xprize.banner.CBanner;
+import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.comp_logging.PerformanceLogItem;
-import cmu.xprize.robotutor.BuildConfig;
 import cmu.xprize.robotutor.R;
 import cmu.xprize.robotutor.RoboTutor;
-import cmu.xprize.robotutor.tutorengine.CTutor;
+import cmu.xprize.robotutor.startup.configuration.Configuration;
 import cmu.xprize.robotutor.tutorengine.CObjectDelegate;
+import cmu.xprize.robotutor.tutorengine.CTutor;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorGraph;
 import cmu.xprize.robotutor.tutorengine.ITutorObject;
 import cmu.xprize.robotutor.tutorengine.ITutorSceneImpl;
-import cmu.xprize.comp_logging.ILogManager;
 
 import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 
@@ -96,7 +95,7 @@ public class TBanner extends CBanner implements ITutorObject, View.OnClickListen
         event.setLanguage(CTutorEngine.language);
         event.setTaskName("BACKBUTTON:PRESSED");
         event.setTimestamp(System.currentTimeMillis());
-        RoboTutor.perfLogManager.postPerformanceLogWithoutContext(event);
+        RoboTutor.perfLogManager.postPerformanceLogWithoutContext(event); // EVELYN_BUG_9_27 can we get the last tutor?
 
         mBackButton.setOnClickListener(null);
         mSceneObject.endTutor();
@@ -131,14 +130,14 @@ public class TBanner extends CBanner implements ITutorObject, View.OnClickListen
 
         mTutor_Ver = "";
 
-        if (BuildConfig.SHOW_TUTORVERSION) {
+        if (Configuration.showTutorVersion(getContext())) {
 
             // #Mod 330 Show TutorID in Banner in debug builds
             //
             mTutor_Ver = TActivitySelector.DEBUG_TUTORID + ".";
 
             //mTutor_Ver += versionID; // not sure why this versionID was used, as it seems to have no significance
-            mTutor_Ver += "v" + BuildConfig.VERSION_NAME;
+            mTutor_Ver += "v" + Configuration.configVersion(getContext());
 
             mVersion.setText(mTutor_Ver);
         }

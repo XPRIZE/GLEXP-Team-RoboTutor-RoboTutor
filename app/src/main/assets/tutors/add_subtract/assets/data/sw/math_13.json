@@ -1,0 +1,26 @@
+{
+  "bootFeatures":"FTR_DEMO_ADD_ZERO",
+
+  "dataSource": [
+
+    {"type":"Asm_Data", "level":"asm_13", "task":"1-digit add allow 0 no carry ", "dataset":[5, 0, 5], "operation":"+", "image": "square"},
+
+    {"type":"Asm_Data", "level":"asm_13", "task":"1-digit add allow 0 no carry ", "dataset":[2, 3, 5], "operation":"+", "image": "triangle"},
+
+    {"type":"Asm_Data", "level":"asm_13", "task":"1-digit add allow 0 no carry ", "dataset":[1, 1, 2], "operation":"+", "image": "circle"},
+
+    {"type":"Asm_Data", "level":"asm_13", "task":"1-digit add allow 0 no carry ", "dataset":[4, 1, 5], "operation":"+", "image": "star"},
+
+    {"type":"Asm_Data", "level":"asm_13", "task":"1-digit add allow 0 no carry ", "dataset":[4, 4, 8], "operation":"+", "image": "pentagon"},
+
+    {"type":"Asm_Data", "level":"asm_13", "task":"1-digit add allow 0 no carry ", "dataset":[4, 2, 6], "operation":"+", "image": "pentagon"},
+
+    {"type":"Asm_Data", "level":"asm_13", "task":"1-digit add allow 0 no carry ", "dataset":[4, 1, 5], "operation":"+", "image": "pentagon"},
+
+    {"type":"Asm_Data", "level":"asm_13", "task":"1-digit add allow 0 no carry ", "dataset":[6, 1, 7], "operation":"+", "image": "hexagon"},
+
+    {"type":"Asm_Data", "level":"asm_13", "task":"1-digit add allow 0 no carry ", "dataset":[7, 1, 8], "operation":"+", "image": "triangle"},
+
+    {"type":"Asm_Data", "level":"asm_13", "task":"1-digit add allow 0 no carry ", "dataset":[7, 0, 7], "operation":"+", "image": "triangle"}
+  ]
+}

@@ -31,10 +31,12 @@ public class CAudioLogThread extends Thread {
 
     private final String logDir;
     private final String logFileName;
+    private final boolean writeToFile;
 
-    public CAudioLogThread(String logDir, String logFileName) {
+    public CAudioLogThread(String logDir, String logFileName, boolean writeToFile) {
         this.logFileName = logFileName;
         this.logDir = logDir;
+        this.writeToFile = writeToFile;
     }
 
     @Override
@@ -48,7 +50,14 @@ public class CAudioLogThread extends Thread {
         try {
             android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
 
-            output = new FileOutputStream(new File(logDir, logFileName + ".raw"));
+
+            if (writeToFile) {
+                File outputFolder = new File(logDir);
+                if (!outputFolder.exists())
+                    outputFolder.mkdir();
+
+                output = new FileOutputStream(logDir + logFileName + ".raw");
+            }
 
             recorder = new AudioRecord(MediaRecorder.AudioSource.VOICE_RECOGNITION, SAMPLERATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, AUDIO_BUFFER_SIZE);
 
@@ -56,13 +65,13 @@ public class CAudioLogThread extends Thread {
                 // Ensure we are recording while the thread is running.
                 //
                 if (!isRecording) {
-                    Log.i("AudioLog", "Resume recording");
+                    Log.v("AudioLog", "Resume recording");
                     recorder.startRecording();
                     isRecording = true;
                     readCount = 0;
                 } else {
                     readCount = recorder.read(buffer, 0, BUFFER_SIZE);
-                    Log.i("AudioLog", "Read from recorder: read_count = " + readCount);
+                    // Log.v("AudioLog", "Read from recorder: read_count = " + readCount);
                 }
 
                 if (readCount == AudioRecord.ERROR_INVALID_OPERATION || readCount == AudioRecord.ERROR_BAD_VALUE) {
@@ -70,8 +79,10 @@ public class CAudioLogThread extends Thread {
                     throw new RuntimeException("error reading from recorder");
                 } else {
                     try {
-                        writeBuffer(buffer, readCount);
-                        for (int i = 0; i < readCount; i++) writeShort(output, buffer[i]);
+                        if (writeToFile) {
+                            writeBuffer(buffer, readCount);
+                            for (int i = 0; i < readCount; i++) writeShort(output, buffer[i]);
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -83,20 +94,22 @@ public class CAudioLogThread extends Thread {
 
         } finally {
             try {
-                Log.i("AudioLog", "Stop session");
+                Log.v("AudioLog", "Stop session");
 
                 recorder.stop();
 
                 readCount = recorder.read(buffer, 0, buffer.length);
-                for (int i = 0; i < readCount; i++) writeShort(output, buffer[i]);
-                Log.i("AudioLog", "Final read from recorder: read_count = " + readCount);
+                if (writeToFile) for (int i = 0; i < readCount; i++) writeShort(output, buffer[i]);
+                Log.v("AudioLog", "Final read from recorder: read_count = " + readCount);
 
                 recorder.release();
 
-                output.close();
+                if (writeToFile) {
+                    output.close();
 
-                // convert raw capture to wav format
-                convertRawToWav(new File(logDir, logFileName + ".raw"), new File(logDir, logFileName + ".wav"));
+                    // convert raw capture to wav format
+                    convertRawToWav(new File(logDir, logFileName + ".raw"), new File(logDir, logFileName + ".wav"));
+                }
 
             } catch (IOException e) {
                 Log.e("AudioLog", "Closing streams: " + e.getMessage());

@@ -3,6 +3,7 @@
 
 "dataSource": [
 
+  {"type":"CBigMath_Data", "level":"demo", "task":" Count up by 10","dataset": [10,80,90],"operation": "+"},
 {"type":"CBigMath_Data", "level":"demo", "task":" Count up by 10","dataset": [30,10,40],"operation": "+"},
 {"type":"CBigMath_Data", "level":"demo", "task":" Count up by 10","dataset": [70,10,80],"operation": "+"},
 {"type":"CBigMath_Data", "level":"demo", "task":" Count up by 10","dataset": [60,10,70],"operation": "+"},

@@ -1,0 +1,22 @@
+{
+"dataSource": [
+
+{"type":"Asm_Data", "level":"asm_24", "task":"Add or subtract multiples of 100", "dataset":[200, 500, 700], "operation":"+", "image": "circle"},
+  
+{"type":"Asm_Data", "level":"asm_24", "task":"Add or subtract multiples of 100", "dataset":[200, 400, 600], "operation":"+", "image": "square"},
+  
+{"type":"Asm_Data", "level":"asm_24", "task":"Add or subtract multiples of 100", "dataset":[300, 100, 400], "operation":"+", "image": "star"},
+  
+{"type":"Asm_Data", "level":"asm_24", "task":"Add or subtract multiples of 100", "dataset":[200, 100, 100], "operation":"-", "image": "triangle"},
+  
+{"type":"Asm_Data", "level":"asm_24", "task":"Add or subtract multiples of 100", "dataset":[500, 300, 800], "operation":"+", "image": "star"},
+  
+{"type":"Asm_Data", "level":"asm_24", "task":"Add or subtract multiples of 100", "dataset":[0, 0, 0], "operation":"+", "image": "star"},
+  
+{"type":"Asm_Data", "level":"asm_24", "task":"Add or subtract multiples of 100", "dataset":[0, 0, 0], "operation":"-", "image": "hexagon"},
+  
+{"type":"Asm_Data", "level":"asm_24", "task":"Add or subtract multiples of 100", "dataset":[300, 500, 800], "operation":"+", "image": "circle"},
+  
+{"type":"Asm_Data", "level":"asm_24", "task":"Add or subtract multiples of 100", "dataset":[300, 0, 300], "operation":"+", "image": "circle"},
+  
+{"type":"Asm_Data", "level":"asm_24", "task":"Add or subtract multiples of 100", "dataset":[0, 100, 100], "operation":"+", "image": "pentagon"}]}

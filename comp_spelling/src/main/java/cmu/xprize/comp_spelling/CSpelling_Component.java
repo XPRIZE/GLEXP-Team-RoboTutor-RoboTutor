@@ -22,17 +22,23 @@ import java.util.HashMap;
 import java.util.List;
 
 import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.util.IEvent;
+import cmu.xprize.util.IEventListener;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IPublisher;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.util.TCONST.AUDIO_EVENT;
+import static cmu.xprize.util.TCONST.FTR_EOD;
+import static cmu.xprize.util.TCONST.TYPE_AUDIO;
+
 /**
  * Generated automatically w/ code written by Kevin DeLand
  */
 
-public class CSpelling_Component extends ConstraintLayout implements ILoadableObject, IPublisher {
+public class CSpelling_Component extends ConstraintLayout implements ILoadableObject, IPublisher, IEventListener {
 
     //region Class Variables
 
@@ -44,6 +50,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     protected String level;
     protected String task;
     protected String layout;
+    private String _sound;
 
     private String IMAGES_PATH;
 
@@ -59,6 +66,8 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
     protected String _imageFileName;
     protected String _fullword;
     protected int _attemptCount;
+
+    protected boolean lastSyllable;
 
     // View
     protected Context mContext;
@@ -181,30 +190,36 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
 
         Log.d("ddd", "Touch: " + letter);
 
-        retractFeature(SP_CONST.FTR_CORRECT);
+        //retractFeature(SP_CONST.FTR_CORRECT);
         retractFeature(SP_CONST.FTR_INCORRECT);
 
         lockLetters();
 
         String current = "" + _word.get(_currentLetterIndex);
 
-        publishValue(SP_CONST.SYLLABLE_STIM, letter);
+        // publish the syllable to be pronounced
+        String pronunciation = mapLetterToVerbal(letter);
+        publishValue(SP_CONST.SYLLABLE_STIM, pronunciation);
 
         boolean isCorrect = letter.equalsIgnoreCase(current);
         trackAndLogPerformance(isCorrect, letter);
         if (isCorrect) {
             Log.d("ddd", "Correct");
             _selectedLetters.add(letter);
-            _selectableLetters.remove(index);
+            _selectableLetters.set(index, null);
 
+            applyBehaviorNode("SAY_SYLLABLE");
             updateLetter();
             _currentLetterIndex++;
-            publishFeature(SP_CONST.FTR_CORRECT);
+            // if correct
+            //publishFeature(SP_CONST.FTR_CORRECT);
             if (_currentLetterIndex >= _word.size()) {
                 Log.d("ddd", "end of word");
+
+                lastSyllable = true;
                 publishFeature(SP_CONST.FTR_EOP);
             }
-            applyBehavior("NEXT_NODE");
+
             _attemptCount = 1;
         } else {
             Log.d("ddd", "INCORRECT");
@@ -215,6 +230,25 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
             _attemptCount++;
         }
 
+    }
+
+    /**
+     * Map a letter to the pronunciation, e.g. to say "mm" instead of "me"
+     *
+     * @param letter
+     * @return
+     */
+    private String mapLetterToVerbal(String letter) {
+        switch (letter) {
+            case "m":
+                return "mm";
+
+            case "n":
+                return "nn";
+
+            default:
+                return letter;
+        }
     }
 
     public void revertColor() {
@@ -233,6 +267,26 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
 //        pointAtMyView();
     }
 
+
+    /**
+     * Called when the syllable is completed
+     * @param eventObject
+     */
+    @Override
+    public void onEvent(IEvent eventObject) {
+
+        if (eventObject.getType().equals(TYPE_AUDIO)) {
+            String command = (String) eventObject.getString(AUDIO_EVENT);
+
+            // don't advance until it's the last syllable
+            if (lastSyllable) {
+                publishValue(SP_CONST.WORD_STIM, _sound);
+                applyBehavior("NEXT_NODE");
+            }
+            Log.d("FIX_SPELLING", "onEvent -- " + command);
+        }
+    }
+
     public void updateLetter() {
 
         mLetterHolder.removeAllViewsInLayout();
@@ -240,7 +294,13 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
 
         int i = 0;
         for (String l : _selectableLetters) {
-            CLetter_Tile letter = new CLetter_Tile(mContext, l, i, this);
+
+            CLetter_Tile letter;
+            if (l == null) {
+                letter = new CLetter_Tile(mContext, null, i, this);
+            } else {
+                letter = new CLetter_Tile(mContext, l, i, this);
+            }
             i++;
             mLetterHolder.addView(letter);
         }
@@ -248,6 +308,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         int j = 0;
         for (String l : _selectedLetters) {
             CLetter_Tile letter = new CLetter_Tile(mContext, l, j, this);
+            letter.markCorrect();
             j++;
             mSelectedLetterHolder.addView(letter);
         }
@@ -328,7 +389,11 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
                 _dataIndex++;
             }
         } catch (Exception e) {
-            CErrorManager.logEvent(SP_CONST.TAG, "Data Exhuasted: call past end of data", e, false);
+            CErrorManager.logEvent(SP_CONST.TAG, "Data Exhuasted: call past end of data", e, true);
+        }
+
+        if (dataExhausted()) {
+            publishFeature(FTR_EOD);
         }
     }
 
@@ -350,12 +415,16 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
      */
     protected void loadDataSet(CSpelling_Data data) {
 
+        lastSyllable = false;
+
         level = data.level;
         task = data.task;
         layout = data.layout;
         _word = new ArrayList<>(Arrays.asList(data.word));
         _attemptCount = 1;
         _currentLetterIndex = 0;
+
+        _sound = data.sound;
 
         // TODO: Is there a join function?
         StringBuilder sb = new StringBuilder();
@@ -371,7 +440,7 @@ public class CSpelling_Component extends ConstraintLayout implements ILoadableOb
         _selectedLetters = new ArrayList<>();
         _imageFileName = data.image;
 
-        publishValue(SP_CONST.WORD_STIM, data.sound);
+        publishValue(SP_CONST.WORD_STIM, _sound);
     }
 
     /**

@@ -7,7 +7,6 @@ import android.support.percent.PercentRelativeLayout;
 import android.text.Html;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -62,21 +61,6 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
     private GridView      gridView;
     //private CSm_Component customView;
     private CDebugAdapter gridAdapter;
-
-
-    // CUSTOM_MENU (0) stash changes, checkout new branch from dev, unstash and commit
-    // CUSTOM_MENU (a2) merge num_compare
-    // CUSTOM_MENU (a2) merge kevin_asm into development
-    // CUSTOM_MENU (a3) add numcompare data sources
-    // CUSTOM_MENU (a3) test numcompare data sources briefly
-    // CUSTOM_MENU (a4) add numcompare menu (mimic 1)
-
-    // CUSTOM_MENU (b2) merge sentence_writing
-    // CUSTOM_MENU (b2) checkout amogh branch https://github.com/RoboTutorLLC/RoboTutor/pull/374
-    // CUSTOM_MENU (b2) test amogh branch
-    // CUSTOM_MENU (b2) merge amogh into development
-    // CUSTOM_MENU (b3) get list of tutor_desc, tutor_id, tutor_data.
-    // CUSTOM_MENU (b4) add sentence menu (mimic 1)
 
     private LinearLayout customView;
     //private Button SBpopCustom;
@@ -165,7 +149,6 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
         SAkiraCustom = (Button) findViewById(R.id.SAkiraCustom);
         SAsmCustom = (Button) findViewById(R.id.SAsmCustom);
         /* bubble pop debug views */
-        // CUSTOM_MENU √√√ (mimic) make a similar menu for each new one
         SBpopMenuButton = (Button) findViewById(R.id.SBPopMenuButton);
         SBpopMenu = (LinearLayout) findViewById(R.id.SBPopMenu);
         SBPopLetters = (Button) findViewById(R.id.SBPopLetters);
@@ -222,7 +205,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
 
         SlaunchTutor  = (Button) findViewById(R.id.SlaunchTutor);
-        ScustomLaunch = (Button) findViewById(R.id.ScustomButton); // CUSTOM_MENU √√√
+        ScustomLaunch = (Button) findViewById(R.id.ScustomButton);
         SresetTutor   = (Button) findViewById(R.id.SresetTutor);
 
         SlaunchTutor.setOnClickListener(new View.OnClickListener() {
@@ -241,7 +224,6 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
         /*
          * Custom launch!
-         * CUSTOM_MENU √√√ (keep)
          */
         ScustomLaunch.setOnClickListener(new View.OnClickListener() {
 
@@ -271,7 +253,6 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
             @Override
             public void onClick(View view) {
 
-                // CUSTOM_MENU √√√ (keep) this
                 mButtonController.doDebugTagLaunchAction((String) view.getTag());
             }
         };
@@ -282,7 +263,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
         SAsmCustom.setOnClickListener(roboDebuggerClickListener);
 
-        // CUSTOM_MENU √√√ (mimic) menu display for each new activity
+        // menu display for each new activity
         SBpopMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -299,7 +280,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
         SBPopShapes.setOnClickListener(roboDebuggerClickListener);
         SBPopExpressions.setOnClickListener(roboDebuggerClickListener);
 
-        // CUSTOM_MENU √√√ new click listeners
+        // new click listeners
         SNumCompareMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -324,7 +305,6 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
             }
         });
 
-        // CUSTOM_MENU...
         SPlaceValueMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -383,17 +363,12 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
     private void initializeQA_Code_Drop2_DebugTutors() {
         ArrayList<CAt_Data> readingCompTutors = new ArrayList<>();
 
-        // CUSTOM_MENU √√√ (1) initialize new CAt_Data for each one we want to create
-        // CUSTOM_MENU √√√ (1) make an array of data sources, and make a custom button with a custom OnClickListener class that takes in args... for each class
-        // CUSTOM_MENU √√√ (1) we need tutor_desc, tutor_data, and tutor_id
-
         String[] storyTypes = {"story.gen.hide",
         "story.clo.hear",
         "story.pic.hear",
         "story.gen.hear",
         "story.pic.hide"};
 
-        // CUSTOM_MENU √√√ (1) try it with story data (see RoboTutor)
         final String tutor_desc = "story.pic.hear";
         final String tutor_id = "story.pic.hear::story_30";
         final String tutor_data = "[encfolder]story_30";
@@ -405,7 +380,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
         };
 
 
-        // CUSTOM_MENU (4) mimic this for each of the layouts
+        // mimic this for each of the layouts
         createCustomMenu(SComprehensionMenu, storyTutors);
 
 
@@ -414,7 +389,6 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
                 {"numdiscr", "numcompare::2d.compare.mix", "[file]numcompare.2d.compare.mix.json"},
                 {"numdiscr", "numcompare::3d.compare.mix", "[file]numcompare.3d.compare.mix.json"}
         };
-        // CUSTOM_MENU (4)
         createCustomMenu(SNumCompareMenu, numCompareTutors);
 
 
@@ -586,8 +560,8 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
 
     /**
-     * CHUNT this is called when a new tutor is selected
-     * CHUNT it updates the display names and the display image
+     * this is called when a new tutor is selected
+     * it updates the display names and the display image
      */
     private void udpateViewVectorNames() {
 
@@ -596,7 +570,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
         SharderTutorName.setText("Harder Tutor:   " + currentTransition.harder);
         SeasierTutorName.setText("Easier Tutor:   " + currentTransition.easier);
 
-        // CHUNT here's where you set the names
+        // Here is where the names are set
 
 
         ArrayList<String> metadata;
@@ -622,19 +596,25 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
             ScurrentTutorMetadata.addView(textView);
         }
 
-        // CHUNT change tutor image
-        Thumb tutorThumb = CTutorData_Metadata.getThumbImage(currentTransition);
+        // change tutor image
+
+        Thumb tutorThumb = CTutorData_Metadata.getThumbImage(currentTransition); // NEW_THUMBS (0) big icon in debugger
 
         int thumbId;
 
-        // https://stackoverflow.com/questions/4427608/android-getting-resource-id-from-string
-        thumbId = getThumbId(tutorThumb);
-        ScurrentTutorImage.setImageResource(thumbId);
+        // NEW_THUMBS https://stackoverflow.com/questions/4427608/android-getting-resource-id-from-string
+        thumbId = getThumbId(tutorThumb); // NEW_THUMBS (1) getThumbId
+        ScurrentTutorImage.setImageResource(thumbId);  // NEW_THUMBS (2) setImageResource
         ScurrentTutorImage.setPadding(36, 36, 36, 36);
         ScurrentTutorImage.setBackground(getResources().getDrawable(R.drawable.outline_current_large, null));
 
     }
 
+    /**
+     * NEW_THUMBS this could return a String instead...
+     * @param tutorThumb
+     * @return
+     */
     public static int getThumbId(Thumb tutorThumb) {
         int thumbId;
         switch(tutorThumb) {
@@ -643,11 +623,11 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
                 break;
 
             case BPOP_NUM:
-                thumbId = R.drawable.thumb_bpop_num;
+                thumbId = R.drawable.thumb_bpop_num_1;
                 break;
 
             case BPOP_LTR:
-                thumbId = R.drawable.thumb_bpop_ltr_lc;
+                thumbId = R.drawable.thumb_bpop_ltr_lc_1;
                 break;
 
             case MN:

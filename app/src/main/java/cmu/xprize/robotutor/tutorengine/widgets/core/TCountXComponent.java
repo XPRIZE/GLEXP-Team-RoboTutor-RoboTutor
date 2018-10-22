@@ -200,7 +200,8 @@ public class TCountXComponent extends CCountX_Component implements ITutorObject,
 
     @Override
     public void onDestroy() {
-        trackAndLogPerformance("ENDPROBLEM","ENDPROBLEM","ENDPROBLEM");
+        stopQueue();
+        trackAndLogPerformance("ENDPROBLEM","ENDPROBLEM","ENDPROBLEM","CORRECT");
 
     }
 
@@ -258,7 +259,13 @@ public class TCountXComponent extends CCountX_Component implements ITutorObject,
     }
 
     @Override
-    protected void trackAndLogPerformance(String expected,String actual,String movement) {
+    protected void trackAndLogPerformance(String expected,String actual,String movement,String cor) {
+
+        if (expected.equals(actual)) {
+            mTutor.countCorrect();
+        } else {
+            mTutor.countIncorrect();
+        }
 
         String tutorName = mTutor.getTutorName();
         PerformanceLogItem event = new PerformanceLogItem();
@@ -273,12 +280,7 @@ public class TCountXComponent extends CCountX_Component implements ITutorObject,
         event.setPromotionMode(RoboTutor.getPromotionMode(event.getMatrixName()));
         event.setLevelName(level);
         event.setTaskName(task);
-        if (mode == "placevalue"){
-            event.setProblemName("placevalue");
-        } else {
-            event.setProblemName("countingx");
-        }
-
+        event.setProblemName(Integer.toString(countTarget));
         if(dataSource != null) {
             event.setTotalProblemsCount(dataSource.length);
         }
@@ -287,7 +289,7 @@ public class TCountXComponent extends CCountX_Component implements ITutorObject,
         event.setAttemptNumber(-1);
         event.setExpectedAnswer(expected);
         event.setUserResponse(actual);
-        event.setCorrectness(TCONST.LOG_CORRECT);
+        event.setCorrectness(cor);
         event.setScaffolding(movement);
 
         event.setTimestamp(System.currentTimeMillis());
@@ -507,7 +509,7 @@ public class TCountXComponent extends CCountX_Component implements ITutorObject,
 
                         }
                     },
-                    2500
+                    3500
             );
 
         }

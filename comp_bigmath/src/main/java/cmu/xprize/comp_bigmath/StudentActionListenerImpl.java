@@ -8,6 +8,7 @@ import android.widget.Toast;
 import java.util.Locale;
 
 import cmu.xprize.util.IBehaviorManager;
+import cmu.xprize.util.IPerformanceTracker;
 import cmu.xprize.util.IPublisher;
 
 import static cmu.xprize.comp_bigmath.BM_CONST.ALL_DIGITS;
@@ -38,6 +39,7 @@ public class StudentActionListenerImpl implements StudentActionListener{
     private final BigMathMechanic _bigMath;
     private final IBehaviorManager _behaviorManager;
     private final IPublisher _publisher;
+    private final IPerformanceTracker _performance;
 
     // testing vars
     private int operandA;
@@ -61,10 +63,11 @@ public class StudentActionListenerImpl implements StudentActionListener{
     private boolean _isBorrowHun;
     private boolean _isDoubleBorrow; // cascade borrow from hundreds place to ones place
 
-    public StudentActionListenerImpl(IBehaviorManager _behaviorManager, IPublisher publisher, BigMathMechanic bigMath) {
+    public StudentActionListenerImpl(IBehaviorManager _behaviorManager, IPublisher publisher, BigMathMechanic bigMath, IPerformanceTracker performance) {
         this._behaviorManager = _behaviorManager;
         this._bigMath = bigMath;
         this._publisher = publisher;
+        this._performance = performance;
     }
 
     @Override
@@ -150,6 +153,7 @@ public class StudentActionListenerImpl implements StudentActionListener{
                     expectedInput = getHunsDigit(_expectedResult);
 
                     if (input.equals(String.valueOf(expectedInput))) {
+                        _performance.trackAndLogPerformance(true, String.valueOf(expectedInput), input);
                         Log.i("YAY", "DONE WITH PROBLEM");
                         _bigMath.markDigitCorrect(HUN_DIGIT);
                         // _publisher.publishFeature(FTR_CORRECT);
@@ -160,6 +164,7 @@ public class StudentActionListenerImpl implements StudentActionListener{
                         }
 
                     } else {
+                        _performance.trackAndLogPerformance(false, String.valueOf(expectedInput), input);
                         _bigMath.markDigitWrong(HUN_DIGIT);
                         // _publisher.publishFeature(FTR_WRONG);
                     }
@@ -171,6 +176,7 @@ public class StudentActionListenerImpl implements StudentActionListener{
 
                     if (input.equals(String.valueOf(expectedInput))) {
 
+                        _performance.trackAndLogPerformance(true, String.valueOf(expectedInput), input);
                         _bigMath.markDigitCorrect(TEN_DIGIT);
                         _publisher.retractFeature(FTR_WRONG);
                         _publisher.publishFeature(FTR_CORRECT);
@@ -202,6 +208,8 @@ public class StudentActionListenerImpl implements StudentActionListener{
                         // ----------
 
                     } else {
+
+                        _performance.trackAndLogPerformance(false, String.valueOf(expectedInput), input);
                         _bigMath.markDigitWrong(TEN_DIGIT);
                         _publisher.retractFeature(FTR_CORRECT);
                         _publisher.publishFeature(FTR_WRONG);
@@ -217,6 +225,7 @@ public class StudentActionListenerImpl implements StudentActionListener{
 
                     if (input.equals(String.valueOf(expectedInput))) {
 
+                        _performance.trackAndLogPerformance(true, String.valueOf(expectedInput), input);
                         _bigMath.markDigitCorrect(ONE_DIGIT);
                         _publisher.retractFeature(FTR_WRONG);
                         _publisher.publishFeature(FTR_CORRECT);
@@ -263,6 +272,7 @@ public class StudentActionListenerImpl implements StudentActionListener{
                         // ----------
 
                     } else {
+                        _performance.trackAndLogPerformance(false, String.valueOf(expectedInput), input);
                         _bigMath.markDigitWrong(ONE_DIGIT);
                         _publisher.retractFeature(FTR_CORRECT);
                         _publisher.publishFeature(FTR_WRONG);
@@ -285,6 +295,7 @@ public class StudentActionListenerImpl implements StudentActionListener{
 
                     if(input.equals(String.valueOf(expectedInput))) {
 
+                        _performance.trackAndLogPerformance(true, String.valueOf(expectedInput), input);
                         // give some sort of correct feedback???
                         _bigMath.markDigitCorrect(TEN_CARRY_DIGIT);
                         // _publisher.retractFeature(FTR_WRONG);
@@ -311,6 +322,7 @@ public class StudentActionListenerImpl implements StudentActionListener{
 
 
                     } else {
+                        _performance.trackAndLogPerformance(false, String.valueOf(expectedInput), input);
                         _bigMath.markDigitWrong(TEN_CARRY_DIGIT);
                     }
 
@@ -322,6 +334,7 @@ public class StudentActionListenerImpl implements StudentActionListener{
 
                     if(input.equals(String.valueOf(expectedInput))) {
 
+                        _performance.trackAndLogPerformance(true, String.valueOf(expectedInput), input);
                         _bigMath.markDigitCorrect(HUN_CARRY_DIGIT);
 
                         _hasCarriedToHuns = true;
@@ -336,6 +349,7 @@ public class StudentActionListenerImpl implements StudentActionListener{
                             // ----------
                         }
                     } else {
+                        _performance.trackAndLogPerformance(false, String.valueOf(expectedInput), input);
                         _bigMath.markDigitWrong(HUN_CARRY_DIGIT);
                     }
                     break;

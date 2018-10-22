@@ -1,0 +1,9 @@
+{
+  "bootFeatures":"FTR_DEMO_SUB_ZERO",
+
+  "dataSource": [
+
+    {"type":"Asm_Data", "level":"demo", "task":"General Addition", "dataset":[3, 0, 3], "operation":"-", "image": "triangle"}
+
+  ]
+}

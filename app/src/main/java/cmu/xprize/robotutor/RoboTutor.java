@@ -34,40 +34,39 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
+import cmu.xprize.comp_logging.CAudioLogThread;
+import cmu.xprize.comp_logging.CErrorManager;
+import cmu.xprize.comp_logging.CLogManager;
+import cmu.xprize.comp_logging.CPerfLogManager;
+import cmu.xprize.comp_logging.CPreferenceCache;
+import cmu.xprize.comp_logging.ILogManager;
 import cmu.xprize.comp_logging.IPerfLogManager;
 import cmu.xprize.ltkplus.CRecognizerPlus;
 import cmu.xprize.ltkplus.GCONST;
 import cmu.xprize.ltkplus.IGlyphSink;
+import cmu.xprize.robotutor.startup.CStartView;
+import cmu.xprize.robotutor.startup.configuration.Configuration;
+import cmu.xprize.robotutor.startup.configuration.ConfigurationItems;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
-import cmu.xprize.robotutor.tutorengine.CTutor;
-import cmu.xprize.robotutor.tutorengine.util.CAssetObject;
-import cmu.xprize.robotutor.tutorengine.util.CrashHandler;
-import cmu.xprize.util.CDisplayMetrics;
-import cmu.xprize.util.CLoaderView;
-import cmu.xprize.comp_logging.CLogManager;
-import cmu.xprize.comp_logging.CPerfLogManager;
-import cmu.xprize.comp_logging.CAudioLogThread;
+import cmu.xprize.robotutor.tutorengine.CTutorAssetManager;
 import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.robotutor.tutorengine.ITutorManager;
+import cmu.xprize.robotutor.tutorengine.util.CAssetObject;
+import cmu.xprize.robotutor.tutorengine.util.CrashHandler;
 import cmu.xprize.robotutor.tutorengine.widgets.core.IGuidView;
-import cmu.xprize.comp_logging.CErrorManager;
-import cmu.xprize.comp_logging.CPreferenceCache;
-import cmu.xprize.robotutor.startup.CStartView;
-import cmu.xprize.comp_logging.ILogManager;
+import cmu.xprize.util.CDisplayMetrics;
+import cmu.xprize.util.CLoaderView;
 import cmu.xprize.util.IReadyListener;
 import cmu.xprize.util.IRoboTutor;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
-import cmu.xprize.robotutor.tutorengine.CTutorAssetManager;
 import cmu.xprize.util.TTSsynthesizer;
 import edu.cmu.xprize.listener.ListenerBase;
 
@@ -99,14 +98,6 @@ import static cmu.xprize.util.TCONST.WRITING_PLACEMENT;
 public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     // VARIABLES FOR QUICK DEBUG LAUNCH
-
-    // private static final String debugTutorVariant = "bigmath";
-    // private static final String debugTutorId = "bigmath:add.by.1.0..8.NoCarryBorrow.lev1";
-    // private static final String debugTutorFile = "[file]bigmath_sub.by.rand.20..90.NoCarryBorrow.lev8.json";     // 2d subtract
-    //private static final String debugTutorFile = "[file]bigmath_add.by.rand.10..80.NoCarryBorrow.lev6.json";      // 2d add
-    //private static final String debugTutorFile = "[file]bigmath_sub.by.1.1..9.NoCarryBorrow.lev3.json";             // 1d sub
-    // private static final String debugTutorFile = "[file]bigmath_add.by.1.0..8.NoCarryBorrow.lev1.json";           // 1d add
-
 //    private static final String debugTutorVariant = "placevalue";
 //    private static final String debugTutorId = "place.value:1";
 //    private static final String debugTutorFile = "[file]place.value__pv-11..99.2D.diff0.3.json";
@@ -135,22 +126,12 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     //private static final String debugTutorFile = "[file]numdiscr_sample.json";
     // private static final String debugTutorFile = "[file]math_0..800.ADD-100-V-S.incr.13.json";
 
-    public static final boolean TURN_OFF_PLACEMENT_FOR_QA = true;
     //private static final String debugTutorFile = "[file]math_10..80.SUB-2D-V-S.rand.12.json";
-    public static final String MATRIX_FILE = "dev_data.qa.json"; // "dev_data.json";
+    public static final String MATRIX_FILE = "dev_data.cd2.json"; // "dev_data.json"; // SUPER_PLACEMENT
 
     private static final String LOG_SEQUENCE_ID = "LOG_SEQUENCE_ID";
 
     public static final boolean OLD_MENU = false;
-
-    //amogh missing letter
-//    private static final String debugTutorFile = "[file]write.missingLtr_0.1.2.fin.s.json";
-    //amogh dictation
-//    private static final String debugTutorFile = "[file]write.wrd.dic_lc.begin.ha.18.json";
-
-//    private static final String debugTutorVariant = "write.ltr.uc.trc";
-//    private static final String debugTutorId = "write.wrd:story_1_1";
-//    private static final String debugTutorFile = "[file]write.ltr.uc.trc_vow.asc.A..Z.1.json";
 
 
     private CMediaController    mMediaController;
@@ -200,6 +181,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     String hotLogPathPerf;
     String readyLogPath;
     String readyLogPathPerf;
+    String audioLogPath;
     public final static String  DOWNLOAD_PATH  = Environment.getExternalStorageDirectory() + File.separator + Environment.DIRECTORY_DOWNLOADS;
     public final static String  EXT_ASSET_PATH = Environment.getExternalStorageDirectory() + File.separator + TCONST.ROBOTUTOR_ASSET_FOLDER;
 
@@ -208,7 +190,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     private Thread audioLogThread;
     // TODO move to config file
-    private boolean RECORD_AUDIO = false;
+    private boolean RECORD_AUDIO = true; // note that this breaks story.read
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -223,11 +205,24 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         hotLogPathPerf = Environment.getExternalStorageDirectory() + TCONST.HOT_LOG_FOLDER_PERF;
         readyLogPathPerf = Environment.getExternalStorageDirectory() + TCONST.READY_LOG_FOLDER_PERF;
 
+        audioLogPath = Environment.getExternalStorageDirectory() + TCONST.AUDIO_LOG_FOLDER;
+
+        APP_PRIVATE_FILES = getApplicationContext().getExternalFilesDir("").getPath();
+
+        // Initialize the JSON Helper STATICS - just throw away the object.
+        //
+        new JSON_Helper(getAssets(), CacheSource, RoboTutor.APP_PRIVATE_FILES);
+
+        ConfigurationItems configurationItems = new ConfigurationItems();
+        Configuration.saveConfigurationItems(this, configurationItems);
+
         Calendar calendar = Calendar.getInstance(Locale.US);
         String initTime     = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss", Locale.US).format(calendar.getTime());
         String sequenceIdString = String.format(Locale.US, "%06d", getNextLogSequenceId());
         // NOTE: Need to include the configuration name when that is fully merged
-        String logFilename  = "RoboTutor_" + BuildConfig.BUILD_TYPE + "." + BuildConfig.VERSION_NAME + "_" + sequenceIdString + "_" + initTime + "_" + Build.SERIAL;
+        String logFilename  = "RoboTutor_" + // TODO TODO TODO there should be a version name in here!!!
+                Configuration.configVersion(this) + "_" + BuildConfig.VERSION_NAME + "_" + sequenceIdString +
+                "_" + initTime + "_" + Build.SERIAL;
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "rt: onCreate");
         // Catch all errors and cause a clean exit -
@@ -272,7 +267,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         Log.v(TAG, "External_Download:" + DOWNLOAD_PATH);
 
         if (RECORD_AUDIO) {
-            audioLogThread = new CAudioLogThread(readyLogPath, logFilename);
+            audioLogThread = new CAudioLogThread(audioLogPath, logFilename, Configuration.recordAudio(this));
             audioLogThread.start();
         }
 
@@ -290,12 +285,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         // This initializes the static object
         //
         displayMetrics = CDisplayMetrics.getInstance(this);
-
-        APP_PRIVATE_FILES = getApplicationContext().getExternalFilesDir("").getPath();
-
-        // Initialize the JSON Helper STATICS - just throw away the object.
-        //
-        new JSON_Helper(getAssets(), CacheSource, RoboTutor.APP_PRIVATE_FILES);
 
         // Initialize the media manager singleton - it needs access to the App assets.
         //
@@ -883,7 +872,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         return logSequenceId;
     }
-
 
     /**
      * gets the stored data for each student based on STUDENT_ID.

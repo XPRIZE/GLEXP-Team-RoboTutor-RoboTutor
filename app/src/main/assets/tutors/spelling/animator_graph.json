@@ -11,6 +11,20 @@
       "version": "1.0.0",
       "rootnode": "INTRO_STATE",
 
+      "queueMap": {
+
+        "SAY_SYLLABLE": {
+          "type": "QUEUE",
+          "COMMENT": "Run when student taps correct syllable",
+          "reuse": true,
+          "tracks": [
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#feedback,value#SAY_SYLLABLE:String", "features":""},
+            {"name":"Play Syllable:", "type": "QUEUEDAUDIO", "command": "PLAY", "soundsource":  "{{SSpelling.syllableStim}}.mp3", "soundpackage": "words","mode":"event", "listeners": "SSpelling", "oncomplete":"SYL_DONE", "features": ""}
+
+          ]
+        }
+      },
+
       "nodeMap": {
 
         "COMMENT": "@@@@@  CNodes  @@@@@",
@@ -54,21 +68,8 @@
           "preenter": [],
           "preexit": [],
           "edges": [
-            {"constraint": "FTR_CORRECT", "edge":"CORRECT"},
+            {"constraint": "FTR_EOP", "edge":"SAY_AGAIN"},
             {"constraint": "FTR_INCORRECT", "edge":"INCORRECT"}
-          ]
-        },
-
-        "CORRECT": {
-          "COMMENT": "When user selects a correct syllable",
-          "type": "node",
-          "maptype": "moduleMap",
-          "mapname": "PLAYCORRECT",
-          "preenter": [],
-          "preexit": [],
-          "edges": [
-            {"constraint": "FTR_EOP", "edge": "NEXT_PROBLEM"},
-            {"constraint": "", "edge": "USER_INPUT"}
           ]
         },
 
@@ -84,14 +85,15 @@
           ]
         },
 
-        "NEXT_PROBLEM": {
+        "SAY_AGAIN": {
           "COMMENT": "",
           "type": "node",
           "maptype": "moduleMap",
-          "mapname": "NEXTPROBLEM",
+          "mapname": "SAYAGAIN",
           "preenter": [],
           "preexit": [],
           "edges": [
+            {"constraint": "FTR_EOD", "edge": "NEXT_SCENE"},
             {"constraint": "", "edge": "UPDATE_STIMULUS"}
           ]
         },
@@ -118,8 +120,8 @@
           "reuse":true,
           "COMMENT": "????",
           "tracks": [
-            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#PLAYINTRO:String", "features":""}
-//            {"name":"Intro clip", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets add some numbers now.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#PLAYINTRO:String", "features":""},
+            {"name":"Play intro", "type": "AUDIO", "command": "PLAY", "soundsource": "Please tap to make each word.mp3","soundpackage": "spelling","mode":"flow", "features": ""}
           ]
         },
 
@@ -128,20 +130,7 @@
           "reuse": true,
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""},
-            {"name":"Please spell", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets add some numbers now.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
-//            {"name":"Play word", "type": "AUDIO", "command": "PLAY", "soundsource": "akalala.mp3","soundpackage": "words","mode":"flow", "features": ""}
             {"name":"Play word", "type": "AUDIO", "command": "PLAY", "soundsource": "{{SSpelling.wordStim}}","soundpackage": "words","mode":"flow", "features": ""}
-          ]
-        },
-
-        "PLAYCORRECT": {
-          "type": "MODULE",
-          "reuse": true,
-          "COMMENT": "TBD",
-          "tracks": [
-            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#PLAYCORRECT:String", "features":""},
-            {"name":"Play syllable", "type": "AUDIO", "command": "PLAY", "soundsource": "{{SSpelling.syllableStim}}.mp3","soundpackage": "words","mode":"flow", "features": ""}
-//            {"name":"Play right", "type": "AUDIO", "command": "PLAY", "soundsource": "Good.mp3","mode":"flow", "features": ""}
           ]
         },
 
@@ -152,9 +141,8 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#PLAYINCORRECT:String", "features":""},
             {"name":"Play syllable", "type": "AUDIO", "command": "PLAY", "soundsource": "{{SSpelling.syllableStim}}.mp3","soundpackage": "words","mode":"flow", "features": ""},
-            {"name":"Please spell", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets add some numbers now.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
             {"name":"Play word", "type": "AUDIO", "command": "PLAY", "soundsource": "{{SSpelling.wordStim}}","soundpackage": "words","mode":"flow", "features": ""},
-//            {"name": "After incorrect clip", "type": "AUDIO", "command": "PLAY", "soundsource": "Not quite try again.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""},
+            {"name": "After incorrect clip", "type": "AUDIO", "command": "PLAY", "soundsource": "Not quite try again.mp3", "soundpackage":"spelling", "volume": 1.0, "mode":"flow", "features": ""},
             {"name": "Revert color", "type": "COMMAND", "id": "SSpelling", "method": "revertColor", "features": ""}
           ]
         },
@@ -169,13 +157,13 @@
           ]
         },
 
-        "NEXTPROBLEM": {
+        "SAYAGAIN": {
           "type": "MODULE",
           "reuse": true,
-          "COMMENT": "TBD",
+          "COMMENT": "SAY THE WORD AGAIN",
           "tracks": [
-            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#NEXTPROBLEM:String", "features":""},
-            {"name": "Problem correct clip", "type": "AUDIO", "command": "PLAY", "soundsource": "Lets add some numbers now.mp3", "soundpackage":"default", "volume": 1.0, "mode":"flow", "features": ""}
+            {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SSpelling", "method": "logState", "parms": "type#node,value#SAYAGAIN:String", "features":""},
+            {"name": "Problem correct clip", "type": "AUDIO", "command": "PLAY", "soundsource": "{{SSpelling.wordStim}}", "soundpackage":"words", "volume": 1.0, "mode":"flow", "features": ""}
           ]
         },
 

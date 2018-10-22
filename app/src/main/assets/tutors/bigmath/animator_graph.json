@@ -10,6 +10,33 @@
       "version": "1.0.0",
       "rootnode": "INTRO",
 
+      "queueMap": {
+
+        "COMMENT": "@@@@@ CQueues @@@@@",
+
+        "INPUT_HESITATION_FEEDBACK": {
+          "type": "QUEUE",
+          "reuse": true,
+          "COMMENT": "provide feedback for what to do",
+          "preenter": [],
+          "tracks": [
+            {"type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|one:String", "features": "FTR_ON_DIGIT_ONE&FTR_TAP_CONCRETE"},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Touch each one to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE&FTR_TAP_CONCRETE"},
+
+            {"type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "result:String|one:String", "features": "FTR_ON_DIGIT_ONE&FTR_WRITE_DIGIT"},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please tap on the box and write your answer.mp3",  "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE&FTR_WRITE_DIGIT"},
+
+            {"type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|ten:String", "features": "FTR_ON_DIGIT_TEN&FTR_TAP_CONCRETE"},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Touch each ten to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN&FTR_TAP_CONCRETE"},
+
+            {"type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "result:String|ten:String", "features": "FTR_ON_DIGIT_TEN&FTR_WRITE_DIGIT"},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Please tap on the box and write your answer.mp3",  "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN&FTR_WRITE_DIGIT"},
+
+            {"type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "triggerHesitationTimer", "parms": ""}
+          ]
+        }
+      },
+
       "nodeMap": {
 
         "COMMENT": "@@@@@  CNodes  @@@@@",
@@ -42,6 +69,10 @@
             {"constraint": "FTR_IS_BORROW", "edge": "BEGIN_PROBLEM_BORROW"}
           ]
         },
+
+        // ==========================
+        // ====== BEGIN REGULAR======
+        // ==========================
 
         "BEGIN_PROBLEM_REGULAR": {
           "type": "NODE",
@@ -205,6 +236,10 @@
           ]
         },
 
+        // ==========================
+        // ====== BEGIN BORROW ======
+        // ==========================
+
         "BEGIN_PROBLEM_BORROW": {
           "type": "NODE",
           "COMMENT": "Regular problem with no carry or borrow.",
@@ -281,6 +316,7 @@
           ]
         },
 
+        // ======  NEXT_SCENE  ======
         "NEXT_SCENE": {
           "type": "NODE",
           "COMMENT": "When module is complete - move to next scene",
@@ -339,8 +375,13 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBigMath", "method": "logState", "parms": "type#node,value#NEXTDIGITs:String", "features":""},
             {"type": "COMMAND", "id": "SBigMath", "method": "nextDigit", "features": ""},
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each one to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_ONE"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each ten to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN"}
+            {"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|one:String", "features": "FTR_ON_DIGIT_ONE"},
+            //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "result:String|one:String", "features": "FTR_ON_DIGIT_ONE"},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Touch each ten to add them up.mp3", "soundpackage":"bigmath", "volume": 1.0, "mode":"flow", "features": "FTR_ON_DIGIT_TEN"},
+            {"type": "COMMAND", "id": "SBigMath", "method": "pointAtDotContainer", "parms": "opA:String|ten:String", "features": "FTR_ON_DIGIT_TEN"},
+            //{"type": "COMMAND", "id": "SBigMath", "method": "pointAtDigitInput", "parms": "result:String|ten:String", "features": "FTR_ON_DIGIT_TEN"}
 
+            {"type": "COMMAND", "id": "SBigMath", "method": "triggerHesitationTimer", "features": ""}
 
             // tap the numbers
 

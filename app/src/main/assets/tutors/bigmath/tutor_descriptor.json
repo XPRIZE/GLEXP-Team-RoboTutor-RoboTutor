@@ -22,7 +22,8 @@
 	"soundMap" : {
 
 		"temp":       {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/arithmetic"},
-		"bigmath":    {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/bigmath"}
+		"bigmath":    {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/bigmath"},
+		"temp2":       {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/bubble_pop"}
 	},
 
 	"navigatorType":"SIMPLE_NAVIGATOR"

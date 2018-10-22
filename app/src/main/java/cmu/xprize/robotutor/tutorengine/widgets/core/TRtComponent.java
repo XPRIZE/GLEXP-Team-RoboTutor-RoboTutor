@@ -67,6 +67,7 @@ import static cmu.xprize.util.TCONST.LOCAL_STORY_AUDIO;
 import static cmu.xprize.util.TCONST.MEDIA_STORY;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
+import static cmu.xprize.util.TCONST.WORD_PROBLEMS;
 
 public class TRtComponent extends CRt_Component implements IBehaviorManager, ITutorObject, Button.OnClickListener, IRtComponent, IDataSink, IEventSource, IPublisher, ITutorLogger {
 
@@ -610,7 +611,6 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
 
                 DATASOURCEPATH = TCONST.ROBOTUTOR_ASSETS + "/" + TCONST.STORY_ASSETS + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
                 // "robotutor_assets/assets/story/sw"
-                // MATH_STORY this should be different
                 STORYSOURCEPATH = DATASOURCEPATH + levelFolder + "/" + storyFolder + "/";
                 // "robotutor_assets/assets/story/sw/hello/hello_world"
 
@@ -654,6 +654,20 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 // ZZZ EXTERN is... TCONST.EXTERN
                 loadStory(STORYSOURCEPATH, "ASB_Data", TCONST.EXTERN);
 
+            } else if (dataNameDescriptor.startsWith(TCONST.WORD_PROBLEMS)) {
+                String storyFolder = dataNameDescriptor.substring(WORD_PROBLEMS.length()).toLowerCase();
+                storyFolder = storyFolder.substring("math.".length());
+
+                DATASOURCEPATH = TCONST.ROBOTUTOR_ASSETS + "/" + TCONST.STORY_ASSETS + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
+                // "robotutor_assets/assets/story/sw"
+                STORYSOURCEPATH = DATASOURCEPATH + "word_problems" + "/" + storyFolder + "/";
+
+                AUDIOSOURCEPATH = TCONST.STORY_PATH + "word_problems" + "/" + storyFolder;
+
+                configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
+                mMediaManager.addSoundPackage(mTutor, MEDIA_STORY, new CMediaPackage(LANG_AUTO, AUDIOSOURCEPATH));
+
+                loadStory(STORYSOURCEPATH, "ASB_Data", TCONST.EXTERN);
             }
 
             // Note that here the {file] load-type semantics is for an external file and [asset] may be used
@@ -710,7 +724,7 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
             }
         }
         catch (Exception e) {
-            CErrorManager.logEvent(TAG, "Invalid Data Source for : " + mTutor.getTutorName(), e, false);
+            CErrorManager.logEvent(TAG, "Invalid Data Source for : " + mTutor.getTutorName(), e, true);
         }
         System.out.println("AUDIOSOURCEPATH: "+AUDIOSOURCEPATH);
         System.out.println("STORYSOURCEPATH: "+STORYSOURCEPATH);

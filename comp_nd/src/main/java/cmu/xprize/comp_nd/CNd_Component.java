@@ -3,6 +3,8 @@ package cmu.xprize.comp_nd;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PointF;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -11,8 +13,12 @@ import android.widget.RelativeLayout;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
+import java.util.Map;
+import java.util.Random;
 
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_nd.ui.CNd_LayoutManager_BaseTen;
@@ -22,17 +28,37 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.comp_nd.ND_CONST.CANCEL_HIGHLIGHT_HUNS;
+import static cmu.xprize.comp_nd.ND_CONST.CANCEL_HIGHLIGHT_ONES;
+import static cmu.xprize.comp_nd.ND_CONST.CANCEL_HIGHLIGHT_TENS;
+import static cmu.xprize.comp_nd.ND_CONST.CANCEL_INDICATE_CORRECT;
+import static cmu.xprize.comp_nd.ND_CONST.FTR_ONE_FIRST;
+import static cmu.xprize.comp_nd.ND_CONST.FTR_SAY_HUNS;
+import static cmu.xprize.comp_nd.ND_CONST.FTR_SAY_NA_ONES;
+import static cmu.xprize.comp_nd.ND_CONST.FTR_SAY_NA_TENS;
+import static cmu.xprize.comp_nd.ND_CONST.FTR_SAY_ONES;
+import static cmu.xprize.comp_nd.ND_CONST.FTR_SAY_TENS;
+import static cmu.xprize.comp_nd.ND_CONST.FTR_TEN_FIRST;
+import static cmu.xprize.comp_nd.ND_CONST.HESITATION_PROMPT;
 import static cmu.xprize.comp_nd.ND_CONST.HIGHLIGHT_HUNS;
 import static cmu.xprize.comp_nd.ND_CONST.HIGHLIGHT_ONES;
 import static cmu.xprize.comp_nd.ND_CONST.HIGHLIGHT_TENS;
 import static cmu.xprize.comp_nd.ND_CONST.HUN_DIGIT;
 import static cmu.xprize.comp_nd.ND_CONST.INDICATE_CORRECT;
+import static cmu.xprize.comp_nd.ND_CONST.INPUT_HESITATION_FEEDBACK;
 import static cmu.xprize.comp_nd.ND_CONST.NO_DIGIT;
 import static cmu.xprize.comp_nd.ND_CONST.ONE_DIGIT;
 import static cmu.xprize.comp_nd.ND_CONST.TEN_DIGIT;
+import static cmu.xprize.comp_nd.ND_CONST.VALUE_DIGIT_COMPARE;
+import static cmu.xprize.comp_nd.ND_CONST.VALUE_DIGIT_LESS;
+import static cmu.xprize.comp_nd.ND_CONST.VALUE_DIGIT_MORE;
+import static cmu.xprize.comp_nd.ND_CONST.VALUE_HUN;
+import static cmu.xprize.comp_nd.ND_CONST.VALUE_ONE;
+import static cmu.xprize.comp_nd.ND_CONST.VALUE_TEN;
 import static cmu.xprize.util.MathUtil.getHunsDigit;
 import static cmu.xprize.util.MathUtil.getOnesDigit;
 import static cmu.xprize.util.MathUtil.getTensDigit;
+import static cmu.xprize.util.TCONST.DEBUG_HESITATE;
 
 /**
  * Generated automatically w/ code written by Kevin DeLand
@@ -81,6 +107,11 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
     // "now say this number"
     //
 
+    // Queue Things
+    protected final Handler mainHandler  = new Handler(Looper.getMainLooper());
+    protected HashMap           queueMap     = new HashMap();
+    protected HashMap nameMap      = new HashMap();
+    protected boolean           _qDisabled   = false;
     //
 
     // DataSource Variables
@@ -90,6 +121,13 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
     protected String layout;
     protected int[] dataset;
     protected boolean isWorkedExample;
+
+    // these are hard-coded for now
+    protected boolean random = true; // set all to random for now...
+    public int questionCount = 10;
+
+    // gets set w/ data source variables
+    protected int numDigits;
 
 
     // json loadable
@@ -141,6 +179,40 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
     }
 
+    public void onDestroy() {
+
+        terminateQueue();
+    }
+
+    /**
+     *  Disable the input queues permenantly in prep for destruction
+     *  walks the queue chain to diaable scene queue
+     *
+     */
+    private void terminateQueue() {
+
+        // disable the input queue permenantly in prep for destruction
+        //
+        _qDisabled = true;
+        flushQueue();
+    }
+
+
+    /**
+     * Remove any pending scenegraph commands.
+     *
+     */
+    private void flushQueue() {
+
+        Iterator<?> tObjects = queueMap.entrySet().iterator();
+
+        while(tObjects.hasNext() ) {
+            Map.Entry entry = (Map.Entry) tObjects.next();
+
+            mainHandler.removeCallbacks((Queue)(entry.getValue()));
+        }
+    }
+
     /**
      * called by AG
      */
@@ -153,7 +225,23 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
         try {
             if (dataSource != null) {
-                updateDataSet(dataSource[_dataIndex]);
+                if (!random) {
+                    updateDataSet(dataSource[_dataIndex]);
+                } else {
+                    int nextIndex = (new Random()).nextInt(dataSource.length);
+                    updateDataSet(dataSource[nextIndex]);
+
+                    boolean replace = true;
+                    if (!replace) {
+                        ArrayList<CNd_Data> newDataSource = new ArrayList<CNd_Data>();
+                        for (int i=0; i < dataSource.length; i++) {
+                            if (i != nextIndex) {
+                                newDataSource.add(dataSource[i]);
+                            }
+                        }
+                        dataSource = (CNd_Data[]) newDataSource.toArray();
+                    }
+                }
 
                 _dataIndex++;
 
@@ -164,8 +252,14 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
     }
 
+    /**
+     * Return whether data source has run out.
+     * @return whether data source has run out.
+     */
     public boolean dataExhausted() {
-        return _dataIndex >= dataSource.length;
+        return random ?
+                _dataIndex >= questionCount :
+                _dataIndex >= dataSource.length;
     }
 
     private void updateDataSet(CNd_Data data) {
@@ -193,7 +287,10 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
             task = data.task;
             layout = data.layout;
             dataset = data.dataset;
-            isWorkedExample = data.isWorkedExample;
+            isWorkedExample = _dataIndex == 0; //data.isWorkedExample; // begin with example
+
+            // get numDigits
+            numDigits = dataset[0] > dataset[1] ? String.valueOf(dataset[0]).length() : String.valueOf(dataset[1]).length();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -260,15 +357,23 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
             _layoutManager.enableChooseNumber(true);
 
-            // ND_SCAFFOLD √√√ do something to publish values, for when we need to speak them
-            // to publish:
-            // - hundreds
-            boolean chooseLeft = dataset[0] > dataset[1];
-            publishValue(".hun", String.valueOf((chooseLeft ? getHunsDigit(dataset[0]) : getHunsDigit(dataset[1])) * 100));
-            publishValue(".ten", String.valueOf((chooseLeft ? getTensDigit(dataset[0]) : getTensDigit(dataset[1])) * 10));
-            publishValue(".one", String.valueOf((chooseLeft ? getOnesDigit(dataset[0]) : getOnesDigit(dataset[1]))));
+            publishNumberNameAudio();
+
             // - twenties
             // - ones
+
+            // This controls for which digit we will say "first"
+            if (numDigits == 1) {
+                publishFeature(FTR_ONE_FIRST);
+                retractFeature(FTR_TEN_FIRST);
+            } else if (numDigits == 2) {
+                retractFeature(FTR_ONE_FIRST);
+                publishFeature(FTR_TEN_FIRST);
+            } else if (numDigits == 3) {
+                retractFeature(FTR_ONE_FIRST);
+                retractFeature(FTR_TEN_FIRST);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -276,16 +381,61 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
     }
 
     /**
-     * if it's a worked example, do the scaffolding
+     * Send features and values to the animator graph, so it knows how to say the number name audio
      */
-    public void playWorkedExample() {
+    private void publishNumberNameAudio() {
+
+        int correctAnswer = dataset[0] > dataset[1] ? dataset[0] : dataset[1];
+
+        publishValue(VALUE_HUN, String.valueOf(getHunsDigit(correctAnswer) * 100));
+        publishValue(VALUE_TEN, String.valueOf(getTensDigit(correctAnswer) * 10));
+        publishValue(VALUE_ONE, String.valueOf(getOnesDigit(correctAnswer)));
+
+        // determines how we know which digits to say
+        boolean nzH = getHunsDigit(correctAnswer) != 0;
+        boolean nzT = getTensDigit(correctAnswer) != 0;
+        boolean nzO = getOnesDigit(correctAnswer) != 0;
+        // play Huns digit if... (Huns n/e 0)
+        // play na ten if.... (Huns n/e 0) and (Tens n/e 0)
+        // play Tens digit if... (Tens n/e 0)
+        // play na ones if ... (Huns n/e 0 or Tens n/e 0) and (Ones n/e 0)
+        // play Ones digit if... (Ones n/e 0)
+        publishOrRetractFeature(FTR_SAY_HUNS, nzH);
+        publishOrRetractFeature(FTR_SAY_NA_TENS, nzH && nzT);
+        publishOrRetractFeature(FTR_SAY_TENS, nzT);
+        publishOrRetractFeature(FTR_SAY_NA_ONES, (nzH || nzT) && nzO);
+        publishOrRetractFeature(FTR_SAY_ONES, nzO);
+    }
+
+    /**
+     * if it's a worked example, do the scaffolding. Otherwise, set the hesitation feedback.
+     */
+    public void playWorkedExampleOrSetHesitation() {
+        // begin with example
         if(isWorkedExample) {
-            applyBehaviorNode(HIGHLIGHT_HUNS);
+            applyBehaviorNode(getStartingHighlightByNumDigits()); // only highlight the necessary digits!!!
+        } else {
+            triggerHesitationFeedback();
         }
+    }
+
+    public void triggerHesitationFeedback() {
+        postNamed(HESITATION_PROMPT, TCONST.APPLY_BEHAVIOR, INPUT_HESITATION_FEEDBACK, (long) 2500);
+    }
+
+    /**
+     * What is the first QueueMap item to be called?
+     * @return one of {HIGHLIGHT_ONES, HIGHLIGHT_TENS, HIGHLIGHT_HUNS}
+     */
+    private String getStartingHighlightByNumDigits() {
+        String[] numDigitsToBehavior = {null, HIGHLIGHT_ONES, HIGHLIGHT_TENS, HIGHLIGHT_HUNS};
+
+        return numDigitsToBehavior[numDigits];
     }
 
 
     // (5) prevent user
+    // deprecated -- don't lock user input anymore
     public void lockUserInput() {
         _layoutManager.enableChooseNumber(false);
     }
@@ -348,15 +498,15 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
                 break;
         }
 
-        publishValue(".digitMore",
+        publishValue(VALUE_DIGIT_MORE,
                 String.valueOf(digitLeft > digitRight ?
                         digitLeft : digitRight));
 
-        publishValue(".digitCompare", digitLeft == digitRight ?
+        publishValue(VALUE_DIGIT_COMPARE, digitLeft == digitRight ?
                 //"is equal to" : "is greater than");
-                "is the same as" : "is more than"); // temporary placeholder
+                "is the same as" : "is bigger than"); // temporary placeholder
 
-        publishValue(".digitLess",
+        publishValue(VALUE_DIGIT_LESS,
                 String.valueOf(digitLeft > digitRight ?
                         digitRight: digitLeft));
     }
@@ -367,6 +517,8 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
     public void highlightNextScaffoldDigit() {
 
         if (_currentHighlightDigit == null) return;
+
+        cancelPost(HESITATION_PROMPT); // prevent hesitation prompt
 
         switch(_currentHighlightDigit) {
             case HUN_DIGIT:
@@ -434,8 +586,23 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
     public void doTheWrongThing() {
         Log.d(TAG, "Doing the wrong thing");
 
-        applyBehaviorNode(HIGHLIGHT_HUNS);
 
+        // Cancel all the scaffolding queue Maps.
+        applyBehaviorNode(CANCEL_HIGHLIGHT_HUNS);
+        applyBehaviorNode(CANCEL_HIGHLIGHT_TENS);
+        applyBehaviorNode(CANCEL_HIGHLIGHT_ONES);
+        applyBehaviorNode(CANCEL_INDICATE_CORRECT);
+
+        // Reset the highlight.
+        _layoutManager.highlightDigit(NO_DIGIT);
+
+        // Prevent hesitation prompt.
+        cancelPost(HESITATION_PROMPT);
+
+        // Restart the scaffolding process.
+        applyBehaviorNode(getStartingHighlightByNumDigits());
+
+        // Continue to next part of nodeMap.
         applyBehaviorNode(ND_CONST.NEXTNODE);
 
 
@@ -446,6 +613,20 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
      */
     public void doTheRightThing() {
         Log.d(TAG, "Doing the right thing");
+
+        // Cancel all the scaffolding queue Maps.
+        applyBehaviorNode(CANCEL_HIGHLIGHT_HUNS);
+        applyBehaviorNode(CANCEL_HIGHLIGHT_TENS);
+        applyBehaviorNode(CANCEL_HIGHLIGHT_ONES);
+        applyBehaviorNode(CANCEL_INDICATE_CORRECT);
+
+        // Prevent hesitation prompt.
+        cancelPost(HESITATION_PROMPT); // prevent hesitation prompt
+
+        // Reset the highlight.
+        _layoutManager.highlightDigit(NO_DIGIT);
+
+        // Continue to next part of nodeMap.
         applyBehaviorNode(ND_CONST.NEXTNODE);
     }
 
@@ -472,6 +653,10 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
     // Overridden in TClass.
     // TODO fix this freakin' architecture...
+    public void publishOrRetractFeature(String feature, boolean p) {}
+
+    // Overridden in TClass.
+    // TODO fix this freakin' architecture...
     public void publishValue(String varName, String value) {
     }
 
@@ -485,5 +670,92 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
 
         JSON_Helper.parseSelf(jsonData, this, CClassMap.classMap, scope);
         _dataIndex = 0;
+    }
+
+    /**
+     * Remove named posts
+     */
+    public void cancelPost(String name) {
+
+        Log.d(TAG, "Cancel Post Requested: " + name);
+
+        while(nameMap.containsKey(name)) {
+
+            Log.d(TAG, "Post Cancelled: " + name);
+
+            mainHandler.removeCallbacks((Queue) (nameMap.get(name)));
+            nameMap.remove(name);
+        }
+    }
+
+    public void postNamed(String name, String command, String target, Long delay) {
+        enQueue(new Queue(name, command, target), delay);
+    }
+
+    private void enQueue(Queue qCommand, long delay) {
+
+        if(!_qDisabled) {
+            queueMap.put(qCommand, qCommand);
+
+            if(delay > 0) {
+                mainHandler.postDelayed(qCommand, delay);
+            }
+            else {
+                mainHandler.post(qCommand);
+            }
+        }
+    }
+
+    public class Queue implements  Runnable {
+
+        protected String _name;
+        protected String _command;
+        protected String _target;
+        protected String _item;
+
+        public Queue(String name, String command) {
+
+            _name    = name;
+            _command = command;
+
+            if(name != null) {
+                nameMap.put(name, this);
+            }
+        }
+
+        public Queue(String name, String command, String target) {
+
+            this(name, command);
+            _target  = target;
+        }
+
+        @Override
+        public void run() {
+
+            try {
+                if (_name != null) {
+                    nameMap.remove(_name);
+                }
+
+                queueMap.remove(this);
+
+                switch (_command) {
+
+                    case TCONST.APPLY_BEHAVIOR:
+
+                        Log.d(DEBUG_HESITATE, "applybehavior: " + _target);
+
+                        applyBehaviorNode(_target);
+                        break;
+
+                    default:
+                        break;
+                }
+
+
+            } catch (Exception e) {
+                CErrorManager.logEvent(TAG, "Run Error:", e, true);
+            }
+        }
     }
 }

@@ -199,6 +199,7 @@ public class TCONST {
     public static final String SONG                = "[song]";
     public static final String SONG_FOLDER         = "?";
     public static final String STORY_PATH          = "cmu/xprize/story_reading/";
+    public static final String WORD_PROBLEMS       = "[wordproblems]";
 
     public static final String LOCAL_FILE          = "[local_file]";
     public static final String DOWNLOAD_PATH       = "/sdcard/Download";
@@ -265,7 +266,6 @@ public class TCONST {
     public static final String CLOZE_WRONG                = "CLOZE_WRONG";
     public static final String PICMATCH_CORRECT              = "PICMATCH_CORRECT";
     public static final String PICMATCH_WRONG                = "PICMATCH_WRONG";
-    public static String TARGET                                  = "";
     public static final String NEXT_SCENE                 = "NEXT_SCENE";
     public static final String NEXT_WORD                  = "NEXT_WORD";
 
@@ -367,6 +367,7 @@ public class TCONST {
 
     static final public String BASE_ASSETS        = "assets";
     public static final String STORY_ASSETS       = "story";
+    public static final String ICON_ASSETS        = "icons";
     static final public String EXTERNAL           = "external";
     static final public String ROBOTUTOR_ASSETS   = "sdcard/robotutor_assets/assets";
     static final public String LOCAL_STORY_AUDIO  = "sdcard/Download/RoboTutor/assets/story_questions";
@@ -408,6 +409,8 @@ public class TCONST {
     public static final String DEFINED         = "DEFINED";
 
     public static final String DEBUG_STORY_TAG = "GENERAL_TSO";
+    public static final String DEBUG_HESITATE = "MATH_HESITATE";
+    public static final String DEBUG_MENU      = "DEBUG_MENU";
 
     // Navigator types
     final static public String SIMPLENAV       = "SIMPLE_NAVIGATOR";
@@ -633,6 +636,8 @@ public class TCONST {
     public static final String  HOT_LOG_FOLDER_PERF = "/RoboTutor_HOT/"; // use same as normal logs
     public static final String READY_LOG_FOLDER_PERF = "/RoboTutor/";    // use same as normal logs
 
+    public static final String AUDIO_LOG_FOLDER = "/RoboTutor Audio/";
+
     public static final String ROBOTUTOR_ASSET_FOLDER   = "/robotutor_assets/";
     public static final String GLYPHS_FOLDER            = "/glyphs/";
 
@@ -777,9 +782,6 @@ public class TCONST {
 
     public static final String RTC_VAR_ECHOSTATE   = ".echoState";
     public static final String RTC_VAR_PARROTSTATE = ".parrotState";
-    public static final String RTC_VAR_QNSTATE = ".qnState";
-    public static final String RTC_VAR_CLZSTATE = ".clzState";
-    public static final String RTC_VAR_PMSTATE = ".pmState";
     // Generic question state flag
     public static final String RTC_VAR_QUESTIONSTATE = ".questionState";
     public static final String RTC_VAR_CLOZESTATE = ".clozeState";
@@ -794,8 +796,6 @@ public class TCONST {
     public static final String RTC_VAR_PARASTATE   = ".paraState";
     public static final String RTC_VAR_LINESTATE   = ".lineState";
     public static final String RTC_VAR_WORDSTATE   = ".wordState";
-    public static final String SHOW_CLOZE          = ".showCloze";
-    public static final String SHOW_PICMATCH        = ".showPicMatch";
     public static final String RTC_VAR_ATTEMPT     = ".attempt";
     public static final String LAST                = "LAST";
     public static final String NOT_LAST            = "NOT_LAST";
@@ -856,6 +856,7 @@ public class TCONST {
 
 
     // Debugger Thumb key words
+    // NEW_THUMBS trace me
     public enum Thumb {
         AKIRA, BPOP_NUM, GL, MN, BPOP_LTR, CX_1, CX_10, CX_100, MATH, NUMSCALE, STORY_1, STORY_2, STORY_3, STORY_4, STORY_5, SONG, STORY_NONSTORY, WRITE, SPELLING, PICMATCH, NUMCOMPARE, COMPREHENSION, PLACEVALUE, BIGMATH, NOTHING
     }
@@ -866,6 +867,7 @@ public class TCONST {
     public static final String DEBUG_AUDIO_FILE = "DEBUG_AUDIO";
 
     public static final String PLACEMENT_TAG = "DEBUG_PLACEMENT";
+    public static final String MENU_BUG_TAG  = "MENU_BUG";
     public static final String MATH_PLACEMENT = "MATH_PLACEMENT"; // TOGGLE_PLACEMENT trace me...
     public static final String MATH_PLACEMENT_INDEX = "MATH_PLACEMENT_INDEX";
     public static final String WRITING_PLACEMENT = "WRITING_PLACEMENT";

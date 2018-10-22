@@ -26,14 +26,11 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -44,11 +41,12 @@ import cmu.xprize.util.CTutorData_Metadata;
 import cmu.xprize.util.IButtonController;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
+import cmu.xprize.util.ImageLoader;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
-import static cmu.xprize.util.TCONST.GRAPH_MSG;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
+import static cmu.xprize.util.TCONST.Thumb.BPOP_LTR;
 
 
 public class CAskComponent extends FrameLayout implements ILoadableObject, View.OnTouchListener {
@@ -197,7 +195,7 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
             if (element == null) break;
             int viewID = getResources().getIdentifier(element.componentID, "id", packageName);
 
-            ImageButton ibView = (ImageButton) findViewById(viewID);
+            CImageButton ibView = (CImageButton) findViewById(viewID);
 
             buttonMap.put(ibView, element.componentID);
             buttonList.add(ibView);
@@ -210,15 +208,61 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
         Log.wtf("NEW_MENU", nextActivities[0].tutor_id + " " + nextActivities[1].tutor_id );// + " " + nextActivities[2].tutor_id);
 
+        // This is a pain...
+        TCONST.Thumb[] thumbs = new TCONST.Thumb[nextActivities.length];
+        String[] icons = new String[nextActivities.length];
+
         // first two (or three) buttons are set...
         for(int i = 0; i < nextActivities.length; i++) {
             CAskElement element = mDataSource.items[i];
-            ImageButton ibView = (ImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
+            CImageButton ibView = (CImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
 
-            TCONST.Thumb resource = CTutorData_Metadata.getThumbImage(nextActivities[i]);
-            Log.wtf("NEW_MENU", resource.toString());
+            boolean useOldWay = false;
+            // get the correct file name
+            String tutorIcon = CTutorData_Metadata.getThumbName(nextActivities[i]); // SUPER_PLACEMENT if the same, do two different icons
+            icons[i] = tutorIcon;
+            if (tutorIcon == null) {
+                useOldWay = true;
+            } else {
+                try {
+                    // NEW_THUMBS (3) continue here...
+                    ImageLoader.makeBitmapLoader(TCONST.ROBOTUTOR_ASSETS + "/" + TCONST.ICON_ASSETS + "/")
+                            .loadBitmap(tutorIcon)
+                            .into(ibView);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                    useOldWay = true;
+                    icons[i] = null;
+                }
+            }
 
-            ibView.setImageResource(CDebugComponent.getThumbId(resource));
+            // the old way does it a different way...
+            if (useOldWay) {
+                TCONST.Thumb resource = CTutorData_Metadata.getThumbImage(nextActivities[i]); // NEW_THUMBS (0) home screen
+                Log.wtf("NEW_MENU", resource.toString());
+
+                thumbs[i] = resource;
+
+                ibView.setImageResource(CDebugComponent.getThumbId(resource)); // NEW_THUMBS (2) setImageResource
+            }
+
+        }
+
+        /// check for duplicates
+        if (thumbs[0] != null && thumbs[0] == thumbs[1]) {
+
+            CAskElement element = mDataSource.items[1];
+            CImageButton ibView = (CImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
+
+            switch(thumbs[0]) {
+                case BPOP_NUM:
+                    ibView.setImageResource(R.drawable.thumb_bpop_num_2);
+                    break;
+
+                case BPOP_LTR:
+                    ibView.setImageResource(R.drawable.thumb_bpop_ltr_lc_2);
+                    break;
+            }
 
         }
     }
@@ -233,7 +277,7 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
                 int test = getResources().getIdentifier(element.componentID, "id", packageName);
 
-                ImageButton ibView = (ImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
+                CImageButton ibView = (CImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
 
                 ibView.setImageDrawable(null);
             }
@@ -315,7 +359,8 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
             case MotionEvent.ACTION_DOWN:
 
                 startTouch(view);
-                view.setPressed(true);
+                // https://stackoverflow.com/questions/5975168/android-button-setpressed-after-onclick
+                view.setPressed(true); // TAP_BUTTON here we go!
 
                 result = true;
                 break;

@@ -12,32 +12,32 @@ public class SelfAssessmentPromotionRules extends PromotionRules {
 
 
     @Override
-    public SelectedActivity selectActivityByPerformance(PerformanceData performance) {
+    public PromotionDecision assessPerformance(PerformanceData performance) {
 
         // a simple one-to-one matching of student's self-assessment to chosen activity
 
         if(performance.getSelfAssessment() == null) {
-            return SelectedActivity.NEXT;
+            return PromotionDecision.NEXT;
         }
 
         switch (performance.getSelfAssessment()) {
             case PLAY_AGAIN:
-                return SelectedActivity.SAME;
+                return PromotionDecision.SAME;
 
             case LET_ROBOTUTOR_DECIDE:
-                return SelectedActivity.NEXT;
+                return PromotionDecision.NEXT;
 
             case TOO_EASY:
-                return SelectedActivity.DOUBLE_NEXT;
+                return PromotionDecision.DOUBLE_NEXT;
 
             case TOO_HARD:
-                return SelectedActivity.PREVIOUS;
+                return PromotionDecision.PREVIOUS;
 
             case JUST_RIGHT:
-                return SelectedActivity.NEXT;
+                return PromotionDecision.NEXT;
 
             default:
-                return SelectedActivity.NEXT;
+                return PromotionDecision.NEXT;
 
         }
     }
