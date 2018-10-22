@@ -372,6 +372,16 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         firstEditOperationSentence.showHighlightBox();
     }
 
+    public void showHighlightBoxOnFirstEditAndPoint(){
+        EditOperation firstEditOperationSentence = getFirstEditOperation(mWrittenSentence, mAnswer);
+        if(!firstEditOperationSentence.toString().equals("N"))
+            firstEditOperationSentence.showHighlightBox();
+
+            int index = firstEditOperationSentence.index;
+            CGlyphController view    = (CGlyphController) mGlyphList.getChildAt(index);
+            autoScrollAndPoint(view);
+    }
+
 //    public void show
 
     public void showHighlightBoxOnFirstEditGroup(){
