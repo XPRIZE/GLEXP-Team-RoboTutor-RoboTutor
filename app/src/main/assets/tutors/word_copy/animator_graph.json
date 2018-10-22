@@ -162,7 +162,7 @@
 //            {"name": "SHOW sample",          "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "postEvent",  "parms": "SHOW_SAMPLE:String",    "features":"FTR_SEN&FTR_SEN_LTR&FTR_ATTEMPT_4"},
 
 
-            {"name": "show box on first edit", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBoxOnFirstEdit", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_LTR&FTR_HESITATION_2|FTR_SEN_CORR&FTR_SEN_LTR&FTR_HESITATION_2"},
+            {"name": "show box on first edit", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "showHighlightBoxOnFirstEditAndPoint", "parms": "", "features":"FTR_SEN_COPY&FTR_SEN_LTR&FTR_HESITATION_2|FTR_SEN_CORR&FTR_SEN_LTR&FTR_HESITATION_2"},
 
 
             //letter level feedback, HESITATION 3, all ATTEMPTS
