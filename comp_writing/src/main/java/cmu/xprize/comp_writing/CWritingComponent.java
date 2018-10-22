@@ -379,7 +379,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
             int index = firstEditOperationSentence.index;
             CGlyphController view    = (CGlyphController) mGlyphList.getChildAt(index);
-            autoScrollAndPoint(view);
+            autoScroll(view);
     }
 
 //    public void show
