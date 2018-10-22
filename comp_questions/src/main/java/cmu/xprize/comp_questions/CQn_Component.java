@@ -32,7 +32,6 @@ import android.widget.TextView;
 import android.widget.ViewAnimator;
 
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -810,6 +809,11 @@ public class CQn_Component extends ViewAnimator implements IEventListener, IVMan
                 Log.e(TAG, "ERROR:node.queuedgraph,action:onevent");
             }
         }
+    }
+
+    // Override...
+    public void logClozePerformance(boolean correct, String expected, String studentChoice, String[] options) {
+
     }
 
     // IEventListener  -- End

@@ -561,12 +561,16 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                         mParent.retractFeature(TCONST.CLOZE_WRONG);
                         mParent.publishFeature(TCONST.CLOZE_CORRECT);
                         mParent.publishValue(SHOW_CLOZE, TCONST.FALSE);
+                        mParent.logClozePerformance(true, clozeTarget, _wordTextView.getText().toString(),
+                                new String[] {mWord1Text.getText().toString(), mWord2Text.getText().toString(), mWord3Text.getText().toString(), mWord4Text.getText().toString()});
                         isClozePage = false;
                         replayCloze = true;
                     }else{
                         mParent.updateViewColor(_wordFrame, Color.RED);
                         mParent.retractFeature(TCONST.CLOZE_CORRECT);
                         mParent.publishFeature(TCONST.CLOZE_WRONG);
+                        mParent.logClozePerformance(false, clozeTarget, _wordTextView.getText().toString(),
+                                new String[]{mWord1Text.getText().toString(), mWord2Text.getText().toString(), mWord3Text.getText().toString(), mWord4Text.getText().toString()});
                     }
                     mParent.nextNode();
                     break;

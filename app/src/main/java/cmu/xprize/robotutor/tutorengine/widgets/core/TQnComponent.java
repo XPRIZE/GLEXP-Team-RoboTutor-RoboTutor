@@ -1225,7 +1225,45 @@ public class TQnComponent extends CQn_Component implements IBehaviorManager, ITu
         super.loadJSON(jsonObj, (IScope2) scope);
     }
 
-        private void trackAndLogPerformance(String task, boolean correct) {
+    public void logClozePerformance(boolean correct, String expected, String studentChoice, String[] options) {
+
+        PerformanceLogItem event = new PerformanceLogItem();
+
+        event.setUserId(RoboTutor.STUDENT_ID);
+        event.setSessionId(RoboTutor.SESSION_ID);
+        event.setGameId(mTutor.getUuid().toString()); // a new tutor is generated for each game, so this will be unique
+        event.setLanguage(CTutorEngine.language);
+        event.setTutorName(mTutor.getTutorName());
+        event.setTutorId(mTutor.getTutorId());
+        event.setPromotionMode(RoboTutor.getPromotionMode(event.getMatrixName()));
+        event.setLevelName("cloze");
+        event.setTaskName("story");
+
+        StringBuilder sb = new StringBuilder(expected);
+        String prefix = "_";
+        for (String option : options) {
+            sb.append(prefix);
+            prefix = "-";
+            sb.append(option);
+        }
+        event.setProblemName(sb.toString());
+        event.setProblemNumber(currentIndex);
+        if (dataSource != null) {
+            event.setTotalProblemsCount(dataSource.length);
+        }
+        event.setSubstepNumber(expectedWordIndex);
+        event.setAttemptNumber(attemptCount);
+        event.setExpectedAnswer(sentenceWords != null && expectedWordIndex < sentenceWords.length ? sentenceWords[expectedWordIndex] : "");
+        event.setUserResponse(spokenWord);
+        event.setCorrectness(correct ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
+
+        event.setTimestamp(System.currentTimeMillis());
+
+        RoboTutor.perfLogManager.postPerformanceLog(event);
+
+    }
+
+    private void trackAndLogPerformance(String task, boolean correct) {
 
         PerformanceLogItem event = new PerformanceLogItem();
 
