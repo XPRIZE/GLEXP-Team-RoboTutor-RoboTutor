@@ -65,6 +65,7 @@ import static cmu.xprize.util.TCONST.ASREventMap;
 import static cmu.xprize.util.TCONST.LANG_AUTO;
 import static cmu.xprize.util.TCONST.LOCAL_STORY_AUDIO;
 import static cmu.xprize.util.TCONST.MEDIA_STORY;
+import static cmu.xprize.util.TCONST.PUNC_STORY;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 import static cmu.xprize.util.TCONST.TUTOR_STATE_MSG;
 import static cmu.xprize.util.TCONST.WORD_PROBLEMS;
@@ -667,6 +668,17 @@ public class TRtComponent extends CRt_Component implements IBehaviorManager, ITu
                 configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
                 mMediaManager.addSoundPackage(mTutor, MEDIA_STORY, new CMediaPackage(LANG_AUTO, AUDIOSOURCEPATH));
 
+                loadStory(STORYSOURCEPATH, "ASB_Data", TCONST.EXTERN);
+            } else if (dataNameDescriptor.startsWith(TCONST.PUNC_STORY)) {
+                String storyFolder = dataNameDescriptor.substring(PUNC_STORY.length()).toLowerCase();
+
+                DATASOURCEPATH = TCONST.ROBOTUTOR_ASSETS + "/" + TCONST.STORY_ASSETS + "/" + mMediaManager.getLanguageIANA_2(mTutor) + "/";
+                STORYSOURCEPATH = DATASOURCEPATH + "punc" + "/" + storyFolder + "/";
+
+                AUDIOSOURCEPATH = TCONST.STORY_PATH + "punc" + "/" + storyFolder;
+
+                configListenerLanguage(mMediaManager.getLanguageFeature(mTutor));
+                mMediaManager.addSoundPackage(mTutor, MEDIA_STORY, new CMediaPackage(LANG_AUTO, AUDIOSOURCEPATH));
                 loadStory(STORYSOURCEPATH, "ASB_Data", TCONST.EXTERN);
             }
 
