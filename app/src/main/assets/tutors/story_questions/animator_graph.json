@@ -384,7 +384,7 @@
           "COMMENT": "After a page, insert generic question",
           "maptype": "moduleMap",
           "mapname": "INSERT_GENERIC_QUESTION", // plays the question audio
-          "preenter": ["SET_GENERIC_QUESTION", "DISPLAY_GENERIC_QUESTION"], // figures out which question to ask, then set up the display on screen
+          "preenter": [], // figures out which question to ask, then set up the display on screen
           "preexit": [],
           "edges": [
             {"constraint": "QUESTION_COMPLETE", "edge": "NEXT_PAGE_NODE"}
@@ -701,10 +701,15 @@
           "COMMENT": "TBD",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryQuestions", "method": "logState", "parms": "type#node,value#INSERT_GENERIC_QUESTION:String", "features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SstoryQuestions.questionAudio}}.mp3", "mode": "flow", "soundpackage": "questions", "features": ""},
 
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "5 second pause.mp3", "mode": "flow", "soundpackage": "pause", "features": ""},
-            {"type": "COMMAND", "id": "SstoryQuestions", "method": "genericQuestions" , "features": ""}
+            {"type": "COMMAND", "id": "SstoryQuestions", "method": "decideToPlayGenericQuestion", "parms": "", "features": ""},
+            {"type": "COMMAND", "id": "SstoryQuestions", "method": "setRandomGenericQuestion", "parms": "" , "features": "FTR_PLAY_GEN"},
+            {"type": "COMMAND", "id": "SstoryQuestions", "method": "displayGenericQuestion", "parms": "" , "features": "FTR_PLAY_GEN"},
+
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SstoryQuestions.questionAudio}}.mp3", "mode": "flow", "soundpackage": "questions", "features": "FTR_PLAY_GEN"},
+
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "5 second pause.mp3", "mode": "flow", "soundpackage": "pause", "features": "FTR_PLAY_GEN"},
+            {"type": "COMMAND", "id": "SstoryQuestions", "method": "genericQuestions" , "features": "FTR_PLAY_GEN"}
           ]
         }
       //,
@@ -806,9 +811,6 @@
         "SET_UTTERANCE":       {"type": "COMMAND", "id": "SstoryQuestions", "method": "setStickyBehavior", "parms": "SPEAK_UTTERANCE:String|SPEAK_UTTERANCE_BEHAVIOR:String" , "features": ""},
 //        "SET_CLOZE_UTTERANCE":       {"type": "COMMAND", "id": "SstoryQuestions", "method": "setStickyBehavior", "parms": "SPEAK_CLOZE_UTTERANCE:String|SPEAK_CLOZE_UTTERANCE_BEHAVIOR:String" , "features": ""},
 
-        "SET_GENERIC_QUESTION": {"type": "COMMAND", "id": "SstoryQuestions", "method": "setRandomGenericQuestion", "parms": "" , "features": ""},
-
-        "DISPLAY_GENERIC_QUESTION": {"type": "COMMAND", "id": "SstoryQuestions", "method": "displayGenericQuestion", "parms": "" , "features": ""},
 //        "SET_CLOZE_QUESTION": {"type": "COMMAND", "id": "SstoryQuestions", "method": "setClozeQuestion", "parms": "" , "features": ""},
         "CHECK_CLOZE": {"type": "COMMAND", "id": "SstoryQuestions", "method": "hasClozeDistractor", "parms": "" , "features": ""},
         "CHECK_QUESTION": {"type": "COMMAND", "id": "SstoryQuestions", "method": "hasQuestion", "parms": "" , "features": ""},

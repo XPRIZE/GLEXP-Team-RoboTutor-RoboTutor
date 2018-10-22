@@ -65,6 +65,8 @@ public interface ICQn_ViewManager extends ILoadableObject {
     void setHighLight(String highlight, boolean update);
 
     //UHQ
+    void decideToPlayGenericQuestion();
+
     void genericQuestions();
 
     void displayGenericQuestion();

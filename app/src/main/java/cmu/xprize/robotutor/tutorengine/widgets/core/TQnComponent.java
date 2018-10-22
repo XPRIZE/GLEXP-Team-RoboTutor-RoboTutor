@@ -1109,6 +1109,11 @@ public class TQnComponent extends CQn_Component implements IBehaviorManager, ITu
     }
 
         @Override
+        public void decideToPlayGenericQuestion() {
+            mViewManager.decideToPlayGenericQuestion();
+        }
+
+        @Override
         public void genericQuestions() {
             mViewManager.genericQuestions();
         }

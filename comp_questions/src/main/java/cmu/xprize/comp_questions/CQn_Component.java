@@ -187,6 +187,11 @@ public class CQn_Component extends ViewAnimator implements IEventListener, IVMan
     public void nextNode() {
     }
 
+
+    public void decideToPlayGenericQuestion() {
+
+    }
+    
     public void setRandomGenericQuestion() {
         mViewManager.setRandomGenericQuestion();
     }
