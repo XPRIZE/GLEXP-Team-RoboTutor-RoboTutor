@@ -75,5 +75,5 @@ public final class ND_CONST {
     public static final String VALUE_DIGIT_LESS = ".digitLess";
 
 
-
+    public static final int HESITATION_DELAY = 6000;
 }
