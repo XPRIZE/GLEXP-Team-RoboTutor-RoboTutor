@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.LogManager;
 
 import cmu.xprize.comp_ask.CAskElement;
 import cmu.xprize.comp_debug.CDebugComponent;
@@ -56,6 +57,7 @@ import static cmu.xprize.comp_session.AS_CONST.ACTIONMAP_KEYS.SET_HESITATION_FEE
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_MATH;
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING;
+import static cmu.xprize.comp_session.AS_CONST.REPEAT_DEBUG_TAG;
 import static cmu.xprize.comp_session.AS_CONST.VAR_DATASOURCE;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENT;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENTDATA;
@@ -403,40 +405,46 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
     @Override
     public void doButtonBehavior(String buttonBehavior) {
 
-        // exit always exits
-        if (buttonBehavior.equals(AS_CONST.SELECT_EXIT)) {
-            mTutor.post(TCONST.FINISH);
-            return;
-        }
+        // add error handling
+        try {
 
-        RoboTutor.STUDENT_CHOSE_REPEAT = false; // default to false, unless they select REPEAT (needed for debug mode)
+            // exit always exits
+            if (buttonBehavior.equals(AS_CONST.SELECT_EXIT)) {
+                mTutor.post(TCONST.FINISH);
+                return;
+            }
 
-        // Special Flavor processing to exclude ASR apps - this was a constraint for BETA trials
-        // reenable the ASK buttons if we don't execute the story_tutor
-        //
+            RoboTutor.STUDENT_CHOSE_REPEAT = false; // default to false, unless they select REPEAT (needed for debug mode)
+
+            // Special Flavor processing to exclude ASR apps - this was a constraint for BETA trials
+            // reenable the ASK buttons if we don't execute the story_tutor
+            //
         /*if (Configuration.noAsrApps(getContext()) && transitionMap == matrix.storyTransitions) {
             SaskActivity.enableButtons(true);
             return;
         }*/
 
-        // the next tutor to be launched
-        CAt_Data tutorToLaunch = menu.getTutorToLaunch(buttonBehavior); // SUPER_PLACEMENT change this TRACE_PROMOTION the tutorToLaunch isn't saved...
+            // the next tutor to be launched
+            CAt_Data tutorToLaunch = menu.getTutorToLaunch(buttonBehavior); // SUPER_PLACEMENT change this TRACE_PROMOTION the tutorToLaunch isn't saved...
 
-        // #Mod 330 Show TutorID in Banner in debug builds
-        // DEBUG_TUTORID is used to communicate the active tutor to the Banner in DEBUG mode
-        //
-        if (Configuration.showTutorVersion(getContext())) {
-            DEBUG_TUTORID = tutorToLaunch.tutor_id;
-        }
+            // #Mod 330 Show TutorID in Banner in debug builds
+            // DEBUG_TUTORID is used to communicate the active tutor to the Banner in DEBUG mode
+            //
+            if (Configuration.showTutorVersion(getContext())) {
+                DEBUG_TUTORID = tutorToLaunch.tutor_id;
+            }
 
-        // This is where we go to the debug view...
-        //
-        if(DEBUG_LANCHER) {
-            mTutor.post(TCONST.ENDTUTOR); // ends current tutor, launches debug tutor instead
-            RoboTutor.SELECTOR_MODE = TCONST.FTR_DEBUG_SELECT;
-        }
-        else {
-            doTutorLaunchWithVideosAndStuff(tutorToLaunch);
+            // This is where we go to the debug view...
+            //
+            if (DEBUG_LANCHER) {
+                mTutor.post(TCONST.ENDTUTOR); // ends current tutor, launches debug tutor instead
+                RoboTutor.SELECTOR_MODE = TCONST.FTR_DEBUG_SELECT;
+            } else {
+                doTutorLaunchWithVideosAndStuff(tutorToLaunch);
+            }
+        } catch (Exception e) {
+            CErrorManager.logEvent(REPEAT_DEBUG_TAG, "StudentModel--" + studentModel.toLogString(), e,true);
+            CErrorManager.logEvent(REPEAT_DEBUG_TAG, Log.getStackTraceString(e), true);
         }
     }
 

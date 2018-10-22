@@ -65,5 +65,7 @@ public class AS_CONST {
     public static final String VAR_INTENTDATA       = ".intentData";
     public static final String VAR_DATASOURCE       = ".dataSource";
     public static final String VAR_TUTOR_ID         = ".tutorId";
+
+    public static final String REPEAT_DEBUG_TAG = "REPEAT_STUFF";
 }
 

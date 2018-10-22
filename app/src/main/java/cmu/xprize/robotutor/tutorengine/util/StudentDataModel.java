@@ -347,4 +347,18 @@ public class StudentDataModel {
 
         return builder.toString();
     }
+
+    public String toLogString() {
+        StringBuilder builder = new StringBuilder();
+
+        Map prefsMap = _preferences.getAll();
+        for (Object k : prefsMap.keySet()) {
+            builder.append(k)
+                    .append("-")
+                    .append(prefsMap.get(k))
+                    .append("---");
+        }
+
+        return builder.toString();
+    }
 }
