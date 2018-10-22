@@ -1897,9 +1897,13 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             int sx = mDrawnScroll.getScrollX();
             int sw = mDrawnScroll.getWidth();
 
-            int gx = (int) view.getX();
             int viewWidth = view.getWidth();
+            int maxScrollX = mDrawnScroll.getChildAt(0).getMeasuredWidth() - sw;
+
+            int gx = (int) view.getX();
             int gw = viewWidth * 2;
+
+
 
             // If the glyph to the right of the current glyph is partially obscurred then calc
             // the offset to bring it on screen - with some padding (i.e. multiple glyph widths)
@@ -1911,8 +1915,17 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                 int newScroll = calcOffsetToMakeGlyphVisible(sx,padding);
                 mDrawnScroll.smoothScrollTo(gx, 0);
                 mDrawnScroll.releaseInitiatorStatus();
+
+                int xToPointAt;
+                if(gx > maxScrollX){
+                    xToPointAt = gx - maxScrollX + viewWidth/2;
+                }
+                else{
+                    xToPointAt = viewWidth/2;
+                }
+
                 Intent msg = new Intent(TCONST.POINTAT);
-                msg.putExtra(TCONST.SCREENPOINT, new float[]{viewWidth/2, (float) ((CGlyphController) glyphController).getBottom()});
+                msg.putExtra(TCONST.SCREENPOINT, new float[]{xToPointAt, (float) ((CGlyphController) glyphController).getBottom()});
                 bManager.sendBroadcast(msg);
             }
 
