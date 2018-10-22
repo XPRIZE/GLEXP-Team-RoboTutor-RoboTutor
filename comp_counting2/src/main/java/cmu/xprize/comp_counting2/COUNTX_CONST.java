@@ -9,7 +9,7 @@ import android.graphics.Color;
 public class COUNTX_CONST {
 
     // drawing parameters
-    public static final int COLOR_PINK = Color.rgb(255, 180, 180);
+    public static final int COLOR_PINK = Color.parseColor("#FFDFEA");
     public static final int COLOR_BACKGROUND = Color.rgb(230, 230, 230);
     public static final int COLOR_YELLOW = Color.rgb(247, 245, 190);
     public static final int COLOR_DARKGREEN =  Color.rgb(144,238,144);
