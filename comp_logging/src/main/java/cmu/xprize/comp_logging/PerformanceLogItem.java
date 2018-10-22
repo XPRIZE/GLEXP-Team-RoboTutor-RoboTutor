@@ -1,7 +1,5 @@
 package cmu.xprize.comp_logging;
 
-import android.content.SharedPreferences;
-
 import java.lang.reflect.Field;
 
 import static cmu.xprize.comp_logging.PerformanceLogItem.MATRIX_TYPE.LITERACY_MATRIX;
@@ -108,7 +106,7 @@ public class PerformanceLogItem {
             setMatrixWrite(tutorId);
         } else if (isStoryTutor(tutorId)) {
             setMatrixStory(tutorId);
-        } else if (isSpellingTutor(tutorId)) {
+        } else if (isAlwaysLitMatrix(tutorId)) {
             matrixName = LITERACY_MATRIX;
         } else {
             matrixName = UNKNOWN_MATRIX;
@@ -148,7 +146,8 @@ public class PerformanceLogItem {
                 || tutorName.contains("100..1000")
                 || tutorName.contains("Counting_Fingers_Toes")
                 || tutorName.contains("Number_Song_2")
-                || tutorName.contains("numbers_counting_song")) {
+                || tutorName.contains("numbers_counting_song")
+                || tutorName.contains("word_problem")) {
             matrixName = MATH_MATRIX;
 
         } else if (tutorName.contains("Garden_Song")
@@ -164,7 +163,10 @@ public class PerformanceLogItem {
                     || tutorName.startsWith("story.read")) {
                 matrixName = LITERACY_MATRIX;
 
-            } else if (tutorName.startsWith("story.hear")) {
+            } else if (tutorName.startsWith("story.hear")
+                    || tutorName.startsWith("story.clo.hear")
+                    || tutorName.startsWith("story.pic.hear")
+                    || tutorName.startsWith("story.gen.hear")) {
                 matrixName = STORIES_MATRIX;
 
             } else {
@@ -247,8 +249,9 @@ public class PerformanceLogItem {
         return tutorName.startsWith("bpop");
     }
 
-    private boolean isSpellingTutor(String tutorName) {
-        return tutorName.startsWith("spelling");
+    private boolean isAlwaysLitMatrix(String tutorName) {
+        return tutorName.startsWith("spelling")
+                || tutorName.startsWith("picmatch");
     }
 
     private boolean isAkiraTutor(String tutorName) {
@@ -260,7 +263,9 @@ public class PerformanceLogItem {
                 || tutorName.startsWith("math")
                 || tutorName.startsWith("countingx")
                 || tutorName.startsWith("place.value")
-                || tutorName.startsWith("placevalue");
+                || tutorName.startsWith("placevalue")
+                || tutorName.startsWith("bigmath")
+                || tutorName.startsWith("numcompare");
     }
 
     public String getUserId() {
