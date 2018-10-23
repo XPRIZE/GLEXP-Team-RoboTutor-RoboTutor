@@ -991,8 +991,8 @@ public class TQnComponent extends CQn_Component implements IBehaviorManager, ITu
     }
 
 
-        @Override
-        public void updateContext(String sentence, int index, String[] wordList, int wordIndex, String word, int attempts, boolean virtual, boolean correct) {
+    @Override
+    public void updateContext(String sentence, int index, String[] wordList, int wordIndex, String word, int attempts, boolean virtual, boolean correct) {
 
         currentSentence = sentence;
         currentIndex = index;
@@ -1001,7 +1001,8 @@ public class TQnComponent extends CQn_Component implements IBehaviorManager, ITu
         spokenWord = attemptCount == 2 && virtual ? "AUTO_GENERATED" : virtual ? "TOUCH_GENERATED" : word;
         attemptCount = attempts;
 
-        trackAndLogPerformance("WORD", correct);
+        // FIX_CLOZE don't log any performance
+        //    trackAndLogPerformance("WORD", correct);
     }
 
 
@@ -1225,7 +1226,8 @@ public class TQnComponent extends CQn_Component implements IBehaviorManager, ITu
         super.loadJSON(jsonObj, (IScope2) scope);
     }
 
-    public void logClozePerformance(boolean correct, String expected, String studentChoice, String[] options) {
+    // FIX_CLOZE make this right
+    public void logClozePerformance(boolean correct, String expected, String studentChoice, String[] options, int page) {
 
         PerformanceLogItem event = new PerformanceLogItem();
 
@@ -1247,20 +1249,51 @@ public class TQnComponent extends CQn_Component implements IBehaviorManager, ITu
             sb.append(option);
         }
         event.setProblemName(sb.toString());
-        event.setProblemNumber(currentIndex);
+        event.setProblemNumber(page);
         if (dataSource != null) {
             event.setTotalProblemsCount(dataSource.length);
         }
-        event.setSubstepNumber(expectedWordIndex);
-        event.setAttemptNumber(attemptCount);
-        event.setExpectedAnswer(sentenceWords != null && expectedWordIndex < sentenceWords.length ? sentenceWords[expectedWordIndex] : "");
-        event.setUserResponse(spokenWord);
+        event.setSubstepNumber(1);
+        event.setAttemptNumber(-1);
+        event.setExpectedAnswer(expected);
+        event.setUserResponse(studentChoice);
         event.setCorrectness(correct ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
 
         event.setTimestamp(System.currentTimeMillis());
 
         RoboTutor.perfLogManager.postPerformanceLog(event);
 
+    }
+
+    // PICMATCH
+    public void logPicMatchPerformance(boolean correct, int expected, int studentChoice, int page) {
+
+        PerformanceLogItem event = new PerformanceLogItem();
+
+        event.setUserId(RoboTutor.STUDENT_ID);
+        event.setSessionId(RoboTutor.SESSION_ID);
+        event.setGameId(mTutor.getUuid().toString()); // a new tutor is generated for each game, so this will be unique
+        event.setLanguage(CTutorEngine.language);
+        event.setTutorName(mTutor.getTutorName());
+        event.setTutorId(mTutor.getTutorId());
+        event.setPromotionMode(RoboTutor.getPromotionMode(event.getMatrixName()));
+        event.setLevelName("pic");
+        event.setTaskName("story");
+
+        event.setProblemName("page_" + String.valueOf(page));
+        event.setProblemNumber(page);
+        if (dataSource != null) {
+            event.setTotalProblemsCount(dataSource.length);
+        }
+        event.setSubstepNumber(1);
+        event.setAttemptNumber(-1);
+        event.setExpectedAnswer(String.valueOf(expected));
+        event.setUserResponse(String.valueOf(studentChoice));
+        event.setCorrectness(correct ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
+
+        event.setTimestamp(System.currentTimeMillis());
+
+        RoboTutor.perfLogManager.postPerformanceLog(event);
     }
 
     private void trackAndLogPerformance(String task, boolean correct) {

@@ -698,6 +698,15 @@ public class CQn_ViewManagerMari implements ICQn_ViewManager, ILoadableObject {
         sentences = new ArrayList<String>(Arrays.asList(sb.toString().split("\\.")));
     }
 
+    @Override
+    public boolean isClozeMode() { return false;}
+
+    @Override
+    public boolean isGenMode() { return false;}
+
+    @Override
+    public boolean isPicMode() {return false;}
+
 }
 
 
