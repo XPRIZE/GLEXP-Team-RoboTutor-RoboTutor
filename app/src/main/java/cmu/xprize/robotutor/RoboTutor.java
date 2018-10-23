@@ -41,7 +41,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-import cmu.xprize.comp_logging.CAudioLogThread;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_logging.CLogManager;
 import cmu.xprize.comp_logging.CPerfLogManager;
@@ -55,14 +54,17 @@ import cmu.xprize.robotutor.startup.CStartView;
 import cmu.xprize.robotutor.startup.configuration.Configuration;
 import cmu.xprize.robotutor.startup.configuration.ConfigurationItems;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
+
 import cmu.xprize.robotutor.tutorengine.CTutorAssetManager;
-import cmu.xprize.robotutor.tutorengine.CTutorEngine;
-import cmu.xprize.robotutor.tutorengine.ITutorManager;
+
 import cmu.xprize.robotutor.tutorengine.util.CAssetObject;
-import cmu.xprize.robotutor.tutorengine.util.CrashHandler;
-import cmu.xprize.robotutor.tutorengine.widgets.core.IGuidView;
 import cmu.xprize.util.CDisplayMetrics;
 import cmu.xprize.util.CLoaderView;
+
+import cmu.xprize.robotutor.tutorengine.CTutorEngine;
+import cmu.xprize.robotutor.tutorengine.ITutorManager;
+import cmu.xprize.robotutor.tutorengine.util.CrashHandler;
+import cmu.xprize.robotutor.tutorengine.widgets.core.IGuidView;
 import cmu.xprize.util.IReadyListener;
 import cmu.xprize.util.IRoboTutor;
 import cmu.xprize.util.JSON_Helper;
@@ -96,6 +98,7 @@ import static cmu.xprize.util.TCONST.WRITING_PLACEMENT;
  *
  */
 public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
+
 
     // VARIABLES FOR QUICK DEBUG LAUNCH
 //    private static final String debugTutorVariant = "placevalue";
@@ -185,12 +188,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     public final static String  DOWNLOAD_PATH  = Environment.getExternalStorageDirectory() + File.separator + Environment.DIRECTORY_DOWNLOADS;
     public final static String  EXT_ASSET_PATH = Environment.getExternalStorageDirectory() + File.separator + TCONST.ROBOTUTOR_ASSET_FOLDER;
 
-    private final String TAG = "CRoboTutor";
+    private final  String  TAG = "CRoboTutor";
     private final String ID_TAG = "StudentId";
-
-    private Thread audioLogThread;
-    // TODO move to config file
-    private boolean RECORD_AUDIO = true; // note that this breaks story.read
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -265,11 +264,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         logManager.postEvent_I(GRAPH_MSG, "EngineVersion:" + VERSION_RT);
 
         Log.v(TAG, "External_Download:" + DOWNLOAD_PATH);
-
-        if (RECORD_AUDIO) {
-            audioLogThread = new CAudioLogThread(audioLogPath, logFilename, Configuration.recordAudio(this));
-            audioLogThread.start();
-        }
 
         // Get the primary container for tutors
         //
@@ -842,10 +836,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
             TTS.shutDown();
             TTS = null;
-        }
-
-        if (RECORD_AUDIO && audioLogThread != null) {
-            audioLogThread.interrupt();
         }
 
         logManager.postDateTimeStamp(GRAPH_MSG, "RoboTutor:SessionEnd");

@@ -19,6 +19,7 @@ import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_OPTION_1;
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_OPTION_2;
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_STORIES;
 import static cmu.xprize.comp_session.AS_CONST.BEHAVIOR_KEYS.SELECT_WRITING;
+import static cmu.xprize.comp_session.AS_CONST.REPEAT_DEBUG_TAG;
 import static cmu.xprize.comp_session.AS_CONST.SELECT_REPEAT;
 import static cmu.xprize.util.TCONST.MENU_BUG_TAG;
 
@@ -181,12 +182,13 @@ public class CycleMatrixActivityMenu implements IActivityMenu {
         Log.d("OH_BEHAVE", "some behavior here should be different...");
 
         if (buttonBehavior.equals(SELECT_REPEAT)) {
-            Log.d("REPEAT_ME", "repeating behavior");
+            RoboTutor.logManager.postEvent_I(REPEAT_DEBUG_TAG, "repeating behavior");
             RoboTutor.STUDENT_CHOSE_REPEAT = true;
             activeSkill = _student.getLastSkill();
             chosenTutorId = _student.getLastTutor();
             transitionMap = _matrix.getTransitionMapByContentArea(activeSkill);
             rootTutor = _matrix.getRootSkillByContentArea(activeSkill);
+            RoboTutor.logManager.postEvent_I(REPEAT_DEBUG_TAG, String.format("activeSkill=%s;chosenTutorId=%s;transitionMap=%s;rootTutor=%s", activeSkill, chosenTutorId, activeSkill, rootTutor));
 
         } else {
 

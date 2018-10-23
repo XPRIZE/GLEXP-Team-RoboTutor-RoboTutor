@@ -169,7 +169,8 @@ public class TPicMatchComponent extends CPicMatch_Component implements ITutorObj
         event.setPromotionMode(RoboTutor.getPromotionMode(event.getMatrixName()));
         event.setLevelName(level);
         event.setTaskName(task);
-        event.setProblemName(prompt);
+        String problemName = generateProblemName();
+        event.setProblemName(problemName);
         event.setTotalProblemsCount(mTutor.getTotalQuestions());
         event.setProblemNumber(_dataIndex);
         event.setSubstepNumber(1);
@@ -181,6 +182,18 @@ public class TPicMatchComponent extends CPicMatch_Component implements ITutorObj
 
         RoboTutor.perfLogManager.postPerformanceLog(event);
 
+    }
+
+    private String generateProblemName() {
+        StringBuilder sb = new StringBuilder(prompt);
+        String prefix = "_";
+        for (String option: images) {
+            sb.append(prefix);
+            prefix = "-";
+            sb.append(option);
+        }
+
+        return sb.toString();
     }
 
 

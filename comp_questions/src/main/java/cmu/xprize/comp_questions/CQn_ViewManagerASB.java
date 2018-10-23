@@ -54,6 +54,8 @@ import cmu.xprize.util.TCONST;
 import edu.cmu.xprize.listener.ListenerBase;
 
 import static cmu.xprize.comp_questions.QN_CONST.FILLER_SPACE;
+import static cmu.xprize.comp_questions.QN_CONST.FTR_PLAY_GEN;
+import static cmu.xprize.comp_questions.QN_CONST.GEN_QUESTION_CHANCE;
 import static cmu.xprize.comp_questions.QN_CONST.RTC_VAR_CLZSTATE;
 import static cmu.xprize.comp_questions.QN_CONST.RTC_VAR_LINESTATE;
 import static cmu.xprize.comp_questions.QN_CONST.RTC_VAR_PARASTATE;
@@ -559,12 +561,16 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                         mParent.retractFeature(TCONST.CLOZE_WRONG);
                         mParent.publishFeature(TCONST.CLOZE_CORRECT);
                         mParent.publishValue(SHOW_CLOZE, TCONST.FALSE);
+                        mParent.logClozePerformance(true, clozeTarget, _wordTextView.getText().toString(),
+                                new String[] {mWord1Text.getText().toString(), mWord2Text.getText().toString(), mWord3Text.getText().toString(), mWord4Text.getText().toString()});
                         isClozePage = false;
                         replayCloze = true;
                     }else{
                         mParent.updateViewColor(_wordFrame, Color.RED);
                         mParent.retractFeature(TCONST.CLOZE_CORRECT);
                         mParent.publishFeature(TCONST.CLOZE_WRONG);
+                        mParent.logClozePerformance(false, clozeTarget, _wordTextView.getText().toString(),
+                                new String[]{mWord1Text.getText().toString(), mWord2Text.getText().toString(), mWord3Text.getText().toString(), mWord4Text.getText().toString()});
                     }
                     mParent.nextNode();
                     break;
@@ -2383,6 +2389,23 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                 mParent.stopAudio();
             }
             UpdateDisplay();
+    }
+
+    /**
+     * Method to decide whether we will play generic questions or not
+     */
+    @Override
+    public void decideToPlayGenericQuestion() {
+
+        double chance = Math.random();
+        Log.d("GEN_QUESTION_CHANCE", "Comparing " + chance + " to " + GEN_QUESTION_CHANCE);
+
+        if (chance < GEN_QUESTION_CHANCE) {
+            mParent.publishFeature(FTR_PLAY_GEN);
+        } else {
+            mParent.retractFeature(FTR_PLAY_GEN);
+        }
+
     }
 
     /**

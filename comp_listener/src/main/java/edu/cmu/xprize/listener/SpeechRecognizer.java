@@ -61,8 +61,6 @@ import edu.cmu.pocketsphinx.FsgModel;
 import edu.cmu.pocketsphinx.Hypothesis;
 import edu.cmu.pocketsphinx.RecognitionListener;
 
-import static cmu.xprize.comp_logging.CAudioLogThread.BUFFER_SIZE;
-import static cmu.xprize.comp_logging.CAudioLogThread.readBuffer;
 import static java.lang.String.format;
 
 /**
@@ -451,15 +449,17 @@ public class SpeechRecognizer {
 
                 String     lastAudioEvent = TCONST.UNKNOWN_TYPE;
 
-//                AudioRecord recorder = null;
+                AudioRecord recorder = null;
 
-//                try {
-//                    recorder = new AudioRecord(AudioSource.VOICE_RECOGNITION, sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, 8192);
-//                }
-//                catch (Exception e) {
-//                    Log.d("ASR", "AudioRecorder Create Failed: " + e);
-//                }
-
+                try {
+                    recorder = new AudioRecord(
+                            AudioSource.VOICE_RECOGNITION, sampleRate,
+                            AudioFormat.CHANNEL_IN_MONO,
+                            AudioFormat.ENCODING_PCM_16BIT, 8192);
+                }
+                catch(Exception e) {
+                    Log.d("ASR", "AudioRecorder Create Failed: " + e);
+                }
                 isRunningRecognizer = true;
 
                 // Collect audio samples continuously while not paused and until the
@@ -473,7 +473,7 @@ public class SpeechRecognizer {
                     if (isPausedRecognizer) {
 
                         try {
-//                            recorder.stop();
+                            recorder.stop();
                             isRecording = false;
 
                             // If we are starting a new utterance stop recording and
@@ -481,12 +481,11 @@ public class SpeechRecognizer {
                             //
                             if (!isDecoding) {
 
-//                                recorder.stop();
+                                recorder.stop();
 
                                 do {
-//                                    nread = recorder.read(buffer, 0, buffer.length);
-                                    nread = readBuffer(buffer, BUFFER_SIZE);
-                                    Log.i("ASR", "Flush buffer: nread = " + nread);
+                                    nread = recorder.read(buffer, 0, buffer.length);
+
                                 } while (nread > 0);
                             }
 
@@ -520,7 +519,7 @@ public class SpeechRecognizer {
                     }
 
                     // We start the thread with the decoder stopped and also when we
-                    // restart for a new utterance - we end the utterance prior to
+                    // restart for a new utterance - we end the uttereance prior to
                     // the decoder fsgsearch update
                     //
                     if (!isDecoding) {
@@ -551,32 +550,32 @@ public class SpeechRecognizer {
 
 
                         Log.i("ASR", "Resume recording");
-//                        recorder.startRecording();
+                        recorder.startRecording();
                         isRecording = true;
                         nread       = 0;
                     }
                     else {
                         // Clean out the buffered input
-//                        nread = recorder.read(buffer, 0, buffer.length);
-                        nread = readBuffer(buffer, BUFFER_SIZE);
-                        Log.i("ASR", "Clean out buffer: nread = " + nread);
+                        nread = recorder.read(buffer, 0, buffer.length);
                     }
                     //Log.i("ASR","ASR RAW-BYTES: " + nread);
 
-                    if (nread == AudioRecord.ERROR_INVALID_OPERATION || nread == AudioRecord.ERROR_BAD_VALUE) {
+                    if (-1 == nread) {
                         Log.i("ASR","Read Error");
                         throw new RuntimeException("error reading audio buffer");
 
                     } else if (nread > 0) {
 
+                        double RMS = publishRMS(buffer, nread);
+
                         // This filters low power segments that otherwise cause false positives
                         // in number_speaking tutor
                         //
-//                        double RMS = publishRMS(buffer, nread);
-//                        if (RMS > 4) {
-                            ASRTimer = System.currentTimeMillis();
+                        //`if(RMS > 4)
+                        {
+                            //ASRTimer = System.currentTimeMillis();
                             decoder.processRaw(buffer, nread, false, false);
-                            Log.d("ASR", "Time in processRaw: " + (System.currentTimeMillis() - ASRTimer));
+                            //Log.d("ASR", "Time in processRaw: " + (System.currentTimeMillis() - ASRTimer));
 
                             nSamples += nread;
 
@@ -591,7 +590,7 @@ public class SpeechRecognizer {
                                 // 1. The last time the mic heard anything
                                 // 2. The last time the mic went silent.
 
-                                Log.i("ASR","State Changed: " + inSpeech);
+                                //Log.i("ASR","State Changed: " + inSpeech);
 
                                 if (inSpeech) {
                                     eventManager.fireStaticEvent(TCONST.SOUND_EVENT);
@@ -606,9 +605,9 @@ public class SpeechRecognizer {
 
                             // Get the hypothesis words from the Sphinx decoder
                             //
-                            ASRTimer = System.currentTimeMillis();
+                            //ASRTimer = System.currentTimeMillis();
                             Hypothesis hypothesis = decoder.hyp();
-                            Log.d("ASR", "Time in Decoder: " + (System.currentTimeMillis() - ASRTimer));
+                            //Log.d("ASR", "Time in Decoder: " + (System.currentTimeMillis() - ASRTimer));
 
                             // If there is a valid hypothesis string from the decoder continue
                             // Once the decoder returns a hypothesis it will not go back to
@@ -625,7 +624,7 @@ public class SpeechRecognizer {
                                         break;
                                 }
                             }
-//                        }
+                        }
                     }
 
                     // While running we continuously watch for timed event firings (timeouts)
@@ -635,16 +634,16 @@ public class SpeechRecognizer {
 
                 Log.i("ASR","Stop session");
 
-//                recorder.stop();
-//                nread = recorder.read(buffer, 0, buffer.length);
-                nread = readBuffer(buffer, BUFFER_SIZE);
-                Log.i("ASR", "Read buffer: nread = " + nread);
-//                recorder.release();
+                recorder.stop();
+                nread = recorder.read(buffer, 0, buffer.length);
+                recorder.release();
                 decoder.processRaw(buffer, nread, false, false);
                 nSamples += nread;
                 decoder.endUtt();
                 // Remove all pending notifications.
                 mainHandler.removeCallbacksAndMessages(null);
+                // convert raw capture to wav format
+                //convertRawToWav(new File(captureDir, label + ".raw"), new File(captureDir, label + ".wav"));
             }
         }
     }
@@ -835,6 +834,43 @@ public class SpeechRecognizer {
         }
 
         return RMS;
+    }
+
+
+    /**
+     * utility to convert raw audio capture file to wav format. Assumes 16Khz mono
+     */
+    public static void convertRawToWav(File rawFile, File wavFile) {
+        InputStream input = null;
+        OutputStream output = null;
+        try {
+            input = new FileInputStream(rawFile);
+            output = new FileOutputStream(wavFile);
+            // first write appropriate wave file header
+            ByteArrayOutputStream hdrBytes = new ByteArrayOutputStream();
+            new WaveHeader(WaveHeader.FORMAT_PCM, (short) 1, 16000, (short) 16, (int) rawFile.length()).write(hdrBytes);
+            output.write(hdrBytes.toByteArray());
+            // then copy raw bytes to output file
+            byte[] buffer = new byte[4096];
+            int nRead;
+            while ((nRead = input.read(buffer)) > 0) {
+                output.write(buffer, 0, nRead);
+            }
+            // finish up
+            output.close();
+            input.close();
+            // on success, delete raw file
+            rawFile.delete();
+        } catch (Exception e) {
+            Log.e("convertRawToWav", "Exception " + e.getMessage());
+        } finally {
+            try {
+                if (input != null) input.close();
+                if (output != null) output.close();
+            } catch (IOException e) {
+                Log.e("convertRawToWav", "Closing streams: " + e.getMessage());
+            }
+        }
     }
 
 

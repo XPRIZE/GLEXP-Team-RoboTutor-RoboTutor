@@ -420,7 +420,7 @@ public class CNd_Component extends RelativeLayout implements ILoadableObject {
     }
 
     public void triggerHesitationFeedback() {
-        postNamed(HESITATION_PROMPT, TCONST.APPLY_BEHAVIOR, INPUT_HESITATION_FEEDBACK, (long) 2500);
+        postNamed(HESITATION_PROMPT, TCONST.APPLY_BEHAVIOR, INPUT_HESITATION_FEEDBACK, (long) ND_CONST.HESITATION_DELAY);
     }
 
     /**
