@@ -940,6 +940,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                         if (attempt > 4) {
                             applyBehavior(WR_CONST.MERCY_RULE); // goto node "MERCY_RULE_BEHAVIOR"
                         } else {
+
+                            if(charExpected.equals(" ")) {
+                                publishFeature("FTR_SPACE_SAMPLE");
+                            }
                             applyBehavior(WR_CONST.ON_ERROR); // goto node "GENERAL_ERROR_BEHAVIOR"
                         }
 
@@ -1232,6 +1236,10 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
                         if (attempt > 4) {
                             applyBehavior(WR_CONST.MERCY_RULE); // goto node "MERCY_RULE_BEHAVIOR"
                         } else {
+                            if(charExpected.equals(" ")) {
+                                publishFeature("FTR_SPACE_SAMPLE");
+                            }
+
                             applyBehavior(WR_CONST.ON_ERROR); // goto node "GENERAL_ERROR_BEHAVIOR"
                         }
 
