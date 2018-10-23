@@ -372,6 +372,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         firstEditOperationSentence.showHighlightBox();
     }
 
+
     public void showHighlightBoxOnFirstEditAndPoint(){
         EditOperation firstEditOperationSentence = getFirstEditOperation(mWrittenSentence, mAnswer);
         if(!firstEditOperationSentence.toString().equals("N"))
@@ -380,6 +381,9 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
             int index = firstEditOperationSentence.index;
             CGlyphController view    = (CGlyphController) mGlyphList.getChildAt(index);
             autoScroll(view);
+            view.post(TCONST.HIGHLIGHT);
+            view.post(TCONST.HIGHLIGHT);
+
     }
 
 //    public void show
@@ -2381,7 +2385,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         IGlyphController glyphController;
         int              i1 = 0;
 
-        if(_immediateFeedback) {
+        if(_immediateFeedback || activityFeature.contains("FTR_SEN_LTR")) {
 
             for (i1 = 0; i1 < mGlyphList.getChildCount(); i1++) {
 
