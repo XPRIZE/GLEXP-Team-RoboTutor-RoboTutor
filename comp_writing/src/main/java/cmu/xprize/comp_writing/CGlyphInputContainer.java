@@ -531,21 +531,23 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                 //
 
                 //amogh added to erase the glyph
-                if(_drawGlyph != null) {
-                    if (mHasGlyph){
-                        _previousUserGlyph = _userGlyph;  //saving the current glyph before erasing.
-                        _previousRecognisedChar = _recognisedChar; //saving the current recognised character before removing it.
-                        erase();
-                        _recognisedChar = "";
-                        int currentIndex = this.getGlyphIndex();
-                        CStimulusController resp = (CStimulusController)_responseView.getChildAt(currentIndex);
-                        resp.setStimulusChar(" ",false);
-                        resp.updateResponseState(true);
-                        mWritingComponent.onErase(currentIndex);
-                        break;
+                try {
+                    if (_drawGlyph != null) {
+                        if (mHasGlyph) {
+                            _previousUserGlyph = _userGlyph;  //saving the current glyph before erasing.
+                            _previousRecognisedChar = _recognisedChar; //saving the current recognised character before removing it.
+                            erase();
+                            _recognisedChar = "";
+                            int currentIndex = this.getGlyphIndex();
+                            CStimulusController resp = (CStimulusController) _responseView.getChildAt(currentIndex);
+                            resp.setStimulusChar(" ", false);
+                            resp.updateResponseState(true);
+                            mWritingComponent.onErase(currentIndex);
+                            break;
+                        }
+                        moveTouch(x, y);
                     }
-                    moveTouch(x, y);
-                }
+                } catch (Exception e){}
                 //amogh added ends
 
                 break;
