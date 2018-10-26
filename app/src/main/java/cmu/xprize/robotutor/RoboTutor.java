@@ -101,10 +101,33 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
 
     // VARIABLES FOR QUICK DEBUG LAUNCH
-    private static final boolean QUICK_DEBUG = false;
-    private static final String debugTutorVariant = "countingx";
-    private static final String debugTutorId = "countingx:1_10";
-    private static final String debugTutorFile = "[file]countingx_1_10.json";
+//    private static final String debugTutorVariant = "placevalue";
+//    private static final String debugTutorId = "place.value:1";
+//    private static final String debugTutorFile = "[file]place.value__pv-11..99.2D.diff0.3.json";
+    private static final boolean QUICK_DEBUG = true;
+    private static final String debugTutorVariant = "write.sen.copy.ltr";
+    private static final String debugTutorId = "write.wrd:story_1_1";
+    private static final String debugTutorFile = "[encfolder]write.sen.copy.ltr_story_1.noerror.1.2.json";
+
+    //amogh missing letter
+//    private static final String debugTutorFile = "[file]write.missingLtr_0.1.2.fin.s.json";
+    //amogh dictation
+//    private static final String debugTutorFile = "[file]write.wrd.dic_lc.begin.ha.18.json";
+
+//    private static final String debugTutorVariant = "write.ltr.uc.trc";
+//    private static final String debugTutorId = "write.wrd:story_1_1";
+//    private static final String debugTutorFile = "[file]write.ltr.uc.trc_vow.asc.A..Z.1.json";
+
+//    private static final boolean QUICK_DEBUG = false;
+//    private static final String debugTutorVariant = "picmatch";
+//    private static final String debugTutorId = "picmatch::animal";
+//    private static final String debugTutorFile = "[file]picmatch_food.json";
+    //private static final String debugTutorVariant = "numdiscr";
+    //private static final String debugTutorVariant = "math";
+    //private static final String debugTutorId = "numdiscr:sample";
+    //private static final String debugTutorId = "math:0..8.ADD-1D-V-S.rand.3";
+    //private static final String debugTutorFile = "[file]numdiscr_sample.json";
+    // private static final String debugTutorFile = "[file]math_0..800.ADD-100-V-S.incr.13.json";
 
     //private static final String debugTutorFile = "[file]math_10..80.SUB-2D-V-S.rand.12.json";
     public static final String MATRIX_FILE = "dev_data.cd2.json"; // "dev_data.json"; // SUPER_PLACEMENT

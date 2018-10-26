@@ -141,7 +141,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     private boolean               _DEVMODE = false;             // Used in GlyphRecognizer project to update metrics etc.
 
     private static final float    TOLERANCE = 5;
-    private static final float    LIMIT = 50;
+    private static final float    LIMIT = 100;
     private static final int[]    STATE_HASGLYPH = {R.attr.state_hasglyph};
 
     private static int            RECDELAY   = 700;              // Just want the end timeout
@@ -531,21 +531,23 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
                 //
 
                 //amogh added to erase the glyph
-                if(_drawGlyph != null) {
-                    if (mHasGlyph){
-                        _previousUserGlyph = _userGlyph;  //saving the current glyph before erasing.
-                        _previousRecognisedChar = _recognisedChar; //saving the current recognised character before removing it.
-                        erase();
-                        _recognisedChar = "";
-                        int currentIndex = this.getGlyphIndex();
-                        CStimulusController resp = (CStimulusController)_responseView.getChildAt(currentIndex);
-                        resp.setStimulusChar(" ",false);
-                        resp.updateResponseState(true);
-                        mWritingComponent.onErase(currentIndex);
-                        break;
+                try {
+                    if (_drawGlyph != null) {
+                        if (mHasGlyph) {
+                            _previousUserGlyph = _userGlyph;  //saving the current glyph before erasing.
+                            _previousRecognisedChar = _recognisedChar; //saving the current recognised character before removing it.
+                            erase();
+                            _recognisedChar = "";
+                            int currentIndex = this.getGlyphIndex();
+                            CStimulusController resp = (CStimulusController) _responseView.getChildAt(currentIndex);
+                            resp.setStimulusChar(" ", false);
+                            resp.updateResponseState(true);
+                            mWritingComponent.onErase(currentIndex);
+                            break;
+                        }
+                        moveTouch(x, y);
                     }
-                    moveTouch(x, y);
-                }
+                } catch (Exception e){}
                 //amogh added ends
 
                 break;
