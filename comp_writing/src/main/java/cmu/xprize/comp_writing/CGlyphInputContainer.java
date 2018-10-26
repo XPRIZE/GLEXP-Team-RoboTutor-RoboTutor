@@ -141,7 +141,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     private boolean               _DEVMODE = false;             // Used in GlyphRecognizer project to update metrics etc.
 
     private static final float    TOLERANCE = 5;
-    private static final float    LIMIT = 80;
+    private static final float    LIMIT = 100;
     private static final int[]    STATE_HASGLYPH = {R.attr.state_hasglyph};
 
     private static int            RECDELAY   = 700;              // Just want the end timeout
