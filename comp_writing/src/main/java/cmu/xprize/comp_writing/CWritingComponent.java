@@ -2393,7 +2393,7 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
         IGlyphController glyphController;
         int              i1 = 0;
 
-        if(_immediateFeedback || activityFeature.contains("FTR_SEN_LTR")) {
+        if(_immediateFeedback) {
 
             for (i1 = 0; i1 < mGlyphList.getChildCount(); i1++) {
 
@@ -2403,6 +2403,19 @@ public class CWritingComponent extends PercentRelativeLayout implements IEventLi
 
                     glyphController.inhibitInput(inhibit);
                 }
+            }
+        }
+    }
+
+    public void inhibitSentenceInput(Boolean inhibit){
+        IGlyphController glyphController;
+        for (int i1 = 0; i1 < mGlyphList.getChildCount(); i1++) {
+
+            glyphController = (IGlyphController) mGlyphList.getChildAt(i1);
+
+            if (glyphController != null) {
+
+                glyphController.inhibitInput(inhibit);
             }
         }
     }
