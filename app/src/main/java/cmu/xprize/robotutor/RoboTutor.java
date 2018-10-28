@@ -104,7 +104,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 //    private static final String debugTutorVariant = "placevalue";
 //    private static final String debugTutorId = "place.value:1";
 //    private static final String debugTutorFile = "[file]place.value__pv-11..99.2D.diff0.3.json";
-    private static final boolean QUICK_DEBUG = true;
+    private static final boolean QUICK_DEBUG = false;
     private static final String debugTutorVariant = "write.sen.copy.ltr";
     private static final String debugTutorId = "write.wrd:story_1_1";
     private static final String debugTutorFile = "[encfolder]write.sen.copy.ltr_story_1.noerror.1.2.json";
