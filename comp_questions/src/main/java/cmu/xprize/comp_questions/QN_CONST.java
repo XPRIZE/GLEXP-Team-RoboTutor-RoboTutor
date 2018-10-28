@@ -24,6 +24,6 @@ public class QN_CONST {
 
     public static final String FTR_PLAY_GEN = "FTR_PLAY_GEN";
 
-    public static final double GEN_QUESTION_CHANCE = 0.25;
+    public static final double GEN_QUESTION_CHANCE = 0.125;
 
 }
