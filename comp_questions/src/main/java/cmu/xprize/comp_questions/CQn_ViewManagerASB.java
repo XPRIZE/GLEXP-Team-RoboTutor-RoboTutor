@@ -562,7 +562,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                         mParent.publishFeature(TCONST.CLOZE_CORRECT);
                         mParent.publishValue(SHOW_CLOZE, TCONST.FALSE);
                         mParent.logClozePerformance(true, clozeTarget, _wordTextView.getText().toString(),
-                                new String[] {mWord1Text.getText().toString(), mWord2Text.getText().toString(), mWord3Text.getText().toString(), mWord4Text.getText().toString()});
+                                new String[] {mWord1Text.getText().toString(), mWord2Text.getText().toString(), mWord3Text.getText().toString(), mWord4Text.getText().toString()}, mCurrPage);
                         isClozePage = false;
                         replayCloze = true;
                     }else{
@@ -570,7 +570,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                         mParent.retractFeature(TCONST.CLOZE_CORRECT);
                         mParent.publishFeature(TCONST.CLOZE_WRONG);
                         mParent.logClozePerformance(false, clozeTarget, _wordTextView.getText().toString(),
-                                new String[]{mWord1Text.getText().toString(), mWord2Text.getText().toString(), mWord3Text.getText().toString(), mWord4Text.getText().toString()});
+                                new String[]{mWord1Text.getText().toString(), mWord2Text.getText().toString(), mWord3Text.getText().toString(), mWord4Text.getText().toString()}, mCurrPage);
                     }
                     mParent.nextNode();
                     break;
@@ -787,6 +787,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                         mParent.updateViewColor(_frame, Color.GREEN);
                         mParent.publishFeature(TCONST.PICMATCH_CORRECT);
                         mParent.retractFeature(TCONST.PICMATCH_WRONG);
+                        mParent.logPicMatchPerformance(true, picmatch_answer, _index, mCurrPage);
                         picture_match_mode = false;
                         show_image_options = false;
                         hasQuestion();
@@ -794,6 +795,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                         mParent.updateViewColor(_frame, Color.RED);
                         mParent.retractFeature(TCONST.PICMATCH_CORRECT);
                         mParent.publishFeature(TCONST.PICMATCH_WRONG);
+                        mParent.logPicMatchPerformance(false, picmatch_answer, _index, mCurrPage);
                     }
                     mParent.nextNode();
                     break;
@@ -3073,4 +3075,12 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         return segmentPrev;
     }
 
+    @Override
+    public boolean isClozeMode() { return cloze_page_mode;}
+
+    @Override
+    public boolean isGenMode() { return false;}
+
+    @Override
+    public boolean isPicMode() {return picture_match_mode;}
 }

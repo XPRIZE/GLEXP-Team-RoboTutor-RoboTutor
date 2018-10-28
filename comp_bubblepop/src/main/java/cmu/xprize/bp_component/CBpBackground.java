@@ -40,6 +40,9 @@ import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 
+import static android.graphics.Bitmap.createScaledBitmap;
+import static android.graphics.BitmapFactory.decodeResource;
+
 public class CBpBackground extends View implements ILoadableObject {
 
     private Paint mPaint;
@@ -300,8 +303,14 @@ public class CBpBackground extends View implements ILoadableObject {
 
                         CLogManager.getInstance().postEvent_I(TAG, "PickedBackground:" + nextBackground);
 
-                        Bitmap bmp = BitmapFactory.decodeResource(getResources(), nextBackground);
-                        Bitmap scaled = Bitmap.createScaledBitmap(bmp, canvas.getWidth(), canvas.getHeight(), false);
+                        Bitmap bmp = decodeResource(getResources(), nextBackground);
+
+                        Log.wtf("BIG_IMAGE", "c_width=" + bmp.getWidth() + "; c_height=" + bmp.getHeight() + "; c_bytes=" + ((bmp.getWidth() * bmp.getHeight()) * 16 + 12));
+                        int width = canvas.getWidth(), height = canvas.getHeight();
+                        int total = width*height;
+                        int projected_byte_failure = (total * 16) + 12;
+                        Log.wtf("BIG_IMAGE", "c_width=" + width + "; c_height=" + height + "; c_bytes=" + projected_byte_failure);
+                        Bitmap scaled = createScaledBitmap(bmp, canvas.getWidth(), canvas.getHeight(), false);
                         canvas.drawBitmap(scaled, mViewRegion, mViewRegion, mPaint);
                     } catch (Exception e) {
                         // if there's an error setting the image, use gray bg, instead of crashing

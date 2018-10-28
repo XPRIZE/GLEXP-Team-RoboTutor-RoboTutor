@@ -147,4 +147,8 @@ public interface ICQn_ViewManager extends ILoadableObject {
 //    public CASB_Narration[] getRawNarration();
 //    public int getUtterancePrev();
 //    public int getSegmentPrev();
+
+     boolean isClozeMode();
+     boolean isGenMode();
+     boolean isPicMode();
 }

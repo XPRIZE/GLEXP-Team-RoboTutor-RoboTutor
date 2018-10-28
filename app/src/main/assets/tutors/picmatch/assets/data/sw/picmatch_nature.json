@@ -1,17 +1,19 @@
 {
  "dataSource": [
 
-{"type":"CPicMatch_Data", "level":"pm", "task":"nature_1", "layout":"default", "prompt": "ziwa", "images": ["ogelea", "ziwa" , "jua" , "mvua"]},
-{"type":"CPicMatch_Data", "level":"pm", "task":"nature_1", "layout":"default", "prompt": "kilimanjaro", "images": ["maua", "kilimanjaro" , "mti" , "jua"]},
-{"type":"CPicMatch_Data", "level":"pm", "task":"nature_1", "layout":"default", "prompt": "mti", "images": ["ziwa", "mti" , "ogelea" , "jua"]},
-{"type":"CPicMatch_Data", "level":"pm", "task":"nature_1", "layout":"default", "prompt": "joto", "images": ["kilimanjaro", "joto" , "jua" , "ziwa"]},
-{"type":"CPicMatch_Data", "level":"pm", "task":"nature_1", "layout":"default", "prompt": "jua", "images": ["ziwa", "kilimanjaro" , "joto" , "jua"]},
-{"type":"CPicMatch_Data", "level":"pm", "task":"nature_1", "layout":"default", "prompt": "kilimanjaro", "images": ["ogelea", "jua" , "kilimanjaro" , "ziwa"]},
-{"type":"CPicMatch_Data", "level":"pm", "task":"nature_1", "layout":"default", "prompt": "ziwa", "images": ["ziwa", "kilimanjaro" , "mti" , "mvua"]},
-{"type":"CPicMatch_Data", "level":"pm", "task":"nature_1", "layout":"default", "prompt": "mti", "images": ["mti", "kilimanjaro" , "ziwa" , "maua"]},
-   {"type":"CPicMatch_Data", "level":"pm", "task":"nature_1", "layout":"default", "prompt": "joto", "images": ["ziwa", "kilimanjaro" , "joto" , "jua"]},
-   {"type":"CPicMatch_Data", "level":"pm", "task":"nature_1", "layout":"default", "prompt": "jua", "images": ["kilimanjaro", "joto" , "jua" , "ziwa"]}
+   {"type":"CPicMatch_Data", "level":"pm", "task":"nature_1", "layout":"default", "prompt": "ogelea", "images": ["ogelea", "ziwa" , "jua" , "mvua"]},
+   {"type":"CPicMatch_Data", "level":"pm", "task":"nature_1", "layout":"default", "prompt": "ziwa", "images": ["ogelea", "ziwa" , "jua" , "mvua"]},
+   {"type":"CPicMatch_Data", "level":"pm", "task":"nature_1", "layout":"default", "prompt": "mvua", "images": ["ogelea", "ziwa" , "jua" , "mvua"]},
+   {"type":"CPicMatch_Data", "level":"pm", "task":"nature_1", "layout":"default", "prompt": "kilimanjaro", "images": ["maua", "kilimanjaro" , "mti" , "jua"]},
+   {"type":"CPicMatch_Data", "level":"pm", "task":"nature_1", "layout":"default", "prompt": "maua", "images": ["maua", "kilimanjaro" , "mti" , "jua"]},
+   {"type":"CPicMatch_Data", "level":"pm", "task":"nature_1", "layout":"default", "prompt": "mti", "images": ["ziwa", "mti" , "ogelea" , "jua"]},
+   {"type":"CPicMatch_Data", "level":"pm", "task":"nature_1", "layout":"default", "prompt": "kilimanjaro", "images": ["ogelea", "jua" , "kilimanjaro" , "ziwa"]},
+   {"type":"CPicMatch_Data", "level":"pm", "task":"nature_1", "layout":"default", "prompt": "ogelea", "images": ["ogelea", "jua" , "kilimanjaro" , "ziwa"]},
+   {"type":"CPicMatch_Data", "level":"pm", "task":"nature_1", "layout":"default", "prompt": "mvua", "images": ["ziwa", "kilimanjaro" , "mti" , "mvua"]},
+   {"type":"CPicMatch_Data", "level":"pm", "task":"nature_1", "layout":"default", "prompt": "ziwa", "images": ["ziwa", "kilimanjaro" , "mti" , "mvua"]},
+   {"type":"CPicMatch_Data", "level":"pm", "task":"nature_1", "layout":"default", "prompt": "maua", "images": ["mti", "kilimanjaro" , "ziwa" , "maua"]},
+   {"type":"CPicMatch_Data", "level":"pm", "task":"nature_1", "layout":"default", "prompt": "mti", "images": ["mti", "kilimanjaro" , "ziwa" , "maua"]}
 
- ]
+   ]
 
 }

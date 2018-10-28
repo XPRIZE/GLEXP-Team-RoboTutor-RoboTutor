@@ -38,10 +38,7 @@
 	// path     - the resource path relative to assets/tutors/trackdata/LIBRARY/audio/<language>
 
 	"soundMap" : {
-		"tutor_effect":  {"type": "SOUNDMAP", "language": "LANG_EFFECT", "path": "cmu/xprize/activity_selector"},
-		"xprize_effect": {"type": "SOUNDMAP", "language": "LANG_EFFECT", "path": "cmu/xprize/global"},
-		"default":       {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/activity_selector"},
-		"xprize":        {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/global"}
+		"default":       {"type": "SOUNDMAP", "language": "LANG_AUTO",   "path": "cmu/xprize/activity_selector"}
 	},
 
 	"navigatorType":"SIMPLE_NAVIGATOR"

@@ -812,7 +812,12 @@ public class CQn_Component extends ViewAnimator implements IEventListener, IVMan
     }
 
     // Override...
-    public void logClozePerformance(boolean correct, String expected, String studentChoice, String[] options) {
+    public void logClozePerformance(boolean correct, String expected, String studentChoice, String[] options, int page) {
+
+    }
+
+    // Override...
+    public void logPicMatchPerformance(boolean correct, int expected, int studentChoice, int page) {
 
     }
 
