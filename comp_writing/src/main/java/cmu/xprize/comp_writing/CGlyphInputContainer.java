@@ -1425,7 +1425,7 @@ public class CGlyphInputContainer extends View implements IGlyphSource, OnTouchL
     public void setStimuliGlyph(CGlyph stimuliGlyph){
         if(stimuliGlyph != null) {
             _stimuliGlyph = stimuliGlyph;
-            _stimuliGlyph.setDotSize(_dotSize);
+            _stimuliGlyph.setDotSize(6);
         }
     }
     //amogh added ends

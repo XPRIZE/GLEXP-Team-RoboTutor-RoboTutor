@@ -694,7 +694,7 @@
               //verify if the error features are cleared.
 
                 //inhibit input on all.
-            {"name": "inhibit input for sentence", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitInput", "parms": "TRUE:Boolean", "features":"FTR_SEN"},
+            {"name": "inhibit input for sentence", "type": "QUEUEDCOMMAND", "id": "SWordCopy", "method": "inhibitSentenceInput", "parms": "TRUE:Boolean", "features":"FTR_SEN"},
 
 
 
