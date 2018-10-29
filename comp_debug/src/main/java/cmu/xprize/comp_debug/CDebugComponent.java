@@ -470,7 +470,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
         @Override
         public void onClick(View view) {
-            mButtonController.doLaunch(tutor.tutor_desc, TCONST.TUTOR_NATIVE, tutor.tutor_data, tutor.tutor_id);
+            mButtonController.doLaunch(tutor.tutor_desc, TCONST.TUTOR_NATIVE, tutor.tutor_data, tutor.tutor_id, null);
         }
     }
 

@@ -120,6 +120,8 @@ public class CTutor implements ILoadableObject2, IEventSource {
     public String                           navigatorType;
     public HashMap<String,CMediaPackage>    soundMap;
 
+    public String matrix;
+
     public String engineLanguage;
 
     private int index = 0;  // test debug
@@ -129,7 +131,7 @@ public class CTutor implements ILoadableObject2, IEventSource {
 
 
 
-    public CTutor(Context context, String name, String tutorId, ITutorManager tutorContainer, ILogManager logManager, TScope rootScope, String tarLanguage, String featSet) {
+    public CTutor(Context context, String name, String tutorId, ITutorManager tutorContainer, ILogManager logManager, TScope rootScope, String tarLanguage, String featSet, String matrix) {
 
         mTutorScope      = new TScope(this, name, rootScope);
         mContext         = context;
@@ -137,6 +139,8 @@ public class CTutor implements ILoadableObject2, IEventSource {
         mTutorId         = tutorId;
         mTutorContainer  = tutorContainer;
         mTutorLogManager = logManager;
+
+        this.matrix = matrix;
 
         mAssetManager    = context.getAssets();
         // GRAY_SCREEN_BUG this is where Media Manager is initialized

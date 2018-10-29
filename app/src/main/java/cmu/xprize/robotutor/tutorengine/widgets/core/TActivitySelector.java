@@ -482,7 +482,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
                 file = ROBO_DEBUG_FILE_BPOP;
         }
 
-        doLaunch(intent, TCONST.TUTOR_NATIVE, TCONST.DEBUG_FILE_PREFIX + file, "DEBUGGER");
+        doLaunch(intent, TCONST.TUTOR_NATIVE, TCONST.DEBUG_FILE_PREFIX + file, "DEBUGGER", null);
     }
 
 
@@ -524,7 +524,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         }
 
         CLogManager.setTutor(activeTutorId);
-        doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data, tutorToLaunch.tutor_id);
+        doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data, tutorToLaunch.tutor_id, tutorToLaunch.skill);
     }
 
     /**
@@ -558,7 +558,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
             // if an error occurs with media player, we don't want to freeze the app completely
             CLogManager.setTutor(tutorToLaunch.tutor_id);
 
-            doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data, tutorToLaunch.tutor_id);
+            doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data, tutorToLaunch.tutor_id, tutorToLaunch.skill);
         }
 
 
@@ -581,7 +581,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
                 Log.d("VID_LAUNCH", timesPlayedId + ": " + timesPlayedActivity + " --> " + increment);
 
                 CLogManager.setTutor(tutorToLaunch.tutor_id);
-                doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data, tutorToLaunch.tutor_id);
+                doLaunch(tutorToLaunch.tutor_desc, TCONST.TUTOR_NATIVE, tutorToLaunch.tutor_data, tutorToLaunch.tutor_id, tutorToLaunch.skill);
             }
         });
     }
@@ -598,7 +598,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
      * @param intentData
      */
     @Override
-    public void doLaunch(String intent, String intentData, String dataSource, String tutorId) {
+    public void doLaunch(String intent, String intentData, String dataSource, String tutorId, String matrix) {
 
         Log.wtf("WARRIOR_MAN", "doLaunch: tutorId = " + tutorId);
 
@@ -615,7 +615,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
 
         // (2.6)
         //applyBehavior(LAUNCH_EVENT); // (2.6) this was collapsed into the following command
-        CTutorEngine.launch(intentData, intent, dataSource, tutorId);
+        CTutorEngine.launch(intentData, intent, dataSource, tutorId, matrix);
     }
 
 

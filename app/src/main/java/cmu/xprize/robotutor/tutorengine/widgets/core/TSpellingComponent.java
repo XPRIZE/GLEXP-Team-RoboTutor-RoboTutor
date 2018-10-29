@@ -547,6 +547,7 @@ public class TSpellingComponent extends CSpelling_Component implements ITutorObj
         event.setExpectedAnswer(_word.get(_currentLetterIndex));
         event.setUserResponse(selectedSyllable);
         event.setCorrectness(isCorrect ? TCONST.LOG_CORRECT : TCONST.LOG_INCORRECT);
+        event.setPromotionMode(RoboTutor.getPromotionMode(event.getMatrixName()));
 
         event.setTimestamp(System.currentTimeMillis());
 

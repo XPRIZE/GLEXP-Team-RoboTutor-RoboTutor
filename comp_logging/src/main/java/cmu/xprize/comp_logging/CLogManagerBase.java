@@ -158,7 +158,7 @@ public class CLogManagerBase implements ILogManager {
             }
 
             for (File f : hotDir.listFiles()) {
-                Log.w("LOG_DEBUG", "Transferring file " + f.getName());
+                Log.w("LOG_DEBUG", "Moving file " + f.getName() + " between folders.");
 
                 if (f.isDirectory()) {
                     // do nothing... there should not be any directories
@@ -179,7 +179,7 @@ public class CLogManagerBase implements ILogManager {
                 }
             }
         } catch (IOException e) {
-            CErrorManager.logEvent(TAG, "Transfer Error:", e, false);
+            CErrorManager.logEvent(TAG, "Moving file Error:", e, false);
         }
 
     }

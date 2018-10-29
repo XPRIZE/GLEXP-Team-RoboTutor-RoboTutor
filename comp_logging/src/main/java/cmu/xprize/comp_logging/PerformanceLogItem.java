@@ -94,7 +94,7 @@ public class PerformanceLogItem {
      * TODO even better, just pass the "skills" variable
      * @param tutorId
      */
-    private void setMatrixName(String tutorId) {
+    private void setMatrixNameByTutorId(String tutorId) {
 
         if (isAlwaysMathTutor(tutorId)) {
             matrixName = MATH_MATRIX;
@@ -132,7 +132,10 @@ public class PerformanceLogItem {
                 || tutorName.contains("letters_alphabet_song")
                 || tutorName.contains("comm")
                 || tutorName.contains("ltr")
-                || tutorName.contains("syl")) {
+                || tutorName.contains("syl")
+                || tutorName.contains("nafasi")
+                || tutorName.contains("herufi_kubwa")
+                || tutorName.contains("kituo")){
             matrixName = LITERACY_MATRIX;
 
         } else if (tutorName.contains("1..4")
@@ -322,7 +325,27 @@ public class PerformanceLogItem {
 
 
         if(tutorId != null) {
-            setMatrixName(tutorId);
+            setMatrixNameByTutorId(tutorId);
+        }
+    }
+
+    public void setMatrixNameBySkillId(String skill) {
+        if (skill == null) {
+            return;
+        }
+        switch (skill) {
+
+            case "letters":
+                matrixName = LITERACY_MATRIX;
+                break;
+
+            case "numbers":
+                matrixName = MATH_MATRIX;
+                break;
+
+            case "stories":
+                matrixName = STORIES_MATRIX;
+                break;
         }
     }
 

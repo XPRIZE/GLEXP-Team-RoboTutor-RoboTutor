@@ -127,7 +127,7 @@ public class CActivitySelector extends FrameLayout implements IButtonController,
      * @param intent
      * @param intentData
      */
-    public void doLaunch(String intent, String intentData, String dataSource, String tutorId) {
+    public void doLaunch(String intent, String intentData, String dataSource, String tutorId, String matrix) {
     }
 
     // IButtonController Interface END

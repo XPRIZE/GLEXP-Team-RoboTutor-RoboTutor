@@ -556,13 +556,14 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                     break;
                 case MotionEvent.ACTION_UP:
                     disableImageButtons();
+                    String[] options = new String[] {mWord1Text.getText().toString(), mWord2Text.getText().toString(), mWord3Text.getText().toString(), mWord4Text.getText().toString()};
                     if (_wordTextView.getText().toString().equals(clozeTarget)){
                         mParent.updateViewColor(_wordFrame, Color.GREEN);
                         mParent.retractFeature(TCONST.CLOZE_WRONG);
                         mParent.publishFeature(TCONST.CLOZE_CORRECT);
                         mParent.publishValue(SHOW_CLOZE, TCONST.FALSE);
                         mParent.logClozePerformance(true, clozeTarget, _wordTextView.getText().toString(),
-                                new String[] {mWord1Text.getText().toString(), mWord2Text.getText().toString(), mWord3Text.getText().toString(), mWord4Text.getText().toString()}, mCurrPage);
+                                options, mCurrPage);
                         isClozePage = false;
                         replayCloze = true;
                     }else{
@@ -570,7 +571,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                         mParent.retractFeature(TCONST.CLOZE_CORRECT);
                         mParent.publishFeature(TCONST.CLOZE_WRONG);
                         mParent.logClozePerformance(false, clozeTarget, _wordTextView.getText().toString(),
-                                new String[]{mWord1Text.getText().toString(), mWord2Text.getText().toString(), mWord3Text.getText().toString(), mWord4Text.getText().toString()}, mCurrPage);
+                                options, mCurrPage);
                     }
                     mParent.nextNode();
                     break;
