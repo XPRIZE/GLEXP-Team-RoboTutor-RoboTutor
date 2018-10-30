@@ -555,7 +555,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                     mParent.updateViewColor(_wordFrame, Color.WHITE);
                     break;
                 case MotionEvent.ACTION_UP:
-                    disableImageButtons();
+                    disableClozeButtons();
                     String[] options = new String[] {mWord1Text.getText().toString(), mWord2Text.getText().toString(), mWord3Text.getText().toString(), mWord4Text.getText().toString()};
                     if (_wordTextView.getText().toString().equals(clozeTarget)){
                         mParent.updateViewColor(_wordFrame, Color.GREEN);

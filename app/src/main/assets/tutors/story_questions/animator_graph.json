@@ -553,7 +553,8 @@
           "COMMENT": "TBD",
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryQuestions", "method": "logState", "parms": "type#node,value#PLAYCLOZEWRONG:String", "features": ""},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "cloze_questions/Try again.mp3", "mode": "flow", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "cloze_questions/Try again.mp3", "mode": "flow", "features": ""},
+            {"type": "COMMAND", "id": "SstoryQuestions", "method": "enableClozeButtons", "parms": "" , "features": ""}
 
           ]
         },
