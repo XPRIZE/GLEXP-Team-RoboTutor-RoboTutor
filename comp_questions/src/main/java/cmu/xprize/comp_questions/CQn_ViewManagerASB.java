@@ -1537,7 +1537,8 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                 for (CASB_Content rawSentence : data[currPage].text[paraIndex]) {
                     otherWordsToSpeak = splitSentence(rawSentence.sentence);
 
-                    String lastSentence = data[currPage].text[mParaCount-1][mLineCount-1].sentence;
+                    int lastParaLastSentenceCount = data[currPage].text[mParaCount-1].length - 1;
+                    String lastSentence = data[currPage].text[mParaCount-1][lastParaLastSentenceCount].sentence;
 
                     // don't speak last word
                     if (rawSentence.sentence == lastSentence) {
