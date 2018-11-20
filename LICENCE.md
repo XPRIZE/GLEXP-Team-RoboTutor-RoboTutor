@@ -11,7 +11,7 @@ The code was released by Carnegie Mellon University under the BSD 3-clause licen
 
 The code is licensed under the Apache License, Version 2.0 (the "License");
 you may not use this code except in compliance with the License.
-You may obtain a copy of the License here: [http://www.apache.org/licenses/LICENSE-2.0] (http://www.apache.org/licenses/LICENSE-2.0)
+You may obtain a copy of the License here: [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
 The content is licensed under the Creative Commons BY license (https://creativecommons.org/licenses/by/4.0/legalcode).
 
