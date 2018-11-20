@@ -3,7 +3,7 @@
 
 # **RoboTutor**
 
-Welcome to RoboTutor:
+Welcome to RoboTutor: this version was uploaded to XPrize 11/20/2018. For subsequent changes, see (https://github.com/RoboTutorLLC/RoboTutor)[https://github.com/RoboTutorLLC/RoboTutor].
 
 
 ## **Setup and Configuration:**
