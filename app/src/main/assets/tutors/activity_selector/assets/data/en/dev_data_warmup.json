@@ -1396,7 +1396,7 @@
       "next": "bpop.wrd:a2EY.show.rise",
       "next_next": "bpop.wrd:a2EY.noShow.mc",
       "prev": "bpop.wrd:s2z.noShow.rise",
-      "harder": "bpop.wrd:i 2AY.show.rise",
+      "harder": "bpop.wrd:i2AY.show.rise",
       "easier": "bpop.wrd:s2z.noShow.rise"
     },
     "bpop.wrd:a2EY.show.rise": {
@@ -1411,7 +1411,7 @@
       "next": "bpop.wrd:a2EY.noShow.mc",
       "next_next": "bpop.wrd:a2EY.noShow.rise",
       "prev": "bpop.wrd:a2EY.show.mc",
-      "harder": "bpop.wrd:i 2AY.noShow.mc",
+      "harder": "bpop.wrd:i2AY.noShow.mc",
       "easier": "bpop.wrd:s2z.show.mc"
     },
     "bpop.wrd:a2EY.noShow.mc": {
@@ -1424,9 +1424,9 @@
       "cell_column": "3",
       "same": "bpop.wrd:a2EY.noShow.mc",
       "next": "bpop.wrd:a2EY.noShow.rise",
-      "next_next": "bpop.wrd:i 2AY.show.mc",
+      "next_next": "bpop.wrd:i2AY.show.mc",
       "prev": "bpop.wrd:a2EY.show.rise",
-      "harder": "bpop.wrd:i 2AY.noShow.rise",
+      "harder": "bpop.wrd:i2AY.noShow.rise",
       "easier": "bpop.wrd:s2z.show.rise"
     },
     "bpop.wrd:a2EY.noShow.rise": {
@@ -1438,69 +1438,69 @@
       "cell_row": "24",
       "cell_column": "4",
       "same": "bpop.wrd:a2EY.noShow.rise",
-      "next": "bpop.wrd:i 2AY.show.mc",
-      "next_next": "bpop.wrd:i 2AY.show.rise",
+      "next": "bpop.wrd:i2AY.show.mc",
+      "next_next": "bpop.wrd:i2AY.show.rise",
       "prev": "bpop.wrd:a2EY.noShow.mc",
-      "harder": "bpop.wrd:i 2AY.noShow.rise",
+      "harder": "bpop.wrd:i2AY.noShow.rise",
       "easier": "bpop.wrd:s2z.noShow.mc"
     },
-    "bpop.wrd:i 2AY.show.mc": {
+    "bpop.wrd:i2AY.show.mc": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "bpop.wrd:i 2AY.show.mc",
+      "tutor_id": "bpop.wrd:i2AY.show.mc",
       "tutor_desc": "bpop.wrd",
-      "tutor_data": "[file]bpop.wrd_i 2AY.show.mc.json",
+      "tutor_data": "[file]bpop.wrd_i2AY.show.mc.json",
       "cell_row": "25",
       "cell_column": "1",
-      "same": "bpop.wrd:i 2AY.show.mc",
-      "next": "bpop.wrd:i 2AY.show.rise",
-      "next_next": "bpop.wrd:i 2AY.noShow.mc",
+      "same": "bpop.wrd:i2AY.show.mc",
+      "next": "bpop.wrd:i2AY.show.rise",
+      "next_next": "bpop.wrd:i2AY.noShow.mc",
       "prev": "bpop.wrd:a2EY.noShow.rise",
       "harder": "bpop.wrd:o2OW.show.rise",
       "easier": "bpop.wrd:a2EY.noShow.rise"
     },
-    "bpop.wrd:i 2AY.show.rise": {
+    "bpop.wrd:i2AY.show.rise": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "bpop.wrd:i 2AY.show.rise",
+      "tutor_id": "bpop.wrd:i2AY.show.rise",
       "tutor_desc": "bpop.wrd",
-      "tutor_data": "[file]bpop.wrd_i 2AY.show.rise.json",
+      "tutor_data": "[file]bpop.wrd_i2AY.show.rise.json",
       "cell_row": "25",
       "cell_column": "2",
-      "same": "bpop.wrd:i 2AY.show.rise",
-      "next": "bpop.wrd:i 2AY.noShow.mc",
-      "next_next": "bpop.wrd:i 2AY.noShow.rise",
-      "prev": "bpop.wrd:i 2AY.show.mc",
+      "same": "bpop.wrd:i2AY.show.rise",
+      "next": "bpop.wrd:i2AY.noShow.mc",
+      "next_next": "bpop.wrd:i2AY.noShow.rise",
+      "prev": "bpop.wrd:i2AY.show.mc",
       "harder": "bpop.wrd:o2OW.noShow.mc",
       "easier": "bpop.wrd:a2EY.show.mc"
     },
-    "bpop.wrd:i 2AY.noShow.mc": {
+    "bpop.wrd:i2AY.noShow.mc": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "bpop.wrd:i 2AY.noShow.mc",
+      "tutor_id": "bpop.wrd:i2AY.noShow.mc",
       "tutor_desc": "bpop.wrd",
-      "tutor_data": "[file]bpop.wrd_i 2AY.noShow.mc.json",
+      "tutor_data": "[file]bpop.wrd_i2AY.noShow.mc.json",
       "cell_row": "25",
       "cell_column": "3",
-      "same": "bpop.wrd:i 2AY.noShow.mc",
-      "next": "bpop.wrd:i 2AY.noShow.rise",
+      "same": "bpop.wrd:i2AY.noShow.mc",
+      "next": "bpop.wrd:i2AY.noShow.rise",
       "next_next": "bpop.wrd:o2OW.show.mc",
-      "prev": "bpop.wrd:i 2AY.show.rise",
+      "prev": "bpop.wrd:i2AY.show.rise",
       "harder": "bpop.wrd:o2OW.noShow.rise",
       "easier": "bpop.wrd:a2EY.show.rise"
     },
-    "bpop.wrd:i 2AY.noShow.rise": {
+    "bpop.wrd:i2AY.noShow.rise": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "bpop.wrd:i 2AY.noShow.rise",
+      "tutor_id": "bpop.wrd:i2AY.noShow.rise",
       "tutor_desc": "bpop.wrd",
-      "tutor_data": "[file]bpop.wrd_i 2AY.noShow.rise.json",
+      "tutor_data": "[file]bpop.wrd_i2AY.noShow.rise.json",
       "cell_row": "25",
       "cell_column": "4",
-      "same": "bpop.wrd:i 2AY.noShow.rise",
+      "same": "bpop.wrd:i2AY.noShow.rise",
       "next": "bpop.wrd:o2OW.show.mc",
       "next_next": "bpop.wrd:o2OW.show.rise",
-      "prev": "bpop.wrd:i 2AY.noShow.mc",
+      "prev": "bpop.wrd:i2AY.noShow.mc",
       "harder": "bpop.wrd:o2OW.noShow.rise",
       "easier": "bpop.wrd:a2EY.noShow.mc"
     },
@@ -1515,9 +1515,9 @@
       "same": "bpop.wrd:o2OW.show.mc",
       "next": "bpop.wrd:o2OW.show.rise",
       "next_next": "bpop.wrd:o2OW.noShow.mc",
-      "prev": "bpop.wrd:i 2AY.noShow.rise",
+      "prev": "bpop.wrd:i2AY.noShow.rise",
       "harder": "bpop.wrd:u2UW.show.rise",
-      "easier": "bpop.wrd:i 2AY.noShow.rise"
+      "easier": "bpop.wrd:i2AY.noShow.rise"
     },
     "bpop.wrd:o2OW.show.rise": {
       "type": "TRANSITION",
@@ -1532,7 +1532,7 @@
       "next_next": "bpop.wrd:o2OW.noShow.rise",
       "prev": "bpop.wrd:o2OW.show.mc",
       "harder": "bpop.wrd:u2UW.noShow.mc",
-      "easier": "bpop.wrd:i 2AY.show.mc"
+      "easier": "bpop.wrd:i2AY.show.mc"
     },
     "bpop.wrd:o2OW.noShow.mc": {
       "type": "TRANSITION",
@@ -1547,7 +1547,7 @@
       "next_next": "bpop.wrd:u2UW.show.mc",
       "prev": "bpop.wrd:o2OW.show.rise",
       "harder": "bpop.wrd:u2UW.noShow.rise",
-      "easier": "bpop.wrd:i 2AY.show.rise"
+      "easier": "bpop.wrd:i2AY.show.rise"
     },
     "bpop.wrd:o2OW.noShow.rise": {
       "type": "TRANSITION",
@@ -1562,7 +1562,7 @@
       "next_next": "bpop.wrd:u2UW.show.rise",
       "prev": "bpop.wrd:o2OW.noShow.mc",
       "harder": "bpop.wrd:u2UW.noShow.rise",
-      "easier": "bpop.wrd:i 2AY.noShow.mc"
+      "easier": "bpop.wrd:i2AY.noShow.mc"
     },
     "bpop.wrd:u2UW.show.mc": {
       "type": "TRANSITION",
@@ -1996,7 +1996,7 @@
       "next": "bpop.wrd:est2EH-S-T.show.rise",
       "next_next": "bpop.wrd:est2EH-S-T.noShow.mc",
       "prev": "bpop.wrd:sh2SH.noShow.rise",
-      "harder": "bpop.wrd:wh 2W.show.rise",
+      "harder": "bpop.wrd:wh2W.show.rise",
       "easier": "bpop.wrd:sh2SH.noShow.rise"
     },
     "bpop.wrd:est2EH-S-T.show.rise": {
@@ -2011,7 +2011,7 @@
       "next": "bpop.wrd:est2EH-S-T.noShow.mc",
       "next_next": "bpop.wrd:est2EH-S-T.noShow.rise",
       "prev": "bpop.wrd:est2EH-S-T.show.mc",
-      "harder": "bpop.wrd:wh 2W.noShow.mc",
+      "harder": "bpop.wrd:wh2W.noShow.mc",
       "easier": "bpop.wrd:sh2SH.show.mc"
     },
     "bpop.wrd:est2EH-S-T.noShow.mc": {
@@ -2024,9 +2024,9 @@
       "cell_column": "3",
       "same": "bpop.wrd:est2EH-S-T.noShow.mc",
       "next": "bpop.wrd:est2EH-S-T.noShow.rise",
-      "next_next": "bpop.wrd:wh 2W.show.mc",
+      "next_next": "bpop.wrd:wh2W.show.mc",
       "prev": "bpop.wrd:est2EH-S-T.show.rise",
-      "harder": "bpop.wrd:wh 2W.noShow.rise",
+      "harder": "bpop.wrd:wh2W.noShow.rise",
       "easier": "bpop.wrd:sh2SH.show.rise"
     },
     "bpop.wrd:est2EH-S-T.noShow.rise": {
@@ -2038,69 +2038,69 @@
       "cell_row": "34",
       "cell_column": "4",
       "same": "bpop.wrd:est2EH-S-T.noShow.rise",
-      "next": "bpop.wrd:wh 2W.show.mc",
-      "next_next": "bpop.wrd:wh 2W.show.rise",
+      "next": "bpop.wrd:wh2W.show.mc",
+      "next_next": "bpop.wrd:wh2W.show.rise",
       "prev": "bpop.wrd:est2EH-S-T.noShow.mc",
-      "harder": "bpop.wrd:wh 2W.noShow.rise",
+      "harder": "bpop.wrd:wh2W.noShow.rise",
       "easier": "bpop.wrd:sh2SH.noShow.mc"
     },
-    "bpop.wrd:wh 2W.show.mc": {
+    "bpop.wrd:wh2W.show.mc": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "bpop.wrd:wh 2W.show.mc",
+      "tutor_id": "bpop.wrd:wh2W.show.mc",
       "tutor_desc": "bpop.wrd",
-      "tutor_data": "[file]bpop.wrd_wh 2W.show.mc.json",
+      "tutor_data": "[file]bpop.wrd_wh2W.show.mc.json",
       "cell_row": "35",
       "cell_column": "1",
-      "same": "bpop.wrd:wh 2W.show.mc",
-      "next": "bpop.wrd:wh 2W.show.rise",
-      "next_next": "bpop.wrd:wh 2W.noShow.mc",
+      "same": "bpop.wrd:wh2W.show.mc",
+      "next": "bpop.wrd:wh2W.show.rise",
+      "next_next": "bpop.wrd:wh2W.noShow.mc",
       "prev": "bpop.wrd:est2EH-S-T.noShow.rise",
       "harder": "bpop.wrd:en2AH-N.show.rise",
       "easier": "bpop.wrd:est2EH-S-T.noShow.rise"
     },
-    "bpop.wrd:wh 2W.show.rise": {
+    "bpop.wrd:wh2W.show.rise": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "bpop.wrd:wh 2W.show.rise",
+      "tutor_id": "bpop.wrd:wh2W.show.rise",
       "tutor_desc": "bpop.wrd",
-      "tutor_data": "[file]bpop.wrd_wh 2W.show.rise.json",
+      "tutor_data": "[file]bpop.wrd_wh2W.show.rise.json",
       "cell_row": "35",
       "cell_column": "2",
-      "same": "bpop.wrd:wh 2W.show.rise",
-      "next": "bpop.wrd:wh 2W.noShow.mc",
-      "next_next": "bpop.wrd:wh 2W.noShow.rise",
-      "prev": "bpop.wrd:wh 2W.show.mc",
+      "same": "bpop.wrd:wh2W.show.rise",
+      "next": "bpop.wrd:wh2W.noShow.mc",
+      "next_next": "bpop.wrd:wh2W.noShow.rise",
+      "prev": "bpop.wrd:wh2W.show.mc",
       "harder": "bpop.wrd:en2AH-N.noShow.mc",
       "easier": "bpop.wrd:est2EH-S-T.show.mc"
     },
-    "bpop.wrd:wh 2W.noShow.mc": {
+    "bpop.wrd:wh2W.noShow.mc": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "bpop.wrd:wh 2W.noShow.mc",
+      "tutor_id": "bpop.wrd:wh2W.noShow.mc",
       "tutor_desc": "bpop.wrd",
-      "tutor_data": "[file]bpop.wrd_wh 2W.noShow.mc.json",
+      "tutor_data": "[file]bpop.wrd_wh2W.noShow.mc.json",
       "cell_row": "35",
       "cell_column": "3",
-      "same": "bpop.wrd:wh 2W.noShow.mc",
-      "next": "bpop.wrd:wh 2W.noShow.rise",
+      "same": "bpop.wrd:wh2W.noShow.mc",
+      "next": "bpop.wrd:wh2W.noShow.rise",
       "next_next": "bpop.wrd:en2AH-N.show.mc",
-      "prev": "bpop.wrd:wh 2W.show.rise",
+      "prev": "bpop.wrd:wh2W.show.rise",
       "harder": "bpop.wrd:en2AH-N.noShow.rise",
       "easier": "bpop.wrd:est2EH-S-T.show.rise"
     },
-    "bpop.wrd:wh 2W.noShow.rise": {
+    "bpop.wrd:wh2W.noShow.rise": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "bpop.wrd:wh 2W.noShow.rise",
+      "tutor_id": "bpop.wrd:wh2W.noShow.rise",
       "tutor_desc": "bpop.wrd",
-      "tutor_data": "[file]bpop.wrd_wh 2W.noShow.rise.json",
+      "tutor_data": "[file]bpop.wrd_wh2W.noShow.rise.json",
       "cell_row": "35",
       "cell_column": "4",
-      "same": "bpop.wrd:wh 2W.noShow.rise",
+      "same": "bpop.wrd:wh2W.noShow.rise",
       "next": "bpop.wrd:en2AH-N.show.mc",
       "next_next": "bpop.wrd:en2AH-N.show.rise",
-      "prev": "bpop.wrd:wh 2W.noShow.mc",
+      "prev": "bpop.wrd:wh2W.noShow.mc",
       "harder": "bpop.wrd:en2AH-N.noShow.rise",
       "easier": "bpop.wrd:est2EH-S-T.noShow.mc"
     },
@@ -2115,9 +2115,9 @@
       "same": "bpop.wrd:en2AH-N.show.mc",
       "next": "bpop.wrd:en2AH-N.show.rise",
       "next_next": "bpop.wrd:en2AH-N.noShow.mc",
-      "prev": "bpop.wrd:wh 2W.noShow.rise",
+      "prev": "bpop.wrd:wh2W.noShow.rise",
       "harder": "bpop.wrd:th2TH.show.rise",
-      "easier": "bpop.wrd:wh 2W.noShow.rise"
+      "easier": "bpop.wrd:wh2W.noShow.rise"
     },
     "bpop.wrd:en2AH-N.show.rise": {
       "type": "TRANSITION",
@@ -2132,7 +2132,7 @@
       "next_next": "bpop.wrd:en2AH-N.noShow.rise",
       "prev": "bpop.wrd:en2AH-N.show.mc",
       "harder": "bpop.wrd:th2TH.noShow.mc",
-      "easier": "bpop.wrd:wh 2W.show.mc"
+      "easier": "bpop.wrd:wh2W.show.mc"
     },
     "bpop.wrd:en2AH-N.noShow.mc": {
       "type": "TRANSITION",
@@ -2147,7 +2147,7 @@
       "next_next": "bpop.wrd:th2TH.show.mc",
       "prev": "bpop.wrd:en2AH-N.show.rise",
       "harder": "bpop.wrd:th2TH.noShow.rise",
-      "easier": "bpop.wrd:wh 2W.show.rise"
+      "easier": "bpop.wrd:wh2W.show.rise"
     },
     "bpop.wrd:en2AH-N.noShow.rise": {
       "type": "TRANSITION",
@@ -2162,7 +2162,7 @@
       "next_next": "bpop.wrd:th2TH.show.rise",
       "prev": "bpop.wrd:en2AH-N.noShow.mc",
       "harder": "bpop.wrd:th2TH.noShow.rise",
-      "easier": "bpop.wrd:wh 2W.noShow.mc"
+      "easier": "bpop.wrd:wh2W.noShow.mc"
     },
     "bpop.wrd:th2TH.show.mc": {
       "type": "TRANSITION",
