@@ -104,10 +104,10 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 //    private static final String debugTutorVariant = "placevalue";
 //    private static final String debugTutorId = "place.value:1";
 //    private static final String debugTutorFile = "[file]place.value__pv-11..99.2D.diff0.3.json";
-    private static final boolean QUICK_DEBUG = false;
-    private static final String debugTutorVariant = "story.echo";
-    private static final String debugTutorId = "write.wrd:story_1_1";
-    private static final String debugTutorFile = "[encfolder]story.echo_all.A..Z.asc.lc.8.json";
+    private static final boolean QUICK_DEBUG = true;
+    private static final String debugTutorVariant = "bpop.wrd";
+    private static final String debugTutorId = "bpop.wrd:2ch_dolch";
+    private static final String debugTutorFile = "[file]bpop.wrd_2ch.dolch.noShow.rise.json";
 
 
     //amogh missing letter
@@ -131,7 +131,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     // private static final String debugTutorFile = "[file]math_0..800.ADD-100-V-S.incr.13.json";
 
     //private static final String debugTutorFile = "[file]math_10..80.SUB-2D-V-S.rand.12.json";
-    public static final String MATRIX_FILE = "dev_data.cd2.json"; // "dev_data.json"; // SUPER_PLACEMENT
+    public static final String MATRIX_FILE = "dev_data_warmup.json"; // "dev_data.json"; // SUPER_PLACEMENT
 
     private static final String LOG_SEQUENCE_ID = "LOG_SEQUENCE_ID";
 
