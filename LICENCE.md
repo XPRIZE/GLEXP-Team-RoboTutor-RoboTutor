@@ -6,9 +6,7 @@
 
 Copyright (c) 2015-2018 by Carnegie Mellon University and RoboTutor LLC.
 
-The files include software consisting of code and/or content.
-
-The code was released by Carnegie Mellon University under the BSD 3-clause license (at https://opensource.org/licenses/BSD-3-Clause) and subsequently by RoboTutor LLC under the Apache 2.0 license.
+The files include software consisting of code and/or content licensed by RoboTutor LLC.
 
 The code is licensed under the Apache License, Version 2.0 (the "License");
 you may not use this code except in compliance with the License.
