@@ -12,7 +12,7 @@ Welcome to RoboTutor:
 
 [Install GitHub Desktop](https://desktop.github.com/)<br>
 
-RoboTutor uses a large volume of external assets at runtime.  To successfully run RoboTutor you must first install these assets on your target device.  The [RTAsset_Publisher](https://github.com/synaptek/RTAsset_Publisher) is the tool you can use to push the Rt assets to your device.  Once you have cloned and run the associated tools to push the data assets to your device you can proceed with building RoboTutor.
+RoboTutor uses a large volume of external assets at runtime.  To successfully run RoboTutor you must first install these assets on your target device.  The [RTAsset_Publisher](https://github.com/RoboTutor/RTAsset_Publisher) is the tool you can use to push the Rt assets to your device.  Once you have cloned and run the associated tools to push the data assets to your device you can proceed with building RoboTutor.
 
 
 ## **Building RoboTutor:**
