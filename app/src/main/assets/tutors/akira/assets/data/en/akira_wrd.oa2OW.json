@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["road", "roam", "foal"],
+      "item_counter": 1,
+      "answer": "RIGHT",
+      "target": "foal",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["coal", "load", "foam"],
+      "item_counter": 2,
+      "answer": "MID",
+      "target": "load",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["road", "oath", "foal"],
+      "item_counter": 3,
+      "answer": "MID",
+      "target": "oath",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["oak", "foal", "loan"],
+      "item_counter": 4,
+      "answer": "RIGHT",
+      "target": "loan",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["moat", "oath", "boat"],
+      "item_counter": 5,
+      "answer": "RIGHT",
+      "target": "boat",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["foam", "roam", "road"],
+      "item_counter": 6,
+      "answer": "LEFT",
+      "target": "foam",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["oath", "oak", "boat"],
+      "item_counter": 7,
+      "answer": "LEFT",
+      "target": "oath",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["goal", "moat", "soak"],
+      "item_counter": 8,
+      "answer": "LEFT",
+      "target": "goal",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["soak", "roam", "moat"],
+      "item_counter": 9,
+      "answer": "RIGHT",
+      "target": "moat",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["load", "loaf", "goat"],
+      "item_counter": 10,
+      "answer": "LEFT",
+      "target": "load",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["purr", "urge", "hurt"],
+      "item_counter": 1,
+      "answer": "RIGHT",
+      "target": "hurt",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["blur", "turn", "urge"],
+      "item_counter": 2,
+      "answer": "LEFT",
+      "target": "blur",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["hurl", "fur", "blur"],
+      "item_counter": 3,
+      "answer": "LEFT",
+      "target": "hurl",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["burp", "urge", "turf"],
+      "item_counter": 4,
+      "answer": "RIGHT",
+      "target": "turf",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["surf", "fur", "burp"],
+      "item_counter": 5,
+      "answer": "MID",
+      "target": "fur",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["burn", "urge", "curl"],
+      "item_counter": 6,
+      "answer": "LEFT",
+      "target": "burn",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["turf", "spur", "purr"],
+      "item_counter": 7,
+      "answer": "LEFT",
+      "target": "turf",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["purr", "hurt", "fur"],
+      "item_counter": 8,
+      "answer": "RIGHT",
+      "target": "fur",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["curl", "turn", "purr"],
+      "item_counter": 9,
+      "answer": "LEFT",
+      "target": "curl",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["blur", "hurl", "curl"],
+      "item_counter": 10,
+      "answer": "RIGHT",
+      "target": "curl",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

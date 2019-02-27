@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["rap", "rook", "roof"],
+      "item_counter": 1,
+      "answer": "LEFT",
+      "target": "rap",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["risk", "rose", "rush"],
+      "item_counter": 2,
+      "answer": "LEFT",
+      "target": "risk",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["rag", "rock", "rap"],
+      "item_counter": 3,
+      "answer": "LEFT",
+      "target": "rag",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["ray", "rod", "red"],
+      "item_counter": 4,
+      "answer": "MID",
+      "target": "rod",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["rip", "rat", "rib"],
+      "item_counter": 5,
+      "answer": "RIGHT",
+      "target": "rib",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["red", "roof", "road"],
+      "item_counter": 6,
+      "answer": "LEFT",
+      "target": "red",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["rug", "rose", "rib"],
+      "item_counter": 7,
+      "answer": "MID",
+      "target": "rose",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["rock", "ran", "rust"],
+      "item_counter": 8,
+      "answer": "MID",
+      "target": "ran",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["rag", "rip", "raft"],
+      "item_counter": 9,
+      "answer": "MID",
+      "target": "rip",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["rook", "rob", "rim"],
+      "item_counter": 10,
+      "answer": "RIGHT",
+      "target": "rim",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

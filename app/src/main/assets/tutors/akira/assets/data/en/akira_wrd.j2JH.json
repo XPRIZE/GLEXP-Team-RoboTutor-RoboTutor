@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["jeans", "jail", "jam"],
+      "item_counter": 1,
+      "answer": "RIGHT",
+      "target": "jam",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["jug", "john", "jaw"],
+      "item_counter": 2,
+      "answer": "RIGHT",
+      "target": "jaw",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["jail", "jot", "jeep"],
+      "item_counter": 3,
+      "answer": "MID",
+      "target": "jot",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["jeans", "jug", "job"],
+      "item_counter": 4,
+      "answer": "LEFT",
+      "target": "jeans",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["jaw", "joy", "jog"],
+      "item_counter": 5,
+      "answer": "LEFT",
+      "target": "jaw",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["joe", "jam", "jaw"],
+      "item_counter": 6,
+      "answer": "MID",
+      "target": "jam",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["jet", "jug", "job"],
+      "item_counter": 7,
+      "answer": "RIGHT",
+      "target": "job",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["jam", "job", "jeep"],
+      "item_counter": 8,
+      "answer": "MID",
+      "target": "job",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["job", "jug", "jar"],
+      "item_counter": 9,
+      "answer": "MID",
+      "target": "jug",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["john", "job", "jeans"],
+      "item_counter": 10,
+      "answer": "MID",
+      "target": "job",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

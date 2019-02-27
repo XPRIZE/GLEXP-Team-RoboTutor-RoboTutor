@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["pipe", "wipe", "lice"],
+      "item_counter": 1,
+      "answer": "MID",
+      "target": "wipe",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["side", "bike", "vine"],
+      "item_counter": 2,
+      "answer": "LEFT",
+      "target": "side",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["pine", "ride", "dice"],
+      "item_counter": 3,
+      "answer": "RIGHT",
+      "target": "dice",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["size", "nine", "bike"],
+      "item_counter": 4,
+      "answer": "LEFT",
+      "target": "size",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["line", "nice", "nine"],
+      "item_counter": 5,
+      "answer": "MID",
+      "target": "nice",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["wise", "line", "ripe"],
+      "item_counter": 6,
+      "answer": "RIGHT",
+      "target": "ripe",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["ripe", "side", "nice"],
+      "item_counter": 7,
+      "answer": "RIGHT",
+      "target": "nice",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["lie", "mine", "nine"],
+      "item_counter": 8,
+      "answer": "LEFT",
+      "target": "lie",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["wipe", "hike", "nine"],
+      "item_counter": 9,
+      "answer": "RIGHT",
+      "target": "nine",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["lie", "wise", "wide"],
+      "item_counter": 10,
+      "answer": "LEFT",
+      "target": "lie",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

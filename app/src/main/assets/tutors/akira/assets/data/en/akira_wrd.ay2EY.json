@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["may", "tray", "ray"],
+      "item_counter": 1,
+      "answer": "MID",
+      "target": "tray",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["lay", "say", "clay"],
+      "item_counter": 2,
+      "answer": "MID",
+      "target": "say",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["tray", "say", "way"],
+      "item_counter": 3,
+      "answer": "RIGHT",
+      "target": "way",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["day", "clay", "play"],
+      "item_counter": 4,
+      "answer": "LEFT",
+      "target": "day",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["stay", "sway", "hay"],
+      "item_counter": 5,
+      "answer": "LEFT",
+      "target": "stay",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["clay", "gray", "way"],
+      "item_counter": 6,
+      "answer": "LEFT",
+      "target": "clay",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["play", "stay", "sway"],
+      "item_counter": 7,
+      "answer": "RIGHT",
+      "target": "sway",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["lay", "play", "sway"],
+      "item_counter": 8,
+      "answer": "LEFT",
+      "target": "lay",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["ray", "may", "say"],
+      "item_counter": 9,
+      "answer": "MID",
+      "target": "may",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["tray", "play", "ray"],
+      "item_counter": 10,
+      "answer": "MID",
+      "target": "play",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

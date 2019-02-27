@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["quad", "quit", "quiz"],
+      "item_counter": 1,
+      "answer": "LEFT",
+      "target": "quad",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["quit", "quiz", "quad"],
+      "item_counter": 2,
+      "answer": "RIGHT",
+      "target": "quad",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["quad", "quiz", "quit"],
+      "item_counter": 3,
+      "answer": "LEFT",
+      "target": "quad",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["quad", "quit", "quiz"],
+      "item_counter": 4,
+      "answer": "LEFT",
+      "target": "quad",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["quit", "quiz", "quad"],
+      "item_counter": 5,
+      "answer": "MID",
+      "target": "quiz",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["quad", "quit", "quiz"],
+      "item_counter": 6,
+      "answer": "LEFT",
+      "target": "quad",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["quad", "quiz", "quit"],
+      "item_counter": 7,
+      "answer": "MID",
+      "target": "quiz",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["quad", "quit", "quiz"],
+      "item_counter": 8,
+      "answer": "RIGHT",
+      "target": "quiz",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["quad", "quit", "quiz"],
+      "item_counter": 9,
+      "answer": "LEFT",
+      "target": "quad",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["quiz", "quit", "quad"],
+      "item_counter": 10,
+      "answer": "LEFT",
+      "target": "quiz",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

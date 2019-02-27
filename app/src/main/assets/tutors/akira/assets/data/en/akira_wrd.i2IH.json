@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["kid", "rich", "chip"],
+      "item_counter": 1,
+      "answer": "MID",
+      "target": "rich",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["twin", "fit", "will"],
+      "item_counter": 2,
+      "answer": "RIGHT",
+      "target": "will",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["tin", "slip", "rib"],
+      "item_counter": 3,
+      "answer": "MID",
+      "target": "slip",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["gift", "kick", "fill"],
+      "item_counter": 4,
+      "answer": "MID",
+      "target": "kick",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["will", "bin", "this"],
+      "item_counter": 5,
+      "answer": "LEFT",
+      "target": "will",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["grin", "fig", "lit"],
+      "item_counter": 6,
+      "answer": "MID",
+      "target": "fig",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["bit", "lid", "fill"],
+      "item_counter": 7,
+      "answer": "RIGHT",
+      "target": "fill",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["dip", "will", "kick"],
+      "item_counter": 8,
+      "answer": "LEFT",
+      "target": "dip",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["rich", "grit", "will"],
+      "item_counter": 9,
+      "answer": "LEFT",
+      "target": "rich",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["miss", "mill", "drip"],
+      "item_counter": 10,
+      "answer": "RIGHT",
+      "target": "drip",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}
