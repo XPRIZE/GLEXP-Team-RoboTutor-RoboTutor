@@ -246,63 +246,68 @@ public class CTutorData_Metadata {
 
         ArrayList<String> result = new ArrayList<>();
 
-        switch (tutorType) {
-            case "akira":
-                result.add("<b>Akira</b>");
-
-                result = processAkiraTutorId(tutor, result);
-                break;
-
-            case "bpop":
-                // CHUNT this is the most complicated...
-                result = processBubblePopTutorId(tutor, result);
-
-                break;
-
-            case "countingx":
-                result.add("<b>Tap to Count</b>");
-                String[] countingSplit = tutor.tutor_id.split("[:_]");
-                result.add(String.format("Tap to count from %s to %s.", countingSplit[1], countingSplit[2]));
-                break;
+        try {
 
 
-            case "math":
-                result.add("<b>Math</b>");
-                String[] splitMe = tutor.tutor_id.split(":");
-                String[] secondPart = splitMe[1].split("\\.");
+            switch (tutorType) {
+                case "akira":
+                    result.add("<b>Akira</b>");
 
-                String[] thirdPart = secondPart[3].split("-");
+                    result = processAkiraTutorId(tutor, result);
+                    break;
 
-                StringBuilder descriptor = new StringBuilder();
-                descriptor.append( thirdPart[0].equals("SUB") ? "<b>Subtract</b> " : "<b>Add</b> ");
-                descriptor.append(String.format("values between <b>%s</b> and <b>%s</b>", secondPart[0], secondPart[2]));
-                result.add(descriptor.toString());
-                break;
+                case "bpop":
+                    // CHUNT this is the most complicated...
+                    result = processBubblePopTutorId(tutor, result);
 
-            case "numberscale":
-                result.add("<b>Number Scale</b>");
-                String numscaleSuffix = tutor.tutor_id.split(":")[1];
-                String[] numscaleDetails = numscaleSuffix.split("\\.");
-                String numscaleOffset = numscaleDetails[3].substring("off".length());
-                result.add(String.format("Explore numbers <b>%s</b> to <b>%s</b>, counting by <b>%s</b>.", numscaleDetails[0], numscaleDetails[2], numscaleOffset));
-                break;
+                    break;
+
+                case "countingx":
+                    result.add("<b>Tap to Count</b>");
+                    String[] countingSplit = tutor.tutor_id.split("[:_]");
+                    result.add(String.format("Tap to count from %s to %s.", countingSplit[1], countingSplit[2]));
+                    break;
 
 
-            case "story":
-                result.add("<b>Story</b>");
-                result = processStoryTutorId(tutor, result);
-                break;
+                case "math":
+                    result.add("<b>Math</b>");
+                    String[] splitMe = tutor.tutor_id.split(":");
+                    String[] secondPart = splitMe[1].split("\\.");
+
+                    String[] thirdPart = secondPart[3].split("-");
+
+                    StringBuilder descriptor = new StringBuilder();
+                    descriptor.append(thirdPart[0].equals("SUB") ? "<b>Subtract</b> " : "<b>Add</b> ");
+                    descriptor.append(String.format("values between <b>%s</b> and <b>%s</b>", secondPart[0], secondPart[2]));
+                    result.add(descriptor.toString());
+                    break;
+
+                case "numberscale":
+                    result.add("<b>Number Scale</b>");
+                    String numscaleSuffix = tutor.tutor_id.split(":")[1];
+                    String[] numscaleDetails = numscaleSuffix.split("\\.");
+                    String numscaleOffset = numscaleDetails[3].substring("off".length());
+                    result.add(String.format("Explore numbers <b>%s</b> to <b>%s</b>, counting by <b>%s</b>.", numscaleDetails[0], numscaleDetails[2], numscaleOffset));
+                    break;
 
 
-            case "write":
-                result.add("<b>Write</b>");
-                result = processWriteTutorId(tutor, result);
-                break;
+                case "story":
+                    result.add("<b>Story</b>");
+                    result = processStoryTutorId(tutor, result);
+                    break;
 
 
-            default:
-                break;
+                case "write":
+                    result.add("<b>Write</b>");
+                    result = processWriteTutorId(tutor, result);
+                    break;
 
+
+                default:
+                    break;
+            }
+        }catch (Exception e) {
+            result.add("<b>Error generating name</b>");
         }
 
         // give it some empty lines
