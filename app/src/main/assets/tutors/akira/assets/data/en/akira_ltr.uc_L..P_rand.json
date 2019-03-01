@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["N", "P", "L"],
+      "item_counter": 1,
+      "answer": "RIGHT",
+      "target": "L",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["P", "L", "N"],
+      "item_counter": 2,
+      "answer": "RIGHT",
+      "target": "N",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["L", "O", "N"],
+      "item_counter": 3,
+      "answer": "LEFT",
+      "target": "L",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["L", "O", "N"],
+      "item_counter": 4,
+      "answer": "RIGHT",
+      "target": "N",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["M", "P", "N"],
+      "item_counter": 5,
+      "answer": "LEFT",
+      "target": "M",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["P", "N", "M"],
+      "item_counter": 6,
+      "answer": "LEFT",
+      "target": "P",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["M", "O", "N"],
+      "item_counter": 7,
+      "answer": "RIGHT",
+      "target": "N",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["O", "P", "N"],
+      "item_counter": 8,
+      "answer": "MID",
+      "target": "P",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["O", "M", "N"],
+      "item_counter": 9,
+      "answer": "RIGHT",
+      "target": "N",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["M", "L", "N"],
+      "item_counter": 10,
+      "answer": "RIGHT",
+      "target": "N",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

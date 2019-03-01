@@ -59,7 +59,7 @@
       "cell_column": "4",
       "same": "write.ltr.uc:A..D_asc",
       "next": "bpop.ltr.uc:A..D.asc.show.rise",
-      "next_next": "akira:ltr.uc_A..D_asc",
+      "next_next": "akira:ltr.uc_A..D_rand",
       "prev": "bpop.ltr.uc:A..D.asc.noShow.mc",
       "harder": "bpop.ltr.lc:A..D.asc.show.rise",
       "easier": "bpop.ltr.uc:A..D.asc.noShow.mc"
@@ -73,21 +73,21 @@
       "cell_row": "1",
       "cell_column": "5",
       "same": "bpop.ltr.uc:A..D.asc.show.rise",
-      "next": "akira:ltr.uc_A..D_asc",
+      "next": "akira:ltr.uc_A..D_rand",
       "next_next": "bpop.ltr.uc:A..D.asc.noShow.rise",
       "prev": "write.ltr.uc:A..D_asc",
-      "harder": "akira:ltr.lc_A..D_asc",
+      "harder": "akira:ltr.lc_A..D_rand",
       "easier": "write.ltr.uc:A..D_asc"
     },
-    "akira:ltr.uc_A..D_asc": {
+    "akira:ltr.uc_A..D_rand": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "akira:ltr.uc_A..D_asc",
+      "tutor_id": "akira:ltr.uc_A..D_rand",
       "tutor_desc": "akira",
-      "tutor_data": "[file]akira_ltr.uc_A..D_asc.json",
+      "tutor_data": "[file]akira_ltr.uc_A..D_rand.json",
       "cell_row": "1",
       "cell_column": "6",
-      "same": "akira:ltr.uc_A..D_asc",
+      "same": "akira:ltr.uc_A..D_rand",
       "next": "bpop.ltr.uc:A..D.asc.noShow.rise",
       "next_next": "write.ltr.uc.dic:A..D_asc",
       "prev": "bpop.ltr.uc:A..D.asc.show.rise",
@@ -105,9 +105,9 @@
       "same": "bpop.ltr.uc:A..D.asc.noShow.rise",
       "next": "write.ltr.uc.dic:A..D_asc",
       "next_next": "bpop.ltr.uc:E..G.asc.show.mc",
-      "prev": "akira:ltr.uc_A..D_asc",
+      "prev": "akira:ltr.uc_A..D_rand",
       "harder": "write.ltr.lc.dic:A..D_asc",
-      "easier": "akira:ltr.uc_A..D_asc"
+      "easier": "akira:ltr.uc_A..D_rand"
     },
     "write.ltr.uc.dic:A..D_asc": {
       "type": "TRANSITION",
@@ -179,7 +179,7 @@
       "cell_column": "12",
       "same": "write.ltr.uc:E..G_asc",
       "next": "bpop.ltr.uc:E..G.asc.show.rise",
-      "next_next": "akira:ltr.uc_E..G_asc",
+      "next_next": "akira:ltr.uc_E..G_rand",
       "prev": "bpop.ltr.uc:E..G.asc.noShow.mc",
       "harder": "bpop.ltr.lc:E..G.asc.show.rise",
       "easier": "bpop.ltr.uc:E..G.asc.noShow.mc"
@@ -193,21 +193,21 @@
       "cell_row": "1",
       "cell_column": "13",
       "same": "bpop.ltr.uc:E..G.asc.show.rise",
-      "next": "akira:ltr.uc_E..G_asc",
+      "next": "akira:ltr.uc_E..G_rand",
       "next_next": "bpop.ltr.uc:E..G.asc.noShow.rise",
       "prev": "write.ltr.uc:E..G_asc",
-      "harder": "akira:ltr.lc_E..G_asc",
+      "harder": "akira:ltr.lc_E..G_rand",
       "easier": "write.ltr.uc:E..G_asc"
     },
-    "akira:ltr.uc_E..G_asc": {
+    "akira:ltr.uc_E..G_rand": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "akira:ltr.uc_E..G_asc",
+      "tutor_id": "akira:ltr.uc_E..G_rand",
       "tutor_desc": "akira",
-      "tutor_data": "[file]akira_ltr.uc_E..G_asc.json",
+      "tutor_data": "[file]akira_ltr.uc_E..G_rand.json",
       "cell_row": "1",
       "cell_column": "14",
-      "same": "akira:ltr.uc_E..G_asc",
+      "same": "akira:ltr.uc_E..G_rand",
       "next": "bpop.ltr.uc:E..G.asc.noShow.rise",
       "next_next": "write.ltr.uc.dic:E..G_asc",
       "prev": "bpop.ltr.uc:E..G.asc.show.rise",
@@ -225,9 +225,9 @@
       "same": "bpop.ltr.uc:E..G.asc.noShow.rise",
       "next": "write.ltr.uc.dic:E..G_asc",
       "next_next": "bpop.ltr.uc:A..G.rand.noShow.mc",
-      "prev": "akira:ltr.uc_E..G_asc",
+      "prev": "akira:ltr.uc_E..G_rand",
       "harder": "write.ltr.lc.dic:E..G_asc",
-      "easier": "akira:ltr.uc_E..G_asc"
+      "easier": "akira:ltr.uc_E..G_rand"
     },
     "write.ltr.uc.dic:E..G_asc": {
       "type": "TRANSITION",
@@ -344,7 +344,7 @@
       "cell_column": "23",
       "same": "write.ltr.uc:H..K_asc",
       "next": "bpop.ltr.uc:H..K.asc.show.rise",
-      "next_next": "akira:ltr.uc_H..K_asc",
+      "next_next": "akira:ltr.uc_H..K_rand",
       "prev": "bpop.ltr.uc:H..K.asc.noShow.mc",
       "harder": "bpop.ltr.lc:H..K.asc.show.rise",
       "easier": "bpop.ltr.uc:H..K.asc.noShow.mc"
@@ -358,21 +358,21 @@
       "cell_row": "1",
       "cell_column": "24",
       "same": "bpop.ltr.uc:H..K.asc.show.rise",
-      "next": "akira:ltr.uc_H..K_asc",
+      "next": "akira:ltr.uc_H..K_rand",
       "next_next": "bpop.ltr.uc:H..K.asc.noShow.rise",
       "prev": "write.ltr.uc:H..K_asc",
-      "harder": "akira:ltr.lc_H..K_asc",
+      "harder": "akira:ltr.lc_H..K_rand",
       "easier": "write.ltr.uc:H..K_asc"
     },
-    "akira:ltr.uc_H..K_asc": {
+    "akira:ltr.uc_H..K_rand": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "akira:ltr.uc_H..K_asc",
+      "tutor_id": "akira:ltr.uc_H..K_rand",
       "tutor_desc": "akira",
-      "tutor_data": "[file]akira_ltr.uc_H..K_asc.json",
+      "tutor_data": "[file]akira_ltr.uc_H..K_rand.json",
       "cell_row": "1",
       "cell_column": "25",
-      "same": "akira:ltr.uc_H..K_asc",
+      "same": "akira:ltr.uc_H..K_rand",
       "next": "bpop.ltr.uc:H..K.asc.noShow.rise",
       "next_next": "write.ltr.uc.dic:H..K_asc",
       "prev": "bpop.ltr.uc:H..K.asc.show.rise",
@@ -390,9 +390,9 @@
       "same": "bpop.ltr.uc:H..K.asc.noShow.rise",
       "next": "write.ltr.uc.dic:H..K_asc",
       "next_next": "bpop.ltr.uc:A..K.rand.noShow.mc",
-      "prev": "akira:ltr.uc_H..K_asc",
+      "prev": "akira:ltr.uc_H..K_rand",
       "harder": "write.ltr.lc.dic:H..K_asc",
-      "easier": "akira:ltr.uc_H..K_asc"
+      "easier": "akira:ltr.uc_H..K_rand"
     },
     "write.ltr.uc.dic:H..K_asc": {
       "type": "TRANSITION",
@@ -509,7 +509,7 @@
       "cell_column": "34",
       "same": "write.ltr.uc:L..P_asc",
       "next": "bpop.ltr.uc:L..P.asc.show.rise",
-      "next_next": "akira:ltr.uc_L..P_asc",
+      "next_next": "akira:ltr.uc_L..P_rand",
       "prev": "bpop.ltr.uc:L..P.asc.noShow.mc",
       "harder": "bpop.ltr.lc:L..P.asc.show.rise",
       "easier": "bpop.ltr.uc:L..P.asc.noShow.mc"
@@ -523,21 +523,21 @@
       "cell_row": "1",
       "cell_column": "35",
       "same": "bpop.ltr.uc:L..P.asc.show.rise",
-      "next": "akira:ltr.uc_L..P_asc",
+      "next": "akira:ltr.uc_L..P_rand",
       "next_next": "bpop.ltr.uc:L..P.asc.noShow.rise",
       "prev": "write.ltr.uc:L..P_asc",
-      "harder": "akira:ltr.lc_L..P_asc",
+      "harder": "akira:ltr.lc_L..P_rand",
       "easier": "write.ltr.uc:L..P_asc"
     },
-    "akira:ltr.uc_L..P_asc": {
+    "akira:ltr.uc_L..P_rand": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "akira:ltr.uc_L..P_asc",
+      "tutor_id": "akira:ltr.uc_L..P_rand",
       "tutor_desc": "akira",
-      "tutor_data": "[file]akira_ltr.uc_L..P_asc.json",
+      "tutor_data": "[file]akira_ltr.uc_L..P_rand.json",
       "cell_row": "1",
       "cell_column": "36",
-      "same": "akira:ltr.uc_L..P_asc",
+      "same": "akira:ltr.uc_L..P_rand",
       "next": "bpop.ltr.uc:L..P.asc.noShow.rise",
       "next_next": "write.ltr.uc.dic:L..P_asc",
       "prev": "bpop.ltr.uc:L..P.asc.show.rise",
@@ -555,9 +555,9 @@
       "same": "bpop.ltr.uc:L..P.asc.noShow.rise",
       "next": "write.ltr.uc.dic:L..P_asc",
       "next_next": "bpop.ltr.uc:A..P.rand.noShow.mc",
-      "prev": "akira:ltr.uc_L..P_asc",
+      "prev": "akira:ltr.uc_L..P_rand",
       "harder": "write.ltr.lc.dic:L..P_asc",
-      "easier": "akira:ltr.uc_L..P_asc"
+      "easier": "akira:ltr.uc_L..P_rand"
     },
     "write.ltr.uc.dic:L..P_asc": {
       "type": "TRANSITION",
@@ -674,7 +674,7 @@
       "cell_column": "45",
       "same": "write.ltr.uc:Q..S_asc",
       "next": "bpop.ltr.uc:Q..S.asc.show.rise",
-      "next_next": "akira:ltr.uc_Q..S_asc",
+      "next_next": "akira:ltr.uc_Q..S_rand",
       "prev": "bpop.ltr.uc:Q..S.asc.noShow.mc",
       "harder": "bpop.ltr.lc:Q..S.asc.show.rise",
       "easier": "bpop.ltr.uc:Q..S.asc.noShow.mc"
@@ -688,21 +688,21 @@
       "cell_row": "1",
       "cell_column": "46",
       "same": "bpop.ltr.uc:Q..S.asc.show.rise",
-      "next": "akira:ltr.uc_Q..S_asc",
+      "next": "akira:ltr.uc_Q..S_rand",
       "next_next": "bpop.ltr.uc:Q..S.asc.noShow.rise",
       "prev": "write.ltr.uc:Q..S_asc",
-      "harder": "akira:ltr.lc_Q..S_asc",
+      "harder": "akira:ltr.lc_Q..S_rand",
       "easier": "write.ltr.uc:Q..S_asc"
     },
-    "akira:ltr.uc_Q..S_asc": {
+    "akira:ltr.uc_Q..S_rand": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "akira:ltr.uc_Q..S_asc",
+      "tutor_id": "akira:ltr.uc_Q..S_rand",
       "tutor_desc": "akira",
-      "tutor_data": "[file]akira_ltr.uc_Q..S_asc.json",
+      "tutor_data": "[file]akira_ltr.uc_Q..S_rand.json",
       "cell_row": "1",
       "cell_column": "47",
-      "same": "akira:ltr.uc_Q..S_asc",
+      "same": "akira:ltr.uc_Q..S_rand",
       "next": "bpop.ltr.uc:Q..S.asc.noShow.rise",
       "next_next": "write.ltr.uc.dic:Q..S_asc",
       "prev": "bpop.ltr.uc:Q..S.asc.show.rise",
@@ -720,9 +720,9 @@
       "same": "bpop.ltr.uc:Q..S.asc.noShow.rise",
       "next": "write.ltr.uc.dic:Q..S_asc",
       "next_next": "bpop.ltr.uc:A..S.rand.noShow.mc",
-      "prev": "akira:ltr.uc_Q..S_asc",
+      "prev": "akira:ltr.uc_Q..S_rand",
       "harder": "write.ltr.lc.dic:Q..S_asc",
-      "easier": "akira:ltr.uc_Q..S_asc"
+      "easier": "akira:ltr.uc_Q..S_rand"
     },
     "write.ltr.uc.dic:Q..S_asc": {
       "type": "TRANSITION",
@@ -839,7 +839,7 @@
       "cell_column": "56",
       "same": "write.ltr.uc:T..V_asc",
       "next": "bpop.ltr.uc:T..V.asc.show.rise",
-      "next_next": "akira:ltr.uc_T..V_asc",
+      "next_next": "akira:ltr.uc_T..V_rand",
       "prev": "bpop.ltr.uc:T..V.asc.noShow.mc",
       "harder": "bpop.ltr.lc:T..V.asc.show.rise",
       "easier": "bpop.ltr.uc:T..V.asc.noShow.mc"
@@ -853,21 +853,21 @@
       "cell_row": "1",
       "cell_column": "57",
       "same": "bpop.ltr.uc:T..V.asc.show.rise",
-      "next": "akira:ltr.uc_T..V_asc",
+      "next": "akira:ltr.uc_T..V_rand",
       "next_next": "bpop.ltr.uc:T..V.asc.noShow.rise",
       "prev": "write.ltr.uc:T..V_asc",
-      "harder": "akira:ltr.lc_T..V_asc",
+      "harder": "akira:ltr.lc_T..V_rand",
       "easier": "write.ltr.uc:T..V_asc"
     },
-    "akira:ltr.uc_T..V_asc": {
+    "akira:ltr.uc_T..V_rand": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "akira:ltr.uc_T..V_asc",
+      "tutor_id": "akira:ltr.uc_T..V_rand",
       "tutor_desc": "akira",
-      "tutor_data": "[file]akira_ltr.uc_T..V_asc.json",
+      "tutor_data": "[file]akira_ltr.uc_T..V_rand.json",
       "cell_row": "1",
       "cell_column": "58",
-      "same": "akira:ltr.uc_T..V_asc",
+      "same": "akira:ltr.uc_T..V_rand",
       "next": "bpop.ltr.uc:T..V.asc.noShow.rise",
       "next_next": "write.ltr.uc.dic:T..V_asc",
       "prev": "bpop.ltr.uc:T..V.asc.show.rise",
@@ -885,9 +885,9 @@
       "same": "bpop.ltr.uc:T..V.asc.noShow.rise",
       "next": "write.ltr.uc.dic:T..V_asc",
       "next_next": "bpop.ltr.uc:A..V.rand.noShow.mc",
-      "prev": "akira:ltr.uc_T..V_asc",
+      "prev": "akira:ltr.uc_T..V_rand",
       "harder": "write.ltr.lc.dic:T..V_asc",
-      "easier": "akira:ltr.uc_T..V_asc"
+      "easier": "akira:ltr.uc_T..V_rand"
     },
     "write.ltr.uc.dic:T..V_asc": {
       "type": "TRANSITION",
@@ -1004,7 +1004,7 @@
       "cell_column": "67",
       "same": "write.ltr.uc:W..Z_asc",
       "next": "bpop.ltr.uc:W..Z.asc.show.rise",
-      "next_next": "akira:ltr.uc_W..Z_asc",
+      "next_next": "akira:ltr.uc_W..Z_rand",
       "prev": "bpop.ltr.uc:W..Z.asc.noShow.mc",
       "harder": "bpop.ltr.lc:W..Z.asc.show.rise",
       "easier": "bpop.ltr.uc:W..Z.asc.noShow.mc"
@@ -1018,21 +1018,21 @@
       "cell_row": "1",
       "cell_column": "68",
       "same": "bpop.ltr.uc:W..Z.asc.show.rise",
-      "next": "akira:ltr.uc_W..Z_asc",
+      "next": "akira:ltr.uc_W..Z_rand",
       "next_next": "bpop.ltr.uc:W..Z.asc.noShow.rise",
       "prev": "write.ltr.uc:W..Z_asc",
-      "harder": "akira:ltr.lc_W..Z_asc",
+      "harder": "akira:ltr.lc_W..Z_rand",
       "easier": "write.ltr.uc:W..Z_asc"
     },
-    "akira:ltr.uc_W..Z_asc": {
+    "akira:ltr.uc_W..Z_rand": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "akira:ltr.uc_W..Z_asc",
+      "tutor_id": "akira:ltr.uc_W..Z_rand",
       "tutor_desc": "akira",
-      "tutor_data": "[file]akira_ltr.uc_W..Z_asc.json",
+      "tutor_data": "[file]akira_ltr.uc_W..Z_rand.json",
       "cell_row": "1",
       "cell_column": "69",
-      "same": "akira:ltr.uc_W..Z_asc",
+      "same": "akira:ltr.uc_W..Z_rand",
       "next": "bpop.ltr.uc:W..Z.asc.noShow.rise",
       "next_next": "write.ltr.uc.dic:W..Z_asc",
       "prev": "bpop.ltr.uc:W..Z.asc.show.rise",
@@ -1050,9 +1050,9 @@
       "same": "bpop.ltr.uc:W..Z.asc.noShow.rise",
       "next": "write.ltr.uc.dic:W..Z_asc",
       "next_next": "bpop.ltr.uc:A..Z.rand.noShow.mc",
-      "prev": "akira:ltr.uc_W..Z_asc",
+      "prev": "akira:ltr.uc_W..Z_rand",
       "harder": "write.ltr.lc.dic:W..Z_asc",
-      "easier": "akira:ltr.uc_W..Z_asc"
+      "easier": "akira:ltr.uc_W..Z_rand"
     },
     "write.ltr.uc.dic:W..Z_asc": {
       "type": "TRANSITION",
@@ -1169,7 +1169,7 @@
       "cell_column": "4",
       "same": "write.ltr.lc:A..D_asc",
       "next": "bpop.ltr.lc:A..D.asc.show.rise",
-      "next_next": "akira:ltr.lc_A..D_asc",
+      "next_next": "akira:ltr.lc_A..D_rand",
       "prev": "bpop.ltr.lc:A..D.asc.noShow.mc",
       "harder": "story.parrot::a2ae_wb_1__it_1",
       "easier": "bpop.ltr.uc:A..D.asc.noShow.mc"
@@ -1183,21 +1183,21 @@
       "cell_row": "2",
       "cell_column": "5",
       "same": "bpop.ltr.lc:A..D.asc.show.rise",
-      "next": "akira:ltr.lc_A..D_asc",
+      "next": "akira:ltr.lc_A..D_rand",
       "next_next": "bpop.ltr.lc:A..D.asc.noShow.rise",
       "prev": "write.ltr.lc:A..D_asc",
       "harder": "bpop.wrd:a2AE.noShow.mc",
       "easier": "write.ltr.uc:A..D_asc"
     },
-    "akira:ltr.lc_A..D_asc": {
+    "akira:ltr.lc_A..D_rand": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "akira:ltr.lc_A..D_asc",
+      "tutor_id": "akira:ltr.lc_A..D_rand",
       "tutor_desc": "akira",
-      "tutor_data": "[file]akira_ltr.lc_A..D_asc.json",
+      "tutor_data": "[file]akira_ltr.lc_A..D_rand.json",
       "cell_row": "2",
       "cell_column": "6",
-      "same": "akira:ltr.lc_A..D_asc",
+      "same": "akira:ltr.lc_A..D_rand",
       "next": "bpop.ltr.lc:A..D.asc.noShow.rise",
       "next_next": "write.ltr.lc.dic:A..D_asc",
       "prev": "bpop.ltr.lc:A..D.asc.show.rise",
@@ -1215,9 +1215,9 @@
       "same": "bpop.ltr.lc:A..D.asc.noShow.rise",
       "next": "write.ltr.lc.dic:A..D_asc",
       "next_next": "bpop.ltr.lc:E..G.asc.show.mc",
-      "prev": "akira:ltr.lc_A..D_asc",
+      "prev": "akira:ltr.lc_A..D_rand",
       "harder": "bpop.wrd:a2AE.noShow.rise",
-      "easier": "akira:ltr.uc_A..D_asc"
+      "easier": "akira:ltr.uc_A..D_rand"
     },
     "write.ltr.lc.dic:A..D_asc": {
       "type": "TRANSITION",
@@ -1289,7 +1289,7 @@
       "cell_column": "12",
       "same": "write.ltr.lc:E..G_asc",
       "next": "bpop.ltr.lc:E..G.asc.show.rise",
-      "next_next": "akira:ltr.lc_E..G_asc",
+      "next_next": "akira:ltr.lc_E..G_rand",
       "prev": "bpop.ltr.lc:E..G.asc.noShow.mc",
       "harder": "story.echo::m2m_sound__it_1",
       "easier": "bpop.ltr.uc:E..G.asc.noShow.mc"
@@ -1303,21 +1303,21 @@
       "cell_row": "2",
       "cell_column": "13",
       "same": "bpop.ltr.lc:E..G.asc.show.rise",
-      "next": "akira:ltr.lc_E..G_asc",
+      "next": "akira:ltr.lc_E..G_rand",
       "next_next": "bpop.ltr.lc:E..G.asc.noShow.rise",
       "prev": "write.ltr.lc:E..G_asc",
       "harder": "bpop.wrd:m2M.show.mc",
       "easier": "write.ltr.uc:E..G_asc"
     },
-    "akira:ltr.lc_E..G_asc": {
+    "akira:ltr.lc_E..G_rand": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "akira:ltr.lc_E..G_asc",
+      "tutor_id": "akira:ltr.lc_E..G_rand",
       "tutor_desc": "akira",
-      "tutor_data": "[file]akira_ltr.lc_E..G_asc.json",
+      "tutor_data": "[file]akira_ltr.lc_E..G_rand.json",
       "cell_row": "2",
       "cell_column": "14",
-      "same": "akira:ltr.lc_E..G_asc",
+      "same": "akira:ltr.lc_E..G_rand",
       "next": "bpop.ltr.lc:E..G.asc.noShow.rise",
       "next_next": "write.ltr.lc.dic:E..G_asc",
       "prev": "bpop.ltr.lc:E..G.asc.show.rise",
@@ -1335,9 +1335,9 @@
       "same": "bpop.ltr.lc:E..G.asc.noShow.rise",
       "next": "write.ltr.lc.dic:E..G_asc",
       "next_next": "bpop.ltr.lc:A..G.rand.noShow.mc",
-      "prev": "akira:ltr.lc_E..G_asc",
+      "prev": "akira:ltr.lc_E..G_rand",
       "harder": "bpop.wrd:m2M.show.rise",
-      "easier": "akira:ltr.uc_E..G_asc"
+      "easier": "akira:ltr.uc_E..G_rand"
     },
     "write.ltr.lc.dic:E..G_asc": {
       "type": "TRANSITION",
@@ -1454,7 +1454,7 @@
       "cell_column": "23",
       "same": "write.ltr.lc:H..K_asc",
       "next": "bpop.ltr.lc:H..K.asc.show.rise",
-      "next_next": "akira:ltr.lc_H..K_asc",
+      "next_next": "akira:ltr.lc_H..K_rand",
       "prev": "bpop.ltr.lc:H..K.asc.noShow.mc",
       "harder": "write.wrd.trc:phon.m2M",
       "easier": "bpop.ltr.uc:H..K.asc.noShow.mc"
@@ -1468,21 +1468,21 @@
       "cell_row": "2",
       "cell_column": "24",
       "same": "bpop.ltr.lc:H..K.asc.show.rise",
-      "next": "akira:ltr.lc_H..K_asc",
+      "next": "akira:ltr.lc_H..K_rand",
       "next_next": "bpop.ltr.lc:H..K.asc.noShow.rise",
       "prev": "write.ltr.lc:H..K_asc",
       "harder": "story.echo::m2m_wb_1__it_2",
       "easier": "write.ltr.uc:H..K_asc"
     },
-    "akira:ltr.lc_H..K_asc": {
+    "akira:ltr.lc_H..K_rand": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "akira:ltr.lc_H..K_asc",
+      "tutor_id": "akira:ltr.lc_H..K_rand",
       "tutor_desc": "akira",
-      "tutor_data": "[file]akira_ltr.lc_H..K_asc.json",
+      "tutor_data": "[file]akira_ltr.lc_H..K_rand.json",
       "cell_row": "2",
       "cell_column": "25",
-      "same": "akira:ltr.lc_H..K_asc",
+      "same": "akira:ltr.lc_H..K_rand",
       "next": "bpop.ltr.lc:H..K.asc.noShow.rise",
       "next_next": "write.ltr.lc.dic:H..K_asc",
       "prev": "bpop.ltr.lc:H..K.asc.show.rise",
@@ -1500,9 +1500,9 @@
       "same": "bpop.ltr.lc:H..K.asc.noShow.rise",
       "next": "write.ltr.lc.dic:H..K_asc",
       "next_next": "bpop.ltr.lc:A..K.rand.noShow.mc",
-      "prev": "akira:ltr.lc_H..K_asc",
+      "prev": "akira:ltr.lc_H..K_rand",
       "harder": "story.parrot::m2m_wb_1__it_2",
-      "easier": "akira:ltr.uc_H..K_asc"
+      "easier": "akira:ltr.uc_H..K_rand"
     },
     "write.ltr.lc.dic:H..K_asc": {
       "type": "TRANSITION",
@@ -1619,7 +1619,7 @@
       "cell_column": "34",
       "same": "write.ltr.lc:L..P_asc",
       "next": "bpop.ltr.lc:L..P.asc.show.rise",
-      "next_next": "akira:ltr.lc_L..P_asc",
+      "next_next": "akira:ltr.lc_L..P_rand",
       "prev": "bpop.ltr.lc:L..P.asc.noShow.mc",
       "harder": "write.wrd.trc:phon.t2T",
       "easier": "bpop.ltr.uc:L..P.asc.noShow.mc"
@@ -1633,21 +1633,21 @@
       "cell_row": "2",
       "cell_column": "35",
       "same": "bpop.ltr.lc:L..P.asc.show.rise",
-      "next": "akira:ltr.lc_L..P_asc",
+      "next": "akira:ltr.lc_L..P_rand",
       "next_next": "bpop.ltr.lc:L..P.asc.noShow.rise",
       "prev": "write.ltr.lc:L..P_asc",
       "harder": "bpop.wrd:t2T.noShow.rise",
       "easier": "write.ltr.uc:L..P_asc"
     },
-    "akira:ltr.lc_L..P_asc": {
+    "akira:ltr.lc_L..P_rand": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "akira:ltr.lc_L..P_asc",
+      "tutor_id": "akira:ltr.lc_L..P_rand",
       "tutor_desc": "akira",
-      "tutor_data": "[file]akira_ltr.lc_L..P_asc.json",
+      "tutor_data": "[file]akira_ltr.lc_L..P_rand.json",
       "cell_row": "2",
       "cell_column": "36",
-      "same": "akira:ltr.lc_L..P_asc",
+      "same": "akira:ltr.lc_L..P_rand",
       "next": "bpop.ltr.lc:L..P.asc.noShow.rise",
       "next_next": "write.ltr.lc.dic:L..P_asc",
       "prev": "bpop.ltr.lc:L..P.asc.show.rise",
@@ -1665,9 +1665,9 @@
       "same": "bpop.ltr.lc:L..P.asc.noShow.rise",
       "next": "write.ltr.lc.dic:L..P_asc",
       "next_next": "bpop.ltr.lc:A..P.rand.noShow.mc",
-      "prev": "akira:ltr.lc_L..P_asc",
+      "prev": "akira:ltr.lc_L..P_rand",
       "harder": "write.wrd:phon.t2T",
-      "easier": "akira:ltr.uc_L..P_asc"
+      "easier": "akira:ltr.uc_L..P_rand"
     },
     "write.ltr.lc.dic:L..P_asc": {
       "type": "TRANSITION",
@@ -1784,7 +1784,7 @@
       "cell_column": "45",
       "same": "write.ltr.lc:Q..S_asc",
       "next": "bpop.ltr.lc:Q..S.asc.show.rise",
-      "next_next": "akira:ltr.lc_Q..S_asc",
+      "next_next": "akira:ltr.lc_Q..S_rand",
       "prev": "bpop.ltr.lc:Q..S.asc.noShow.mc",
       "harder": "bpop.wrd:s2S.noShow.mc",
       "easier": "bpop.ltr.uc:Q..S.asc.noShow.mc"
@@ -1798,21 +1798,21 @@
       "cell_row": "2",
       "cell_column": "46",
       "same": "bpop.ltr.lc:Q..S.asc.show.rise",
-      "next": "akira:ltr.lc_Q..S_asc",
+      "next": "akira:ltr.lc_Q..S_rand",
       "next_next": "bpop.ltr.lc:Q..S.asc.noShow.rise",
       "prev": "write.ltr.lc:Q..S_asc",
       "harder": "story.parrot::s2s_wb_1__it_1",
       "easier": "write.ltr.uc:Q..S_asc"
     },
-    "akira:ltr.lc_Q..S_asc": {
+    "akira:ltr.lc_Q..S_rand": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "akira:ltr.lc_Q..S_asc",
+      "tutor_id": "akira:ltr.lc_Q..S_rand",
       "tutor_desc": "akira",
-      "tutor_data": "[file]akira_ltr.lc_Q..S_asc.json",
+      "tutor_data": "[file]akira_ltr.lc_Q..S_rand.json",
       "cell_row": "2",
       "cell_column": "47",
-      "same": "akira:ltr.lc_Q..S_asc",
+      "same": "akira:ltr.lc_Q..S_rand",
       "next": "bpop.ltr.lc:Q..S.asc.noShow.rise",
       "next_next": "write.ltr.lc.dic:Q..S_asc",
       "prev": "bpop.ltr.lc:Q..S.asc.show.rise",
@@ -1830,9 +1830,9 @@
       "same": "bpop.ltr.lc:Q..S.asc.noShow.rise",
       "next": "write.ltr.lc.dic:Q..S_asc",
       "next_next": "bpop.ltr.lc:A..S.rand.noShow.mc",
-      "prev": "akira:ltr.lc_Q..S_asc",
+      "prev": "akira:ltr.lc_Q..S_rand",
       "harder": "story.echo::s2s_sound__it_2",
-      "easier": "akira:ltr.uc_Q..S_asc"
+      "easier": "akira:ltr.uc_Q..S_rand"
     },
     "write.ltr.lc.dic:Q..S_asc": {
       "type": "TRANSITION",
@@ -1949,7 +1949,7 @@
       "cell_column": "56",
       "same": "write.ltr.lc:T..V_asc",
       "next": "bpop.ltr.lc:T..V.asc.show.rise",
-      "next_next": "akira:ltr.lc_T..V_asc",
+      "next_next": "akira:ltr.lc_T..V_rand",
       "prev": "bpop.ltr.lc:T..V.asc.noShow.mc",
       "harder": "story.echo::d2d_sound__it_1",
       "easier": "bpop.ltr.uc:T..V.asc.noShow.mc"
@@ -1963,21 +1963,21 @@
       "cell_row": "2",
       "cell_column": "57",
       "same": "bpop.ltr.lc:T..V.asc.show.rise",
-      "next": "akira:ltr.lc_T..V_asc",
+      "next": "akira:ltr.lc_T..V_rand",
       "next_next": "bpop.ltr.lc:T..V.asc.noShow.rise",
       "prev": "write.ltr.lc:T..V_asc",
       "harder": "bpop.wrd:d2D.show.mc",
       "easier": "write.ltr.uc:T..V_asc"
     },
-    "akira:ltr.lc_T..V_asc": {
+    "akira:ltr.lc_T..V_rand": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "akira:ltr.lc_T..V_asc",
+      "tutor_id": "akira:ltr.lc_T..V_rand",
       "tutor_desc": "akira",
-      "tutor_data": "[file]akira_ltr.lc_T..V_asc.json",
+      "tutor_data": "[file]akira_ltr.lc_T..V_rand.json",
       "cell_row": "2",
       "cell_column": "58",
-      "same": "akira:ltr.lc_T..V_asc",
+      "same": "akira:ltr.lc_T..V_rand",
       "next": "bpop.ltr.lc:T..V.asc.noShow.rise",
       "next_next": "write.ltr.lc.dic:T..V_asc",
       "prev": "bpop.ltr.lc:T..V.asc.show.rise",
@@ -1995,9 +1995,9 @@
       "same": "bpop.ltr.lc:T..V.asc.noShow.rise",
       "next": "write.ltr.lc.dic:T..V_asc",
       "next_next": "bpop.ltr.lc:A..V.rand.noShow.mc",
-      "prev": "akira:ltr.lc_T..V_asc",
+      "prev": "akira:ltr.lc_T..V_rand",
       "harder": "bpop.wrd:d2D.show.rise",
-      "easier": "akira:ltr.uc_T..V_asc"
+      "easier": "akira:ltr.uc_T..V_rand"
     },
     "write.ltr.lc.dic:T..V_asc": {
       "type": "TRANSITION",
@@ -2114,7 +2114,7 @@
       "cell_column": "67",
       "same": "write.ltr.lc:W..Z_asc",
       "next": "bpop.ltr.lc:W..Z.asc.show.rise",
-      "next_next": "akira:ltr.lc_W..Z_asc",
+      "next_next": "akira:ltr.lc_W..Z_rand",
       "prev": "bpop.ltr.lc:W..Z.asc.noShow.mc",
       "harder": "write.wrd.trc:phon.d2D",
       "easier": "bpop.ltr.uc:W..Z.asc.noShow.mc"
@@ -2128,21 +2128,21 @@
       "cell_row": "2",
       "cell_column": "68",
       "same": "bpop.ltr.lc:W..Z.asc.show.rise",
-      "next": "akira:ltr.lc_W..Z_asc",
+      "next": "akira:ltr.lc_W..Z_rand",
       "next_next": "bpop.ltr.lc:W..Z.asc.noShow.rise",
       "prev": "write.ltr.lc:W..Z_asc",
       "harder": "story.echo::d2d_wb_1__it_2",
       "easier": "write.ltr.uc:W..Z_asc"
     },
-    "akira:ltr.lc_W..Z_asc": {
+    "akira:ltr.lc_W..Z_rand": {
       "type": "TRANSITION",
       "skill": "letters",
-      "tutor_id": "akira:ltr.lc_W..Z_asc",
+      "tutor_id": "akira:ltr.lc_W..Z_rand",
       "tutor_desc": "akira",
-      "tutor_data": "[file]akira_ltr.lc_W..Z_asc.json",
+      "tutor_data": "[file]akira_ltr.lc_W..Z_rand.json",
       "cell_row": "2",
       "cell_column": "69",
-      "same": "akira:ltr.lc_W..Z_asc",
+      "same": "akira:ltr.lc_W..Z_rand",
       "next": "bpop.ltr.lc:W..Z.asc.noShow.rise",
       "next_next": "write.ltr.lc.dic:W..Z_asc",
       "prev": "bpop.ltr.lc:W..Z.asc.show.rise",
@@ -2160,9 +2160,9 @@
       "same": "bpop.ltr.lc:W..Z.asc.noShow.rise",
       "next": "write.ltr.lc.dic:W..Z_asc",
       "next_next": "bpop.ltr.lc:A..Z.rand.noShow.mc",
-      "prev": "akira:ltr.lc_W..Z_asc",
+      "prev": "akira:ltr.lc_W..Z_rand",
       "harder": "story.parrot::d2d_wb_1__it_2",
-      "easier": "akira:ltr.uc_W..Z_asc"
+      "easier": "akira:ltr.uc_W..Z_rand"
     },
     "write.ltr.lc.dic:W..Z_asc": {
       "type": "TRANSITION",
@@ -2297,7 +2297,7 @@
       "next_next": "story.echo::a2ae_wb_1__it_2",
       "prev": "bpop.wrd:a2AE.noShow.mc",
       "harder": "bpop.wrd:r2R.noShow.rise",
-      "easier": "akira:ltr.lc_A..D_asc"
+      "easier": "akira:ltr.lc_A..D_rand"
     },
     "bpop.wrd:a2AE.noShow.rise": {
       "type": "TRANSITION",
@@ -2522,7 +2522,7 @@
       "next_next": "story.echo::m2m_wb_1__it_1",
       "prev": "bpop.wrd:m2M.show.mc",
       "harder": "write.wrd.dic:phon.r2R",
-      "easier": "akira:ltr.lc_E..G_asc"
+      "easier": "akira:ltr.lc_E..G_rand"
     },
     "story.parrot::m2m_sound__it_2": {
       "type": "TRANSITION",
@@ -2597,7 +2597,7 @@
       "next_next": "write.wrd.dic:phon.m2M",
       "prev": "story.echo::m2m_wb_1__it_2",
       "harder": "story.parrot::o2ao_sound__it_2",
-      "easier": "akira:ltr.lc_H..K_asc"
+      "easier": "akira:ltr.lc_H..K_rand"
     },
     "story.parrot::m2m_wb_1__it_1": {
       "type": "TRANSITION",
@@ -2762,7 +2762,7 @@
       "next_next": "story.parrot::t2t_wb_1__it_2",
       "prev": "bpop.wrd:t2T.noShow.rise",
       "harder": "akira:wrd.f2F",
-      "easier": "akira:ltr.lc_L..P_asc"
+      "easier": "akira:ltr.lc_L..P_rand"
     },
     "write.wrd:phon.t2T": {
       "type": "TRANSITION",
@@ -2882,7 +2882,7 @@
       "next_next": "akira:wrd.s2S",
       "prev": "story.parrot::s2s_wb_1__it_1",
       "harder": "story.echo::l2l_wb_1__it_1",
-      "easier": "akira:ltr.lc_Q..S_asc"
+      "easier": "akira:ltr.lc_Q..S_rand"
     },
     "story.echo::s2s_sound__it_1": {
       "type": "TRANSITION",
@@ -3182,7 +3182,7 @@
       "next_next": "story.echo::d2d_wb_1__it_1",
       "prev": "bpop.wrd:d2D.show.mc",
       "harder": "write.wrd.dic:phon.l2L",
-      "easier": "akira:ltr.lc_T..V_asc"
+      "easier": "akira:ltr.lc_T..V_rand"
     },
     "story.parrot::d2d_sound__it_2": {
       "type": "TRANSITION",
@@ -3257,7 +3257,7 @@
       "next_next": "write.wrd.dic:phon.d2D",
       "prev": "story.echo::d2d_wb_1__it_2",
       "harder": "story.parrot::g2g_sound__it_2",
-      "easier": "akira:ltr.lc_W..Z_asc"
+      "easier": "akira:ltr.lc_W..Z_rand"
     },
     "story.parrot::d2d_wb_1__it_1": {
       "type": "TRANSITION",
