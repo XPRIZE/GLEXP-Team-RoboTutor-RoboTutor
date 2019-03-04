@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["brown", "pretty", "with"],
+      "item_counter": 1,
+      "answer": "RIGHT",
+      "target": "with",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["they", "like", "am"],
+      "item_counter": 2,
+      "answer": "LEFT",
+      "target": "they",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["pretty", "she", "did"],
+      "item_counter": 3,
+      "answer": "MID",
+      "target": "she",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["who", "new", "saw"],
+      "item_counter": 4,
+      "answer": "LEFT",
+      "target": "who",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["brown", "they", "yes"],
+      "item_counter": 5,
+      "answer": "RIGHT",
+      "target": "yes",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["on", "new", "did"],
+      "item_counter": 6,
+      "answer": "MID",
+      "target": "new",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["into", "that", "too"],
+      "item_counter": 7,
+      "answer": "LEFT",
+      "target": "into",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["have", "this", "who"],
+      "item_counter": 8,
+      "answer": "MID",
+      "target": "this",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["ran", "with", "do"],
+      "item_counter": 9,
+      "answer": "LEFT",
+      "target": "ran",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["black", "soon", "want"],
+      "item_counter": 10,
+      "answer": "RIGHT",
+      "target": "want",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

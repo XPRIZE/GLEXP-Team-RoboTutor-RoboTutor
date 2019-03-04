@@ -12016,6 +12016,7 @@
       "next": "akira:wrd.oo2UH",
       "next_next": "bpop.wrd:oo2UH.show.rise",
       "prev": "story.echo::oo2uh_wb_2__it_1",
+      "harder": "bpop.wrd:dolch_preprimer.show.rise",
       "easier": "story.echo::ee2iy_sound__it_1"
     },
     "akira:wrd.oo2UH": {
@@ -12030,6 +12031,7 @@
       "next": "bpop.wrd:oo2UH.show.rise",
       "next_next": "story.parrot::oo2uh_wb_2__it_1",
       "prev": "bpop.wrd:oo2UH.show.mc",
+      "harder": "akira:wrd.dolch_preprimer",
       "easier": "bpop.wrd:ee2IY.show.mc"
     },
     "bpop.wrd:oo2UH.show.rise": {
@@ -12044,6 +12046,7 @@
       "next": "story.parrot::oo2uh_wb_2__it_1",
       "next_next": "bpop.wrd:oo2UH.noShow.mc",
       "prev": "akira:wrd.oo2UH",
+      "harder": "bpop.wrd:dolch_preprimer.noShow.mc",
       "easier": "story.parrot::ee2iy_sound__it_1"
     },
     "bpop.wrd:oo2UH.noShow.mc": {
@@ -12058,6 +12061,7 @@
       "next": "write.wrd.trc:phon.oo2UH",
       "next_next": "bpop.wrd:oo2UH.noShow.rise",
       "prev": "story.parrot::oo2uh_wb_2__it_1",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.echo::ee2iy_wb_1"
     },
     "write.wrd.trc:phon.oo2UH": {
@@ -12072,6 +12076,7 @@
       "next": "bpop.wrd:oo2UH.noShow.rise",
       "next_next": "story.echo::oo2uh_wb_2__it_2",
       "prev": "bpop.wrd:oo2UH.noShow.mc",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "bpop.wrd:ee2IY.noShow.mc"
     },
     "bpop.wrd:oo2UH.noShow.rise": {
@@ -12086,6 +12091,7 @@
       "next": "story.echo::oo2uh_wb_2__it_2",
       "next_next": "write.wrd:phon.oo2UH",
       "prev": "write.wrd.trc:phon.oo2UH",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.parrot::ee2iy_wb_1"
     },
     "story.echo::oo2uh_wb_2__it_1": {
@@ -12100,6 +12106,7 @@
       "next": "bpop.wrd:oo2UH.show.mc",
       "next_next": "akira:wrd.oo2UH",
       "prev": "write.wrd.dic:phon.ea2EH",
+      "harder": "write.wrd:word.dolch_preprimer",
       "easier": "write.wrd.dic:phon.ea2EH"
     },
     "story.echo::oo2uh_wb_2__it_2": {
@@ -12114,6 +12121,7 @@
       "next": "write.wrd:phon.oo2UH",
       "next_next": "story.parrot::oo2uh_wb_2__it_2",
       "prev": "bpop.wrd:oo2UH.noShow.rise",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "bpop.wrd:ee2IY.noShow.rise"
     },
     "write.wrd:phon.oo2UH": {
@@ -12128,6 +12136,7 @@
       "next": "story.parrot::oo2uh_wb_2__it_2",
       "next_next": "write.wrd.dic:phon.oo2UH",
       "prev": "story.echo::oo2uh_wb_2__it_2",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.echo::ee2iy_wb_2"
     },
     "story.parrot::oo2uh_wb_2__it_1": {
@@ -12142,6 +12151,7 @@
       "next": "bpop.wrd:oo2UH.noShow.mc",
       "next_next": "write.wrd.trc:phon.oo2UH",
       "prev": "bpop.wrd:oo2UH.show.rise",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "bpop.wrd:ee2IY.show.rise"
     },
     "story.parrot::oo2uh_wb_2__it_2": {
@@ -12156,6 +12166,7 @@
       "next": "write.wrd.dic:phon.oo2UH",
       "next_next": "story.echo::ay2ey_wb_1__it_1",
       "prev": "write.wrd:phon.oo2UH",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "akira:wrd.ee2IY"
     },
     "write.wrd.dic:phon.oo2UH": {
@@ -12170,6 +12181,7 @@
       "next": "story.echo::ay2ey_wb_1__it_1",
       "next_next": "bpop.wrd:ay2EY.show.mc",
       "prev": "story.parrot::oo2uh_wb_2__it_2",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.parrot::ee2iy_wb_2"
     },
     "bpop.wrd:ay2EY.show.mc": {
@@ -12184,6 +12196,7 @@
       "next": "story.parrot::ay2ey_wb_1__it_1",
       "next_next": "bpop.wrd:ay2EY.show.rise",
       "prev": "story.echo::ay2ey_wb_1__it_1",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.echo::ee2iy_sound__it_2"
     },
     "bpop.wrd:ay2EY.show.rise": {
@@ -12198,6 +12211,7 @@
       "next": "story.echo::ay2ey_wb_2__it_1",
       "next_next": "bpop.wrd:ay2EY.noShow.mc",
       "prev": "story.parrot::ay2ey_wb_1__it_1",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.parrot::ee2iy_sound__it_2"
     },
     "bpop.wrd:ay2EY.noShow.mc": {
@@ -12212,6 +12226,7 @@
       "next": "story.parrot::ay2ey_wb_2__it_1",
       "next_next": "bpop.wrd:ay2EY.noShow.rise",
       "prev": "story.echo::ay2ey_wb_2__it_1",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.echo::ai2ey_wb_1__it_1"
     },
     "bpop.wrd:ay2EY.noShow.rise": {
@@ -12226,6 +12241,7 @@
       "next": "story.echo::ay2ey_wb_1__it_2",
       "next_next": "akira:wrd.ay2EY",
       "prev": "story.parrot::ay2ey_wb_2__it_1",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.parrot::ai2ey_wb_1__it_1"
     },
     "story.echo::ay2ey_wb_1__it_1": {
@@ -12240,6 +12256,7 @@
       "next": "bpop.wrd:ay2EY.show.mc",
       "next_next": "story.parrot::ay2ey_wb_1__it_1",
       "prev": "write.wrd.dic:phon.oo2UH",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "write.wrd.trc:phon.ee2IY"
     },
     "story.echo::ay2ey_wb_1__it_2": {
@@ -12254,6 +12271,7 @@
       "next": "akira:wrd.ay2EY",
       "next_next": "story.parrot::ay2ey_wb_1__it_2",
       "prev": "bpop.wrd:ay2EY.noShow.rise",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "bpop.wrd:ai2EY.show.rise"
     },
     "akira:wrd.ay2EY": {
@@ -12268,6 +12286,7 @@
       "next": "story.parrot::ay2ey_wb_1__it_2",
       "next_next": "write.wrd.trc:phon.ay2EY",
       "prev": "story.echo::ay2ey_wb_1__it_2",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.echo::ai2ey_wb_2__it_1"
     },
     "story.parrot::ay2ey_wb_1__it_1": {
@@ -12282,6 +12301,7 @@
       "next": "bpop.wrd:ay2EY.show.rise",
       "next_next": "story.echo::ay2ey_wb_2__it_1",
       "prev": "bpop.wrd:ay2EY.show.mc",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "write.wrd:phon.ee2IY"
     },
     "story.parrot::ay2ey_wb_1__it_2": {
@@ -12296,6 +12316,7 @@
       "next": "write.wrd.trc:phon.ay2EY",
       "next_next": "story.echo::ay2ey_wb_2__it_2",
       "prev": "akira:wrd.ay2EY",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "bpop.wrd:ai2EY.noShow.mc"
     },
     "write.wrd.trc:phon.ay2EY": {
@@ -12310,6 +12331,7 @@
       "next": "story.echo::ay2ey_wb_2__it_2",
       "next_next": "write.wrd:phon.ay2EY",
       "prev": "story.parrot::ay2ey_wb_1__it_2",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.parrot::ai2ey_wb_2__it_1"
     },
     "story.echo::ay2ey_wb_2__it_1": {
@@ -12324,6 +12346,7 @@
       "next": "bpop.wrd:ay2EY.noShow.mc",
       "next_next": "story.parrot::ay2ey_wb_2__it_1",
       "prev": "bpop.wrd:ay2EY.show.rise",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "write.wrd.dic:phon.ee2IY"
     },
     "story.echo::ay2ey_wb_2__it_2": {
@@ -12338,6 +12361,7 @@
       "next": "write.wrd:phon.ay2EY",
       "next_next": "story.parrot::ay2ey_wb_2__it_2",
       "prev": "write.wrd.trc:phon.ay2EY",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "bpop.wrd:ai2EY.noShow.rise"
     },
     "write.wrd:phon.ay2EY": {
@@ -12352,6 +12376,7 @@
       "next": "story.parrot::ay2ey_wb_2__it_2",
       "next_next": "write.wrd.dic:phon.ay2EY",
       "prev": "story.echo::ay2ey_wb_2__it_2",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.echo::ai2ey_wb_1__it_2"
     },
     "story.parrot::ay2ey_wb_2__it_1": {
@@ -12366,6 +12391,7 @@
       "next": "bpop.wrd:ay2EY.noShow.rise",
       "next_next": "story.echo::ay2ey_wb_1__it_2",
       "prev": "bpop.wrd:ay2EY.noShow.mc",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "bpop.wrd:ai2EY.show.mc"
     },
     "story.parrot::ay2ey_wb_2__it_2": {
@@ -12380,6 +12406,7 @@
       "next": "write.wrd.dic:phon.ay2EY",
       "next_next": "story.echo::ou2aw_sound__it_1",
       "prev": "write.wrd:phon.ay2EY",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "akira:wrd.ai2EY"
     },
     "write.wrd.dic:phon.ay2EY": {
@@ -12394,6 +12421,7 @@
       "next": "story.echo::ou2aw_sound__it_1",
       "next_next": "bpop.wrd:ou2AW.show.mc",
       "prev": "story.parrot::ay2ey_wb_2__it_2",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.parrot::ai2ey_wb_1__it_2"
     },
     "bpop.wrd:ou2AW.show.mc": {
@@ -12408,6 +12436,7 @@
       "next": "story.parrot::ou2aw_sound__it_1",
       "next_next": "bpop.wrd:ou2AW.show.rise",
       "prev": "story.echo::ou2aw_sound__it_1",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.echo::ai2ey_wb_2__it_2"
     },
     "bpop.wrd:ou2AW.show.rise": {
@@ -12422,6 +12451,7 @@
       "next": "story.echo::ou2aw_wb_1",
       "next_next": "bpop.wrd:ou2AW.noShow.mc",
       "prev": "story.parrot::ou2aw_sound__it_1",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.parrot::ai2ey_wb_2__it_2"
     },
     "story.echo::ou2aw_wb_1": {
@@ -12436,6 +12466,7 @@
       "next": "bpop.wrd:ou2AW.noShow.mc",
       "next_next": "story.parrot::ou2aw_wb_1",
       "prev": "bpop.wrd:ou2AW.show.rise",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "write.wrd.dic:phon.ai2EY"
     },
     "bpop.wrd:ou2AW.noShow.mc": {
@@ -12450,6 +12481,7 @@
       "next": "story.parrot::ou2aw_wb_1",
       "next_next": "bpop.wrd:ou2AW.noShow.rise",
       "prev": "story.echo::ou2aw_wb_1",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.echo::ch2ch_sound__it_1"
     },
     "story.parrot::ou2aw_wb_1": {
@@ -12464,6 +12496,7 @@
       "next": "bpop.wrd:ou2AW.noShow.rise",
       "next_next": "story.echo::ou2aw_wb_2",
       "prev": "bpop.wrd:ou2AW.noShow.mc",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "bpop.wrd:ch2CH.show.mc"
     },
     "bpop.wrd:ou2AW.noShow.rise": {
@@ -12478,6 +12511,7 @@
       "next": "story.echo::ou2aw_wb_2",
       "next_next": "akira:wrd.ou2AW",
       "prev": "story.parrot::ou2aw_wb_1",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.parrot::ch2ch_sound__it_1"
     },
     "story.echo::ou2aw_wb_2": {
@@ -12492,6 +12526,7 @@
       "next": "akira:wrd.ou2AW",
       "next_next": "story.parrot::ou2aw_wb_2",
       "prev": "bpop.wrd:ou2AW.noShow.rise",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "bpop.wrd:ch2CH.show.rise"
     },
     "akira:wrd.ou2AW": {
@@ -12506,6 +12541,7 @@
       "next": "story.parrot::ou2aw_wb_2",
       "next_next": "write.wrd.trc:phon.ou2AW",
       "prev": "story.echo::ou2aw_wb_2",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.echo::ch2ch_wb_2__it_1"
     },
     "story.parrot::ou2aw_wb_2": {
@@ -12520,6 +12556,7 @@
       "next": "write.wrd.trc:phon.ou2AW",
       "next_next": "story.echo::ou2aw_sound__it_2",
       "prev": "akira:wrd.ou2AW",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "bpop.wrd:ch2CH.noShow.mc"
     },
     "write.wrd.trc:phon.ou2AW": {
@@ -12534,6 +12571,7 @@
       "next": "story.echo::ou2aw_sound__it_2",
       "next_next": "write.wrd:phon.ou2AW",
       "prev": "story.parrot::ou2aw_wb_2",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.parrot::ch2ch_wb_2__it_1"
     },
     "story.echo::ou2aw_sound__it_1": {
@@ -12548,6 +12586,7 @@
       "next": "bpop.wrd:ou2AW.show.mc",
       "next_next": "story.parrot::ou2aw_sound__it_1",
       "prev": "write.wrd.dic:phon.ay2EY",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "write.wrd.trc:phon.ai2EY"
     },
     "story.echo::ou2aw_sound__it_2": {
@@ -12562,6 +12601,7 @@
       "next": "write.wrd:phon.ou2AW",
       "next_next": "story.parrot::ou2aw_sound__it_2",
       "prev": "write.wrd.trc:phon.ou2AW",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "bpop.wrd:ch2CH.noShow.rise"
     },
     "write.wrd:phon.ou2AW": {
@@ -12576,6 +12616,7 @@
       "next": "story.parrot::ou2aw_sound__it_2",
       "next_next": "write.wrd.dic:phon.ou2AW",
       "prev": "story.echo::ou2aw_sound__it_2",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.echo::ch2ch_sound__it_2"
     },
     "story.parrot::ou2aw_sound__it_1": {
@@ -12590,6 +12631,7 @@
       "next": "bpop.wrd:ou2AW.show.rise",
       "next_next": "story.echo::ou2aw_wb_1",
       "prev": "bpop.wrd:ou2AW.show.mc",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "write.wrd:phon.ai2EY"
     },
     "story.parrot::ou2aw_sound__it_2": {
@@ -12604,6 +12646,7 @@
       "next": "write.wrd.dic:phon.ou2AW",
       "next_next": "story.echo::ir2er_sound__it_1",
       "prev": "write.wrd:phon.ou2AW",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "akira:wrd.ch2CH"
     },
     "write.wrd.dic:phon.ou2AW": {
@@ -12618,6 +12661,7 @@
       "next": "story.echo::ir2er_sound__it_1",
       "next_next": "bpop.wrd:ir2ER.show.mc",
       "prev": "story.parrot::ou2aw_sound__it_2",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.parrot::ch2ch_sound__it_2"
     },
     "bpop.wrd:ir2ER.show.mc": {
@@ -12632,6 +12676,7 @@
       "next": "story.parrot::ir2er_sound__it_1",
       "next_next": "bpop.wrd:ir2ER.show.rise",
       "prev": "story.echo::ir2er_sound__it_1",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.echo::ch2ch_wb_2__it_2"
     },
     "bpop.wrd:ir2ER.show.rise": {
@@ -12646,6 +12691,7 @@
       "next": "story.echo::ir2er_wb_1",
       "next_next": "bpop.wrd:ir2ER.noShow.mc",
       "prev": "story.parrot::ir2er_sound__it_1",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.parrot::ch2ch_wb_2__it_2"
     },
     "story.echo::ir2er_wb_1": {
@@ -12660,6 +12706,7 @@
       "next": "bpop.wrd:ir2ER.noShow.mc",
       "next_next": "story.parrot::ir2er_wb_1",
       "prev": "bpop.wrd:ir2ER.show.rise",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "write.wrd.dic:phon.ch2CH"
     },
     "bpop.wrd:ir2ER.noShow.mc": {
@@ -12674,6 +12721,7 @@
       "next": "story.parrot::ir2er_wb_1",
       "next_next": "bpop.wrd:ir2ER.noShow.rise",
       "prev": "story.echo::ir2er_wb_1",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.echo::qu2kw_wb_1__it_1"
     },
     "story.parrot::ir2er_wb_1": {
@@ -12688,6 +12736,7 @@
       "next": "bpop.wrd:ir2ER.noShow.rise",
       "next_next": "story.echo::ir2er_wb_2",
       "prev": "bpop.wrd:ir2ER.noShow.mc",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "bpop.wrd:qu2K-W.show.mc"
     },
     "bpop.wrd:ir2ER.noShow.rise": {
@@ -12702,6 +12751,7 @@
       "next": "story.echo::ir2er_wb_2",
       "next_next": "akira:wrd.ir2ER",
       "prev": "story.parrot::ir2er_wb_1",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.parrot::qu2kw_wb_1__it_1"
     },
     "story.echo::ir2er_wb_2": {
@@ -12716,6 +12766,7 @@
       "next": "akira:wrd.ir2ER",
       "next_next": "story.parrot::ir2er_wb_2",
       "prev": "bpop.wrd:ir2ER.noShow.rise",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "bpop.wrd:qu2K-W.show.rise"
     },
     "akira:wrd.ir2ER": {
@@ -12730,6 +12781,7 @@
       "next": "story.parrot::ir2er_wb_2",
       "next_next": "write.wrd.trc:phon.ir2ER",
       "prev": "story.echo::ir2er_wb_2",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.echo::qu2kw_wb_2__it_1"
     },
     "story.parrot::ir2er_wb_2": {
@@ -12744,6 +12796,7 @@
       "next": "write.wrd.trc:phon.ir2ER",
       "next_next": "story.echo::ir2er_sound__it_2",
       "prev": "akira:wrd.ir2ER",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "bpop.wrd:qu2K-W.noShow.mc"
     },
     "write.wrd.trc:phon.ir2ER": {
@@ -12758,6 +12811,7 @@
       "next": "story.echo::ir2er_sound__it_2",
       "next_next": "write.wrd:phon.ir2ER",
       "prev": "story.parrot::ir2er_wb_2",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.parrot::qu2kw_wb_2__it_1"
     },
     "story.echo::ir2er_sound__it_1": {
@@ -12772,6 +12826,7 @@
       "next": "bpop.wrd:ir2ER.show.mc",
       "next_next": "story.parrot::ir2er_sound__it_1",
       "prev": "write.wrd.dic:phon.ou2AW",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "write.wrd.trc:phon.ch2CH"
     },
     "story.echo::ir2er_sound__it_2": {
@@ -12786,6 +12841,7 @@
       "next": "write.wrd:phon.ir2ER",
       "next_next": "story.parrot::ir2er_sound__it_2",
       "prev": "write.wrd.trc:phon.ir2ER",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "bpop.wrd:qu2K-W.noShow.rise"
     },
     "write.wrd:phon.ir2ER": {
@@ -12800,6 +12856,7 @@
       "next": "story.parrot::ir2er_sound__it_2",
       "next_next": "write.wrd.dic:phon.ir2ER",
       "prev": "story.echo::ir2er_sound__it_2",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.echo::qu2kw_wb_1__it_2"
     },
     "story.parrot::ir2er_sound__it_1": {
@@ -12814,6 +12871,7 @@
       "next": "bpop.wrd:ir2ER.show.rise",
       "next_next": "story.echo::ir2er_wb_1",
       "prev": "bpop.wrd:ir2ER.show.mc",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "write.wrd:phon.ch2CH"
     },
     "story.parrot::ir2er_sound__it_2": {
@@ -12828,6 +12886,7 @@
       "next": "write.wrd.dic:phon.ir2ER",
       "next_next": "story.echo::ur2er_wb_1__it_1",
       "prev": "write.wrd:phon.ir2ER",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "akira:wrd.qu2K-W"
     },
     "write.wrd.dic:phon.ir2ER": {
@@ -12842,6 +12901,7 @@
       "next": "story.echo::ur2er_wb_1__it_1",
       "next_next": "bpop.wrd:ur2ER.show.mc",
       "prev": "story.parrot::ir2er_sound__it_2",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.parrot::qu2kw_wb_1__it_2"
     },
     "bpop.wrd:ur2ER.show.mc": {
@@ -12856,6 +12916,7 @@
       "next": "story.parrot::ur2er_wb_1__it_1",
       "next_next": "bpop.wrd:ur2ER.show.rise",
       "prev": "story.echo::ur2er_wb_1__it_1",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.echo::qu2kw_wb_2__it_2"
     },
     "bpop.wrd:ur2ER.show.rise": {
@@ -12870,6 +12931,7 @@
       "next": "story.echo::ur2er_wb_2",
       "next_next": "bpop.wrd:ur2ER.noShow.mc",
       "prev": "story.parrot::ur2er_wb_1__it_1",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.parrot::qu2kw_wb_2__it_2"
     },
     "story.echo::ur2er_wb_2": {
@@ -12884,6 +12946,7 @@
       "next": "bpop.wrd:ur2ER.noShow.mc",
       "next_next": "story.parrot::ur2er_wb_2",
       "prev": "bpop.wrd:ur2ER.show.rise",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "write.wrd.dic:phon.qu2K-W"
     },
     "bpop.wrd:ur2ER.noShow.mc": {
@@ -12898,6 +12961,7 @@
       "next": "story.parrot::ur2er_wb_2",
       "next_next": "bpop.wrd:ur2ER.noShow.rise",
       "prev": "story.echo::ur2er_wb_2",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.echo::or2aor_sound"
     },
     "story.parrot::ur2er_wb_2": {
@@ -12912,6 +12976,7 @@
       "next": "bpop.wrd:ur2ER.noShow.rise",
       "next_next": "story.echo::ur2er_wb_3",
       "prev": "bpop.wrd:ur2ER.noShow.mc",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "bpop.wrd:or2AO-R.show.mc"
     },
     "bpop.wrd:ur2ER.noShow.rise": {
@@ -12926,6 +12991,7 @@
       "next": "story.echo::ur2er_wb_3",
       "next_next": "akira:wrd.ur2ER",
       "prev": "story.parrot::ur2er_wb_2",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.parrot::or2aor_sound"
     },
     "story.echo::ur2er_wb_3": {
@@ -12940,6 +13006,7 @@
       "next": "akira:wrd.ur2ER",
       "next_next": "story.parrot::ur2er_wb_3",
       "prev": "bpop.wrd:ur2ER.noShow.rise",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "bpop.wrd:or2AO-R.show.rise"
     },
     "akira:wrd.ur2ER": {
@@ -12954,6 +13021,7 @@
       "next": "story.parrot::ur2er_wb_3",
       "next_next": "write.wrd.trc:phon.ur2ER",
       "prev": "story.echo::ur2er_wb_3",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.echo::or2aor_wb_1"
     },
     "story.parrot::ur2er_wb_3": {
@@ -12968,6 +13036,7 @@
       "next": "write.wrd.trc:phon.ur2ER",
       "next_next": "story.echo::ur2er_wb_1__it_2",
       "prev": "akira:wrd.ur2ER",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "bpop.wrd:or2AO-R.noShow.mc"
     },
     "write.wrd.trc:phon.ur2ER": {
@@ -12982,6 +13051,7 @@
       "next": "story.echo::ur2er_wb_1__it_2",
       "next_next": "write.wrd:phon.ur2ER",
       "prev": "story.parrot::ur2er_wb_3",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.parrot::or2aor_wb_1"
     },
     "story.echo::ur2er_wb_1__it_1": {
@@ -12996,6 +13066,7 @@
       "next": "bpop.wrd:ur2ER.show.mc",
       "next_next": "story.parrot::ur2er_wb_1__it_1",
       "prev": "write.wrd.dic:phon.ir2ER",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "write.wrd.trc:phon.qu2K-W"
     },
     "story.echo::ur2er_wb_1__it_2": {
@@ -13010,6 +13081,7 @@
       "next": "write.wrd:phon.ur2ER",
       "next_next": "story.parrot::ur2er_wb_1__it_2",
       "prev": "write.wrd.trc:phon.ur2ER",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "bpop.wrd:or2AO-R.noShow.rise"
     },
     "write.wrd:phon.ur2ER": {
@@ -13024,6 +13096,7 @@
       "next": "story.parrot::ur2er_wb_1__it_2",
       "next_next": "write.wrd.dic:phon.ur2ER",
       "prev": "story.echo::ur2er_wb_1__it_2",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.echo::or2aor_wb_2"
     },
     "story.parrot::ur2er_wb_1__it_1": {
@@ -13038,6 +13111,7 @@
       "next": "bpop.wrd:ur2ER.show.rise",
       "next_next": "story.echo::ur2er_wb_2",
       "prev": "bpop.wrd:ur2ER.show.mc",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "write.wrd:phon.qu2K-W"
     },
     "story.parrot::ur2er_wb_1__it_2": {
@@ -13052,6 +13126,7 @@
       "next": "write.wrd.dic:phon.ur2ER",
       "next_next": "story.echo::kn2n_wb_1__it_1",
       "prev": "write.wrd:phon.ur2ER",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "akira:wrd.or2AO-R"
     },
     "write.wrd.dic:phon.ur2ER": {
@@ -13066,6 +13141,7 @@
       "next": "story.echo::kn2n_wb_1__it_1",
       "next_next": "bpop.wrd:kn2N.show.mc",
       "prev": "story.parrot::ur2er_wb_1__it_2",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.parrot::or2aor_wb_2"
     },
     "bpop.wrd:kn2N.show.mc": {
@@ -13080,6 +13156,7 @@
       "next": "akira:wrd.kn2N",
       "next_next": "bpop.wrd:kn2N.show.rise",
       "prev": "story.echo::kn2n_wb_1__it_1",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.echo::or2aor_wb_3"
     },
     "akira:wrd.kn2N": {
@@ -13094,6 +13171,7 @@
       "next": "bpop.wrd:kn2N.show.rise",
       "next_next": "story.parrot::kn2n_wb_1__it_1",
       "prev": "bpop.wrd:kn2N.show.mc",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "write.wrd:phon.or2AO-R"
     },
     "bpop.wrd:kn2N.show.rise": {
@@ -13108,6 +13186,7 @@
       "next": "story.parrot::kn2n_wb_1__it_1",
       "next_next": "bpop.wrd:kn2N.noShow.mc",
       "prev": "akira:wrd.kn2N",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.parrot::or2aor_wb_3"
     },
     "bpop.wrd:kn2N.noShow.mc": {
@@ -13122,6 +13201,7 @@
       "next": "write.wrd.trc:phon.kn2N",
       "next_next": "bpop.wrd:kn2N.noShow.rise",
       "prev": "story.parrot::kn2n_wb_1__it_1",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.echo::ea2eh_wb_1__it_1"
     },
     "write.wrd.trc:phon.kn2N": {
@@ -13136,6 +13216,7 @@
       "next": "bpop.wrd:kn2N.noShow.rise",
       "next_next": "story.echo::kn2n_wb_1__it_2",
       "prev": "bpop.wrd:kn2N.noShow.mc",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "bpop.wrd:ea2EH.show.mc"
     },
     "bpop.wrd:kn2N.noShow.rise": {
@@ -13150,6 +13231,7 @@
       "next": "story.echo::kn2n_wb_1__it_2",
       "next_next": "write.wrd:phon.kn2N",
       "prev": "write.wrd.trc:phon.kn2N",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.parrot::ea2eh_wb_1__it_1"
     },
     "story.echo::kn2n_wb_1__it_1": {
@@ -13164,6 +13246,7 @@
       "next": "bpop.wrd:kn2N.show.mc",
       "next_next": "akira:wrd.kn2N",
       "prev": "write.wrd.dic:phon.ur2ER",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "write.wrd.trc:phon.or2AO-R"
     },
     "story.echo::kn2n_wb_1__it_2": {
@@ -13178,6 +13261,7 @@
       "next": "write.wrd:phon.kn2N",
       "next_next": "story.parrot::kn2n_wb_1__it_2",
       "prev": "bpop.wrd:kn2N.noShow.rise",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "bpop.wrd:ea2EH.show.rise"
     },
     "write.wrd:phon.kn2N": {
@@ -13192,6 +13276,7 @@
       "next": "story.parrot::kn2n_wb_1__it_2",
       "next_next": "write.wrd.dic:phon.kn2N",
       "prev": "story.echo::kn2n_wb_1__it_2",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.echo::ea2eh_wb_2__it_1"
     },
     "story.parrot::kn2n_wb_1__it_1": {
@@ -13206,6 +13291,7 @@
       "next": "bpop.wrd:kn2N.noShow.mc",
       "next_next": "write.wrd.trc:phon.kn2N",
       "prev": "bpop.wrd:kn2N.show.rise",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "write.wrd.dic:phon.or2AO-R"
     },
     "story.parrot::kn2n_wb_1__it_2": {
@@ -13218,8 +13304,9 @@
       "cell_column": "87",
       "same": "story.parrot::kn2n_wb_1__it_2",
       "next": "write.wrd.dic:phon.kn2N",
-      "next_next": "story.parrot::kn2n_wb_1__it_2",
+      "next_next": "bpop.wrd:dolch_preprimer.show.mc",
       "prev": "write.wrd:phon.kn2N",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "bpop.wrd:ea2EH.noShow.mc"
     },
     "write.wrd.dic:phon.kn2N": {
@@ -13231,10 +13318,461 @@
       "cell_row": "10",
       "cell_column": "88",
       "same": "write.wrd.dic:phon.kn2N",
-      "next": "write.wrd.dic:phon.kn2N",
-      "next_next": "write.wrd.dic:phon.kn2N",
+      "next": "bpop.wrd:dolch_preprimer.show.mc",
+      "next_next": "write.wrd:word.dolch_preprimer",
       "prev": "story.parrot::kn2n_wb_1__it_2",
+      "harder": "write.wrd.dic:word.dolch_preprimer",
       "easier": "story.parrot::ea2eh_wb_2__it_1"
+    },
+    "bpop.wrd:dolch_preprimer.show.mc": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "bpop.wrd:dolch_preprimer.show.mc",
+      "tutor_desc": "bpop.wrd",
+      "tutor_data": "[file]bpop.wrd_dolch_preprimer.show.mc.json",
+      "cell_row": "11",
+      "cell_column": "1",
+      "same": "bpop.wrd:dolch_preprimer.show.mc",
+      "next": "write.wrd:word.dolch_preprimer",
+      "next_next": "bpop.wrd:dolch_preprimer.show.rise",
+      "prev": "write.wrd.dic:phon.kn2N",
+      "harder": "write.wrd:word.dolch_primer",
+      "easier": "write.wrd.dic:phon.kn2N"
+    },
+    "write.wrd:word.dolch_preprimer": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "write.wrd:word.dolch_preprimer",
+      "tutor_desc": "write.wrd",
+      "tutor_data": "[file]write.wrd_word.dolch_preprimer.json",
+      "cell_row": "11",
+      "cell_column": "2",
+      "same": "write.wrd:word.dolch_preprimer",
+      "next": "bpop.wrd:dolch_preprimer.show.rise",
+      "next_next": "akira:wrd.dolch_preprimer",
+      "prev": "bpop.wrd:dolch_preprimer.show.mc",
+      "harder": "bpop.wrd:dolch_primer.show.rise",
+      "easier": "story.echo::oo2uh_wb_2__it_1"
+    },
+    "bpop.wrd:dolch_preprimer.show.rise": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "bpop.wrd:dolch_preprimer.show.rise",
+      "tutor_desc": "bpop.wrd",
+      "tutor_data": "[file]bpop.wrd_dolch_preprimer.show.rise.json",
+      "cell_row": "11",
+      "cell_column": "3",
+      "same": "bpop.wrd:dolch_preprimer.show.rise",
+      "next": "akira:wrd.dolch_preprimer",
+      "next_next": "bpop.wrd:dolch_preprimer.noShow.mc",
+      "prev": "write.wrd:word.dolch_preprimer",
+      "harder": "akira:wrd.dolch_primer",
+      "easier": "bpop.wrd:oo2UH.show.mc"
+    },
+    "akira:wrd.dolch_preprimer": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "akira:wrd.dolch_preprimer",
+      "tutor_desc": "akira",
+      "tutor_data": "[file]akira_wrd.dolch_preprimer.json",
+      "cell_row": "11",
+      "cell_column": "4",
+      "same": "akira:wrd.dolch_preprimer",
+      "next": "bpop.wrd:dolch_preprimer.noShow.mc",
+      "next_next": "write.wrd.dic:word.dolch_preprimer",
+      "prev": "bpop.wrd:dolch_preprimer.show.rise",
+      "harder": "bpop.wrd:dolch_primer.noShow.mc",
+      "easier": "akira:wrd.oo2UH"
+    },
+    "bpop.wrd:dolch_preprimer.noShow.mc": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "bpop.wrd:dolch_preprimer.noShow.mc",
+      "tutor_desc": "bpop.wrd",
+      "tutor_data": "[file]bpop.wrd_dolch_preprimer.noShow.mc.json",
+      "cell_row": "11",
+      "cell_column": "5",
+      "same": "bpop.wrd:dolch_preprimer.noShow.mc",
+      "next": "write.wrd.dic:word.dolch_preprimer",
+      "next_next": "bpop.wrd:dolch_primer.show.mc",
+      "prev": "akira:wrd.dolch_preprimer",
+      "harder": "write.wrd.dic:word.dolch_primer",
+      "easier": "bpop.wrd:oo2UH.show.rise"
+    },
+    "write.wrd.dic:word.dolch_preprimer": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "write.wrd.dic:word.dolch_preprimer",
+      "tutor_desc": "write.wrd.dic",
+      "tutor_data": "[file]write.wrd.dic_word.dolch_preprimer.json",
+      "cell_row": "11",
+      "cell_column": "6",
+      "same": "write.wrd.dic:word.dolch_preprimer",
+      "next": "bpop.wrd:dolch_primer.show.mc",
+      "next_next": "write.wrd:word.dolch_primer",
+      "prev": "bpop.wrd:dolch_preprimer.noShow.mc",
+      "harder": "write.wrd.dic:word.dolch_primer",
+      "easier": "story.parrot::oo2uh_wb_2__it_1"
+    },
+    "bpop.wrd:dolch_primer.show.mc": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "bpop.wrd:dolch_primer.show.mc",
+      "tutor_desc": "bpop.wrd",
+      "tutor_data": "[file]bpop.wrd_dolch_primer.show.mc.json",
+      "cell_row": "12",
+      "cell_column": "1",
+      "same": "bpop.wrd:dolch_primer.show.mc",
+      "next": "write.wrd:word.dolch_primer",
+      "next_next": "bpop.wrd:dolch_primer.show.rise",
+      "prev": "write.wrd.dic:word.dolch_preprimer",
+      "harder": "write.wrd:word.dolch_1st_grade",
+      "easier": "write.wrd.dic:word.dolch_preprimer"
+    },
+    "write.wrd:word.dolch_primer": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "write.wrd:word.dolch_primer",
+      "tutor_desc": "write.wrd",
+      "tutor_data": "[file]write.wrd_word.dolch_primer.json",
+      "cell_row": "12",
+      "cell_column": "2",
+      "same": "write.wrd:word.dolch_primer",
+      "next": "bpop.wrd:dolch_primer.show.rise",
+      "next_next": "akira:wrd.dolch_primer",
+      "prev": "bpop.wrd:dolch_primer.show.mc",
+      "harder": "bpop.wrd:dolch_1st_grade.show.rise",
+      "easier": "bpop.wrd:dolch_preprimer.show.mc"
+    },
+    "bpop.wrd:dolch_primer.show.rise": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "bpop.wrd:dolch_primer.show.rise",
+      "tutor_desc": "bpop.wrd",
+      "tutor_data": "[file]bpop.wrd_dolch_primer.show.rise.json",
+      "cell_row": "12",
+      "cell_column": "3",
+      "same": "bpop.wrd:dolch_primer.show.rise",
+      "next": "akira:wrd.dolch_primer",
+      "next_next": "bpop.wrd:dolch_primer.noShow.mc",
+      "prev": "write.wrd:word.dolch_primer",
+      "harder": "akira:wrd.dolch_1st_grade",
+      "easier": "write.wrd:word.dolch_preprimer"
+    },
+    "akira:wrd.dolch_primer": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "akira:wrd.dolch_primer",
+      "tutor_desc": "akira",
+      "tutor_data": "[file]akira_wrd.dolch_primer.json",
+      "cell_row": "12",
+      "cell_column": "4",
+      "same": "akira:wrd.dolch_primer",
+      "next": "bpop.wrd:dolch_primer.noShow.mc",
+      "next_next": "write.wrd.dic:word.dolch_primer",
+      "prev": "bpop.wrd:dolch_primer.show.rise",
+      "harder": "bpop.wrd:dolch_1st_grade.noShow.mc",
+      "easier": "bpop.wrd:dolch_preprimer.show.rise"
+    },
+    "bpop.wrd:dolch_primer.noShow.mc": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "bpop.wrd:dolch_primer.noShow.mc",
+      "tutor_desc": "bpop.wrd",
+      "tutor_data": "[file]bpop.wrd_dolch_primer.noShow.mc.json",
+      "cell_row": "12",
+      "cell_column": "5",
+      "same": "bpop.wrd:dolch_primer.noShow.mc",
+      "next": "write.wrd.dic:word.dolch_primer",
+      "next_next": "bpop.wrd:dolch_1st_grade.show.mc",
+      "prev": "akira:wrd.dolch_primer",
+      "harder": "write.wrd.dic:word.dolch_1st_grade",
+      "easier": "akira:wrd.dolch_preprimer"
+    },
+    "write.wrd.dic:word.dolch_primer": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "write.wrd.dic:word.dolch_primer",
+      "tutor_desc": "write.wrd.dic",
+      "tutor_data": "[file]write.wrd.dic_word.dolch_primer.json",
+      "cell_row": "12",
+      "cell_column": "6",
+      "same": "write.wrd.dic:word.dolch_primer",
+      "next": "bpop.wrd:dolch_1st_grade.show.mc",
+      "next_next": "write.wrd:word.dolch_1st_grade",
+      "prev": "bpop.wrd:dolch_primer.noShow.mc",
+      "harder": "write.wrd.dic:word.dolch_1st_grade",
+      "easier": "bpop.wrd:dolch_preprimer.noShow.mc"
+    },
+    "bpop.wrd:dolch_1st_grade.show.mc": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "bpop.wrd:dolch_1st_grade.show.mc",
+      "tutor_desc": "bpop.wrd",
+      "tutor_data": "[file]bpop.wrd_dolch_1st_grade.show.mc.json",
+      "cell_row": "13",
+      "cell_column": "1",
+      "same": "bpop.wrd:dolch_1st_grade.show.mc",
+      "next": "write.wrd:word.dolch_1st_grade",
+      "next_next": "bpop.wrd:dolch_1st_grade.show.rise",
+      "prev": "write.wrd.dic:word.dolch_primer",
+      "harder": "write.wrd:word.dolch_2nd_grade",
+      "easier": "write.wrd.dic:word.dolch_primer"
+    },
+    "write.wrd:word.dolch_1st_grade": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "write.wrd:word.dolch_1st_grade",
+      "tutor_desc": "write.wrd",
+      "tutor_data": "[file]write.wrd_word.dolch_1st_grade.json",
+      "cell_row": "13",
+      "cell_column": "2",
+      "same": "write.wrd:word.dolch_1st_grade",
+      "next": "bpop.wrd:dolch_1st_grade.show.rise",
+      "next_next": "akira:wrd.dolch_1st_grade",
+      "prev": "bpop.wrd:dolch_1st_grade.show.mc",
+      "harder": "bpop.wrd:dolch_2nd_grade.show.rise",
+      "easier": "bpop.wrd:dolch_primer.show.mc"
+    },
+    "bpop.wrd:dolch_1st_grade.show.rise": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "bpop.wrd:dolch_1st_grade.show.rise",
+      "tutor_desc": "bpop.wrd",
+      "tutor_data": "[file]bpop.wrd_dolch_1st_grade.show.rise.json",
+      "cell_row": "13",
+      "cell_column": "3",
+      "same": "bpop.wrd:dolch_1st_grade.show.rise",
+      "next": "akira:wrd.dolch_1st_grade",
+      "next_next": "bpop.wrd:dolch_1st_grade.noShow.mc",
+      "prev": "write.wrd:word.dolch_1st_grade",
+      "harder": "akira:wrd.dolch_2nd_grade",
+      "easier": "write.wrd:word.dolch_primer"
+    },
+    "akira:wrd.dolch_1st_grade": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "akira:wrd.dolch_1st_grade",
+      "tutor_desc": "akira",
+      "tutor_data": "[file]akira_wrd.dolch_1st_grade.json",
+      "cell_row": "13",
+      "cell_column": "4",
+      "same": "akira:wrd.dolch_1st_grade",
+      "next": "bpop.wrd:dolch_1st_grade.noShow.mc",
+      "next_next": "write.wrd.dic:word.dolch_1st_grade",
+      "prev": "bpop.wrd:dolch_1st_grade.show.rise",
+      "harder": "bpop.wrd:dolch_2nd_grade.noShow.mc",
+      "easier": "bpop.wrd:dolch_primer.show.rise"
+    },
+    "bpop.wrd:dolch_1st_grade.noShow.mc": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "bpop.wrd:dolch_1st_grade.noShow.mc",
+      "tutor_desc": "bpop.wrd",
+      "tutor_data": "[file]bpop.wrd_dolch_1st_grade.noShow.mc.json",
+      "cell_row": "13",
+      "cell_column": "5",
+      "same": "bpop.wrd:dolch_1st_grade.noShow.mc",
+      "next": "write.wrd.dic:word.dolch_1st_grade",
+      "next_next": "bpop.wrd:dolch_2nd_grade.show.mc",
+      "prev": "akira:wrd.dolch_1st_grade",
+      "harder": "write.wrd.dic:word.dolch_2nd_grade",
+      "easier": "akira:wrd.dolch_primer"
+    },
+    "write.wrd.dic:word.dolch_1st_grade": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "write.wrd.dic:word.dolch_1st_grade",
+      "tutor_desc": "write.wrd.dic",
+      "tutor_data": "[file]write.wrd.dic_word.dolch_1st_grade.json",
+      "cell_row": "13",
+      "cell_column": "6",
+      "same": "write.wrd.dic:word.dolch_1st_grade",
+      "next": "bpop.wrd:dolch_2nd_grade.show.mc",
+      "next_next": "write.wrd:word.dolch_2nd_grade",
+      "prev": "bpop.wrd:dolch_1st_grade.noShow.mc",
+      "harder": "write.wrd.dic:word.dolch_2nd_grade",
+      "easier": "bpop.wrd:dolch_primer.noShow.mc"
+    },
+    "bpop.wrd:dolch_2nd_grade.show.mc": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "bpop.wrd:dolch_2nd_grade.show.mc",
+      "tutor_desc": "bpop.wrd",
+      "tutor_data": "[file]bpop.wrd_dolch_2nd_grade.show.mc.json",
+      "cell_row": "14",
+      "cell_column": "1",
+      "same": "bpop.wrd:dolch_2nd_grade.show.mc",
+      "next": "write.wrd:word.dolch_2nd_grade",
+      "next_next": "bpop.wrd:dolch_2nd_grade.show.rise",
+      "prev": "write.wrd.dic:word.dolch_1st_grade",
+      "harder": "write.wrd:word.dolch_3rd_grade",
+      "easier": "write.wrd.dic:word.dolch_1st_grade"
+    },
+    "write.wrd:word.dolch_2nd_grade": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "write.wrd:word.dolch_2nd_grade",
+      "tutor_desc": "write.wrd",
+      "tutor_data": "[file]write.wrd_word.dolch_2nd_grade.json",
+      "cell_row": "14",
+      "cell_column": "2",
+      "same": "write.wrd:word.dolch_2nd_grade",
+      "next": "bpop.wrd:dolch_2nd_grade.show.rise",
+      "next_next": "akira:wrd.dolch_2nd_grade",
+      "prev": "bpop.wrd:dolch_2nd_grade.show.mc",
+      "harder": "bpop.wrd:dolch_3rd_grade.show.rise",
+      "easier": "bpop.wrd:dolch_1st_grade.show.mc"
+    },
+    "bpop.wrd:dolch_2nd_grade.show.rise": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "bpop.wrd:dolch_2nd_grade.show.rise",
+      "tutor_desc": "bpop.wrd",
+      "tutor_data": "[file]bpop.wrd_dolch_2nd_grade.show.rise.json",
+      "cell_row": "14",
+      "cell_column": "3",
+      "same": "bpop.wrd:dolch_2nd_grade.show.rise",
+      "next": "akira:wrd.dolch_2nd_grade",
+      "next_next": "bpop.wrd:dolch_2nd_grade.noShow.mc",
+      "prev": "write.wrd:word.dolch_2nd_grade",
+      "harder": "akira:wrd.dolch_3rd_grade",
+      "easier": "write.wrd:word.dolch_1st_grade"
+    },
+    "akira:wrd.dolch_2nd_grade": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "akira:wrd.dolch_2nd_grade",
+      "tutor_desc": "akira",
+      "tutor_data": "[file]akira_wrd.dolch_2nd_grade.json",
+      "cell_row": "14",
+      "cell_column": "4",
+      "same": "akira:wrd.dolch_2nd_grade",
+      "next": "bpop.wrd:dolch_2nd_grade.noShow.mc",
+      "next_next": "write.wrd.dic:word.dolch_2nd_grade",
+      "prev": "bpop.wrd:dolch_2nd_grade.show.rise",
+      "harder": "bpop.wrd:dolch_3rd_grade.noShow.mc",
+      "easier": "bpop.wrd:dolch_1st_grade.show.rise"
+    },
+    "bpop.wrd:dolch_2nd_grade.noShow.mc": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "bpop.wrd:dolch_2nd_grade.noShow.mc",
+      "tutor_desc": "bpop.wrd",
+      "tutor_data": "[file]bpop.wrd_dolch_2nd_grade.noShow.mc.json",
+      "cell_row": "14",
+      "cell_column": "5",
+      "same": "bpop.wrd:dolch_2nd_grade.noShow.mc",
+      "next": "write.wrd.dic:word.dolch_2nd_grade",
+      "next_next": "bpop.wrd:dolch_3rd_grade.show.mc",
+      "prev": "akira:wrd.dolch_2nd_grade",
+      "harder": "write.wrd.dic:word.dolch_3rd_grade",
+      "easier": "akira:wrd.dolch_1st_grade"
+    },
+    "write.wrd.dic:word.dolch_2nd_grade": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "write.wrd.dic:word.dolch_2nd_grade",
+      "tutor_desc": "write.wrd.dic",
+      "tutor_data": "[file]write.wrd.dic_word.dolch_2nd_grade.json",
+      "cell_row": "14",
+      "cell_column": "6",
+      "same": "write.wrd.dic:word.dolch_2nd_grade",
+      "next": "bpop.wrd:dolch_3rd_grade.show.mc",
+      "next_next": "write.wrd:word.dolch_3rd_grade",
+      "prev": "bpop.wrd:dolch_2nd_grade.noShow.mc",
+      "harder": "write.wrd.dic:word.dolch_3rd_grade",
+      "easier": "bpop.wrd:dolch_1st_grade.noShow.mc"
+    },
+    "bpop.wrd:dolch_3rd_grade.show.mc": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "bpop.wrd:dolch_3rd_grade.show.mc",
+      "tutor_desc": "bpop.wrd",
+      "tutor_data": "[file]bpop.wrd_dolch_3rd_grade.show.mc.json",
+      "cell_row": "15",
+      "cell_column": "1",
+      "same": "bpop.wrd:dolch_3rd_grade.show.mc",
+      "next": "write.wrd:word.dolch_3rd_grade",
+      "next_next": "bpop.wrd:dolch_3rd_grade.show.rise",
+      "prev": "write.wrd.dic:word.dolch_2nd_grade",
+      "harder": "write.wrd:word.dolch_3rd_grade",
+      "easier": "write.wrd.dic:word.dolch_2nd_grade"
+    },
+    "write.wrd:word.dolch_3rd_grade": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "write.wrd:word.dolch_3rd_grade",
+      "tutor_desc": "write.wrd",
+      "tutor_data": "[file]write.wrd_word.dolch_3rd_grade.json",
+      "cell_row": "15",
+      "cell_column": "2",
+      "same": "write.wrd:word.dolch_3rd_grade",
+      "next": "bpop.wrd:dolch_3rd_grade.show.rise",
+      "next_next": "akira:wrd.dolch_3rd_grade",
+      "prev": "bpop.wrd:dolch_3rd_grade.show.mc",
+      "harder": "bpop.wrd:dolch_3rd_grade.show.rise",
+      "easier": "bpop.wrd:dolch_2nd_grade.show.mc"
+    },
+    "bpop.wrd:dolch_3rd_grade.show.rise": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "bpop.wrd:dolch_3rd_grade.show.rise",
+      "tutor_desc": "bpop.wrd",
+      "tutor_data": "[file]bpop.wrd_dolch_3rd_grade.show.rise.json",
+      "cell_row": "15",
+      "cell_column": "3",
+      "same": "bpop.wrd:dolch_3rd_grade.show.rise",
+      "next": "akira:wrd.dolch_3rd_grade",
+      "next_next": "bpop.wrd:dolch_3rd_grade.noShow.mc",
+      "prev": "write.wrd:word.dolch_3rd_grade",
+      "harder": "akira:wrd.dolch_3rd_grade",
+      "easier": "write.wrd:word.dolch_2nd_grade"
+    },
+    "akira:wrd.dolch_3rd_grade": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "akira:wrd.dolch_3rd_grade",
+      "tutor_desc": "akira",
+      "tutor_data": "[file]akira_wrd.dolch_3rd_grade.json",
+      "cell_row": "15",
+      "cell_column": "4",
+      "same": "akira:wrd.dolch_3rd_grade",
+      "next": "bpop.wrd:dolch_3rd_grade.noShow.mc",
+      "next_next": "write.wrd.dic:word.dolch_3rd_grade",
+      "prev": "bpop.wrd:dolch_3rd_grade.show.rise",
+      "harder": "bpop.wrd:dolch_3rd_grade.noShow.mc",
+      "easier": "bpop.wrd:dolch_2nd_grade.show.rise"
+    },
+    "bpop.wrd:dolch_3rd_grade.noShow.mc": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "bpop.wrd:dolch_3rd_grade.noShow.mc",
+      "tutor_desc": "bpop.wrd",
+      "tutor_data": "[file]bpop.wrd_dolch_3rd_grade.noShow.mc.json",
+      "cell_row": "15",
+      "cell_column": "5",
+      "same": "bpop.wrd:dolch_3rd_grade.noShow.mc",
+      "next": "write.wrd.dic:word.dolch_3rd_grade",
+      "next_next": "bpop.wrd:dolch_3rd_grade.noShow.mc",
+      "prev": "akira:wrd.dolch_3rd_grade",
+      "harder": "write.wrd.dic:word.dolch_3rd_grade",
+      "easier": "akira:wrd.dolch_2nd_grade"
+    },
+    "write.wrd.dic:word.dolch_3rd_grade": {
+      "type": "TRANSITION",
+      "skill": "letters",
+      "tutor_id": "write.wrd.dic:word.dolch_3rd_grade",
+      "tutor_desc": "write.wrd.dic",
+      "tutor_data": "[file]write.wrd.dic_word.dolch_3rd_grade.json",
+      "cell_row": "15",
+      "cell_column": "6",
+      "same": "write.wrd.dic:word.dolch_3rd_grade",
+      "next": "write.wrd.dic:word.dolch_3rd_grade",
+      "next_next": "write.wrd.dic:word.dolch_3rd_grade",
+      "prev": "bpop.wrd:dolch_3rd_grade.noShow.mc",
+      "harder": "bpop.wrd:dolch_3rd_grade.show.mc",
+      "easier": "bpop.wrd:dolch_2nd_grade.noShow.mc"
     }
   },
   "storyTransitions": {

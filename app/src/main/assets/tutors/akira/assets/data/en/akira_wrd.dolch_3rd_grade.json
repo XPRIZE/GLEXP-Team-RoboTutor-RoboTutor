@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["about", "laugh", "myself"],
+      "item_counter": 1,
+      "answer": "MID",
+      "target": "laugh",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["myself", "hot", "carry"],
+      "item_counter": 2,
+      "answer": "LEFT",
+      "target": "myself",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["today", "seven", "if"],
+      "item_counter": 3,
+      "answer": "LEFT",
+      "target": "today",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["much", "if", "nine"],
+      "item_counter": 4,
+      "answer": "MID",
+      "target": "if",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["own", "try", "eight"],
+      "item_counter": 5,
+      "answer": "MID",
+      "target": "try",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["six", "ten", "bring"],
+      "item_counter": 6,
+      "answer": "MID",
+      "target": "ten",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["shall", "laugh", "carry"],
+      "item_counter": 7,
+      "answer": "MID",
+      "target": "laugh",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["draw", "clean", "bring"],
+      "item_counter": 8,
+      "answer": "LEFT",
+      "target": "draw",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["hurt", "own", "only"],
+      "item_counter": 9,
+      "answer": "LEFT",
+      "target": "hurt",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["cut", "hot", "kind"],
+      "item_counter": 10,
+      "answer": "MID",
+      "target": "hot",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}
