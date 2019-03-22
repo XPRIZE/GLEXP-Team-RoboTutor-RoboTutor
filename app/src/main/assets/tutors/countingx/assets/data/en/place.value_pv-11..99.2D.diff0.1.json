@@ -1,0 +1,15 @@
+{
+
+"bootFeatures":"",
+
+"dataSource": [
+
+{"type":"CountX_Data", "level":"place_value_2D", "task":" Two digit place value ","layout":"default", "dataset":[0, 99], "tenPower": ["one","ten"] , "difficulty":0},
+{"type":"CountX_Data", "level":"place_value_2D", "task":" Two digit place value ","layout":"default", "dataset":[0, 22], "tenPower": ["one","ten"] , "difficulty":0},
+{"type":"CountX_Data", "level":"place_value_2D", "task":" Two digit place value ","layout":"default", "dataset":[0, 13], "tenPower": ["one","ten"] , "difficulty":0},
+{"type":"CountX_Data", "level":"place_value_2D", "task":" Two digit place value ","layout":"default", "dataset":[0, 92], "tenPower": ["one","ten"] , "difficulty":0},
+{"type":"CountX_Data", "level":"place_value_2D", "task":" Two digit place value ","layout":"default", "dataset":[0, 54], "tenPower": ["one","ten"] , "difficulty":0}
+
+   ]
+
+}
