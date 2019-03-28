@@ -1,25 +1,10 @@
 {
   "gen_responsetype": "text_data",
-  "gen_responseSet": [
-    "laud",
-    "maul",
-    "paul",
-    "saul"
-  ],
+  "gen_responseSet": ["laud", "maul", "paul", "saul"],
   "gen_answertype": "text_data",
-  "gen_answerSet": [
-    "laud",
-    "maul",
-    "paul",
-    "saul"
-  ],
+  "gen_answerSet": ["laud", "maul", "paul", "saul"],
   "gen_stimulustype": "text_data",
-  "gen_stimulusSet": [
-    "laud",
-    "maul",
-    "paul",
-    "saul"
-  ],
+  "gen_stimulusSet": ["laud", "maul", "paul", "saul"],
   "question_count": 10,
   "question_sequence": "RANDOM",
   "question_replacement": false,
@@ -34,5 +19,14 @@
       "question_type": "rising",
       "question_show": false
     }
-  ]
+  ],
+  "view_background": {
+    "layout": "grid",
+    "kind": "squares",
+    "layoutcount": 0,
+    "style": "primitives",
+    "colorchoice": "fixed",
+    "colorbase": "#666666",
+    "colors": [-6053120, -7566336, -2500352, -5066240]
+  }
 }

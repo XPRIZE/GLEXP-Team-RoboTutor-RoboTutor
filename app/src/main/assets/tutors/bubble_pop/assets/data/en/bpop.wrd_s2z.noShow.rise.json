@@ -1,16 +1,10 @@
 {
   "gen_responsetype": "text_data",
-  "gen_responseSet": [
-    "no beginnings"
-  ],
+  "gen_responseSet": ["no beginnings"],
   "gen_answertype": "text_data",
-  "gen_answerSet": [
-    "no beginnings"
-  ],
+  "gen_answerSet": ["no beginnings"],
   "gen_stimulustype": "text_data",
-  "gen_stimulusSet": [
-    "no beginnings"
-  ],
+  "gen_stimulusSet": ["no beginnings"],
   "question_count": 10,
   "question_sequence": "RANDOM",
   "question_replacement": false,
@@ -25,5 +19,14 @@
       "question_type": "rising",
       "question_show": false
     }
-  ]
+  ],
+  "view_background": {
+    "layout": "grid",
+    "kind": "squares",
+    "layoutcount": 0,
+    "style": "primitives",
+    "colorchoice": "fixed",
+    "colorbase": "#666666",
+    "colors": [-6053120, -7566336, -2500352, -5066240]
+  }
 }
