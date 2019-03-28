@@ -177,5 +177,14 @@
       "answer_index": -1,
       "question_type": "rising"
     }
-  ]
+  ],
+  "view_background": {
+    "layout": "grid",
+    "kind": "squares",
+    "layoutcount": 0,
+    "style": "primitives",
+    "colorchoice": "fixed",
+    "colorbase": "#666666",
+    "colors": [-6053120, -7566336, -2500352, -5066240]
+  }
 }
