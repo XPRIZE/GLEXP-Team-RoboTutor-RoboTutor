@@ -555,7 +555,7 @@ public class CTutorAssetManager {
 
             // Only process RTAsset_ files
             //
-            if (objectname.toLowerCase().startsWith(assetRoot)) {
+            if (objectname.toLowerCase().startsWith(assetRoot.toLowerCase())) {
 
                 int startVer = objectname.indexOf(".");
                 assetName = objectname.substring(0,startVer).toLowerCase();
