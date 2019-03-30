@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["gas", "gut", "gone"],
+      "item_counter": 1,
+      "answer": "RIGHT",
+      "target": "gone",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["gap", "glow", "glad"],
+      "item_counter": 2,
+      "answer": "RIGHT",
+      "target": "glad",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["glue", "gown", "gas"],
+      "item_counter": 3,
+      "answer": "LEFT",
+      "target": "glue",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["go", "glad", "goal"],
+      "item_counter": 4,
+      "answer": "MID",
+      "target": "glad",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["got", "gig", "golf"],
+      "item_counter": 5,
+      "answer": "MID",
+      "target": "gig",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["game", "grin", "goal"],
+      "item_counter": 6,
+      "answer": "LEFT",
+      "target": "game",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["gig", "grip", "gum"],
+      "item_counter": 7,
+      "answer": "LEFT",
+      "target": "gig",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["glow", "go", "gram"],
+      "item_counter": 8,
+      "answer": "RIGHT",
+      "target": "gram",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["grip", "gig", "good"],
+      "item_counter": 9,
+      "answer": "RIGHT",
+      "target": "good",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["gut", "guy", "go"],
+      "item_counter": 10,
+      "answer": "LEFT",
+      "target": "gut",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

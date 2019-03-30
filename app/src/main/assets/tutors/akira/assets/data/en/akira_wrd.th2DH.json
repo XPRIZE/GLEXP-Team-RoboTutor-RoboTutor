@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["then", "than", "this"],
+      "item_counter": 1,
+      "answer": "LEFT",
+      "target": "then",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["the", "them", "that"],
+      "item_counter": 2,
+      "answer": "MID",
+      "target": "them",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["they", "this", "that"],
+      "item_counter": 3,
+      "answer": "RIGHT",
+      "target": "that",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["then", "than", "they"],
+      "item_counter": 4,
+      "answer": "RIGHT",
+      "target": "they",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["them", "the", "then"],
+      "item_counter": 5,
+      "answer": "MID",
+      "target": "the",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["that", "them", "then"],
+      "item_counter": 6,
+      "answer": "MID",
+      "target": "them",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["the", "then", "this"],
+      "item_counter": 7,
+      "answer": "MID",
+      "target": "then",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["then", "they", "this"],
+      "item_counter": 8,
+      "answer": "LEFT",
+      "target": "then",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["the", "then", "them"],
+      "item_counter": 9,
+      "answer": "RIGHT",
+      "target": "them",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["the", "they", "than"],
+      "item_counter": 10,
+      "answer": "RIGHT",
+      "target": "than",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

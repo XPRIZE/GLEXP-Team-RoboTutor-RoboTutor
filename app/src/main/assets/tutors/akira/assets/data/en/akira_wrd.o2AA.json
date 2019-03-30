@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["cost", "rot", "doll"],
+      "item_counter": 1,
+      "answer": "MID",
+      "target": "rot",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["bog", "flop", "cot"],
+      "item_counter": 2,
+      "answer": "MID",
+      "target": "flop",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["drop", "mop", "hop"],
+      "item_counter": 3,
+      "answer": "RIGHT",
+      "target": "hop",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["rod", "shot", "mom"],
+      "item_counter": 4,
+      "answer": "MID",
+      "target": "shot",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["bog", "on", "top"],
+      "item_counter": 5,
+      "answer": "LEFT",
+      "target": "bog",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["top", "hop", "spot"],
+      "item_counter": 6,
+      "answer": "RIGHT",
+      "target": "spot",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["rob", "bop", "bog"],
+      "item_counter": 7,
+      "answer": "RIGHT",
+      "target": "bog",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["knob", "pond", "cop"],
+      "item_counter": 8,
+      "answer": "MID",
+      "target": "pond",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["pod", "fond", "cost"],
+      "item_counter": 9,
+      "answer": "MID",
+      "target": "fond",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["fog", "crop", "lots"],
+      "item_counter": 10,
+      "answer": "MID",
+      "target": "crop",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

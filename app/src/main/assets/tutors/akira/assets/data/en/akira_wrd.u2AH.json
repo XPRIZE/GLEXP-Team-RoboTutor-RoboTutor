@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["cup", "bunk", "junk"],
+      "item_counter": 1,
+      "answer": "MID",
+      "target": "bunk",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["putt", "dug", "club"],
+      "item_counter": 2,
+      "answer": "LEFT",
+      "target": "putt",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["pug", "mush", "gum"],
+      "item_counter": 3,
+      "answer": "RIGHT",
+      "target": "gum",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["cup", "bud", "just"],
+      "item_counter": 4,
+      "answer": "RIGHT",
+      "target": "just",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["puff", "just", "sum"],
+      "item_counter": 5,
+      "answer": "MID",
+      "target": "just",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["dusk", "bud", "dug"],
+      "item_counter": 6,
+      "answer": "MID",
+      "target": "bud",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["mug", "bunk", "gut"],
+      "item_counter": 7,
+      "answer": "LEFT",
+      "target": "mug",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["but", "plus", "puff"],
+      "item_counter": 8,
+      "answer": "MID",
+      "target": "plus",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["bunk", "dunk", "rust"],
+      "item_counter": 9,
+      "answer": "MID",
+      "target": "dunk",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["mush", "cub", "pug"],
+      "item_counter": 10,
+      "answer": "MID",
+      "target": "cub",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

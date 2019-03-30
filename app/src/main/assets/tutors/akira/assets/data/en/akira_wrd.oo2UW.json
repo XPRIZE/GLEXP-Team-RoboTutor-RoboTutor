@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["boot", "toon", "soon"],
+      "item_counter": 1,
+      "answer": "RIGHT",
+      "target": "soon",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["loop", "mood", "boot"],
+      "item_counter": 2,
+      "answer": "RIGHT",
+      "target": "boot",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["root", "loom", "roof"],
+      "item_counter": 3,
+      "answer": "MID",
+      "target": "loom",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["goof", "toon", "noon"],
+      "item_counter": 4,
+      "answer": "RIGHT",
+      "target": "noon",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["food", "pool", "loot"],
+      "item_counter": 5,
+      "answer": "MID",
+      "target": "pool",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["zoo", "boot", "tool"],
+      "item_counter": 6,
+      "answer": "LEFT",
+      "target": "zoo",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["roof", "tool", "moon"],
+      "item_counter": 7,
+      "answer": "MID",
+      "target": "tool",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["soon", "zoo", "boom"],
+      "item_counter": 8,
+      "answer": "LEFT",
+      "target": "soon",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["loot", "toon", "roof"],
+      "item_counter": 9,
+      "answer": "MID",
+      "target": "toon",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["noon", "loop", "boom"],
+      "item_counter": 10,
+      "answer": "RIGHT",
+      "target": "boom",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

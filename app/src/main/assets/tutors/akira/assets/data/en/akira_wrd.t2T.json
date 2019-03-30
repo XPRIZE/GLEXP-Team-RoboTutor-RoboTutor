@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["tow", "too", "town"],
+      "item_counter": 1,
+      "answer": "RIGHT",
+      "target": "town",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["trap", "tea", "tom"],
+      "item_counter": 2,
+      "answer": "RIGHT",
+      "target": "tom",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["ten", "tub", "tail"],
+      "item_counter": 3,
+      "answer": "LEFT",
+      "target": "ten",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["tee", "teal", "ton"],
+      "item_counter": 4,
+      "answer": "MID",
+      "target": "teal",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["town", "torn", "trap"],
+      "item_counter": 5,
+      "answer": "MID",
+      "target": "torn",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["tap", "tip", "tow"],
+      "item_counter": 6,
+      "answer": "RIGHT",
+      "target": "tow",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["test", "team", "take"],
+      "item_counter": 7,
+      "answer": "MID",
+      "target": "team",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["tip", "test", "tail"],
+      "item_counter": 8,
+      "answer": "LEFT",
+      "target": "tip",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["tail", "torn", "tux"],
+      "item_counter": 9,
+      "answer": "RIGHT",
+      "target": "tux",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["tag", "top", "tea"],
+      "item_counter": 10,
+      "answer": "LEFT",
+      "target": "tag",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

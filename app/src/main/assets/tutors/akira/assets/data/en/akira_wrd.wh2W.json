@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["when", "why", "what"],
+      "item_counter": 1,
+      "answer": "MID",
+      "target": "why",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["what", "when", "why"],
+      "item_counter": 2,
+      "answer": "LEFT",
+      "target": "what",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["when", "what", "why"],
+      "item_counter": 3,
+      "answer": "MID",
+      "target": "what",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["when", "why", "what"],
+      "item_counter": 4,
+      "answer": "LEFT",
+      "target": "when",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["when", "why", "what"],
+      "item_counter": 5,
+      "answer": "RIGHT",
+      "target": "what",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["what", "why", "when"],
+      "item_counter": 6,
+      "answer": "LEFT",
+      "target": "what",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["when", "why", "what"],
+      "item_counter": 7,
+      "answer": "MID",
+      "target": "why",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["what", "when", "why"],
+      "item_counter": 8,
+      "answer": "LEFT",
+      "target": "what",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["why", "what", "when"],
+      "item_counter": 9,
+      "answer": "RIGHT",
+      "target": "when",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["when", "why", "what"],
+      "item_counter": 10,
+      "answer": "LEFT",
+      "target": "when",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

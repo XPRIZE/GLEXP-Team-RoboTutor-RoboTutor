@@ -1,0 +1,15 @@
+{
+
+"bootFeatures":"",
+
+"dataSource": [
+
+{"type":"CountX_Data", "level":"place_value_3D", "task":" Three digit place value ","layout":"default", "dataset":[0, 250], "tenPower": ["one","ten", "hundred"] , "difficulty":2},
+{"type":"CountX_Data", "level":"place_value_3D", "task":" Three digit place value ","layout":"default", "dataset":[0, 106], "tenPower": ["one","ten", "hundred"] , "difficulty":2},
+{"type":"CountX_Data", "level":"place_value_3D", "task":" Three digit place value ","layout":"default", "dataset":[0, 369], "tenPower": ["one","ten", "hundred"] , "difficulty":2},
+{"type":"CountX_Data", "level":"place_value_3D", "task":" Three digit place value ","layout":"default", "dataset":[0, 139], "tenPower": ["one","ten", "hundred"] , "difficulty":2},
+{"type":"CountX_Data", "level":"place_value_3D", "task":" Three digit place value ","layout":"default", "dataset":[0, 399], "tenPower": ["one","ten", "hundred"] , "difficulty":2}
+
+   ]
+
+}

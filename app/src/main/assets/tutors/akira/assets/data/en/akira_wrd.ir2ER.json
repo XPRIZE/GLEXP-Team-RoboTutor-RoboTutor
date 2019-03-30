@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["stir", "bird", "dirt"],
+      "item_counter": 1,
+      "answer": "RIGHT",
+      "target": "dirt",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["dirt", "sir", "girl"],
+      "item_counter": 2,
+      "answer": "RIGHT",
+      "target": "girl",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["firm", "girl", "sir"],
+      "item_counter": 3,
+      "answer": "LEFT",
+      "target": "firm",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["firm", "sir", "girl"],
+      "item_counter": 4,
+      "answer": "MID",
+      "target": "sir",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["fir", "sir", "irk"],
+      "item_counter": 5,
+      "answer": "LEFT",
+      "target": "fir",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["fir", "girl", "sir"],
+      "item_counter": 6,
+      "answer": "LEFT",
+      "target": "fir",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["dirt", "sir", "firm"],
+      "item_counter": 7,
+      "answer": "RIGHT",
+      "target": "firm",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["stir", "sir", "girl"],
+      "item_counter": 8,
+      "answer": "MID",
+      "target": "sir",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["irk", "dirt", "sir"],
+      "item_counter": 9,
+      "answer": "LEFT",
+      "target": "irk",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["girl", "firm", "fir"],
+      "item_counter": 10,
+      "answer": "RIGHT",
+      "target": "fir",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

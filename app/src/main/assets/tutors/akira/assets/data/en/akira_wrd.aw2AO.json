@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["hawk", "jaw", "paw"],
+      "item_counter": 1,
+      "answer": "RIGHT",
+      "target": "paw",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["fawn", "flaw", "dawn"],
+      "item_counter": 2,
+      "answer": "MID",
+      "target": "flaw",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["hawk", "lawn", "flaw"],
+      "item_counter": 3,
+      "answer": "MID",
+      "target": "lawn",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["claw", "pawn", "saw"],
+      "item_counter": 4,
+      "answer": "RIGHT",
+      "target": "saw",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["dawn", "jaw", "hawk"],
+      "item_counter": 5,
+      "answer": "LEFT",
+      "target": "dawn",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["lawn", "claw", "fawn"],
+      "item_counter": 6,
+      "answer": "LEFT",
+      "target": "lawn",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["claw", "thaw", "paw"],
+      "item_counter": 7,
+      "answer": "RIGHT",
+      "target": "paw",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["paw", "yawn", "hawk"],
+      "item_counter": 8,
+      "answer": "RIGHT",
+      "target": "hawk",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["draw", "dawn", "flaw"],
+      "item_counter": 9,
+      "answer": "LEFT",
+      "target": "draw",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["law", "draw", "thaw"],
+      "item_counter": 10,
+      "answer": "RIGHT",
+      "target": "thaw",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

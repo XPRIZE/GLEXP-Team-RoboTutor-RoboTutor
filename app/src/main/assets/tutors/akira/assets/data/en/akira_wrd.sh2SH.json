@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["shoe", "shy", "show"],
+      "item_counter": 1,
+      "answer": "MID",
+      "target": "shy",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["show", "shed", "shin"],
+      "item_counter": 2,
+      "answer": "RIGHT",
+      "target": "shin",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["shot", "shy", "shin"],
+      "item_counter": 3,
+      "answer": "LEFT",
+      "target": "shot",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["she", "shed", "shin"],
+      "item_counter": 4,
+      "answer": "LEFT",
+      "target": "she",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["shin", "shed", "shoo"],
+      "item_counter": 5,
+      "answer": "LEFT",
+      "target": "shin",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["shut", "shot", "she"],
+      "item_counter": 6,
+      "answer": "RIGHT",
+      "target": "she",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["shy", "she", "shed"],
+      "item_counter": 7,
+      "answer": "RIGHT",
+      "target": "shed",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["shed", "ship", "she"],
+      "item_counter": 8,
+      "answer": "LEFT",
+      "target": "shed",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["ship", "shop", "shoo"],
+      "item_counter": 9,
+      "answer": "RIGHT",
+      "target": "shoo",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["shut", "shed", "shot"],
+      "item_counter": 10,
+      "answer": "RIGHT",
+      "target": "shot",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

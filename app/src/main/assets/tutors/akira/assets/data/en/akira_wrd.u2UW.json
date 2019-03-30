@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["mute", "luge", "due"],
+      "item_counter": 1,
+      "answer": "LEFT",
+      "target": "mute",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["clue", "rude", "cute"],
+      "item_counter": 2,
+      "answer": "MID",
+      "target": "rude",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["rule", "lute", "mule"],
+      "item_counter": 3,
+      "answer": "MID",
+      "target": "lute",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["mule", "mute", "dude"],
+      "item_counter": 4,
+      "answer": "LEFT",
+      "target": "mule",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["luge", "sue", "clue"],
+      "item_counter": 5,
+      "answer": "MID",
+      "target": "sue",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["true", "mute", "dune"],
+      "item_counter": 6,
+      "answer": "LEFT",
+      "target": "true",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["mule", "suit", "june"],
+      "item_counter": 7,
+      "answer": "MID",
+      "target": "suit",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["rule", "cue", "glue"],
+      "item_counter": 8,
+      "answer": "MID",
+      "target": "cue",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["use", "flu", "june"],
+      "item_counter": 9,
+      "answer": "MID",
+      "target": "flu",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["use", "mule", "sue"],
+      "item_counter": 10,
+      "answer": "MID",
+      "target": "mule",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

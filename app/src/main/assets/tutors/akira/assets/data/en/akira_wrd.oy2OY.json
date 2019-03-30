@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["toy", "soy", "joy"],
+      "item_counter": 1,
+      "answer": "MID",
+      "target": "soy",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["boy", "toy", "soy"],
+      "item_counter": 2,
+      "answer": "LEFT",
+      "target": "boy",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["joy", "boy", "soy"],
+      "item_counter": 3,
+      "answer": "RIGHT",
+      "target": "soy",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["toy", "boy", "soy"],
+      "item_counter": 4,
+      "answer": "MID",
+      "target": "boy",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["boy", "joy", "soy"],
+      "item_counter": 5,
+      "answer": "RIGHT",
+      "target": "soy",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["toy", "soy", "boy"],
+      "item_counter": 6,
+      "answer": "RIGHT",
+      "target": "boy",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["boy", "toy", "soy"],
+      "item_counter": 7,
+      "answer": "RIGHT",
+      "target": "soy",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["boy", "soy", "joy"],
+      "item_counter": 8,
+      "answer": "MID",
+      "target": "soy",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["soy", "boy", "toy"],
+      "item_counter": 9,
+      "answer": "LEFT",
+      "target": "soy",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["joy", "toy", "soy"],
+      "item_counter": 10,
+      "answer": "LEFT",
+      "target": "joy",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

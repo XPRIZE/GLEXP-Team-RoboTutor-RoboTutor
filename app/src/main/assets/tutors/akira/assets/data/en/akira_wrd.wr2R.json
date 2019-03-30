@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["write", "wren", "writ"],
+      "item_counter": 1,
+      "answer": "RIGHT",
+      "target": "writ",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["wrap", "wren", "write"],
+      "item_counter": 2,
+      "answer": "MID",
+      "target": "wren",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["wrap", "write", "writ"],
+      "item_counter": 3,
+      "answer": "LEFT",
+      "target": "wrap",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["write", "writ", "wrap"],
+      "item_counter": 4,
+      "answer": "LEFT",
+      "target": "write",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["wrap", "write", "writ"],
+      "item_counter": 5,
+      "answer": "MID",
+      "target": "write",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["write", "wren", "wry"],
+      "item_counter": 6,
+      "answer": "LEFT",
+      "target": "write",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["wren", "wrap", "wry"],
+      "item_counter": 7,
+      "answer": "RIGHT",
+      "target": "wry",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["wry", "writ", "wrap"],
+      "item_counter": 8,
+      "answer": "MID",
+      "target": "writ",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["writ", "write", "wrap"],
+      "item_counter": 9,
+      "answer": "MID",
+      "target": "write",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["wry", "write", "writ"],
+      "item_counter": 10,
+      "answer": "MID",
+      "target": "write",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["right", "best", "these"],
+      "item_counter": 1,
+      "answer": "MID",
+      "target": "best",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["upon", "your", "read"],
+      "item_counter": 2,
+      "answer": "RIGHT",
+      "target": "read",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["us", "sleep", "been"],
+      "item_counter": 3,
+      "answer": "LEFT",
+      "target": "us",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["many", "does", "work"],
+      "item_counter": 4,
+      "answer": "RIGHT",
+      "target": "work",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["tell", "found", "pull"],
+      "item_counter": 5,
+      "answer": "LEFT",
+      "target": "tell",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["sit", "read", "very"],
+      "item_counter": 6,
+      "answer": "MID",
+      "target": "read",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["very", "always", "would"],
+      "item_counter": 7,
+      "answer": "MID",
+      "target": "always",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["fast", "best", "write"],
+      "item_counter": 8,
+      "answer": "LEFT",
+      "target": "fast",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["made", "sit", "these"],
+      "item_counter": 9,
+      "answer": "LEFT",
+      "target": "made",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["would", "because", "very"],
+      "item_counter": 10,
+      "answer": "LEFT",
+      "target": "would",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

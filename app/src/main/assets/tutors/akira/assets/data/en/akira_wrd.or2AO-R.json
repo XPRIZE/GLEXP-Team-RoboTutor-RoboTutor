@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["sort", "door", "more"],
+      "item_counter": 1,
+      "answer": "LEFT",
+      "target": "sort",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["fort", "fork", "pork"],
+      "item_counter": 2,
+      "answer": "LEFT",
+      "target": "fort",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["cork", "born", "pork"],
+      "item_counter": 3,
+      "answer": "MID",
+      "target": "born",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["wore", "door", "pork"],
+      "item_counter": 4,
+      "answer": "RIGHT",
+      "target": "pork",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["orb", "tore", "norm"],
+      "item_counter": 5,
+      "answer": "LEFT",
+      "target": "orb",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["norm", "more", "or"],
+      "item_counter": 6,
+      "answer": "RIGHT",
+      "target": "or",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["norm", "cork", "tore"],
+      "item_counter": 7,
+      "answer": "MID",
+      "target": "cork",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["core", "corn", "more"],
+      "item_counter": 8,
+      "answer": "MID",
+      "target": "corn",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["wore", "pork", "torn"],
+      "item_counter": 9,
+      "answer": "MID",
+      "target": "pork",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["tore", "orb", "sort"],
+      "item_counter": 10,
+      "answer": "MID",
+      "target": "orb",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

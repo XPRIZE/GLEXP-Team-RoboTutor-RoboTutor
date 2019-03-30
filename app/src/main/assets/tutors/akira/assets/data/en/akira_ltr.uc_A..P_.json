@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["A", "N", "L"],
+      "item_counter": 1,
+      "answer": "MID",
+      "target": "N",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["J", "E", "B"],
+      "item_counter": 2,
+      "answer": "MID",
+      "target": "E",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["H", "C", "M"],
+      "item_counter": 3,
+      "answer": "LEFT",
+      "target": "H",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["G", "L", "M"],
+      "item_counter": 4,
+      "answer": "RIGHT",
+      "target": "M",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["A", "O", "K"],
+      "item_counter": 5,
+      "answer": "LEFT",
+      "target": "A",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["A", "F", "K"],
+      "item_counter": 6,
+      "answer": "MID",
+      "target": "F",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["L", "P", "D"],
+      "item_counter": 7,
+      "answer": "LEFT",
+      "target": "L",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["C", "J", "P"],
+      "item_counter": 8,
+      "answer": "MID",
+      "target": "J",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["H", "N", "E"],
+      "item_counter": 9,
+      "answer": "MID",
+      "target": "N",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["F", "P", "A"],
+      "item_counter": 10,
+      "answer": "LEFT",
+      "target": "F",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

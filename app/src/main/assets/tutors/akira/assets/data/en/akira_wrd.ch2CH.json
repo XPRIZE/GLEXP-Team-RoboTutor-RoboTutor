@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["chai", "chop", "chat"],
+      "item_counter": 1,
+      "answer": "RIGHT",
+      "target": "chat",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["chat", "chop", "chest"],
+      "item_counter": 2,
+      "answer": "RIGHT",
+      "target": "chest",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["chew", "chest", "chat"],
+      "item_counter": 3,
+      "answer": "LEFT",
+      "target": "chew",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["chop", "chat", "chew"],
+      "item_counter": 4,
+      "answer": "LEFT",
+      "target": "chop",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["chin", "chat", "chai"],
+      "item_counter": 5,
+      "answer": "LEFT",
+      "target": "chin",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["chew", "chest", "chin"],
+      "item_counter": 6,
+      "answer": "RIGHT",
+      "target": "chin",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["chest", "chin", "chew"],
+      "item_counter": 7,
+      "answer": "MID",
+      "target": "chin",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["chest", "chew", "chop"],
+      "item_counter": 8,
+      "answer": "RIGHT",
+      "target": "chop",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["chop", "chai", "chew"],
+      "item_counter": 9,
+      "answer": "LEFT",
+      "target": "chop",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["chop", "chew", "chip"],
+      "item_counter": 10,
+      "answer": "LEFT",
+      "target": "chop",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

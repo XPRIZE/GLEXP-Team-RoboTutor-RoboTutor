@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["sail", "nail", "laid"],
+      "item_counter": 1,
+      "answer": "RIGHT",
+      "target": "laid",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["main", "rain", "aim"],
+      "item_counter": 2,
+      "answer": "LEFT",
+      "target": "main",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["wait", "laid", "rail"],
+      "item_counter": 3,
+      "answer": "MID",
+      "target": "laid",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["rain", "main", "bail"],
+      "item_counter": 4,
+      "answer": "RIGHT",
+      "target": "bail",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["laid", "fail", "aid"],
+      "item_counter": 5,
+      "answer": "MID",
+      "target": "fail",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["mail", "fail", "aid"],
+      "item_counter": 6,
+      "answer": "MID",
+      "target": "fail",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["sail", "paid", "tail"],
+      "item_counter": 7,
+      "answer": "LEFT",
+      "target": "sail",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["pain", "gain", "laid"],
+      "item_counter": 8,
+      "answer": "RIGHT",
+      "target": "laid",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["pain", "paid", "gain"],
+      "item_counter": 9,
+      "answer": "RIGHT",
+      "target": "gain",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["bail", "maid", "fail"],
+      "item_counter": 10,
+      "answer": "MID",
+      "target": "maid",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

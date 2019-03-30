@@ -1,0 +1,17 @@
+{
+	"bootFeatures":"FTR_DEMO_NUM",
+	"random": false,
+	"singleStimulus": false,
+	"dataSource": [
+		{ "stimulus": "10", "audioStimulus": [ "10", "", "" ], "answer": "10" },
+		{ "stimulus": "20", "audioStimulus": [ "20", "", "" ], "answer": "20" },
+		{ "stimulus": "30", "audioStimulus": [ "30", "", "" ], "answer": "30" },
+		{ "stimulus": "40", "audioStimulus": [ "40", "", "" ], "answer": "40" },
+		{ "stimulus": "50", "audioStimulus": [ "50", "", "" ], "answer": "50" },
+		{ "stimulus": "60", "audioStimulus": [ "60", "", "" ], "answer": "60" },
+		{ "stimulus": "70", "audioStimulus": [ "70", "", "" ], "answer": "70" },
+		{ "stimulus": "80", "audioStimulus": [ "80", "", "" ], "answer": "80" },
+		{ "stimulus": "90", "audioStimulus": [ "90", "", "" ], "answer": "90" },
+		{ "stimulus": "100", "audioStimulus": [ "100", "", "" ], "answer": "100" }
+	]
+}

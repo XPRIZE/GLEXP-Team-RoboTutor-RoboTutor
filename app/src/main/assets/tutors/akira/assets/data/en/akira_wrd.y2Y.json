@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["yelp", "yard", "yarn"],
+      "item_counter": 1,
+      "answer": "MID",
+      "target": "yard",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["yelp", "yuck", "yell"],
+      "item_counter": 2,
+      "answer": "MID",
+      "target": "yuck",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["yuck", "yeah", "yolk"],
+      "item_counter": 3,
+      "answer": "RIGHT",
+      "target": "yolk",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["yak", "yell", "yeah"],
+      "item_counter": 4,
+      "answer": "MID",
+      "target": "yell",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["yolk", "yell", "yuck"],
+      "item_counter": 5,
+      "answer": "MID",
+      "target": "yell",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["yard", "yolk", "yak"],
+      "item_counter": 6,
+      "answer": "RIGHT",
+      "target": "yak",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["yum", "yuck", "yet"],
+      "item_counter": 7,
+      "answer": "MID",
+      "target": "yuck",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["yarn", "yank", "yuck"],
+      "item_counter": 8,
+      "answer": "RIGHT",
+      "target": "yuck",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["yum", "yank", "yawn"],
+      "item_counter": 9,
+      "answer": "RIGHT",
+      "target": "yawn",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["you", "yard", "yelp"],
+      "item_counter": 10,
+      "answer": "RIGHT",
+      "target": "yelp",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

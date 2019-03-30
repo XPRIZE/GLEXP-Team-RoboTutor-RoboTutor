@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["some", "slam", "slug"],
+      "item_counter": 1,
+      "answer": "LEFT",
+      "target": "some",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["sled", "sly", "seen"],
+      "item_counter": 2,
+      "answer": "LEFT",
+      "target": "sled",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["soak", "sew", "soap"],
+      "item_counter": 3,
+      "answer": "RIGHT",
+      "target": "soap",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["sap", "slam", "six"],
+      "item_counter": 4,
+      "answer": "RIGHT",
+      "target": "six",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["said", "sale", "snap"],
+      "item_counter": 5,
+      "answer": "MID",
+      "target": "sale",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["slim", "soon", "sam"],
+      "item_counter": 6,
+      "answer": "LEFT",
+      "target": "slim",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["said", "say", "sled"],
+      "item_counter": 7,
+      "answer": "LEFT",
+      "target": "said",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["seat", "sled", "sad"],
+      "item_counter": 8,
+      "answer": "LEFT",
+      "target": "seat",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["soup", "star", "son"],
+      "item_counter": 9,
+      "answer": "MID",
+      "target": "star",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["sat", "sap", "stem"],
+      "item_counter": 10,
+      "answer": "RIGHT",
+      "target": "stem",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

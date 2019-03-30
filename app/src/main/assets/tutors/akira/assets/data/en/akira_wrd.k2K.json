@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["kin", "kind", "kelp"],
+      "item_counter": 1,
+      "answer": "MID",
+      "target": "kind",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["keep", "kilt", "kelp"],
+      "item_counter": 2,
+      "answer": "MID",
+      "target": "kilt",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["kind", "keep", "kale"],
+      "item_counter": 3,
+      "answer": "LEFT",
+      "target": "kind",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["kick", "kit", "king"],
+      "item_counter": 4,
+      "answer": "LEFT",
+      "target": "kick",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["kids", "keep", "kid"],
+      "item_counter": 5,
+      "answer": "MID",
+      "target": "keep",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["kit", "kiss", "kind"],
+      "item_counter": 6,
+      "answer": "LEFT",
+      "target": "kit",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["key", "kit", "kiss"],
+      "item_counter": 7,
+      "answer": "LEFT",
+      "target": "key",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["keep", "kind", "kiss"],
+      "item_counter": 8,
+      "answer": "RIGHT",
+      "target": "kiss",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["kid", "keys", "kiln"],
+      "item_counter": 9,
+      "answer": "RIGHT",
+      "target": "kiln",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["keep", "kiln", "kids"],
+      "item_counter": 10,
+      "answer": "LEFT",
+      "target": "keep",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

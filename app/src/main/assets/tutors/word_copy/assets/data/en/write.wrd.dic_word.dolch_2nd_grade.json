@@ -1,0 +1,116 @@
+{
+  "random": true,
+  "singleStimulus": false,
+  "dataSource": [
+    {
+      "stimulus": "always",
+      "audioStimulus": ["always", "", ""],
+      "answer": "always"
+    },
+    {
+      "stimulus": "around",
+      "audioStimulus": ["around", "", ""],
+      "answer": "around"
+    },
+    {
+      "stimulus": "because",
+      "audioStimulus": ["because", "", ""],
+      "answer": "because"
+    },
+    {"stimulus": "been", "audioStimulus": ["been", "", ""], "answer": "been"},
+    {
+      "stimulus": "before",
+      "audioStimulus": ["before", "", ""],
+      "answer": "before"
+    },
+    {"stimulus": "best", "audioStimulus": ["best", "", ""], "answer": "best"},
+    {"stimulus": "both", "audioStimulus": ["both", "", ""], "answer": "both"},
+    {"stimulus": "buy", "audioStimulus": ["buy", "", ""], "answer": "buy"},
+    {"stimulus": "call", "audioStimulus": ["call", "", ""], "answer": "call"},
+    {"stimulus": "cold", "audioStimulus": ["cold", "", ""], "answer": "cold"},
+    {"stimulus": "does", "audioStimulus": ["does", "", ""], "answer": "does"},
+    {
+      "stimulus": "don't",
+      "audioStimulus": ["don't", "", ""],
+      "answer": "don't"
+    },
+    {"stimulus": "fast", "audioStimulus": ["fast", "", ""], "answer": "fast"},
+    {
+      "stimulus": "first",
+      "audioStimulus": ["first", "", ""],
+      "answer": "first"
+    },
+    {"stimulus": "five", "audioStimulus": ["five", "", ""], "answer": "five"},
+    {
+      "stimulus": "found",
+      "audioStimulus": ["found", "", ""],
+      "answer": "found"
+    },
+    {"stimulus": "gave", "audioStimulus": ["gave", "", ""], "answer": "gave"},
+    {"stimulus": "goes", "audioStimulus": ["goes", "", ""], "answer": "goes"},
+    {
+      "stimulus": "green",
+      "audioStimulus": ["green", "", ""],
+      "answer": "green"
+    },
+    {"stimulus": "its", "audioStimulus": ["its", "", ""], "answer": "its"},
+    {"stimulus": "made", "audioStimulus": ["made", "", ""], "answer": "made"},
+    {"stimulus": "many", "audioStimulus": ["many", "", ""], "answer": "many"},
+    {"stimulus": "off", "audioStimulus": ["off", "", ""], "answer": "off"},
+    {"stimulus": "or", "audioStimulus": ["or", "", ""], "answer": "or"},
+    {"stimulus": "pull", "audioStimulus": ["pull", "", ""], "answer": "pull"},
+    {"stimulus": "read", "audioStimulus": ["read", "", ""], "answer": "read"},
+    {
+      "stimulus": "right",
+      "audioStimulus": ["right", "", ""],
+      "answer": "right"
+    },
+    {"stimulus": "sing", "audioStimulus": ["sing", "", ""], "answer": "sing"},
+    {"stimulus": "sit", "audioStimulus": ["sit", "", ""], "answer": "sit"},
+    {
+      "stimulus": "sleep",
+      "audioStimulus": ["sleep", "", ""],
+      "answer": "sleep"
+    },
+    {"stimulus": "tell", "audioStimulus": ["tell", "", ""], "answer": "tell"},
+    {
+      "stimulus": "their",
+      "audioStimulus": ["their", "", ""],
+      "answer": "their"
+    },
+    {
+      "stimulus": "these",
+      "audioStimulus": ["these", "", ""],
+      "answer": "these"
+    },
+    {
+      "stimulus": "those",
+      "audioStimulus": ["those", "", ""],
+      "answer": "those"
+    },
+    {"stimulus": "upon", "audioStimulus": ["upon", "", ""], "answer": "upon"},
+    {"stimulus": "us", "audioStimulus": ["us", "", ""], "answer": "us"},
+    {"stimulus": "use", "audioStimulus": ["use", "", ""], "answer": "use"},
+    {"stimulus": "very", "audioStimulus": ["very", "", ""], "answer": "very"},
+    {"stimulus": "wash", "audioStimulus": ["wash", "", ""], "answer": "wash"},
+    {
+      "stimulus": "which",
+      "audioStimulus": ["which", "", ""],
+      "answer": "which"
+    },
+    {"stimulus": "why", "audioStimulus": ["why", "", ""], "answer": "why"},
+    {"stimulus": "wish", "audioStimulus": ["wish", "", ""], "answer": "wish"},
+    {"stimulus": "work", "audioStimulus": ["work", "", ""], "answer": "work"},
+    {
+      "stimulus": "would",
+      "audioStimulus": ["would", "", ""],
+      "answer": "would"
+    },
+    {
+      "stimulus": "write",
+      "audioStimulus": ["write", "", ""],
+      "answer": "write"
+    },
+    {"stimulus": "your", "audioStimulus": ["your", "", ""], "answer": "your"}
+  ]
+}
