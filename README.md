@@ -1,7 +1,9 @@
 
 # **RoboTutor**
 
+
 Welcome to RoboTutor: this version was uploaded to XPrize 11/20/2018. For subsequent changes, see [https://github.com/RoboTutorLLC/RoboTutor](https://github.com/RoboTutorLLC/RoboTutor).
+
 
 
 ## **Setup and Configuration:**
@@ -49,6 +51,7 @@ The following repositories are part of the Team-RoboTutor entry:
  * XPRIZE/GLEXP-Team-RoboTutor-CodeDrop1-Assets
  * XPRIZE/GLEXP-Team-RoboTutor-RoboLauncher 
  * XPRIZE/GLEXP-Team-RoboTutor-RoboTransfer 
+
 
 <br>
 <br>
