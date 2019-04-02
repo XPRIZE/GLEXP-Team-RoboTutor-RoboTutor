@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["leap", "peak", "heat"],
+      "item_counter": 1,
+      "answer": "LEFT",
+      "target": "leap",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["leak", "bead", "hear"],
+      "item_counter": 2,
+      "answer": "LEFT",
+      "target": "leak",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["meat", "teal", "leap"],
+      "item_counter": 3,
+      "answer": "MID",
+      "target": "teal",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["weak", "leap", "east"],
+      "item_counter": 4,
+      "answer": "MID",
+      "target": "leap",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["beam", "peak", "seam"],
+      "item_counter": 5,
+      "answer": "RIGHT",
+      "target": "seam",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["beak", "deal", "hear"],
+      "item_counter": 6,
+      "answer": "LEFT",
+      "target": "beak",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["meal", "weak", "veal"],
+      "item_counter": 7,
+      "answer": "RIGHT",
+      "target": "veal",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["eat", "seam", "heal"],
+      "item_counter": 8,
+      "answer": "RIGHT",
+      "target": "heal",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["veal", "team", "neat"],
+      "item_counter": 9,
+      "answer": "LEFT",
+      "target": "veal",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["heap", "teal", "lean"],
+      "item_counter": 10,
+      "answer": "RIGHT",
+      "target": "lean",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

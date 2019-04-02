@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["arc", "bar", "harm"],
+      "item_counter": 1,
+      "answer": "LEFT",
+      "target": "arc",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["yarn", "arm", "barn"],
+      "item_counter": 2,
+      "answer": "RIGHT",
+      "target": "barn",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["carp", "part", "bar"],
+      "item_counter": 3,
+      "answer": "LEFT",
+      "target": "carp",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["part", "car", "bar"],
+      "item_counter": 4,
+      "answer": "MID",
+      "target": "car",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["jar", "dark", "yard"],
+      "item_counter": 5,
+      "answer": "MID",
+      "target": "dark",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["mark", "far", "mars"],
+      "item_counter": 6,
+      "answer": "MID",
+      "target": "far",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["hard", "tarp", "dark"],
+      "item_counter": 7,
+      "answer": "RIGHT",
+      "target": "dark",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["harp", "carp", "card"],
+      "item_counter": 8,
+      "answer": "MID",
+      "target": "carp",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["bar", "yarn", "far"],
+      "item_counter": 9,
+      "answer": "LEFT",
+      "target": "bar",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["mark", "scar", "yard"],
+      "item_counter": 10,
+      "answer": "RIGHT",
+      "target": "yard",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

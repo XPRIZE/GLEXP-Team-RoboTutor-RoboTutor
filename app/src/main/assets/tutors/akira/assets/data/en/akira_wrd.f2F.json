@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["foam", "fan", "frog"],
+      "item_counter": 1,
+      "answer": "MID",
+      "target": "fan",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["fig", "for", "four"],
+      "item_counter": 2,
+      "answer": "RIGHT",
+      "target": "four",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["fly", "fee", "fear"],
+      "item_counter": 3,
+      "answer": "RIGHT",
+      "target": "fear",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["fix", "fish", "feet"],
+      "item_counter": 4,
+      "answer": "RIGHT",
+      "target": "feet",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["fed", "fat", "fade"],
+      "item_counter": 5,
+      "answer": "MID",
+      "target": "fat",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["feel", "feed", "four"],
+      "item_counter": 6,
+      "answer": "RIGHT",
+      "target": "four",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["frog", "fun", "five"],
+      "item_counter": 7,
+      "answer": "LEFT",
+      "target": "frog",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["fear", "fit", "fish"],
+      "item_counter": 8,
+      "answer": "LEFT",
+      "target": "fear",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["fake", "food", "fear"],
+      "item_counter": 9,
+      "answer": "MID",
+      "target": "food",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["fade", "foot", "foam"],
+      "item_counter": 10,
+      "answer": "LEFT",
+      "target": "fade",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

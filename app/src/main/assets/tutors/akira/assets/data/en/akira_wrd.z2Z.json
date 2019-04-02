@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["zap", "zoo", "zip"],
+      "item_counter": 1,
+      "answer": "LEFT",
+      "target": "zap",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["zap", "zoom", "zinc"],
+      "item_counter": 2,
+      "answer": "RIGHT",
+      "target": "zinc",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["zinc", "zest", "zone"],
+      "item_counter": 3,
+      "answer": "RIGHT",
+      "target": "zone",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["zap", "zip", "zoo"],
+      "item_counter": 4,
+      "answer": "LEFT",
+      "target": "zap",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["zap", "zeal", "zip"],
+      "item_counter": 5,
+      "answer": "LEFT",
+      "target": "zap",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["zinc", "zoo", "zip"],
+      "item_counter": 6,
+      "answer": "MID",
+      "target": "zoo",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["zoom", "zoo", "zone"],
+      "item_counter": 7,
+      "answer": "LEFT",
+      "target": "zoom",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["zip", "zoo", "zeal"],
+      "item_counter": 8,
+      "answer": "LEFT",
+      "target": "zip",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["zinc", "zoom", "zoo"],
+      "item_counter": 9,
+      "answer": "MID",
+      "target": "zoom",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["zap", "zeal", "zinc"],
+      "item_counter": 10,
+      "answer": "RIGHT",
+      "target": "zinc",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

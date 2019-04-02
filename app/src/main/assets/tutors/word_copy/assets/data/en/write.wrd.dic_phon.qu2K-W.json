@@ -1,0 +1,9 @@
+{
+  "random": true,
+  "singleStimulus": false,
+  "dataSource": [
+    {"stimulus": "quad", "audioStimulus": ["quad", "", ""], "answer": "quad"},
+    {"stimulus": "quit", "audioStimulus": ["quit", "", ""], "answer": "quit"},
+    {"stimulus": "quiz", "audioStimulus": ["quiz", "", ""], "answer": "quiz"}
+  ]
+}

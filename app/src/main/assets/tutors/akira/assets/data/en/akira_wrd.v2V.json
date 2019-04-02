@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["vet", "vine", "vent"],
+      "item_counter": 1,
+      "answer": "MID",
+      "target": "vine",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["vet", "vice", "veil"],
+      "item_counter": 2,
+      "answer": "MID",
+      "target": "vice",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["vent", "van", "verb"],
+      "item_counter": 3,
+      "answer": "MID",
+      "target": "van",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["veil", "vine", "van"],
+      "item_counter": 4,
+      "answer": "LEFT",
+      "target": "veil",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["veil", "van", "vet"],
+      "item_counter": 5,
+      "answer": "RIGHT",
+      "target": "vet",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["vine", "verb", "veil"],
+      "item_counter": 6,
+      "answer": "LEFT",
+      "target": "vine",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["vice", "vet", "verb"],
+      "item_counter": 7,
+      "answer": "MID",
+      "target": "vet",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["vent", "vice", "verb"],
+      "item_counter": 8,
+      "answer": "LEFT",
+      "target": "vent",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["veil", "vine", "vein"],
+      "item_counter": 9,
+      "answer": "LEFT",
+      "target": "veil",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["verb", "void", "vent"],
+      "item_counter": 10,
+      "answer": "RIGHT",
+      "target": "vent",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

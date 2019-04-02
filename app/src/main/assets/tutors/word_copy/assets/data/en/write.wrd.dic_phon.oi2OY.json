@@ -1,0 +1,14 @@
+{
+  "random": true,
+  "singleStimulus": false,
+  "dataSource": [
+    {"stimulus": "boil", "audioStimulus": ["boil", "", ""], "answer": "boil"},
+    {"stimulus": "coil", "audioStimulus": ["coil", "", ""], "answer": "coil"},
+    {"stimulus": "coin", "audioStimulus": ["coin", "", ""], "answer": "coin"},
+    {"stimulus": "foil", "audioStimulus": ["foil", "", ""], "answer": "foil"},
+    {"stimulus": "join", "audioStimulus": ["join", "", ""], "answer": "join"},
+    {"stimulus": "oil", "audioStimulus": ["oil", "", ""], "answer": "oil"},
+    {"stimulus": "soil", "audioStimulus": ["soil", "", ""], "answer": "soil"},
+    {"stimulus": "toil", "audioStimulus": ["toil", "", ""], "answer": "toil"}
+  ]
+}

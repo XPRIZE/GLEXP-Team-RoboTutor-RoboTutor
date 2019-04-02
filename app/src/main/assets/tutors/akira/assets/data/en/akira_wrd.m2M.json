@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["mold", "must", "mend"],
+      "item_counter": 1,
+      "answer": "RIGHT",
+      "target": "mend",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["mood", "mat", "mold"],
+      "item_counter": 2,
+      "answer": "MID",
+      "target": "mat",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["men", "man", "moon"],
+      "item_counter": 3,
+      "answer": "MID",
+      "target": "man",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["moon", "map", "must"],
+      "item_counter": 4,
+      "answer": "MID",
+      "target": "map",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["maid", "mud", "mule"],
+      "item_counter": 5,
+      "answer": "MID",
+      "target": "mud",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["mat", "met", "mood"],
+      "item_counter": 6,
+      "answer": "RIGHT",
+      "target": "mood",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["me", "must", "mice"],
+      "item_counter": 7,
+      "answer": "RIGHT",
+      "target": "mice",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["mind", "mule", "mail"],
+      "item_counter": 8,
+      "answer": "LEFT",
+      "target": "mind",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["met", "me", "mule"],
+      "item_counter": 9,
+      "answer": "RIGHT",
+      "target": "mule",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["mud", "mend", "mint"],
+      "item_counter": 10,
+      "answer": "MID",
+      "target": "mend",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

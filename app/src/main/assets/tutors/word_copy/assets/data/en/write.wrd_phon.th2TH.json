@@ -1,0 +1,24 @@
+{
+  "random": true,
+  "singleStimulus": false,
+  "dataSource": [
+    {"stimulus": "thin", "audioStimulus": ["thin", "", ""], "answer": "thin"},
+    {
+      "stimulus": "thirst",
+      "audioStimulus": ["thirst", "", ""],
+      "answer": "thirst"
+    },
+    {
+      "stimulus": "thursday",
+      "audioStimulus": ["thursday", "", ""],
+      "answer": "thursday"
+    },
+    {"stimulus": "thaw", "audioStimulus": ["thaw", "", ""], "answer": "thaw"},
+    {"stimulus": "thud", "audioStimulus": ["thud", "", ""], "answer": "thud"},
+    {
+      "stimulus": "through",
+      "audioStimulus": ["through", "", ""],
+      "answer": "through"
+    }
+  ]
+}

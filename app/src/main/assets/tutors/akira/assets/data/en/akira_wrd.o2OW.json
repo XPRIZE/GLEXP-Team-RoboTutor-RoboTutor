@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["rope", "old", "hose"],
+      "item_counter": 1,
+      "answer": "RIGHT",
+      "target": "hose",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["most", "sold", "home"],
+      "item_counter": 2,
+      "answer": "MID",
+      "target": "sold",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["lobe", "dome", "pose"],
+      "item_counter": 3,
+      "answer": "LEFT",
+      "target": "lobe",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["pose", "mold", "role"],
+      "item_counter": 4,
+      "answer": "RIGHT",
+      "target": "role",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["colt", "hole", "tone"],
+      "item_counter": 5,
+      "answer": "RIGHT",
+      "target": "tone",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["pole", "host", "dome"],
+      "item_counter": 6,
+      "answer": "RIGHT",
+      "target": "dome",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["comb", "cone", "mode"],
+      "item_counter": 7,
+      "answer": "MID",
+      "target": "cone",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["code", "woke", "comb"],
+      "item_counter": 8,
+      "answer": "MID",
+      "target": "woke",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["note", "code", "hope"],
+      "item_counter": 9,
+      "answer": "MID",
+      "target": "code",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["pole", "cone", "pose"],
+      "item_counter": 10,
+      "answer": "MID",
+      "target": "cone",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

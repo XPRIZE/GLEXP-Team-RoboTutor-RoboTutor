@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["punt", "pan", "pie"],
+      "item_counter": 1,
+      "answer": "MID",
+      "target": "pan",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["pure", "pork", "pail"],
+      "item_counter": 2,
+      "answer": "LEFT",
+      "target": "pure",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["pig", "pile", "pit"],
+      "item_counter": 3,
+      "answer": "RIGHT",
+      "target": "pit",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["pea", "pill", "prop"],
+      "item_counter": 4,
+      "answer": "RIGHT",
+      "target": "prop",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["peak", "pod", "page"],
+      "item_counter": 5,
+      "answer": "LEFT",
+      "target": "peak",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["peek", "paid", "pen"],
+      "item_counter": 6,
+      "answer": "MID",
+      "target": "paid",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["pain", "pin", "page"],
+      "item_counter": 7,
+      "answer": "MID",
+      "target": "pin",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["puck", "pale", "pink"],
+      "item_counter": 8,
+      "answer": "RIGHT",
+      "target": "pink",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["pipe", "park", "pant"],
+      "item_counter": 9,
+      "answer": "MID",
+      "target": "park",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["pole", "punt", "pile"],
+      "item_counter": 10,
+      "answer": "RIGHT",
+      "target": "pile",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

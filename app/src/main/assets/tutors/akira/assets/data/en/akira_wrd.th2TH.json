@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["thaw", "thursday", "thud"],
+      "item_counter": 1,
+      "answer": "LEFT",
+      "target": "thaw",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["thin", "thaw", "thud"],
+      "item_counter": 2,
+      "answer": "LEFT",
+      "target": "thin",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["thaw", "thirst", "through"],
+      "item_counter": 3,
+      "answer": "RIGHT",
+      "target": "through",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["through", "thursday", "thud"],
+      "item_counter": 4,
+      "answer": "RIGHT",
+      "target": "thud",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["through", "thirst", "thin"],
+      "item_counter": 5,
+      "answer": "RIGHT",
+      "target": "thin",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["thirst", "thaw", "thursday"],
+      "item_counter": 6,
+      "answer": "RIGHT",
+      "target": "thursday",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["thursday", "thin", "thud"],
+      "item_counter": 7,
+      "answer": "LEFT",
+      "target": "thursday",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["thud", "through", "thin"],
+      "item_counter": 8,
+      "answer": "LEFT",
+      "target": "thud",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["thursday", "thaw", "thirst"],
+      "item_counter": 9,
+      "answer": "RIGHT",
+      "target": "thirst",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["thursday", "thud", "thaw"],
+      "item_counter": 10,
+      "answer": "RIGHT",
+      "target": "thaw",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

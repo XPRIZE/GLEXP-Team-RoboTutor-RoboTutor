@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["in", "see", "you"],
+      "item_counter": 1,
+      "answer": "MID",
+      "target": "see",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["for", "go", "three"],
+      "item_counter": 2,
+      "answer": "LEFT",
+      "target": "for",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["go", "find", "in"],
+      "item_counter": 3,
+      "answer": "MID",
+      "target": "find",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["blue", "you", "in"],
+      "item_counter": 4,
+      "answer": "MID",
+      "target": "you",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["funny", "find", "my"],
+      "item_counter": 5,
+      "answer": "MID",
+      "target": "find",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["not", "the", "come"],
+      "item_counter": 6,
+      "answer": "LEFT",
+      "target": "not",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["away", "go", "can"],
+      "item_counter": 7,
+      "answer": "LEFT",
+      "target": "away",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["up", "away", "see"],
+      "item_counter": 8,
+      "answer": "MID",
+      "target": "away",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["one", "make", "see"],
+      "item_counter": 9,
+      "answer": "LEFT",
+      "target": "one",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["said", "run", "find"],
+      "item_counter": 10,
+      "answer": "RIGHT",
+      "target": "find",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "datasource"   : [ 
+
+       {
+ "type":"CAk_Data",
+ "choices":["595", "723", "490"],
+ "item_counter":1,
+ "answer":"LEFT",
+ "target":595,
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["356", "5", "825"],
+ "item_counter":2,
+ "answer":"MID",
+ "target":5,
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["522", "704", "559"],
+ "item_counter":3,
+ "answer":"LEFT",
+ "target":522,
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["67", "162", "420"],
+ "item_counter":4,
+ "answer":"LEFT",
+ "target":67,
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["683", "938", "0"],
+ "item_counter":5,
+ "answer":"RIGHT",
+ "target":0,
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["241", "621", "177"],
+ "item_counter":6,
+ "answer":"MID",
+ "target":621,
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["0", "415", "711"],
+ "item_counter":7,
+ "answer":"LEFT",
+ "target":0,
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["138", "221", "986"],
+ "item_counter":8,
+ "answer":"LEFT",
+ "target":138,
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["357", "213", "386"],
+ "item_counter":9,
+ "answer":"LEFT",
+ "target":357,
+ "belowString":"audio",
+ "audio":"true" 
+       } ,
+
+       {
+ "type":"CAk_Data",
+ "choices":["50", "534", "530"],
+ "item_counter":10,
+ "answer":"LEFT",
+ "target":50,
+ "belowString":"audio",
+ "audio":"true" 
+       }
+
+   ]
+}

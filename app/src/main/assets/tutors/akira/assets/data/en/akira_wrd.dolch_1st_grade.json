@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["as", "any", "him"],
+      "item_counter": 1,
+      "answer": "LEFT",
+      "target": "as",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["after", "take", "live"],
+      "item_counter": 2,
+      "answer": "RIGHT",
+      "target": "live",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["again", "then", "them"],
+      "item_counter": 3,
+      "answer": "LEFT",
+      "target": "again",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["every", "walk", "could"],
+      "item_counter": 4,
+      "answer": "MID",
+      "target": "walk",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["give", "then", "when"],
+      "item_counter": 5,
+      "answer": "MID",
+      "target": "then",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["once", "put", "when"],
+      "item_counter": 6,
+      "answer": "MID",
+      "target": "put",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["from", "over", "every"],
+      "item_counter": 7,
+      "answer": "RIGHT",
+      "target": "every",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["once", "again", "has"],
+      "item_counter": 8,
+      "answer": "MID",
+      "target": "again",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["think", "had", "when"],
+      "item_counter": 9,
+      "answer": "MID",
+      "target": "had",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["give", "fly", "after"],
+      "item_counter": 10,
+      "answer": "LEFT",
+      "target": "give",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

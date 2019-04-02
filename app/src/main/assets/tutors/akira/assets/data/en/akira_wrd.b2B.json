@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["bake", "bark", "bear"],
+      "item_counter": 1,
+      "answer": "LEFT",
+      "target": "bake",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["bye", "but", "bad"],
+      "item_counter": 2,
+      "answer": "RIGHT",
+      "target": "bad",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["bar", "by", "bed"],
+      "item_counter": 3,
+      "answer": "LEFT",
+      "target": "bar",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["by", "bill", "bean"],
+      "item_counter": 4,
+      "answer": "MID",
+      "target": "bill",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["bear", "bake", "beg"],
+      "item_counter": 5,
+      "answer": "LEFT",
+      "target": "bear",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["bee", "belt", "bug"],
+      "item_counter": 6,
+      "answer": "LEFT",
+      "target": "bee",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["bed", "boo", "base"],
+      "item_counter": 7,
+      "answer": "MID",
+      "target": "boo",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["burn", "bike", "bend"],
+      "item_counter": 8,
+      "answer": "MID",
+      "target": "bike",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["barn", "buy", "bean"],
+      "item_counter": 9,
+      "answer": "RIGHT",
+      "target": "bean",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["book", "beat", "band"],
+      "item_counter": 10,
+      "answer": "MID",
+      "target": "beat",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}
