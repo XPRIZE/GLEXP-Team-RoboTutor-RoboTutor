@@ -1,3 +1,4 @@
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 # **RoboTutor**
 
@@ -12,7 +13,7 @@ Welcome to RoboTutor: this version was uploaded to XPrize 11/20/2018. For subseq
 
 [Install GitHub Desktop](https://desktop.github.com/)<br>
 
-RoboTutor uses a large volume of external assets at runtime.  To successfully run RoboTutor you must first install these assets on your target device.  The [RTAsset_Publisher](https://github.com/RoboTutorLLC/RTAsset_Publisher) is the tool you can use to push the Rt assets to your device.  Once you have cloned and run the associated tools to push the data assets to your device you can proceed with building RoboTutor.
+RoboTutor uses a large volume of external assets at runtime.  To successfully run RoboTutor you must first install these assets on your target device: [English](https://github.com/XPRIZE/GLEXP-Team-RoboTutor-EnglishAssets). [Swahili](https://github.com/XPRIZE/GLEXP-Team-RoboTutor-CodeDrop2-Assets). Once you have cloned and run the associated tools to push the data assets to your device you can proceed with building RoboTutor.
 
 
 ## **Building RoboTutor:**
