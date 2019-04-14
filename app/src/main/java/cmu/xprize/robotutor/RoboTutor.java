@@ -132,7 +132,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     // private static final String debugTutorFile = "[file]math_0..800.ADD-100-V-S.incr.13.json";
 
     //private static final String debugTutorFile = "[file]math_10..80.SUB-2D-V-S.rand.12.json";
-    public static final String MATRIX_FILE = "dev_data_warmup.json"; // "dev_data.json"; // SUPER_PLACEMENT
+    public static final String MATRIX_FILE = "dev_data.open.json"; // "dev_data.json"; // SUPER_PLACEMENT
 
     private static final String LOG_SEQUENCE_ID = "LOG_SEQUENCE_ID";
 
