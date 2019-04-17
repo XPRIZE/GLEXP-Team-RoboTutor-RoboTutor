@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["bag", "sag", "bad"],
+      "item_counter": 1,
+      "answer": "RIGHT",
+      "target": "bad",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["fat", "map", "zap"],
+      "item_counter": 2,
+      "answer": "MID",
+      "target": "map",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["sat", "pat", "rap"],
+      "item_counter": 3,
+      "answer": "MID",
+      "target": "pat",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["lad", "zap", "pad"],
+      "item_counter": 4,
+      "answer": "MID",
+      "target": "zap",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["rag", "cab", "bat"],
+      "item_counter": 5,
+      "answer": "LEFT",
+      "target": "rag",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["map", "has", "bag"],
+      "item_counter": 6,
+      "answer": "LEFT",
+      "target": "map",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["mat", "has", "pat"],
+      "item_counter": 7,
+      "answer": "LEFT",
+      "target": "mat",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["yak", "bad", "sag"],
+      "item_counter": 8,
+      "answer": "MID",
+      "target": "bad",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["rag", "rap", "bad"],
+      "item_counter": 9,
+      "answer": "LEFT",
+      "target": "rag",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["mad", "has", "dad"],
+      "item_counter": 10,
+      "answer": "MID",
+      "target": "has",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

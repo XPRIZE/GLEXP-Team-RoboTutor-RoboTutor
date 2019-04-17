@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["dead", "pear", "read"],
+      "item_counter": 1,
+      "answer": "LEFT",
+      "target": "dead",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["tear", "wear", "bear"],
+      "item_counter": 2,
+      "answer": "LEFT",
+      "target": "tear",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["dead", "read", "tear"],
+      "item_counter": 3,
+      "answer": "RIGHT",
+      "target": "tear",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["wear", "read", "dead"],
+      "item_counter": 4,
+      "answer": "RIGHT",
+      "target": "dead",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["bear", "tear", "head"],
+      "item_counter": 5,
+      "answer": "MID",
+      "target": "tear",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["head", "read", "lead"],
+      "item_counter": 6,
+      "answer": "LEFT",
+      "target": "head",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["bear", "deaf", "dead"],
+      "item_counter": 7,
+      "answer": "MID",
+      "target": "deaf",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["head", "lead", "pear"],
+      "item_counter": 8,
+      "answer": "RIGHT",
+      "target": "pear",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["wear", "read", "lead"],
+      "item_counter": 9,
+      "answer": "MID",
+      "target": "read",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["deaf", "read", "wear"],
+      "item_counter": 10,
+      "answer": "LEFT",
+      "target": "deaf",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

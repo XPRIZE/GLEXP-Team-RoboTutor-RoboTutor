@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["cab", "care", "comb"],
+      "item_counter": 1,
+      "answer": "LEFT",
+      "target": "cab",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["clap", "cry", "cold"],
+      "item_counter": 2,
+      "answer": "LEFT",
+      "target": "clap",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["case", "cab", "crib"],
+      "item_counter": 3,
+      "answer": "MID",
+      "target": "cab",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["cup", "coal", "calf"],
+      "item_counter": 4,
+      "answer": "MID",
+      "target": "coal",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["crop", "cob", "cool"],
+      "item_counter": 5,
+      "answer": "MID",
+      "target": "cob",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["crib", "claw", "clam"],
+      "item_counter": 6,
+      "answer": "RIGHT",
+      "target": "clam",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["corn", "cat", "coat"],
+      "item_counter": 7,
+      "answer": "RIGHT",
+      "target": "coat",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["crab", "care", "claw"],
+      "item_counter": 8,
+      "answer": "RIGHT",
+      "target": "claw",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["cab", "cook", "cat"],
+      "item_counter": 9,
+      "answer": "MID",
+      "target": "cook",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["coin", "call", "cob"],
+      "item_counter": 10,
+      "answer": "LEFT",
+      "target": "coin",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

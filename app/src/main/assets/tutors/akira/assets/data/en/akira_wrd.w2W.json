@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["we", "wipe", "wing"],
+      "item_counter": 1,
+      "answer": "MID",
+      "target": "wipe",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["weld", "wipe", "wake"],
+      "item_counter": 2,
+      "answer": "LEFT",
+      "target": "weld",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["wink", "woof", "wig"],
+      "item_counter": 3,
+      "answer": "MID",
+      "target": "woof",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["wand", "went", "wow"],
+      "item_counter": 4,
+      "answer": "RIGHT",
+      "target": "wow",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["wax", "want", "wad"],
+      "item_counter": 5,
+      "answer": "MID",
+      "target": "want",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["wool", "went", "way"],
+      "item_counter": 6,
+      "answer": "RIGHT",
+      "target": "way",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["wake", "worm", "wade"],
+      "item_counter": 7,
+      "answer": "RIGHT",
+      "target": "wade",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["wasp", "we", "woke"],
+      "item_counter": 8,
+      "answer": "MID",
+      "target": "we",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["wave", "wand", "web"],
+      "item_counter": 9,
+      "answer": "RIGHT",
+      "target": "web",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["wake", "wasp", "warm"],
+      "item_counter": 10,
+      "answer": "RIGHT",
+      "target": "warm",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

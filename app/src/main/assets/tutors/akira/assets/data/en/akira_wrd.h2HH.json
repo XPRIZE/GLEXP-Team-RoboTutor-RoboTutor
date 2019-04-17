@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["hill", "ham", "heal"],
+      "item_counter": 1,
+      "answer": "LEFT",
+      "target": "hill",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["her", "hid", "hope"],
+      "item_counter": 2,
+      "answer": "MID",
+      "target": "hid",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["hurt", "hold", "hot"],
+      "item_counter": 3,
+      "answer": "RIGHT",
+      "target": "hot",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["hut", "hang", "hood"],
+      "item_counter": 4,
+      "answer": "RIGHT",
+      "target": "hood",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["howl", "horn", "hike"],
+      "item_counter": 5,
+      "answer": "RIGHT",
+      "target": "hike",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["hoop", "his", "hose"],
+      "item_counter": 6,
+      "answer": "MID",
+      "target": "his",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["harp", "hoot", "home"],
+      "item_counter": 7,
+      "answer": "LEFT",
+      "target": "harp",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["harp", "hope", "haul"],
+      "item_counter": 8,
+      "answer": "LEFT",
+      "target": "harp",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["him", "heat", "hurt"],
+      "item_counter": 9,
+      "answer": "RIGHT",
+      "target": "hurt",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["hit", "hot", "hang"],
+      "item_counter": 10,
+      "answer": "RIGHT",
+      "target": "hang",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

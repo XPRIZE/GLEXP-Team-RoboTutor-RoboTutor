@@ -1,0 +1,12 @@
+{
+  "random": true,
+  "singleStimulus": false,
+  "dataSource": [
+    {"stimulus": "foul", "audioStimulus": ["foul", "", ""], "answer": "foul"},
+    {"stimulus": "loud", "audioStimulus": ["loud", "", ""], "answer": "loud"},
+    {"stimulus": "noun", "audioStimulus": ["noun", "", ""], "answer": "noun"},
+    {"stimulus": "ouch", "audioStimulus": ["ouch", "", ""], "answer": "ouch"},
+    {"stimulus": "out", "audioStimulus": ["out", "", ""], "answer": "out"},
+    {"stimulus": "pout", "audioStimulus": ["pout", "", ""], "answer": "pout"}
+  ]
+}

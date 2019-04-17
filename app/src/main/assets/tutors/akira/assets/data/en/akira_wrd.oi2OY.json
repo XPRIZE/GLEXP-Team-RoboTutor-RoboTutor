@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["coin", "toil", "coil"],
+      "item_counter": 1,
+      "answer": "LEFT",
+      "target": "coin",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["oil", "coin", "foil"],
+      "item_counter": 2,
+      "answer": "LEFT",
+      "target": "oil",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["coin", "boil", "join"],
+      "item_counter": 3,
+      "answer": "MID",
+      "target": "boil",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["foil", "oil", "coin"],
+      "item_counter": 4,
+      "answer": "LEFT",
+      "target": "foil",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["soil", "boil", "oil"],
+      "item_counter": 5,
+      "answer": "RIGHT",
+      "target": "oil",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["boil", "foil", "join"],
+      "item_counter": 6,
+      "answer": "MID",
+      "target": "foil",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["boil", "soil", "join"],
+      "item_counter": 7,
+      "answer": "LEFT",
+      "target": "boil",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["coin", "oil", "foil"],
+      "item_counter": 8,
+      "answer": "MID",
+      "target": "oil",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["soil", "foil", "join"],
+      "item_counter": 9,
+      "answer": "RIGHT",
+      "target": "join",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["soil", "coin", "boil"],
+      "item_counter": 10,
+      "answer": "RIGHT",
+      "target": "boil",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

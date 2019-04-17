@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["fed", "pet", "wet"],
+      "item_counter": 1,
+      "answer": "RIGHT",
+      "target": "wet",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["fled", "gem", "tend"],
+      "item_counter": 2,
+      "answer": "RIGHT",
+      "target": "tend",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["vent", "beg", "cent"],
+      "item_counter": 3,
+      "answer": "LEFT",
+      "target": "vent",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["net", "desk", "cent"],
+      "item_counter": 4,
+      "answer": "MID",
+      "target": "desk",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["text", "men", "red"],
+      "item_counter": 5,
+      "answer": "RIGHT",
+      "target": "red",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["less", "ten", "neck"],
+      "item_counter": 6,
+      "answer": "LEFT",
+      "target": "less",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["peck", "vent", "send"],
+      "item_counter": 7,
+      "answer": "RIGHT",
+      "target": "send",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["tend", "fend", "help"],
+      "item_counter": 8,
+      "answer": "LEFT",
+      "target": "tend",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["tend", "elf", "red"],
+      "item_counter": 9,
+      "answer": "MID",
+      "target": "elf",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["men", "pen", "gem"],
+      "item_counter": 10,
+      "answer": "MID",
+      "target": "pen",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "random": true,
+  "singleStimulus": false,
+  "dataSource": [
+    {
+      "stimulus": "after",
+      "audioStimulus": ["after", "", ""],
+      "answer": "after"
+    },
+    {
+      "stimulus": "again",
+      "audioStimulus": ["again", "", ""],
+      "answer": "again"
+    },
+    {"stimulus": "an", "audioStimulus": ["an", "", ""], "answer": "an"},
+    {"stimulus": "any", "audioStimulus": ["any", "", ""], "answer": "any"},
+    {"stimulus": "as", "audioStimulus": ["as", "", ""], "answer": "as"},
+    {"stimulus": "ask", "audioStimulus": ["ask", "", ""], "answer": "ask"},
+    {"stimulus": "by", "audioStimulus": ["by", "", ""], "answer": "by"},
+    {
+      "stimulus": "could",
+      "audioStimulus": ["could", "", ""],
+      "answer": "could"
+    },
+    {
+      "stimulus": "every",
+      "audioStimulus": ["every", "", ""],
+      "answer": "every"
+    },
+    {"stimulus": "fly", "audioStimulus": ["fly", "", ""], "answer": "fly"},
+    {"stimulus": "from", "audioStimulus": ["from", "", ""], "answer": "from"},
+    {"stimulus": "give", "audioStimulus": ["give", "", ""], "answer": "give"},
+    {
+      "stimulus": "giving",
+      "audioStimulus": ["giving", "", ""],
+      "answer": "giving"
+    },
+    {"stimulus": "had", "audioStimulus": ["had", "", ""], "answer": "had"},
+    {"stimulus": "has", "audioStimulus": ["has", "", ""], "answer": "has"},
+    {"stimulus": "her", "audioStimulus": ["her", "", ""], "answer": "her"},
+    {"stimulus": "him", "audioStimulus": ["him", "", ""], "answer": "him"},
+    {"stimulus": "his", "audioStimulus": ["his", "", ""], "answer": "his"},
+    {"stimulus": "how", "audioStimulus": ["how", "", ""], "answer": "how"},
+    {"stimulus": "just", "audioStimulus": ["just", "", ""], "answer": "just"},
+    {"stimulus": "know", "audioStimulus": ["know", "", ""], "answer": "know"},
+    {"stimulus": "let", "audioStimulus": ["let", "", ""], "answer": "let"},
+    {"stimulus": "live", "audioStimulus": ["live", "", ""], "answer": "live"},
+    {"stimulus": "may", "audioStimulus": ["may", "", ""], "answer": "may"},
+    {"stimulus": "of", "audioStimulus": ["of", "", ""], "answer": "of"},
+    {"stimulus": "old", "audioStimulus": ["old", "", ""], "answer": "old"},
+    {"stimulus": "once", "audioStimulus": ["once", "", ""], "answer": "once"},
+    {"stimulus": "open", "audioStimulus": ["open", "", ""], "answer": "open"},
+    {"stimulus": "over", "audioStimulus": ["over", "", ""], "answer": "over"},
+    {"stimulus": "put", "audioStimulus": ["put", "", ""], "answer": "put"},
+    {
+      "stimulus": "round",
+      "audioStimulus": ["round", "", ""],
+      "answer": "round"
+    },
+    {"stimulus": "some", "audioStimulus": ["some", "", ""], "answer": "some"},
+    {"stimulus": "stop", "audioStimulus": ["stop", "", ""], "answer": "stop"},
+    {"stimulus": "take", "audioStimulus": ["take", "", ""], "answer": "take"},
+    {
+      "stimulus": "thank",
+      "audioStimulus": ["thank", "", ""],
+      "answer": "thank"
+    },
+    {"stimulus": "them", "audioStimulus": ["them", "", ""], "answer": "them"},
+    {"stimulus": "then", "audioStimulus": ["then", "", ""], "answer": "then"},
+    {
+      "stimulus": "think",
+      "audioStimulus": ["think", "", ""],
+      "answer": "think"
+    },
+    {"stimulus": "walk", "audioStimulus": ["walk", "", ""], "answer": "walk"},
+    {"stimulus": "were", "audioStimulus": ["were", "", ""], "answer": "were"},
+    {"stimulus": "when", "audioStimulus": ["when", "", ""], "answer": "when"}
+  ]
+}

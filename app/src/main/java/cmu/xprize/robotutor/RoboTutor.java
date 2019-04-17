@@ -79,6 +79,7 @@ import static cmu.xprize.comp_logging.PerformanceLogItem.MATRIX_TYPE.STORIES_MAT
 import static cmu.xprize.comp_logging.PerformanceLogItem.MATRIX_TYPE.UNKNOWN_MATRIX;
 import static cmu.xprize.util.TCONST.CODE_DROP_1_ASSET_PATTERN;
 import static cmu.xprize.util.TCONST.CODE_DROP_2_ASSET_PATTERN;
+import static cmu.xprize.util.TCONST.ENGLISH_ASSET_PATTERN;
 import static cmu.xprize.util.TCONST.GRAPH_MSG;
 import static cmu.xprize.util.TCONST.MATH_PLACEMENT;
 import static cmu.xprize.util.TCONST.PROTOTYPE_ASSET_PATTERN;
@@ -105,9 +106,9 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 //    private static final String debugTutorId = "place.value:1";
 //    private static final String debugTutorFile = "[file]place.value__pv-11..99.2D.diff0.3.json";
     private static final boolean QUICK_DEBUG = false;
-    private static final String debugTutorVariant = "story.echo";
-    private static final String debugTutorId = "write.wrd:story_1_1";
-    private static final String debugTutorFile = "[encfolder]story.echo_all.A..Z.asc.lc.8.json";
+    private static final String debugTutorVariant = "bpop.wrd";
+    private static final String debugTutorId = "bpop.wrd:2ch_dolch";
+    private static final String debugTutorFile = "[file]bpop.wrd_2ch.dolch.noShow.rise.json";
 
 
     //amogh missing letter
@@ -131,7 +132,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
     // private static final String debugTutorFile = "[file]math_0..800.ADD-100-V-S.incr.13.json";
 
     //private static final String debugTutorFile = "[file]math_10..80.SUB-2D-V-S.rand.12.json";
-    public static final String MATRIX_FILE = "dev_data.cd2.json"; // "dev_data.json"; // SUPER_PLACEMENT
+    public static final String MATRIX_FILE = "dev_data_warmup.json"; // "dev_data.json"; // SUPER_PLACEMENT
 
     private static final String LOG_SEQUENCE_ID = "LOG_SEQUENCE_ID";
 
@@ -480,6 +481,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
                 tutorAssetManager.updateAssetPackages(CODE_DROP_2_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
                 tutorAssetManager.updateAssetPackages(PROTOTYPE_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
                 tutorAssetManager.updateAssetPackages(QA_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
+                tutorAssetManager.updateAssetPackages(ENGLISH_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
 
                 // Create the one system levelFolder LTKPLUS recognizer
                 //

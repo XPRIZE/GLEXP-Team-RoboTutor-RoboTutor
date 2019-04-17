@@ -1,0 +1,18 @@
+{
+ "bootFeatures": "FTR_DEMO_SUB",
+
+"dataSource": [
+
+{"type":"CBigMath_Data", "level":"demo", "task":" Count down by 1","dataset": [7,1,6],"operation": "-"},
+{"type":"CBigMath_Data", "level":"demo", "task":" Count down by 1","dataset": [9,1,8],"operation": "-"},
+{"type":"CBigMath_Data", "level":"demo", "task":" Count down by 1","dataset": [5,1,4],"operation": "-"},
+{"type":"CBigMath_Data", "level":"demo", "task":" Count down by 1","dataset": [6,1,5],"operation": "-"},
+{"type":"CBigMath_Data", "level":"demo", "task":" Count down by 1","dataset": [2,1,1],"operation": "-"},
+{"type":"CBigMath_Data", "level":"demo", "task":" Count down by 1","dataset": [8,1,7],"operation": "-"},
+{"type":"CBigMath_Data", "level":"demo", "task":" Count down by 1","dataset": [7,1,6],"operation": "-"},
+{"type":"CBigMath_Data", "level":"demo", "task":" Count down by 1","dataset": [1,1,0],"operation": "-"},
+{"type":"CBigMath_Data", "level":"demo", "task":" Count down by 1","dataset": [2,1,1],"operation": "-"}
+
+   ]
+
+}

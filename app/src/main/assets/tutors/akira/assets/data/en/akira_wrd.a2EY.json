@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["cake", "pane", "ale"],
+      "item_counter": 1,
+      "answer": "LEFT",
+      "target": "cake",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["fake", "fame", "daze"],
+      "item_counter": 2,
+      "answer": "RIGHT",
+      "target": "daze",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["rake", "came", "tape"],
+      "item_counter": 3,
+      "answer": "RIGHT",
+      "target": "tape",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["age", "race", "same"],
+      "item_counter": 4,
+      "answer": "MID",
+      "target": "race",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["pane", "lane", "cape"],
+      "item_counter": 5,
+      "answer": "LEFT",
+      "target": "pane",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["case", "hate", "race"],
+      "item_counter": 6,
+      "answer": "LEFT",
+      "target": "case",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["rate", "date", "tape"],
+      "item_counter": 7,
+      "answer": "MID",
+      "target": "date",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["pace", "fame", "tape"],
+      "item_counter": 8,
+      "answer": "RIGHT",
+      "target": "tape",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["cage", "cane", "came"],
+      "item_counter": 9,
+      "answer": "RIGHT",
+      "target": "came",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["made", "wage", "cane"],
+      "item_counter": 10,
+      "answer": "LEFT",
+      "target": "made",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

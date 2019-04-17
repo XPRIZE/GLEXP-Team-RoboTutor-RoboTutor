@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["let", "leak", "low"],
+      "item_counter": 1,
+      "answer": "MID",
+      "target": "leak",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["luck", "lock", "lamb"],
+      "item_counter": 2,
+      "answer": "LEFT",
+      "target": "luck",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["lie", "lot", "lack"],
+      "item_counter": 3,
+      "answer": "MID",
+      "target": "lot",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["load", "lend", "lock"],
+      "item_counter": 4,
+      "answer": "MID",
+      "target": "lend",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["lips", "lost", "lane"],
+      "item_counter": 5,
+      "answer": "RIGHT",
+      "target": "lane",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["lot", "land", "leap"],
+      "item_counter": 6,
+      "answer": "RIGHT",
+      "target": "leap",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["lend", "loss", "load"],
+      "item_counter": 7,
+      "answer": "LEFT",
+      "target": "lend",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["lay", "lack", "lips"],
+      "item_counter": 8,
+      "answer": "LEFT",
+      "target": "lay",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["lend", "less", "lamp"],
+      "item_counter": 9,
+      "answer": "LEFT",
+      "target": "lend",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["lane", "lips", "lap"],
+      "item_counter": 10,
+      "answer": "RIGHT",
+      "target": "lap",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

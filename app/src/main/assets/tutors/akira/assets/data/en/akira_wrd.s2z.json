@@ -1,0 +1,88 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": [null, "no beginnings", null],
+      "item_counter": 1,
+      "answer": "MID",
+      "target": "no beginnings",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": [null, null, "no beginnings"],
+      "item_counter": 2,
+      "answer": "MID",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["no beginnings", null, null],
+      "item_counter": 3,
+      "answer": "RIGHT",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": [null, null, "no beginnings"],
+      "item_counter": 4,
+      "answer": "MID",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["no beginnings", null, null],
+      "item_counter": 5,
+      "answer": "RIGHT",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": [null, "no beginnings", null],
+      "item_counter": 6,
+      "answer": "LEFT",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": [null, null, "no beginnings"],
+      "item_counter": 7,
+      "answer": "RIGHT",
+      "target": "no beginnings",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["no beginnings", null, null],
+      "item_counter": 8,
+      "answer": "LEFT",
+      "target": "no beginnings",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": [null, "no beginnings", null],
+      "item_counter": 9,
+      "answer": "MID",
+      "target": "no beginnings",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["no beginnings", null, null],
+      "item_counter": 10,
+      "answer": "RIGHT",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

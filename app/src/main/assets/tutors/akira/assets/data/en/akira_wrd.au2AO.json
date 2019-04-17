@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["laud", "maul", "saul"],
+      "item_counter": 1,
+      "answer": "RIGHT",
+      "target": "saul",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["laud", "maul", "saul"],
+      "item_counter": 2,
+      "answer": "LEFT",
+      "target": "laud",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["paul", "saul", "maul"],
+      "item_counter": 3,
+      "answer": "MID",
+      "target": "saul",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["saul", "maul", "laud"],
+      "item_counter": 4,
+      "answer": "LEFT",
+      "target": "saul",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["laud", "paul", "maul"],
+      "item_counter": 5,
+      "answer": "MID",
+      "target": "paul",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["paul", "saul", "maul"],
+      "item_counter": 6,
+      "answer": "LEFT",
+      "target": "paul",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["laud", "saul", "paul"],
+      "item_counter": 7,
+      "answer": "LEFT",
+      "target": "laud",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["saul", "laud", "paul"],
+      "item_counter": 8,
+      "answer": "RIGHT",
+      "target": "paul",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["maul", "saul", "paul"],
+      "item_counter": 9,
+      "answer": "LEFT",
+      "target": "maul",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["maul", "saul", "laud"],
+      "item_counter": 10,
+      "answer": "LEFT",
+      "target": "maul",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}

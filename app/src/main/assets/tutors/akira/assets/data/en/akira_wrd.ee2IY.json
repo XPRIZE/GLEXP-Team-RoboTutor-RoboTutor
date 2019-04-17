@@ -1,0 +1,94 @@
+{
+  "datasource": [
+    {
+      "type": "CAk_Data",
+      "choices": ["flee", "reed", "seek"],
+      "item_counter": 1,
+      "answer": "LEFT",
+      "target": "flee",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["reed", "meet", "feel"],
+      "item_counter": 2,
+      "answer": "MID",
+      "target": "meet",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["feel", "meet", "keep"],
+      "item_counter": 3,
+      "answer": "RIGHT",
+      "target": "keep",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["peek", "beef", "beet"],
+      "item_counter": 4,
+      "answer": "LEFT",
+      "target": "peek",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["fee", "peel", "seen"],
+      "item_counter": 5,
+      "answer": "RIGHT",
+      "target": "seen",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["knee", "week", "beef"],
+      "item_counter": 6,
+      "answer": "RIGHT",
+      "target": "beef",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["feet", "reel", "seed"],
+      "item_counter": 7,
+      "answer": "LEFT",
+      "target": "feet",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["fee", "knee", "feed"],
+      "item_counter": 8,
+      "answer": "MID",
+      "target": "knee",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["seed", "weep", "fee"],
+      "item_counter": 9,
+      "answer": "RIGHT",
+      "target": "fee",
+      "belowString": "audio",
+      "audio": "true"
+    },
+    {
+      "type": "CAk_Data",
+      "choices": ["reed", "flee", "meet"],
+      "item_counter": 10,
+      "answer": "LEFT",
+      "target": "reed",
+      "belowString": "audio",
+      "audio": "true"
+    }
+  ]
+}
