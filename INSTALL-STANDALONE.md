@@ -2,7 +2,7 @@
 
 ## Overview
 
-The installation steps mentioned below will allow you to setup RoboTutor as a standalone application without installing the RoboLauncher and RoboTransfer applications.
+The installation steps mentioned below will allow you to set up RoboTutor as a standalone application without installing the RoboLauncher and RoboTransfer applications.
 
 ## Requirements
 1. Ensure you have _adb_ installed on your computer. You can [follow the steps in this helpful guide](https://www.androidpit.com/how-to-install-adb-and-fastboot).
@@ -15,11 +15,11 @@ The installation steps mentioned below will allow you to setup RoboTutor as a st
 2. Tap **Build Number** 7 times until it displays _"You are now a developer"_.
 
 ##### Enable USB Debugging
-1. Go to **Settings > Developer** options.
+1. Go to **Settings > Developer options**.
 2. Tap **Enable USB debugging**.
-3. Tap **OK** when prompted by the disclaimer.
+3. Tap **OK** when prompted with a disclaimer.
 4. You should see dialog with you computer's _"RSA key fingerprint"_.
-5. Tap _"Always allow from this computer"_.
+5. Tap **Always allow from this computer**.
 6. Tap **OK**.
 
 ## 2. Assets preparation
@@ -32,7 +32,7 @@ The installation steps mentioned below will allow you to setup RoboTutor as a st
 2. Execute the following scripts to generate zip files:  
     * [ZIP_English_StoriesAudio.bat](https://github.com/XPRIZE/GLEXP-Team-RoboTutor-EnglishAssets/blob/master/ZIP_English_StoriesAudio.bat)  
     * [ZIP_English_TutorAudio.bat](https://github.com/XPRIZE/GLEXP-Team-RoboTutor-EnglishAssets/blob/master/ZIP_English_TutorAudio.bat)  
-3. Unzip the _English_StoriesAudio.1.1.0.zip_ and _English_TutorAudio.1.1.0_ zip files.
+3. Unzip the _English_StoriesAudio.1.1.0.zip_ and _English_TutorAudio.1.1.0.zip_ zip files.
 
 4. Create a folder named _robotutor_assets_ in the internal storage of your Android device.
 
@@ -76,12 +76,13 @@ The installation steps mentioned below will allow you to setup RoboTutor as a st
 
 ## 4. Building and installing the RoboTutor app
 
-1. Ensure that you have **Android Studio** installed. You can [follow the steps in this helpful guide](https://developer.android.com/studio/install.html).
+1. Ensure that you have installed [**Android Studio**](https://developer.android.com/studio/install.html).
 
 2. Open Android Studio and import the RoboTutor project.  
-(Note: You may need to install different versions of the Build Tools and Android SDKs.)
 
-3. Go to Run and select Run 'app' option. This will install the RoboTutor application into your Android device.
+3. Install different versions of the Build Tools and Android SDKs as prompted by Android Studio.
 
-4. Launch the RoboTutor app from the app drawer.  
-  (**Note:** The English version of application can be used right after the app launches. In case of Swahili version, after launching the app, the user needs to wait for the assets to be extracted by the app.)
+4. Go to Run and select Run 'app' option. This will install the RoboTutor application into your Android device.
+
+5. Launch the RoboTutor app from the app drawer.  
+  (**Note:** The English version of application can be used right after the app launches. In case of Swahili version, after launching the app, the user needs to wait for assets extraction to complete.)
