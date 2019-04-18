@@ -4,6 +4,11 @@
 
 The installation steps mentioned below will allow you to set up RoboTutor as a standalone application without installing the RoboLauncher and RoboTransfer applications.
 
+**Note:** 
+1. The installation instructions work for both Windows as well as Mac OS.
+2. Terminal in Mac OS is referred to as Command Prompt in Windows OS.
+3. Use batch scripts (.bat files) for Windows OS and shell scripts (.sh files) for Mac OS.
+
 ## Requirements
 1. Ensure you have _adb_ installed on your computer. You can [follow the steps in this helpful guide](https://www.androidpit.com/how-to-install-adb-and-fastboot).
 2. Connect your device to the computer via USB.
@@ -73,6 +78,8 @@ The installation steps mentioned below will allow you to set up RoboTutor as a s
 2. Execute the following command from terminal to push the configuration file:
 
 		adb push config_sw/config.json /sdcard/Download
+		
+(**Note:** The configuration file needs to be stored in _Download_ folder on _sdcard_ since the application searches for it in _Download_ folder.)
 
 ## 4. Building and installing the RoboTutor app
 
@@ -82,7 +89,8 @@ The installation steps mentioned below will allow you to set up RoboTutor as a s
 
 3. Install different versions of the Build Tools and Android SDKs as prompted by Android Studio.
 
-4. Go to Run and select Run 'app' option. This will install the RoboTutor application into your Android device.
+4. Go to _Run_ and select _Run 'app'_ option. This will install the RoboTutor application into your Android device.  
+Alternatively, you can build the APK by selecting _Build_ and then _Make Project_. Copy the APK generated in _[app](https://github.com/XPRIZE/GLEXP-Team-RoboTutor-RoboTutor/tree/master/app)/build/outputs/apk_ folder to your Android device and install it.
 
 5. Launch the RoboTutor app from the app drawer.  
   (**Note:** The English version of application can be used right after the app launches. In case of Swahili version, after launching the app, the user needs to wait for assets extraction to complete.)
