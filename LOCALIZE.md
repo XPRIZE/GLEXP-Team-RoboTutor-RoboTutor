@@ -7,9 +7,9 @@ There are 9 key steps to localize RoboTutor as mentioned below:
 3. **Image creation:** Identify the images required to represent stories and content in an effective manner.
 4. **Dialog creation:** Create basic dialogs in the local language required for a child to learn and effectively communicate in day-to-day life.
 5. **Time-stamp generation:** Generate time-stamps for audio file to synchronize highlighting of words in the sentences.
-6. **Speech recognition:** Create speech recognition models to identify speech in localized language.
-7. **Handwriting recognition:** Create handwriting recognition models to identify handwritten characters in localized language.
-8. **Font:** Select a suitable font which can correctly render localized content in the application.
+6. **Speech recognition:** Create speech recognition models to recognize speech in localized language.
+7. **Handwriting recognition:** Create handwriting recognition models to recognize handwritten characters in localized language.
+8. **Font:** Select a suitable font which can correctly render localized text in the application.
 9. **Final build:** With all assets prepared, build RoboTutor in the new target language.
 
 ## Process
@@ -22,9 +22,10 @@ Stories section consist of 3 main components as mentioned below:
 Stories can be localized as follows:  
 1. Localize the story audios present in [English_StoriesAudio](https://github.com/XPRIZE/GLEXP-Team-RoboTutor-EnglishAssets/tree/master/English_StoriesAudio/assets/audio/en/cmu/xprize/story_reading/quality_low).
 2. Localize the story content by modifying the JSON files present [here](https://github.com/XPRIZE/GLEXP-Team-RoboTutor-EnglishAssets/tree/master/English_StoriesAudio/assets/story/en).  
-For example, observe the code snippet from [storydata.json](https://github.com/XPRIZE/GLEXP-Team-RoboTutor-EnglishAssets/blob/master/English_StoriesAudio/assets/story/en/1/1_1/storydata.json)  file:
+For example, observe the code snippet from [storydata.json](https://github.com/XPRIZE/GLEXP-Team-RoboTutor-EnglishAssets/blob/master/English_StoriesAudio/assets/story/en/1/1_1/storydata.json) file below and modify the value under the keys _word_, _utterances_ and _sentence_ to use localized text. Update the word's start and end timestamps by modifying the values for keys _start_ and _end_ respectively.  
+(**Note:** Contact the RoboTutor team for more information regarding timestamp generation.)  
 
-```
+```json
 {
       "image": "a_cow_is_my_friend_1_page_2_image_0001.jpg",
       "page": 2,
@@ -83,8 +84,6 @@ For example, observe the code snippet from [storydata.json](https://github.com/X
     }
 ```
 
-Modify the value under the keys _word_, _utterances_ and _sentence_ to use localized text. Update the word's start and end timestamps by modifying the values for keys _start_ and _end_ respectively.  
-(**Note:** Contact the RoboTutor team for more information regarding timestamp generation.)
 3. Replace the images in [story](https://github.com/XPRIZE/GLEXP-Team-RoboTutor-EnglishAssets/tree/master/English_StoriesAudio/assets/story/en) folder with localized images.
 
 ### 2. Instructions
@@ -98,8 +97,9 @@ For speech recognition module, CMUSphinx library is being used. Replace the spee
 (**Note:** Speech recognition models for the languages supported by CMUSphinx can be found [here](https://cmusphinx.github.io/wiki/download/).)
 
 ### 5. Handwriting Recognition
-For handwriting recognition module, LipiTk toolkit is being used.  Replace the modules in [comp_ltkplus](https://github.com/XPRIZE/GLEXP-Team-RoboTutor-RoboTutor/tree/master/comp_ltkplus) folder with localized modules.
+For handwriting recognition module, LipiTk toolkit is being used.  Replace the modules in [comp_ltkplus](https://github.com/XPRIZE/GLEXP-Team-RoboTutor-RoboTutor/tree/master/comp_ltkplus) folder with localized modules.  
 (**Note:** Handwriting recognition models for the languages supported by LipiTk toolkit can be found [here](http://lipitk.sourceforge.net/lipi-toolkit.htm).)
 
 ### 6. Font
-Replace the fonts in [fonts](https://github.com/XPRIZE/GLEXP-Team-RoboTutor-RoboTutor/tree/master/comp_ltkplus/src/main/assets/fonts) folder with the fonts that support your target localization language.
+Replace the fonts in [fonts](https://github.com/XPRIZE/GLEXP-Team-RoboTutor-RoboTutor/tree/master/comp_ltkplus/src/main/assets/fonts) folder with the fonts that support your target localization language.  
+(**Note:** Ensure that the new font files have the same name as the existing font file names.)
