@@ -95,8 +95,7 @@ Game content is available under [assets/tutors](https://github.com/XPRIZE/GLEXP-
 PocketSphinx library is being used for speech recognition. Replace the speech recognition models available in [models](https://github.com/XPRIZE/GLEXP-Team-RoboTutor-RoboTutor/tree/master/comp_listener/src/main/assets/sync/models) folder with localized models. Languages supported by PocketSphinx can be found [here](https://cmusphinx.github.io/wiki/download/). Replace the contents in [models](https://github.com/XPRIZE/GLEXP-Team-RoboTutor-RoboTutor/tree/master/comp_listener/src/main/assets/sync/models) folder with a supported language.
 
 ### 5. Handwriting Recognition
-LipiTk toolkit is being used for handwriting recognition.  Replace the modules in [comp_ltkplus](https://github.com/XPRIZE/GLEXP-Team-RoboTutor-RoboTutor/tree/master/comp_ltkplus) folder with localized modules.  
-Languages supported by LipiTk toolkit can be found [here](http://lipitk.sourceforge.net/resources.htm). Replace the contents in [comp_ltkplus](https://github.com/XPRIZE/GLEXP-Team-RoboTutor-RoboTutor/tree/master/comp_ltkplus) with a supported language.
+LipiTk toolkit is being used for handwriting recognition.  Replace the modules in [comp_ltkplus](https://github.com/XPRIZE/GLEXP-Team-RoboTutor-RoboTutor/tree/master/comp_ltkplus) folder with localized modules. Languages supported by LipiTk toolkit can be found [here](http://lipitk.sourceforge.net/resources.htm). Replace the contents in [comp_ltkplus](https://github.com/XPRIZE/GLEXP-Team-RoboTutor-RoboTutor/tree/master/comp_ltkplus) with a supported language.
 
 ### 6. Font
 Replace the fonts in [fonts](https://github.com/XPRIZE/GLEXP-Team-RoboTutor-RoboTutor/tree/master/comp_ltkplus/src/main/assets/fonts) folder with the fonts that support your target localization language. Ensure that the new font files have the same name as the existing font file names so that the application can pick it up.
