@@ -41,10 +41,10 @@ The installation steps mentioned below will allow you to set up RoboTutor as a s
 
 4. Create a folder named _robotutor_assets_ in the internal storage of your Android device.
 
-5. Copy the assets folder from _English_StoriesAudio.1.1.0_ and _English_TutorAudio.1.1.0_ folders into the _robotutor_assets_ folder.
+5. Copy the assets folder from _English_StoriesAudio.1.1.0_ and _English_TutorAudio.1.1.0_ folders into the _robotutor_assets_ folder using the Windows (or Mac) OS file explorer.
 
 #### Preparing assets for Swahili version
-1. Clone the [**CodeDrop2-Assets**](https://github.com/XPRIZE/GLEXP-Team-RoboTutor-CodeDrop2-Assets) repository:
+1. Clone the [**SwahiliAssets**](https://github.com/XPRIZE/GLEXP-Team-RoboTutor-CodeDrop2-Assets) repository:
 		
 		git clone https://github.com/XPRIZE/GLEXP-Team-RoboTutor-CodeDrop2-Assets.git
     
@@ -85,7 +85,7 @@ The installation steps mentioned below will allow you to set up RoboTutor as a s
 
 1. Ensure that you have installed [**Android Studio**](https://developer.android.com/studio/install.html).
 
-2. Open Android Studio and import the RoboTutor project.  
+2. Open Android Studio and import the [RoboTutor](https://github.com/XPRIZE/GLEXP-Team-RoboTutor-RoboTutor) project.  
 
 3. Install different versions of the Build Tools and Android SDKs as prompted by Android Studio.
 
@@ -93,4 +93,3 @@ The installation steps mentioned below will allow you to set up RoboTutor as a s
 Alternatively, you can build the APK by selecting _Build_ and then _Make Project_. Copy the APK generated in _[app](https://github.com/XPRIZE/GLEXP-Team-RoboTutor-RoboTutor/tree/master/app)/build/outputs/apk_ folder to your Android device and install it.
 
 5. Launch the RoboTutor app from the app drawer.  
-  (**Note:** The English version of application can be used right after the app launches. In case of Swahili version, after launching the app, the user needs to wait for assets extraction to complete.)
