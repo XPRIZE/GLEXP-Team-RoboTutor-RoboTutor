@@ -5,7 +5,7 @@
 The installation steps mentioned below will allow you to set up RoboTutor as a standalone application without installing the RoboLauncher and RoboTransfer applications.
 
 **Note:** 
-1. The installation instructions work for both Windows as well as Mac OS.
+1. The installation instructions work for both Windows and Mac OS.
 2. Terminal in Mac OS is referred to as Command Prompt in Windows OS.
 3. Use batch scripts (.bat files) for Windows OS and shell scripts (.sh files) for Mac OS.
 
@@ -23,7 +23,7 @@ The installation steps mentioned below will allow you to set up RoboTutor as a s
 1. Go to **Settings > Developer options**.
 2. Tap **Enable USB debugging**.
 3. Tap **OK** when prompted with a disclaimer.
-4. You should see dialog with you computer's _"RSA key fingerprint"_.
+4. You should see a dialog with your computer's _"RSA key fingerprint"_.
 5. Tap **Always allow from this computer**.
 6. Tap **OK**.
 
@@ -89,7 +89,7 @@ The installation steps mentioned below will allow you to set up RoboTutor as a s
 
 3. Install different versions of the Build Tools and Android SDKs as prompted by Android Studio.
 
-4. Go to _Run_ and select _Run 'app'_ option. This will install the RoboTutor application into your Android device.  
+4. Go to _Run_ and select _Run 'app'_ option. This will install the RoboTutor application onto your Android device.  
 Alternatively, you can build the APK by selecting _Build_ and then _Make Project_. Copy the APK generated in _[app](https://github.com/XPRIZE/GLEXP-Team-RoboTutor-RoboTutor/tree/master/app)/build/outputs/apk_ folder to your Android device and install it.
 
 5. Launch the RoboTutor app from the app drawer.  
