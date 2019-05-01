@@ -1,5 +1,6 @@
 package cmu.xprize.comp_counting2;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PointF;
@@ -14,6 +15,8 @@ import java.util.Arrays;
 import java.util.List;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -27,6 +30,7 @@ import java.util.HashMap;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.ltkplus.CGlyphSet;
 import cmu.xprize.ltkplus.IGlyphSink;
+import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
@@ -534,6 +538,46 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         stimulusText.setText(stimulus);
 
         // point to it using RoboFinger
+        /*float width = stimulusText.getWidth();
+
+        float scaleStimulusVal = 3.0f;
+        if(width > 500) {
+            scaleStimulusVal = 2.5f;
+        }
+        if(width > 1000) {
+            scaleStimulusVal = 1.25f;
+        }
+        if(width > 2000) {
+            scaleStimulusVal = 1.0f;
+        }
+
+        final float inverseScale = 1 / scaleStimulusVal;
+
+        Animator inflator = CAnimatorUtil.configZoomIn(stimulusText, 600, 0, new BounceInterpolator(), 0f, scaleStimulusVal);
+        inflator.start();
+        inflator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                Animator deflator = CAnimatorUtil.configZoomIn(stimulusText, 600, 0, new LinearInterpolator(), 0f, inverseScale);
+                deflator.start();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+        */
 
         int[] screenCoord = new int[2];
         stimulusText.getLocationOnScreen(screenCoord);
