@@ -283,6 +283,27 @@ public class CTutorData_Metadata {
                     result.add(descriptor.toString());
                     break;
 
+                case "bigmath":
+                    result.add("<b>Math</b>");
+                    break;
+
+                case "place":
+                case "place.value":
+                    result.add("<b>Place Value</b>");
+                    break;
+
+                case "numcompare":
+                    result.add("<b>Number Comparison</b>");
+                    break;
+
+                case "picmatch":
+                    result.add("<b>Picture Match</b>");
+                    break;
+
+                case "spelling":
+                    result.add("<b>Spelling</b>");
+                    break;
+
                 case "numberscale":
                     result.add("<b>Number Scale</b>");
                     String numscaleSuffix = tutor.tutor_id.split(":")[1];
@@ -308,7 +329,8 @@ public class CTutorData_Metadata {
                     break;
             }
         }catch (Exception e) {
-            result.add("<b>Error generating name</b>");
+            // result.add("<b>Error generating name</b>");
+            // CHUNT commenting out (for now) so that it doesn't show the error
         }
 
         // give it some empty lines
@@ -322,6 +344,12 @@ public class CTutorData_Metadata {
 
 
     private static ArrayList<String> processStoryTutorId(CAt_Data tutor, ArrayList<String> result) {
+
+        // CHUNT 4/14
+        // story.hear::1_1 --> "Error generating name"
+        // story.[hear|echo|read]::\d_\d --> "Error generating name"
+
+
         String[] splitStory = tutor.tutor_id.split(":");
         String storySuffix = splitStory[2];
 
@@ -419,6 +447,12 @@ public class CTutorData_Metadata {
     private static ArrayList<String> processWriteTutorId(CAt_Data tutor, ArrayList<String> result) {
         // USIDORE Write.lit Write.math
         // DO NEXT
+
+        // CHUNT 4/14
+        // write.wrd.dic:phon.r2R --> "Write null"
+        // write.wrd.trc:phon.m2M --> "Write null"
+        // write.wrd:dolch_preprimer --> "Write null"
+        // write.wrd:dolch_1st_grade --> "Write null"
 
         String splitDesc[] = tutor.tutor_desc.split("\\.");
         String modeOfEntry = "Write";
@@ -579,6 +613,16 @@ public class CTutorData_Metadata {
 
     private static ArrayList<String> processAkiraTutorId(CAt_Data tutor, ArrayList<String> result) {
 
+        // CHUNT 4/14
+
+        // CHUNT LIT
+        // akira:ltr.lc_A..D_rand
+        // akira:ltr.lc_E..G_rand --> "Identify null"
+        // akira:wrd.a2AE --> "Identify null"
+        // akira:wrd.th2TH --> "Identify null"
+        // akira:wrd.dolch_preprimer --> "Identify null"
+        // akira:wrd.dolch_2nd_grade--> "Identify null"
+
         //
         // LIT
         // "akira:vow.ltr.lc:I..I.vow.10.rand.say.8"
@@ -681,6 +725,23 @@ public class CTutorData_Metadata {
      */
     private static ArrayList<String> processBubblePopTutorId(CAt_Data tutor, ArrayList<String> result) {
 
+        // new cases for English Version:
+
+        // CHUNT 4/14
+        // letters
+        // bpop.ltr.uc:A..D.asc.noShow.rise --> "null A to Z", "<b>Error generating name</b>"
+        // bpop.ltr.lc:A..D.asc.show.rise --> "null A to Z", "<b>Error generating name</b>"
+        // change to bpop.ltr.lc:A..D.[all|vow].[asc|rand].... [show|noShow] should be in index 7
+
+        // phon words
+        // bpop.wrd:u2AH.show.mc --> Fail on first row
+        // bpop.wrd:oo2UH.show.mc
+        // change to bpop.wrd:phon.oo2UH.show.mc
+
+        // common words
+        // bpop.wrd:dolch_preprimer.show.mc
+        // bpop.wrd:dolch_preprimer.noShow.mc
+        // bpop.wrd:dolch_1st_grade.show.rise
         result.add("<b>Bubble Pop</b>");
 
 
@@ -745,7 +806,7 @@ public class CTutorData_Metadata {
                 result.add(String.format("%s %s", ltrOrderText, ltrTypeText));
 
 
-                showWord = suffixSplit[7];
+                showWord = suffixSplit[7]; // CHUNT wrong index...
                 switch(showWord) {
                     case "show":
                         result.add("Audio plus visual stimuli");
@@ -777,7 +838,7 @@ public class CTutorData_Metadata {
 
                 showWord = null;
 
-                boolean syl = suffixSplit[3].equals("syl");
+                boolean syl = suffixSplit[3].equals("syl"); // CHUNT e2EH.show.rise not enough
                 // check if syllable
                 if(syl) {
                     if (suffixSplit[0].substring(1).equals("ch")) {
@@ -812,6 +873,12 @@ public class CTutorData_Metadata {
                         case "nonwrd":
                             result.add(String.format("Identify <b>nonsense words with %s letters</b>", suffixSplit[1]));
                             showWord = suffixSplit[5];
+                            break;
+
+                        case "phon":
+
+                            result.add(String.format("Identify words that map <b>grapheme %s</b>", "GGG"));
+                            result.add(String.format("to <b>phoneme %s</b>", "PPP"));
                             break;
                     }
 
