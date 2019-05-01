@@ -692,23 +692,23 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
                 break;
 
             case PICMATCH:
-                thumbId = R.drawable.thumb_picmatch_qa;
+                thumbId = R.drawable.thumb_picture_matching;
                 break;
 
             case PLACEVALUE:
-                thumbId = R.drawable.thumb_placevalue_qa;
+                thumbId = R.drawable.thumb_place_value;
                 break;
 
             case NUMCOMPARE:
-                thumbId = R.drawable.thumb_numcompare_qa;
+                thumbId = R.drawable.thumb_numcompare;
                 break;
 
             case SPELLING:
-                thumbId = R.drawable.thumb_spelling_qa;
+                thumbId = R.drawable.thumb_spelling_tutor;
                 break;
 
             case BIGMATH:
-                thumbId = R.drawable.thumb_bigmath_qa;
+                thumbId = R.drawable.thumb_bigmath_1d;
                 break;
 
             default:

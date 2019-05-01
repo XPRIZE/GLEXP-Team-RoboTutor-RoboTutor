@@ -131,6 +131,7 @@ public class CTutorData_Metadata {
                 return TCONST.Thumb.PICMATCH;
 
             case "placevalue":
+            case "place":
                 return TCONST.Thumb.PLACEVALUE;
 
             case "numcompare":
