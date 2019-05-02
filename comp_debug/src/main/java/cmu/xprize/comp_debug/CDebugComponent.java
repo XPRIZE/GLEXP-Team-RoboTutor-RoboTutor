@@ -2,6 +2,7 @@ package cmu.xprize.comp_debug;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Build;
 import android.support.percent.PercentRelativeLayout;
 import android.text.Html;
@@ -37,6 +38,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
     protected IButtonController mButtonController;
 
     private TextView SskillTitle;
+    private ImageView SskillImage;
     private TextView ScurrentTutorName;
     private TextView SnextTutorName;
     private TextView SharderTutorName;
@@ -194,6 +196,7 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
         mContainer = (ViewGroup) findViewById(R.id.SdebugContainer);
 
         SskillTitle       = (TextView) findViewById(R.id.SskillTitle);
+        SskillImage       = (ImageView) findViewById(R.id.SskillImage);
         ScurrentTutorName = (TextView) findViewById(R.id.ScurrentTutorName);
         SnextTutorName    = (TextView) findViewById(R.id.SnextTutorName);
         SharderTutorName  = (TextView) findViewById(R.id.SharderTutorName);
@@ -488,9 +491,9 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
     public void initDisplay() {
 
-        String skillType = "";
-        String text      = "Skill: Unknown";
+        String text      = "Skill: ";
         int    color     = 0;
+        int    imgid = 0;
 
         // Init the skill pointers
         //
@@ -498,33 +501,37 @@ public class CDebugComponent extends PercentRelativeLayout implements IDebugLaun
 
             case SELECT_WRITING:
                 color = 0x00DD00;
-                text  = "Skill: Reading & Writing";
-                skillType = "reading_writing";
+                text  += "Reading & Writing";
+                imgid = R.drawable.button_letters_normal;
                 break;
 
             case SELECT_STORIES:
                 color = 0xFFB000;
-                text  = "Skill: Stories";
-                skillType = "stories" + "/" + getLanguage();
+                text  += "Stories";
+                imgid = R.drawable.button_stories_normal;
                 break;
 
             case SELECT_MATH:
                 color = 0xFF0000;
-                text  = "Skill: Math";
-                skillType = "math";
+                text  += "Math";
+                imgid = R.drawable.button_math_normal;
                 break;
 
             case SELECT_SHAPES:
                 color = 0x2DA4FC;
-                text  = "Skill: Shapes";
-                skillType = "shapes";
+                text  += "Shapes";
                 break;
 
+            default:
+                text += "Unknown";
+                break;
         }
 
         //customView.setDataSource("[local_file]" + skillType);
         mContainer.setBackgroundColor(color);
-        SskillTitle.setText(text);
+        SskillTitle.setText(text); // BIOLOGY change this to say "Developer mode"
+        if (imgid != 0)
+        SskillImage.setBackground(getResources().getDrawable(imgid, null));
     }
 
 
