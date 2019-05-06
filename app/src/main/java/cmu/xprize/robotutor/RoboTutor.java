@@ -136,7 +136,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     private static final String LOG_SEQUENCE_ID = "LOG_SEQUENCE_ID";
 
-    public static final boolean OLD_MENU = false;
+    public static final boolean OLD_MENU = true; // NEW_MENU make this a config variable
 
 
     private CMediaController    mMediaController;

@@ -704,6 +704,7 @@ public class CQn_Component extends ViewAnimator implements IEventListener, IVMan
             mViewManager.loadJSON(new JSONObject(jsonData), null);
 
             // UHQ load the relevant mcq json data for cloze questions
+            // FOR_HUI: should not load if story.pic.hear or story.gen.hear
             String jsonMcq = JSON_Helper.cacheDataByName(EXTERNPATH + TCONST.STORYMCQ);
             Log.d(TCONST.DEBUG_STORY_TAG, "logging jsonMcq:");
             mViewManager.loadJSON(new JSONObject(jsonMcq), null);

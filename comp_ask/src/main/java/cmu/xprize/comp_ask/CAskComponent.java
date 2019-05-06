@@ -216,7 +216,7 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
             // fill in with Math, Reading, Lit icons
             CAskElement lit = mDataSource.items[0];
-            CImageButton litView = (CImageButton) findViewById(getResources().getIdentifier(lit.componentID, "id", packageName));
+            ImageButton litView = (ImageButton) findViewById(getResources().getIdentifier(lit.componentID, "id", packageName));
 
             //litView.setImageResource(R.drawable); // button_stories_select
 
@@ -298,7 +298,7 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
                 int test = getResources().getIdentifier(element.componentID, "id", packageName);
 
-                CImageButton ibView = (CImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
+                ImageButton ibView = (ImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
 
                 ibView.setImageDrawable(null);
             }

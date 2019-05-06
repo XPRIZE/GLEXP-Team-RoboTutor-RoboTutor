@@ -273,19 +273,18 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
      * @param assetPath
      */
     public void initStory(IVManListener owner, String assetPath, String location) {
-        for(int i = 0; i < questions.length; i++){
-            if (questions[i].distractor != null) {
-                clozeIndices.add(i+1); // TRACE_CLOZE (1) adding indices...
+
+        // FOR_HUI... these should not exist
+        try {
+            for (int i = 0; i < questions.length; i++) {
+                if (questions[i].distractor != null) {
+                    clozeIndices.add(i + 1); // TRACE_CLOZE (1) adding indices...
+                }
             }
+        } catch (Exception e) {
+            Log.e(TAG, "Missing mcq.json... please add.");
         }
-        int numPara = 0;
-        int numLineCountdown = 0;
-        for(int i = 0; i < data.length; i++){
-            numPara += data[i].text.length;
-            for(int j = 0; j < data[i].text.length; j++){
-                numLineCountdown += data[i].text[j].length;
-            }
-        }
+
         mCurrLineInStory = 0;
         mOwner        = owner;
         mAsset        = assetPath; // ZZZ assetPath... TCONST.EXTERN
@@ -499,21 +498,26 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         setButtonState(mSay, speakButtonEnable);
         setButtonState(mSay, speakButtonShow);
 
-        mPageFlip.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Log.v(QGRAPH_MSG, "event.click: " + " CQn_ViewManagerASB: PAGEFLIP");
+        try {
+            mPageFlip.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Log.v(QGRAPH_MSG, "event.click: " + " CQn_ViewManagerASB: PAGEFLIP");
 
-                mParent.onButtonClick(TCONST.PAGEFLIP_BUTTON);
-            }
-        });
+                    mParent.onButtonClick(TCONST.PAGEFLIP_BUTTON);
+                }
+            });
 
-        mSay.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Log.v(QGRAPH_MSG, "event.click: " + " CQn_ViewManagerASB:onButtonClick SPEAKBUTTON");
+            mSay.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Log.v(QGRAPH_MSG, "event.click: " + " CQn_ViewManagerASB:onButtonClick SPEAKBUTTON");
 
-                mParent.onButtonClick(TCONST.SPEAK_BUTTON);
-            }
-        });
+                    mParent.onButtonClick(TCONST.SPEAK_BUTTON);
+                }
+            });
+        }
+        catch(Exception e) {
+            Log.e(TAG, "error:" + e);
+        }
 
     }
 
@@ -2574,6 +2578,8 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
      */
     @Override
     public void displayPictureMatching(){
+
+        // OPEN_SOURCE picmatch... place debug breakpoint here.
         if (numPicMatch==2){
             InputStream in1;
             InputStream in2;
@@ -2625,7 +2631,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                 if (assetLocation.equals(TCONST.EXTERN)) {
                     in1 = new FileInputStream(mAsset + data[mCurrPage].image); // ZZZ load image
                     in2 = new FileInputStream(mAsset + randImg1); // ZZZ load image
-                    in3 = new FileInputStream(mAsset + randImg2);
+                    in3 = new FileInputStream(mAsset + randImg2); // OPEN_SOURCE not enough images for picmatch
                 } else {
                     in1 = JSON_Helper.assetManager().open(mAsset + data[mCurrPage].image); // ZZZ load image
                     in2 = JSON_Helper.assetManager().open(mAsset + randImg1); // ZZZ load image
