@@ -198,7 +198,7 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
             if (element == null) break;
             int viewID = getResources().getIdentifier(element.componentID, "id", packageName);
 
-            View view = findViewById(viewID); // NEW_MENU
+            View view = findViewById(viewID);
 
             ImageButton ibView = (ImageButton) view;
 

@@ -10,6 +10,7 @@ import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_session.AS_CONST;
 import cmu.xprize.robotutor.RoboTutor;
 import cmu.xprize.robotutor.tutorengine.CTutor;
+import cmu.xprize.robotutor.tutorengine.CTutorEngine;
 import cmu.xprize.util.CAt_Data;
 import cmu.xprize.util.CPlacementTest_Tutor;
 import cmu.xprize.util.TCONST;
@@ -75,8 +76,19 @@ public class PromotionMechanism {
                 break;
         }
 
+        // NEW_MENU this should only be incremented in the CYCLE_CONTENT menu type
         if (!wasRepeat) {
-            _studentModel.incrementActiveSkill(); // MENU_LOGIC... activeSkill should be incremented after assessment
+
+            switch (CTutorEngine.menuType) {
+                case CYCLE_CONTENT:
+                    _studentModel.incrementActiveSkill(); // MENU_LOGIC... activeSkill should be incremented after assessment
+                    break;
+
+                case STUDENT_CHOICE:
+                    _studentModel.updateActiveSkill(lastSkillPlayed);
+                    break;
+            }
+
         }
     }
 
