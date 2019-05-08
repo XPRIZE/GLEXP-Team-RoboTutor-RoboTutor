@@ -109,12 +109,17 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 //    private static final String debugTutorId = "place.value:1";
 //    private static final String debugTutorFile = "[file]place.value__pv-11..99.2D.diff0.3.json";
     private static final boolean QUICK_DEBUG = true;
+    private static final String QUICK_DEBUG_TEST_KEY = "story.pic:missing_prompt";
 
     // BUGS to check...
     // in the future, this could be a cool debugging screen that pops up and leads you through bugs
     // there could also be an in-app bug-reporting system
     private static Map<String, QuickDebugTutor> bugMap = new HashMap<>();
     static {
+
+        // --------
+        // RESOLVED
+        // --------
         QuickDebugTutor bug1 = new QuickDebugTutor("write.wrd.dic",
                 "write.wrd.dic:word.dolch_3rd_grade",
                 "[file]write.wrd.dic_word.dolch_3rd_grade.json");
@@ -133,38 +138,64 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         bugMap.put("nd:missing_prompts", bug2);
         bug2.resolve(); // FIXED
 
-        QuickDebugTutor bug3 = new QuickDebugTutor(
-                "bpop.gl",
-                "bpop.gl:dot.0..9.GL_SD_OFF1_L.bub2.6",
-                "[file]bpop.gl_dot.0..9.GL_SD_OFF1_L.bub2.6.json"
-        );
-        bug3.setComment("Should say 'tap the bigger number' or 'tap the smaller number");
-        bugMap.put("bpop.gl:missing_prompts", bug3);
-
-        QuickDebugTutor bug4 = new QuickDebugTutor(
-                "bpop.mn",
-                "bpop.mn:0..9.MN-SD-UP-OFF1-BL1.incr.4",
-                "[file]bpop.mn_0..9.MN-SD-UP-OFF1-BL1.incr.4.json"
-        );
-        bug4.setComment("Should say 'tap the missing number'");
-        bugMap.put("bpop.mn:wrong_prompt", bug4);
-
         QuickDebugTutor bug5 = new QuickDebugTutor(
                 "place.value",
                 "place.value:pv-100..499.3D.diff0.17",
                 "[file]place.value_pv-100..499.3D.diff0.17.json"
         );
         bug5.setComment("Missing audio 'tap inside the box'; stimulus box is ugly; second screen missing number audio.");
+        bug5.setLocation("CCountingXComponent");
         bugMap.put("place.value:many_bugs", bug5);
+        bug5.resolve(); // FIXED
 
         QuickDebugTutor bug6 = new QuickDebugTutor(
                 "place.value",
-                "place.value:pv-100..499.3D",
-                "[file]place.value_pv-100..499.3D.json"
+                "place.value:pv-100..499.3D.diff2.26",
+                "[file]place.value_pv-100..499.3D.diff2.26.json"
         );
         bug6.setComment("Missing audio on second screen.");
+        bug6.setPriority(QuickDebugTutor.Priority.MUST);
         bugMap.put("place.value:missing_audio", bug6);
+        bug6.resolve(); // FIXED
 
+        QuickDebugTutor bug11 = new QuickDebugTutor(
+                "place.value",
+                "place.value:pv-100..499.3D.diff2.26",
+                "[file]place.value_pv-100..499.3D.diff2.26.json"
+        );
+        bug11.setComment("countx audio should just say 'please tap' if place value.");
+        bug11.setLocation("countingx/animator_graph.json");
+        bug11.setPriority(QuickDebugTutor.Priority.SHOULD);
+        bugMap.put("place.value:wrong_audio", bug11);
+        bug11.resolve(); // FIXED
+
+        // -------
+        // TO FIX
+        // -------
+
+        // STATUS: need audio (see MISSING.txt)
+        QuickDebugTutor bug3 = new QuickDebugTutor(
+                "bpop.gl",
+                "bpop.gl:dot.0..9.GL_SD_OFF1_L.bub2.6",
+                "[file]bpop.gl_dot.0..9.GL_SD_OFF1_L.bub2.6.json"
+        );
+        bug3.setComment("Should say 'tap the bigger number' or 'tap the smaller number");
+        bug3.setLocation("bubble_pop/animator_graph.json");
+        bug3.setPriority(QuickDebugTutor.Priority.MUST);
+        bugMap.put("bpop.gl:wrong_prompt", bug3);
+
+        // STATUS: need audio (see MISSING.txt)
+        QuickDebugTutor bug4 = new QuickDebugTutor(
+                "bpop.mn",
+                "bpop.mn:0..9.MN-SD-UP-OFF1-BL1.incr.4",
+                "[file]bpop.mn_0..9.MN-SD-UP-OFF1-BL1.incr.4.json"
+        );
+        bug4.setComment("Should say 'tap the missing number'");
+        bug4.setLocation("bubble_pop/animator_graph.json");
+        bug4.setPriority(QuickDebugTutor.Priority.MUST);
+        bugMap.put("bpop.mn:wrong_prompt", bug4);
+
+        // STATUS: need audio (see MISSING.txt)
         QuickDebugTutor bug7 = new QuickDebugTutor(
                 "story.parrot",
                 "story.parrot::ea2eh_wb_2",
@@ -173,6 +204,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         bug7.setComment("Should say 'Read after me'");
         bugMap.put("story.parrot:missing_prompt", bug7);
 
+        // STATUS: need audio (see MISSING.txt)
         QuickDebugTutor bug8 = new QuickDebugTutor(
                 "story.pic.hear",
                 "story.pic.hear::1_13",
@@ -181,13 +213,25 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         bug8.setComment("Missing audio prompts e.g. 'Which picture?'");
         bugMap.put("story.pic:missing_prompt", bug8);
 
+        // STATUS: review
         QuickDebugTutor bug9 = new QuickDebugTutor(
                 "numcompare",
                 "numcompare:1d",
                 "[file]numcompare_1d.json"
         );
         bug9.setComment("Audio prompts should not say 'First tap on the ones' if there are only ones.");
+        bug9.setPriority(QuickDebugTutor.Priority.COULD);
         bugMap.put("numcompare:wordy_prompt", bug9);
+
+        // STATUS: review
+        QuickDebugTutor bug10 = new QuickDebugTutor(
+                "place.value",
+                "place.value:pv-100..499.3D.diff2.26",
+                "[file]place.value_pv-100..499.3D.diff2.26.json"
+        );
+        bug10.setComment("'Good job' audio is overlapping on second screen.");
+        bug10.setPriority(QuickDebugTutor.Priority.COULD);
+        bugMap.put("place.value:overlapping_audio", bug10);
 
     }
 
@@ -693,7 +737,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "xx: startSessionManager in 'onStartTutor'");
 
-        QuickDebugTutor debugMe = bugMap.get(1);
+        QuickDebugTutor debugMe = bugMap.get(QUICK_DEBUG_TEST_KEY);
         // CTutorEngine.quickLaunch(debugTutorVariant, debugTutorId, debugTutorFile);
         CTutorEngine.quickLaunch(debugMe.tutorVariant, debugMe.tutorId, debugMe.tutorFile);
 
