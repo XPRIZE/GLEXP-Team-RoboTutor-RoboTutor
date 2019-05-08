@@ -107,9 +107,9 @@
           "reuse": true,
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#feedback,value#CHIME_FEEDBACK:String", "features":""},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{CurrentCountt}}.mp3",  "soundpackage":"xprize_numbers", "volume": 0.9, "mode":"flow", "features": ""},
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{CurrentCountt}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""},
             {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "Na.mp3",  "soundpackage":"xprize", "volume": 1.0, "mode":"flow", "features": ""},
-            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{CurrentCount}}.mp3",  "soundpackage":"xprize_numbers", "volume": 0.9, "mode":"flow", "features": ""}
+            {"type": "QUEUEDAUDIO", "command": "PLAY", "soundsource": "{{CurrentCount}}.mp3",  "soundpackage":"numbers", "volume": 0.9, "mode":"flow", "features": ""}
 
           ],
           "preexit":[],
