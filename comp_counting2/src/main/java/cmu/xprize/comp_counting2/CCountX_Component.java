@@ -1,6 +1,5 @@
 package cmu.xprize.comp_counting2;
 
-import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PointF;
@@ -12,11 +11,9 @@ import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import java.util.Arrays;
-import java.util.List;
+
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.BounceInterpolator;
-import android.view.animation.LinearInterpolator;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -30,7 +27,6 @@ import java.util.HashMap;
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.ltkplus.CGlyphSet;
 import cmu.xprize.ltkplus.IGlyphSink;
-import cmu.xprize.util.CAnimatorUtil;
 import cmu.xprize.util.ILoadableObject;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
@@ -145,7 +141,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         checkOne = (TextView) findViewById(R.id.checkOne);
         checkTen = (TextView) findViewById(R.id.checkTen);
         checkHundred = (TextView) findViewById(R.id.checkHundred);
-        stimulusText = (TextView) findViewById(R.id.stimulusText);
+
 
         bManager = LocalBroadcastManager.getInstance(getContext());
         drawIndex =-10;
@@ -211,11 +207,21 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
 
         resetView();
-        if(mode != "placevalue"){
-            surfaceView.initTenFrame();}
-        else{
-            surfaceView.initTenFramePlaceValue();
+
+        switch(mode) {
+            case "countingx":
+                stimulusText = (TextView) findViewById(R.id.countxStimulusText);
+                surfaceView.initTenFrame();
+                break;
+
+            case "placevalue":
+                stimulusText = (TextView) findViewById(R.id.placevalueStimulusText);
+                //stimulusText.setBackgroundColor(Color.WHITE);
+                surfaceView.initTenFramePlaceValue();
+                break;
         }
+        stimulusText.setVisibility(VISIBLE);
+
         //surfaceView.resetCounter(); // functionality already called above
 
         // reset vieresetView();
