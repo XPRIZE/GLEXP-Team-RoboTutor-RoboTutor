@@ -49,6 +49,9 @@ public class COUNTX_CONST {
 
     public static final String DONE_COUNTING_TO_N = "DONE_COUNTING_TO_N";
 
+    // FEATURES
+    public static final String FTR_COUNTX = "FTR_COUNTX";
+    public static final String FTR_PLACEVALUE = "FTR_PLACEVALUE";
 
     public static final String DONE_MOVING_TO_TEN_FRAME = "DONE_MOVING_TO_TEN_FRAME";
     public static final String DONE_SAYING_FINAL_COUNT = "DONE_SAYING_FINAL_COUNT";

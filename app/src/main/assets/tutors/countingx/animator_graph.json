@@ -291,8 +291,9 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "logState", "parms": "type#node,value#UPDATESTIMULUS:String", "features":""},
 
-            {"name": "RoboFinger tap demo", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "pointAtCenterOfActivity", "parms": "", "features":""},
-            {"name": "Update Stimulus Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Please tap inside the box.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""},
+            {"name": "RoboFinger tap demo", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "pointAtCenterOfActivity", "parms": "", "features":"FTR_COUNTX"},
+            {"name": "Update Stimulus Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Please tap inside the box.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":"FTR_COUNTX"},
+            {"name": "Update Stimulus Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "Please tap.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":"FTR_PLACEVALUE"},
             {"name": "Update Stimulus Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "until you find.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""},
             {"name": "Update Stimulus Display", "type": "QUEUEDCOMMAND", "id": "SCountingX", "method": "updateAndIndicateStimulus", "parms": "", "features":""},
             {"name": "Update Stimulus Audio", "type": "AUDIO", "command": "PLAY", "soundsource": "this number.mp3", "soundpackage":"default", "volume": 1.0, "mode": "flow", "features":""},

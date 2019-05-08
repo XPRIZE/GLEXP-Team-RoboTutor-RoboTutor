@@ -28,15 +28,19 @@ import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.ltkplus.CGlyphSet;
 import cmu.xprize.ltkplus.IGlyphSink;
 import cmu.xprize.util.ILoadableObject;
+import cmu.xprize.util.IPublisher;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
+
+import static cmu.xprize.comp_counting2.COUNTX_CONST.FTR_COUNTX;
+import static cmu.xprize.comp_counting2.COUNTX_CONST.FTR_PLACEVALUE;
 
 /**
  * Created by kevindeland on 10/20/17.
  */
 
-public class CCountX_Component extends PercentRelativeLayout implements ILoadableObject {
+public class CCountX_Component extends PercentRelativeLayout implements ILoadableObject, IPublisher {
 
     // Infrastructure
     protected final Handler mainHandler  = new Handler(Looper.getMainLooper());
@@ -208,16 +212,20 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
         resetView();
 
+        retractFeature(FTR_PLACEVALUE);
+        retractFeature(FTR_COUNTX);
         switch(mode) {
             case "countingx":
                 stimulusText = (TextView) findViewById(R.id.countxStimulusText);
                 surfaceView.initTenFrame();
+                publishFeature(FTR_COUNTX);
                 break;
 
             case "placevalue":
                 stimulusText = (TextView) findViewById(R.id.placevalueStimulusText);
                 //stimulusText.setBackgroundColor(Color.WHITE);
                 surfaceView.initTenFramePlaceValue();
+                publishFeature(FTR_PLACEVALUE);
                 break;
         }
         stimulusText.setVisibility(VISIBLE);
@@ -914,6 +922,51 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
                 mainHandler.post(qCommand);
             }
         }
+    }
+
+    @Override
+    public void publishState() {
+
+    }
+
+    @Override
+    public void publishValue(String varName, String value) {
+
+    }
+
+    @Override
+    public void publishValue(String varName, int value) {
+
+    }
+
+    @Override
+    public void publishFeatureSet(String featureset) {
+
+    }
+
+    @Override
+    public void retractFeatureSet(String featureset) {
+
+    }
+
+    @Override
+    public void publishFeature(String feature) {
+
+    }
+
+    @Override
+    public void retractFeature(String feature) {
+
+    }
+
+    @Override
+    public void publishFeatureMap(HashMap featureMap) {
+
+    }
+
+    @Override
+    public void retractFeatureMap(HashMap featureMap) {
+
     }
 
     /**
