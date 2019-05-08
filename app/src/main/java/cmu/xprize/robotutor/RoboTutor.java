@@ -169,11 +169,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         bugMap.put("place.value:wrong_audio", bug11);
         bug11.resolve(); // FIXED
 
-        // -------
-        // TO FIX
-        // -------
-
-        // STATUS: need audio (see MISSING.txt)
         QuickDebugTutor bug3 = new QuickDebugTutor(
                 "bpop.gl",
                 "bpop.gl:dot.0..9.GL_SD_OFF1_L.bub2.6",
@@ -183,8 +178,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         bug3.setLocation("bubble_pop/animator_graph.json");
         bug3.setPriority(QuickDebugTutor.Priority.MUST);
         bugMap.put("bpop.gl:wrong_prompt", bug3);
+        bug3.resolve(); // FIXED
 
-        // STATUS: need audio (see MISSING.txt)
         QuickDebugTutor bug4 = new QuickDebugTutor(
                 "bpop.mn",
                 "bpop.mn:0..9.MN-SD-UP-OFF1-BL1.incr.4",
@@ -194,8 +189,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         bug4.setLocation("bubble_pop/animator_graph.json");
         bug4.setPriority(QuickDebugTutor.Priority.MUST);
         bugMap.put("bpop.mn:wrong_prompt", bug4);
+        bug4.resolve(); // FIXED
 
-        // STATUS: need audio (see MISSING.txt)
         QuickDebugTutor bug7 = new QuickDebugTutor(
                 "story.parrot",
                 "story.parrot::ea2eh_wb_2",
@@ -203,6 +198,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         );
         bug7.setComment("Should say 'Read after me'");
         bugMap.put("story.parrot:missing_prompt", bug7);
+        bug7.resolve(); // FIXED
 
         // STATUS: need audio (see MISSING.txt)
         QuickDebugTutor bug8 = new QuickDebugTutor(
@@ -212,7 +208,11 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         );
         bug8.setComment("Missing audio prompts e.g. 'Which picture?'");
         bugMap.put("story.pic:missing_prompt", bug8);
-
+        bug8.resolve(); // FIXED
+        
+        // -------
+        // TO FIX
+        // -------
         // STATUS: review
         QuickDebugTutor bug9 = new QuickDebugTutor(
                 "numcompare",
