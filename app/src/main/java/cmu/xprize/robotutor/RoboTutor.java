@@ -39,7 +39,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.comp_logging.CLogManager;
@@ -57,6 +59,7 @@ import cmu.xprize.robotutor.tutorengine.CMediaController;
 
 import cmu.xprize.robotutor.tutorengine.CTutorAssetManager;
 
+import cmu.xprize.robotutor.tutorengine.QuickDebugTutor;
 import cmu.xprize.robotutor.tutorengine.util.CAssetObject;
 import cmu.xprize.util.CDisplayMetrics;
 import cmu.xprize.util.CLoaderView;
@@ -105,38 +108,94 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 //    private static final String debugTutorVariant = "placevalue";
 //    private static final String debugTutorId = "place.value:1";
 //    private static final String debugTutorFile = "[file]place.value__pv-11..99.2D.diff0.3.json";
-    private static final boolean QUICK_DEBUG = false;
-    private static final String debugTutorVariant = "bpop.wrd";
-    private static final String debugTutorId = "bpop.wrd:2ch_dolch";
-    private static final String debugTutorFile = "[file]bpop.wrd_2ch.dolch.noShow.rise.json";
+    private static final boolean QUICK_DEBUG = true;
 
+    // BUGS to check...
+    // in the future, this could be a cool debugging screen that pops up and leads you through bugs
+    // there could also be an in-app bug-reporting system
+    private static Map<String, QuickDebugTutor> bugMap = new HashMap<>();
+    static {
+        QuickDebugTutor bug1 = new QuickDebugTutor("write.wrd.dic",
+                "write.wrd.dic:word.dolch_3rd_grade",
+                "[file]write.wrd.dic_word.dolch_3rd_grade.json");
+        bug1.setComment("Missing the word 'if' and hangs");
+        bugMap.put("write:missing_word", bug1);
+        bug1.resolve(); // FIXED
 
-    //amogh missing letter
-//    private static final String debugTutorFile = "[file]write.missingLtr_0.1.2.fin.s.json";
-    //amogh dictation
-//    private static final String debugTutorFile = "[file]write.wrd.dic_lc.begin.ha.18.json";
+        QuickDebugTutor bug2 = new QuickDebugTutor(
+                "numcompare",
+                "numcompare:1d",
+                "[file]numcompare_1d.json"
+                );
+        bug2.setComment("Missing audio");
+        bug2.setComment("assets/audio/en/cmu/xprize/nd/{{SNumDiscr.digitCompare}}.mp3");
+        bug2.setComment("assets/audio/en/cmu/xprize/nd/So the bigger number is.mp3");
+        bugMap.put("nd:missing_prompts", bug2);
+        bug2.resolve(); // FIXED
 
-//    private static final String debugTutorVariant = "write.ltr.uc.trc";
-//    private static final String debugTutorId = "write.wrd:story_1_1";
-//    private static final String debugTutorFile = "[file]write.ltr.uc.trc_vow.asc.A..Z.1.json";
+        QuickDebugTutor bug3 = new QuickDebugTutor(
+                "bpop.gl",
+                "bpop.gl:dot.0..9.GL_SD_OFF1_L.bub2.6",
+                "[file]bpop.gl_dot.0..9.GL_SD_OFF1_L.bub2.6.json"
+        );
+        bug3.setComment("Should say 'tap the bigger number' or 'tap the smaller number");
+        bugMap.put("bpop.gl:missing_prompts", bug3);
 
-//    private static final boolean QUICK_DEBUG = false;
-//    private static final String debugTutorVariant = "picmatch";
-//    private static final String debugTutorId = "picmatch::animal";
-//    private static final String debugTutorFile = "[file]picmatch_food.json";
-    //private static final String debugTutorVariant = "numdiscr";
-    //private static final String debugTutorVariant = "math";
-    //private static final String debugTutorId = "numdiscr:sample";
-    //private static final String debugTutorId = "math:0..8.ADD-1D-V-S.rand.3";
-    //private static final String debugTutorFile = "[file]numdiscr_sample.json";
-    // private static final String debugTutorFile = "[file]math_0..800.ADD-100-V-S.incr.13.json";
+        QuickDebugTutor bug4 = new QuickDebugTutor(
+                "bpop.mn",
+                "bpop.mn:0..9.MN-SD-UP-OFF1-BL1.incr.4",
+                "[file]bpop.mn_0..9.MN-SD-UP-OFF1-BL1.incr.4.json"
+        );
+        bug4.setComment("Should say 'tap the missing number'");
+        bugMap.put("bpop.mn:wrong_prompt", bug4);
 
-    //private static final String debugTutorFile = "[file]math_10..80.SUB-2D-V-S.rand.12.json";
-    public static final String MATRIX_FILE = "dev_data.open.json"; // "dev_data.json"; // SUPER_PLACEMENT
+        QuickDebugTutor bug5 = new QuickDebugTutor(
+                "place.value",
+                "place.value:pv-100..499.3D.diff0.17",
+                "[file]place.value_pv-100..499.3D.diff0.17.json"
+        );
+        bug5.setComment("Missing audio 'tap inside the box'; stimulus box is ugly; second screen missing number audio.");
+        bugMap.put("place.value:many_bugs", bug5);
+
+        QuickDebugTutor bug6 = new QuickDebugTutor(
+                "place.value",
+                "place.value:pv-100..499.3D",
+                "[file]place.value_pv-100..499.3D.json"
+        );
+        bug6.setComment("Missing audio on second screen.");
+        bugMap.put("place.value:missing_audio", bug6);
+
+        QuickDebugTutor bug7 = new QuickDebugTutor(
+                "story.parrot",
+                "story.parrot::ea2eh_wb_2",
+                "[encfolder]ea2eh_wb_2"
+        );
+        bug7.setComment("Should say 'Read after me'");
+        bugMap.put("story.parrot:missing_prompt", bug7);
+
+        QuickDebugTutor bug8 = new QuickDebugTutor(
+                "story.pic.hear",
+                "story.pic.hear::1_13",
+                "[encfolder]1_13"
+        );
+        bug8.setComment("Missing audio prompts e.g. 'Which picture?'");
+        bugMap.put("story.pic:missing_prompt", bug8);
+
+        QuickDebugTutor bug9 = new QuickDebugTutor(
+                "numcompare",
+                "numcompare:1d",
+                "[file]numcompare_1d.json"
+        );
+        bug9.setComment("Audio prompts should not say 'First tap on the ones' if there are only ones.");
+        bugMap.put("numcompare:wordy_prompt", bug9);
+
+    }
+
+    public static final String MATRIX_FILE = "dev_data.open.json";
 
     private static final String LOG_SEQUENCE_ID = "LOG_SEQUENCE_ID";
 
-    public static final boolean OLD_MENU = true; // NEW_MENU make this a config variable
+    public static final boolean OLD_MENU = true;
 
 
     private CMediaController    mMediaController;
@@ -633,7 +692,10 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         LOG_ID = CPreferenceCache.initLogPreference(this);
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "xx: startSessionManager in 'onStartTutor'");
-        CTutorEngine.quickLaunch(debugTutorVariant, debugTutorId, debugTutorFile);
+
+        QuickDebugTutor debugMe = bugMap.get(1);
+        // CTutorEngine.quickLaunch(debugTutorVariant, debugTutorId, debugTutorFile);
+        CTutorEngine.quickLaunch(debugMe.tutorVariant, debugMe.tutorId, debugMe.tutorFile);
 
         startView.stopTapTutor();
         masterContainer.removeView(startView);
