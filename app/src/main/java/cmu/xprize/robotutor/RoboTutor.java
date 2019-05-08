@@ -108,8 +108,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 //    private static final String debugTutorVariant = "placevalue";
 //    private static final String debugTutorId = "place.value:1";
 //    private static final String debugTutorFile = "[file]place.value__pv-11..99.2D.diff0.3.json";
-    private static final boolean QUICK_DEBUG = true;
-    private static final String QUICK_DEBUG_TEST_KEY = "story.pic:missing_prompt";
+    private static final boolean QUICK_DEBUG = false;
+    private static final String QUICK_DEBUG_TEST_KEY = "akira:missing_audio";
 
     // BUGS to check...
     // in the future, this could be a cool debugging screen that pops up and leads you through bugs
@@ -200,7 +200,6 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         bugMap.put("story.parrot:missing_prompt", bug7);
         bug7.resolve(); // FIXED
 
-        // STATUS: need audio (see MISSING.txt)
         QuickDebugTutor bug8 = new QuickDebugTutor(
                 "story.pic.hear",
                 "story.pic.hear::1_13",
@@ -209,7 +208,27 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         bug8.setComment("Missing audio prompts e.g. 'Which picture?'");
         bugMap.put("story.pic:missing_prompt", bug8);
         bug8.resolve(); // FIXED
-        
+
+        QuickDebugTutor bug12 = new QuickDebugTutor(
+                "bpop.gl",
+                "bpop.gl:num.100..900.GL_DD_OFF100_L.bub2.30.json",
+                "[file]bpop.gl_num.100..900.GL_DD_OFF100_L.bub2.30.json");
+        bug12.setComment("Audio not playing");
+        bugMap.put("bpop.gl:multidigit_audio", bug12);
+        bug12.setPriority(QuickDebugTutor.Priority.MUST);
+        bug12.setLocation("bubble_pop/animator_graph.json");
+        bug12.resolve(); // FIXED
+
+        QuickDebugTutor bug13 = new QuickDebugTutor(
+                "bpop.num",
+                "bpop.num:1..4.by.1.asc.q2q.AV.mc.1",
+                "[file]bpop.num_1..4.by.1.asc.q2q.AV.mc.1.json"
+        );
+        bug13.setComment("Number audio not playing");
+        bugMap.put("bpop.num:missing_audio", bug13);
+        bug13.setPriority(QuickDebugTutor.Priority.MUST);
+        bug13.resolve(); // FIXED
+
         // -------
         // TO FIX
         // -------
@@ -232,6 +251,16 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         bug10.setComment("'Good job' audio is overlapping on second screen.");
         bug10.setPriority(QuickDebugTutor.Priority.COULD);
         bugMap.put("place.value:overlapping_audio", bug10);
+
+        QuickDebugTutor bug14 = new QuickDebugTutor(
+                "akira",
+                "akira:10..100.by.within.des",
+                "[file]akira_10..100.by.within.des.json"
+        );
+        bug14.setComment("Akira prompt number not playing");
+        bug14.setLocation("akira/animator_graph.json --> INSTRUCT_3V");
+        bugMap.put("akira:missing_audio", bug14);
+
 
     }
 
