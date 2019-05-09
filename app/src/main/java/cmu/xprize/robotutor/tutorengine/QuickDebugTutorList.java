@@ -56,12 +56,14 @@ public class QuickDebugTutorList {
     }
     
     static {
+        // BACKUP PLAN: remove story.pic from the English matrix.
         QuickDebugTutor bug1 = new QuickDebugTutor(
           "story.pic.hear",
                 "story.pic.hear::1_1",
                 "[encfolder]1_1"
         );
         bug1.setComment("Shows three ? images instead of pictures");
+        bug1.setLocation("OPEN_SOURCE (1) - does not account for pages without images");
         bug1.setPriority(QuickDebugTutor.Priority.MUST);
         toFixBugMap.put("story_1_1:images", bug1);
 
@@ -70,7 +72,8 @@ public class QuickDebugTutorList {
                 "story.pic.hear::1_2",
                 "[encfolder]1_2"
         );
-        bug2.setComment("After 'they used dogs to help them' gets STUCK");
+        bug2.setComment("After 'When they were moving they came across two guinea fowls.' gets STUCK");
+        bug2.setLocation("UNKNOWN - no error output shown. Could be issue with storydata.json");
         bug2.setPriority(QuickDebugTutor.Priority.SHOULD);
         toFixBugMap.put("story_1_2:STUCK", bug2);
 
@@ -79,27 +82,11 @@ public class QuickDebugTutorList {
                 "story.pic.hear::2_1",
                 "[encfolder]2_1"
         );
-        bug3.setComment("STUCK page 2 after reading 'guinea fowls'");
+        bug3.setComment("Shows two images with question marks.");
         bug3.setPriority(QuickDebugTutor.Priority.SHOULD);
-        toFixBugMap.put("story_2_1:STUCK", bug3);
+        toFixBugMap.put("story_2_1:images", bug3);
 
-        QuickDebugTutor bug4 = new QuickDebugTutor(
-          "story.parrot",
-                "story.parrot::ee2iy_sound",
-                "[encfolder]ee2iy_sound"
-        );
-        bug4.setComment("should not say 'repeat after me' before reading to kid");
-        bug4.setPriority(QuickDebugTutor.Priority.SHOULD);
-        toFixBugMap.put("story.parrot:prompt", bug4);
-
-        QuickDebugTutor bug5 = new QuickDebugTutor(
-                "akira",
-                "akira:wrd.dolch_2nd_grade",
-                "[file]akira_wrd.dolch_2nd_grade"
-        );
-        bug4.setComment("'us' recorded as 'US'. Should prompt 'tap on your answer'");
-        bug4.setPriority(QuickDebugTutor.Priority.COULD);
-        toFixBugMap.put("akira:audio", bug4);
+        // TO CHECK
     }
 
     // NON-TUTOR bugs
@@ -107,6 +94,30 @@ public class QuickDebugTutorList {
 
     }
 
+    // --------
+    // RESOLVED as of 5/9/2019
+    // --------
+    static {
+        QuickDebugTutor bug4 = new QuickDebugTutor(
+                "story.parrot",
+                "story.parrot::ee2iy_sound",
+                "[encfolder]ee2iy_sound"
+        );
+        bug4.setComment("should not say 'repeat after me' before reading to kid");
+        bug4.setPriority(QuickDebugTutor.Priority.SHOULD);
+        toFixBugMap.put("story.parrot:prompt", bug4);
+        bug4.resolve();
+
+        QuickDebugTutor bug5 = new QuickDebugTutor(
+                "akira",
+                "akira:wrd.dolch_2nd_grade",
+                "[file]akira_wrd.dolch_2nd_grade.json"
+        );
+        bug5.setComment("'us' recorded as 'US'. Should prompt 'tap on your answer'");
+        bug5.setPriority(QuickDebugTutor.Priority.COULD);
+        toFixBugMap.put("akira:audio", bug5);
+        bug5.resolve();
+    }
 
     // --------
     // RESOLVED as of 5/8/2019

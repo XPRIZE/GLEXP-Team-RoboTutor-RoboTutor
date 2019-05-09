@@ -228,7 +228,18 @@ public class CTutorData_Metadata {
         return null;
     }
 
+    /**
+     * Given a tutor, return a list of Strings that describes the tutor.
+     * @param tutor
+     * @return
+     */
     public static ArrayList<String> parseNameIntoLabels(CAt_Data tutor) {
+
+        // OPEN_SOURCE FIXME
+        // write.ltr.uc.trc:A..D_asc
+        // bpop.ltr.lc:A..D.asc.show.mc
+        // akira.wrd.a2AE
+        // write.wrd:phon.m2M
 
         Log.d("CHUNT", "tutor_desc = " + tutor.tutor_desc);
         // tutortype is first token... e.g. "story.hear" --> "story"
@@ -615,7 +626,7 @@ public class CTutorData_Metadata {
 
         // CHUNT 4/14
 
-        // CHUNT LIT
+        // CHUNT LIT... these should be put into a Test Class.
         // akira:ltr.lc_A..D_rand
         // akira:ltr.lc_E..G_rand --> "Identify null"
         // akira:wrd.a2AE --> "Identify null"
