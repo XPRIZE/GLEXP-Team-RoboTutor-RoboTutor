@@ -238,7 +238,7 @@ public class CTutorData_Metadata {
         // OPEN_SOURCE FIXME
         // write.ltr.uc.trc:A..D_asc
         // bpop.ltr.lc:A..D.asc.show.mc
-        // akira.wrd.a2AE
+        // akira.wrd:a2AE
         // write.wrd:phon.m2M
 
         Log.d("CHUNT", "tutor_desc = " + tutor.tutor_desc);
@@ -624,15 +624,10 @@ public class CTutorData_Metadata {
 
     private static ArrayList<String> processAkiraTutorId(CAt_Data tutor, ArrayList<String> result) {
 
-        // CHUNT 4/14
+        // CHUNT NEW
+        // akira:wrd.a2AE
 
         // CHUNT LIT... these should be put into a Test Class.
-        // akira:ltr.lc_A..D_rand
-        // akira:ltr.lc_E..G_rand --> "Identify null"
-        // akira:wrd.a2AE --> "Identify null"
-        // akira:wrd.th2TH --> "Identify null"
-        // akira:wrd.dolch_preprimer --> "Identify null"
-        // akira:wrd.dolch_2nd_grade--> "Identify null"
 
         //
         // LIT
@@ -717,6 +712,35 @@ public class CTutorData_Metadata {
 
                     case "nonwrd":
                         str = String.format(Locale.US, "%d-letter nonsense words", Integer.parseInt(splits[1]));
+                        break;
+
+                    // OPEN_SOURCE new English options...
+                    // akira:wrd.a2AE --> "Identify null"
+                    // akira:wrd.th2TH --> "Identify null"
+                    // akira:wrd.dolch_preprimer --> "Identify null"
+                    // akira:wrd.dolch_2nd_grade--> "Identify null"
+                    case "wrd":
+                        if (splits[1].startsWith("dolch")) {
+                            str = splits[2] + " grade Dolch words";
+                        } else if (splits[1].contains("2")) {
+                            String[] g2p = splits[1].split("2");
+                            str = " g2p mapping: <i>" + g2p[0] + "</i> to <i>" + g2p[1] + "</i>";
+                        }
+
+                        break;
+
+                    // akira:ltr.lc_A..D_rand
+                    // akira:ltr.lc_E..G_rand --> "Identify null"
+                    case "ltr":
+                        //str = String.format()
+                        switch(splits[1]) {
+                            case "lc":
+                                str = "lowercase";
+                                break;
+                            case "uc":
+                                str = "uppercase";
+                        }
+                        str += " letters " + splits[2] + " to " + splits[4];
                         break;
                 }
                 break;
