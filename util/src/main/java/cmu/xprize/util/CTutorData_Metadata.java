@@ -237,7 +237,10 @@ public class CTutorData_Metadata {
 
         // OPEN_SOURCE FIXME
         // write.ltr.uc.trc:A..D_asc √√√
-        // bpop.ltr.lc:A..D.asc.show.mc --> fix
+        // bpop.ltr.lc:A..D.asc.show.mc --> "null A to Z"
+        // bpop.wrd:m2M.noShow.rise --> nothing
+        // bpop.wrd:dolch_preprimer.noShow.mc --> nothing
+        //
         // write.wrd:phon.m2M √√√
 
         Log.d("CHUNT", "tutor_desc = " + tutor.tutor_desc);
@@ -730,10 +733,10 @@ public class CTutorData_Metadata {
                         break;
 
                     // OPEN_SOURCE new English options...
-                    // akira:wrd.a2AE --> "Identify null"
-                    // akira:wrd.th2TH --> "Identify null"
-                    // akira:wrd.dolch_preprimer --> "Identify null"
-                    // akira:wrd.dolch_2nd_grade--> "Identify null"
+                    // akira:wrd.a2AE √√√
+                    // akira:wrd.th2TH √√√
+                    // akira:wrd.dolch_preprimer √√√
+                    // akira:wrd.dolch_2nd_grade √√√
                     case "wrd":
                         if (splits[1].startsWith("dolch")) {
                             str = splits[2] + " grade Dolch words";
@@ -779,8 +782,7 @@ public class CTutorData_Metadata {
 
         // OPEN_SOURCE Bpop metadata errors
         // letters
-        // bpop.ltr.uc:A..D.asc.noShow.rise --> "null A to Z", "<b>Error generating name</b>"
-        // bpop.ltr.lc:A..D.asc.show.rise --> "null A to Z", "<b>Error generating name</b>"
+
         // change to bpop.ltr.lc:A..D.[all|vow].[asc|rand].... [show|noShow] should be in index 7
 
         // phon words
@@ -853,10 +855,19 @@ public class CTutorData_Metadata {
                         ltrTypeText = "A to Z";
                         break;
                 }
-                result.add(String.format("%s %s", ltrOrderText, ltrTypeText));
 
+                if (ltrOrderText != null) {
+                    result.add(String.format("%s %s", ltrOrderText, ltrTypeText));
+                    showWord = suffixSplit[7]; // wrong index?
+                } else {
+                    // bpop.ltr.uc:A..D.asc.noShow.rise --> "null A to Z"
+                    // bpop.ltr.lc:A..D.asc.show.rise --> "null A to Z"
+                    result.add(String.format("Letters %s to %s", suffixSplit[0], suffixSplit[2]));
 
-                showWord = suffixSplit[7]; // wrong index?
+                    showWord = suffixSplit[4];
+                }
+                
+
                 switch(showWord) {
                     case "show":
                         result.add("Audio plus visual stimuli");
