@@ -62,6 +62,7 @@ import static cmu.xprize.comp_session.AS_CONST.VAR_DATASOURCE;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENT;
 import static cmu.xprize.comp_session.AS_CONST.VAR_INTENTDATA;
 import static cmu.xprize.comp_session.AS_CONST.VAR_TUTOR_ID;
+import static cmu.xprize.util.TCONST.LANG_EN;
 import static cmu.xprize.util.TCONST.QGRAPH_MSG;
 import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_AKIRA;
 import static cmu.xprize.util.TCONST.ROBO_DEBUG_FILE_ASM;
@@ -185,11 +186,16 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         SaskActivity.setVisibility(VISIBLE);
         SdebugActivity.setVisibility(GONE);
 
+        // redundant code in "nextTutors"
         _activeLayout = menu.initializeActiveLayout();
         CAt_Data[] nextTutors = menu.getTutorsToShow();;
         String layoutName = menu.getLayoutName();
 
-        SaskActivity.initializeButtonsAndSetButtonImages(layoutName, _activeLayout, nextTutors);
+        if (menu instanceof StudentChooseMatrixActivityMenu) {
+            SaskActivity.initializeButtonsAndSetButtonImages(layoutName, _activeLayout, null);
+        } else if (menu instanceof CycleMatrixActivityMenu) {
+            SaskActivity.initializeButtonsAndSetButtonImages(layoutName, _activeLayout, nextTutors);
+        }
 
     }
 
@@ -425,7 +431,7 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
         }*/
 
             // the next tutor to be launched
-            CAt_Data tutorToLaunch = menu.getTutorToLaunch(buttonBehavior); // SUPER_PLACEMENT change this TRACE_PROMOTION the tutorToLaunch isn't saved...
+            CAt_Data tutorToLaunch = menu.getTutorToLaunch(buttonBehavior);
 
             // #Mod 330 Show TutorID in Banner in debug builds
             // DEBUG_TUTORID is used to communicate the active tutor to the Banner in DEBUG mode
@@ -794,9 +800,20 @@ public class TActivitySelector extends CActivitySelector implements ITutorSceneI
                 // The new way to load the TransitionMatrix and StudentModel
                 matrix = CTutorEngine.matrix;
                 studentModel = CTutorEngine.studentModel;
-                menu = RoboTutor.OLD_MENU ?
-                        new StudentChooseMatrixActivityMenu(matrix, studentModel) :
-                        new CycleMatrixActivityMenu(matrix, studentModel);
+
+                boolean studentChoice = RoboTutor.OLD_MENU || CTutorEngine.language.equals(LANG_EN);
+
+                switch(CTutorEngine.menuType) {
+                    case STUDENT_CHOICE:
+                        menu = new StudentChooseMatrixActivityMenu(matrix, studentModel);
+                        break;
+
+                    case CYCLE_CONTENT:
+                        menu = new CycleMatrixActivityMenu(matrix, studentModel);
+                        break;
+                }
+
+
 
             } else if (dataNameDescriptor.startsWith("db|")) {
 

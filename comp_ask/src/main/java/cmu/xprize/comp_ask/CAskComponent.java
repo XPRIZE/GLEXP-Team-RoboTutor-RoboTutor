@@ -27,6 +27,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 
 import org.json.JSONObject;
 
@@ -169,7 +170,9 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
     /**
      * call it "initializeButtonsAndSetButtonImages"...
-     * @param dataSource
+     * @param layoutName reference to a layout file
+     * @param dataSource what goes into the layout file
+     * @param nextActivities what are the next activities to display
      */
     public void initializeButtonsAndSetButtonImages(String layoutName, CAsk_Data dataSource, CAt_Data[] nextActivities) {
 
@@ -195,7 +198,9 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
             if (element == null) break;
             int viewID = getResources().getIdentifier(element.componentID, "id", packageName);
 
-            CImageButton ibView = (CImageButton) findViewById(viewID);
+            View view = findViewById(viewID);
+
+            ImageButton ibView = (ImageButton) view;
 
             buttonMap.put(ibView, element.componentID);
             buttonList.add(ibView);
@@ -206,64 +211,80 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
         // here is where button images start...
 
-        Log.wtf("NEW_MENU", nextActivities[0].tutor_id + " " + nextActivities[1].tutor_id );// + " " + nextActivities[2].tutor_id);
+        if (nextActivities == null) {
 
-        // This is a pain...
-        TCONST.Thumb[] thumbs = new TCONST.Thumb[nextActivities.length];
-        String[] icons = new String[nextActivities.length];
 
-        // first two (or three) buttons are set...
-        for(int i = 0; i < nextActivities.length; i++) {
-            CAskElement element = mDataSource.items[i];
-            CImageButton ibView = (CImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
+            // fill in with Math, Reading, Lit icons
+            CAskElement lit = mDataSource.items[0];
+            ImageButton litView = (ImageButton) findViewById(getResources().getIdentifier(lit.componentID, "id", packageName));
 
-            boolean useOldWay = false;
-            // get the correct file name
-            String tutorIcon = CTutorData_Metadata.getThumbName(nextActivities[i]); // SUPER_PLACEMENT if the same, do two different icons
-            icons[i] = tutorIcon;
-            if (tutorIcon == null) {
-                useOldWay = true;
-            } else {
-                try {
-                    // NEW_THUMBS (3) continue here...
-                    ImageLoader.makeBitmapLoader(TCONST.ROBOTUTOR_ASSETS + "/" + TCONST.ICON_ASSETS + "/")
-                            .loadBitmap(tutorIcon)
-                            .into(ibView);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+            //litView.setImageResource(R.drawable); // button_stories_select
+
+            CAskElement stories = mDataSource.items[1];
+            CAskElement math = mDataSource.items[2];
+
+
+        } else {
+
+            Log.wtf("NEW_MENU", nextActivities[0].tutor_id + " " + nextActivities[1].tutor_id);// + " " + nextActivities[2].tutor_id);
+
+            // This is a pain...
+            TCONST.Thumb[] thumbs = new TCONST.Thumb[nextActivities.length];
+            String[] icons = new String[nextActivities.length];
+
+            // first two (or three) buttons are set...
+            for (int i = 0; i < nextActivities.length; i++) {
+                CAskElement element = mDataSource.items[i];
+                CImageButton ibView = (CImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
+
+                boolean useOldWay = false;
+                // get the correct file name
+                String tutorIcon = CTutorData_Metadata.getThumbName(nextActivities[i]); // SUPER_PLACEMENT if the same, do two different icons
+                icons[i] = tutorIcon;
+                if (tutorIcon == null) {
                     useOldWay = true;
-                    icons[i] = null;
+                } else {
+                    try {
+                        // NEW_THUMBS (3) continue here...
+                        ImageLoader.makeBitmapLoader(TCONST.ROBOTUTOR_ASSETS + "/" + TCONST.ICON_ASSETS + "/")
+                                .loadBitmap(tutorIcon)
+                                .into(ibView);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                        useOldWay = true;
+                        icons[i] = null;
+                    }
                 }
+
+                // the old way does it a different way...
+                if (useOldWay) {
+                    TCONST.Thumb resource = CTutorData_Metadata.getThumbImage(nextActivities[i]); // NEW_THUMBS (0) home screen
+                    Log.wtf("NEW_MENU", resource.toString());
+
+                    thumbs[i] = resource;
+
+                    ibView.setImageResource(CDebugComponent.getThumbId(resource)); // NEW_THUMBS (2) setImageResource
+                }
+
             }
 
-            // the old way does it a different way...
-            if (useOldWay) {
-                TCONST.Thumb resource = CTutorData_Metadata.getThumbImage(nextActivities[i]); // NEW_THUMBS (0) home screen
-                Log.wtf("NEW_MENU", resource.toString());
+            /// check for duplicates
+            if (thumbs[0] != null && thumbs[0] == thumbs[1]) {
 
-                thumbs[i] = resource;
+                CAskElement element = mDataSource.items[1];
+                CImageButton ibView = (CImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
 
-                ibView.setImageResource(CDebugComponent.getThumbId(resource)); // NEW_THUMBS (2) setImageResource
+                switch (thumbs[0]) {
+                    case BPOP_NUM:
+                        ibView.setImageResource(R.drawable.thumb_bpop_num_2);
+                        break;
+
+                    case BPOP_LTR:
+                        ibView.setImageResource(R.drawable.thumb_bpop_ltr_lc_2);
+                        break;
+                }
+
             }
-
-        }
-
-        /// check for duplicates
-        if (thumbs[0] != null && thumbs[0] == thumbs[1]) {
-
-            CAskElement element = mDataSource.items[1];
-            CImageButton ibView = (CImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
-
-            switch(thumbs[0]) {
-                case BPOP_NUM:
-                    ibView.setImageResource(R.drawable.thumb_bpop_num_2);
-                    break;
-
-                case BPOP_LTR:
-                    ibView.setImageResource(R.drawable.thumb_bpop_ltr_lc_2);
-                    break;
-            }
-
         }
     }
 
@@ -277,7 +298,7 @@ public class CAskComponent extends FrameLayout implements ILoadableObject, View.
 
                 int test = getResources().getIdentifier(element.componentID, "id", packageName);
 
-                CImageButton ibView = (CImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
+                ImageButton ibView = (ImageButton) findViewById(getResources().getIdentifier(element.componentID, "id", packageName));
 
                 ibView.setImageDrawable(null);
             }

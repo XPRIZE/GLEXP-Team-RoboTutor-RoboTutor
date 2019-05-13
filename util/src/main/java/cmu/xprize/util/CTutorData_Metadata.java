@@ -131,6 +131,7 @@ public class CTutorData_Metadata {
                 return TCONST.Thumb.PICMATCH;
 
             case "placevalue":
+            case "place":
                 return TCONST.Thumb.PLACEVALUE;
 
             case "numcompare":
@@ -227,7 +228,20 @@ public class CTutorData_Metadata {
         return null;
     }
 
+    /**
+     * Given a tutor, return a list of Strings that describes the tutor.
+     * @param tutor
+     * @return
+     */
     public static ArrayList<String> parseNameIntoLabels(CAt_Data tutor) {
+
+        // OPEN_SOURCE FIXME
+        // write.ltr.uc.trc:A..D_asc √√√
+        // bpop.ltr.lc:A..D.asc.show.mc --> "null A to Z"
+        // bpop.wrd:m2M.noShow.rise --> nothing
+        // bpop.wrd:dolch_preprimer.noShow.mc --> nothing
+        //
+        // write.wrd:phon.m2M √√√
 
         Log.d("CHUNT", "tutor_desc = " + tutor.tutor_desc);
         // tutortype is first token... e.g. "story.hear" --> "story"
@@ -257,7 +271,6 @@ public class CTutorData_Metadata {
                     break;
 
                 case "bpop":
-                    // CHUNT this is the most complicated...
                     result = processBubblePopTutorId(tutor, result);
 
                     break;
@@ -280,6 +293,27 @@ public class CTutorData_Metadata {
                     descriptor.append(thirdPart[0].equals("SUB") ? "<b>Subtract</b> " : "<b>Add</b> ");
                     descriptor.append(String.format("values between <b>%s</b> and <b>%s</b>", secondPart[0], secondPart[2]));
                     result.add(descriptor.toString());
+                    break;
+
+                case "bigmath":
+                    result.add("<b>Math</b>");
+                    break;
+
+                case "place":
+                case "place.value":
+                    result.add("<b>Place Value</b>");
+                    break;
+
+                case "numcompare":
+                    result.add("<b>Number Comparison</b>");
+                    break;
+
+                case "picmatch":
+                    result.add("<b>Picture Match</b>");
+                    break;
+
+                case "spelling":
+                    result.add("<b>Spelling</b>");
                     break;
 
                 case "numberscale":
@@ -307,7 +341,8 @@ public class CTutorData_Metadata {
                     break;
             }
         }catch (Exception e) {
-            result.add("<b>Error generating name</b>");
+            // result.add("<b>Error generating name</b>");
+            // commenting out (for now) so that it doesn't show the error
         }
 
         // give it some empty lines
@@ -321,6 +356,10 @@ public class CTutorData_Metadata {
 
 
     private static ArrayList<String> processStoryTutorId(CAt_Data tutor, ArrayList<String> result) {
+
+        // story.hear::1_1 --> "Error generating name"
+        // story.[hear|echo|read]::\d_\d --> "Error generating name"
+
         String[] splitStory = tutor.tutor_id.split(":");
         String storySuffix = splitStory[2];
 
@@ -335,8 +374,6 @@ public class CTutorData_Metadata {
 
             result.add(String.format(Locale.US, "%s numbers from <b>%d</b> to <b>%d</b>",
                     storyModeCap, Integer.parseInt(storyNumberSuffix[0]), Integer.parseInt(storyNumberSuffix[2])));
-
-            // CHUNT could add more details...
 
         } else {
 
@@ -416,8 +453,12 @@ public class CTutorData_Metadata {
     }
 
     private static ArrayList<String> processWriteTutorId(CAt_Data tutor, ArrayList<String> result) {
-        // USIDORE Write.lit Write.math
-        // DO NEXT
+        // write.wrd.dic:phon.r2R √√√
+        // write.wrd.trc:phon.m2M √√√
+        // write.wrd:dolch_preprimer √√√
+        // write.wrd:dolch_1st_grade √√√
+
+        // write.ltr.uc.trc:A..D_asc √√√
 
         String splitDesc[] = tutor.tutor_desc.split("\\.");
         String modeOfEntry = "Write";
@@ -437,6 +478,7 @@ public class CTutorData_Metadata {
         }
 
         String splitSuffix[] = tutor.tutor_id.split(":")[1].split("[\\-\\.]");
+        String str;
         switch(splitDesc[1]) {
 
             // letters
@@ -457,31 +499,41 @@ public class CTutorData_Metadata {
 
                 result.add(String.format("%s %s letters", modeOfEntry, caps));
 
-                String vowels, order;
+                String vowels = null, order;
                 switch(splitSuffix[0]) {
                     case "vow":
                         vowels = "Vowels";
                         break;
 
                     case "all":
-                    default:
                         vowels = "All Letters";
                         break;
 
-                }
-
-                switch(splitSuffix[1]) {
-                    case "asc":
-                        order = "Ascending";
+                    default:
                         break;
 
-                    case "rand":
-                    default:
-                        order = "Random";
-
                 }
-                result.add(String.format("%s, %s", vowels, order));
 
+                // THIS is a mess... fix
+                if (vowels == null) {
+                    // write.ltr.uc:A..D_asc
+                    order = splitSuffix[2].substring(2);
+                    if (order.equals("asc")) order = "ascending";
+
+                    result.add(String.format("Letters %s through %s, %s", splitSuffix[0], splitSuffix[2].substring(0, 1), order));
+                } else {
+                    switch(splitSuffix[1]) {
+                        case "asc":
+                            order = "Ascending";
+                            break;
+
+                        case "rand":
+                        default:
+                            order = "Random";
+
+                    }
+                    result.add(String.format("%s, %s", vowels, order));
+                }
 
                 break;
 
@@ -501,6 +553,12 @@ public class CTutorData_Metadata {
                 if(splitSuffix[0].equals("syl")) {
                     String syl = splitSuffix[1];
                     wordToWrite = String.format("the syllable %s", syl);
+                } else if (splitSuffix[0].equals("phon")) {
+                    String[] g2p = splitSuffix[1].split("2");
+                    wordToWrite = " words with g2p: <i>" + g2p[0] + "</i> to <i>" + g2p[1] + "</i>";
+
+                } else if (splitSuffix[1].startsWith("dolch")) {
+                    wordToWrite = splitSuffix[1].substring(6) + " grade Dolch words";
                 } else if (splitSuffix[1].equals("wrd")) {
 
                     if(splitSuffix[2].equals("cat")) {
@@ -539,7 +597,6 @@ public class CTutorData_Metadata {
                 // numbers
             case "num":
 
-                // USIDORE finish me
                 String numberToWrite = "the number";
                 result.add(String.format("%s %s", modeOfEntry, numberToWrite));
                 break;
@@ -547,10 +604,22 @@ public class CTutorData_Metadata {
                // arith
             case "arith":
 
-                // USIDORE finish me
                 String answerToWrite = "the equation";
                 result.add(String.format("%s %s", modeOfEntry, answerToWrite));
                 break;
+
+
+            case "dolch":
+
+                str = "Write " + splitSuffix[2] + " grade Dolch words";
+                result.add(str);
+                break;
+
+
+            case "phon":
+
+
+
 
 
             default:
@@ -662,6 +731,35 @@ public class CTutorData_Metadata {
                     case "nonwrd":
                         str = String.format(Locale.US, "%d-letter nonsense words", Integer.parseInt(splits[1]));
                         break;
+
+                    // OPEN_SOURCE new English options...
+                    // akira:wrd.a2AE √√√
+                    // akira:wrd.th2TH √√√
+                    // akira:wrd.dolch_preprimer √√√
+                    // akira:wrd.dolch_2nd_grade √√√
+                    case "wrd":
+                        if (splits[1].startsWith("dolch")) {
+                            str = splits[2] + " grade Dolch words";
+                        } else if (splits[1].contains("2")) {
+                            String[] g2p = splits[1].split("2");
+                            str = " g2p mapping: <i>" + g2p[0] + "</i> to <i>" + g2p[1] + "</i>";
+                        }
+
+                        break;
+
+                    // akira:ltr.lc_A..D_rand
+                    // akira:ltr.lc_E..G_rand --> "Identify null"
+                    case "ltr":
+                        //str = String.format()
+                        switch(splits[1]) {
+                            case "lc":
+                                str = "lowercase";
+                                break;
+                            case "uc":
+                                str = "uppercase";
+                        }
+                        str += " letters " + splits[2] + " to " + splits[4];
+                        break;
                 }
                 break;
         }
@@ -680,6 +778,22 @@ public class CTutorData_Metadata {
      */
     private static ArrayList<String> processBubblePopTutorId(CAt_Data tutor, ArrayList<String> result) {
 
+        // new cases for English Version:
+
+        // OPEN_SOURCE Bpop metadata errors
+        // letters
+
+        // change to bpop.ltr.lc:A..D.[all|vow].[asc|rand].... [show|noShow] should be in index 7
+
+        // phon words
+        // bpop.wrd:u2AH.show.mc --> Fail on first row
+        // bpop.wrd:oo2UH.show.mc
+        // change to bpop.wrd:phon.oo2UH.show.mc
+
+        // common words
+        // bpop.wrd:dolch_preprimer.show.mc
+        // bpop.wrd:dolch_preprimer.noShow.mc
+        // bpop.wrd:dolch_1st_grade.show.rise
         result.add("<b>Bubble Pop</b>");
 
 
@@ -741,10 +855,19 @@ public class CTutorData_Metadata {
                         ltrTypeText = "A to Z";
                         break;
                 }
-                result.add(String.format("%s %s", ltrOrderText, ltrTypeText));
 
+                if (ltrOrderText != null) {
+                    result.add(String.format("%s %s", ltrOrderText, ltrTypeText));
+                    showWord = suffixSplit[7]; // wrong index?
+                } else {
+                    // bpop.ltr.uc:A..D.asc.noShow.rise --> "null A to Z"
+                    // bpop.ltr.lc:A..D.asc.show.rise --> "null A to Z"
+                    result.add(String.format("Letters %s to %s", suffixSplit[0], suffixSplit[2]));
 
-                showWord = suffixSplit[7];
+                    showWord = suffixSplit[4];
+                }
+                
+
                 switch(showWord) {
                     case "show":
                         result.add("Audio plus visual stimuli");
@@ -776,7 +899,7 @@ public class CTutorData_Metadata {
 
                 showWord = null;
 
-                boolean syl = suffixSplit[3].equals("syl");
+                boolean syl = suffixSplit[3].equals("syl"); // OPEN_SOURCE e2EH.show.rise not enough
                 // check if syllable
                 if(syl) {
                     if (suffixSplit[0].substring(1).equals("ch")) {
@@ -811,6 +934,12 @@ public class CTutorData_Metadata {
                         case "nonwrd":
                             result.add(String.format("Identify <b>nonsense words with %s letters</b>", suffixSplit[1]));
                             showWord = suffixSplit[5];
+                            break;
+
+                        case "phon":
+
+                            result.add(String.format("Identify words that map <b>grapheme %s</b>", "GGG"));
+                            result.add(String.format("to <b>phoneme %s</b>", "PPP"));
                             break;
                     }
 

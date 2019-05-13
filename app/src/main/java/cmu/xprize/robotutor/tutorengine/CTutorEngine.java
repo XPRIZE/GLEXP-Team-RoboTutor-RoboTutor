@@ -56,6 +56,8 @@ import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
 
+import static cmu.xprize.util.TCONST.LANG_EN;
+
 /**
  * The tutor engine provides top-levelFolder control over the tutor lifecycle and can support multiple
  * simultaneous tutors.  On creation the tutor engine will instantiate and launch the DefTutor
@@ -75,6 +77,8 @@ public class CTutorEngine implements ILoadableObject2 {
     public static StudentDataModel          studentModel;
     public static TransitionMatrixModel     matrix;
     public static PromotionMechanism        promotionMechanism;
+    public enum MenuType {STUDENT_CHOICE, CYCLE_CONTENT};
+    public static MenuType menuType;
 
     static public  RoboTutor                Activity;
     static public  ILogManager              TutorLogManager;
@@ -152,6 +156,7 @@ public class CTutorEngine implements ILoadableObject2 {
         matrix = loadTransitionMatrixModel();
         studentModel = loadStudentModel(matrix);
         promotionMechanism = new PromotionMechanism(studentModel, matrix);
+        menuType = getMenuType();
     }
 
 
@@ -615,10 +620,16 @@ public class CTutorEngine implements ILoadableObject2 {
             matrix = loadTransitionMatrixModel();
             studentModel = loadStudentModel(matrix);
             promotionMechanism = new PromotionMechanism(studentModel, matrix);
+            menuType = getMenuType();
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private static MenuType getMenuType() {
+        return (RoboTutor.OLD_MENU || CTutorEngine.language.equals(LANG_EN)) ?
+                MenuType.STUDENT_CHOICE : MenuType.CYCLE_CONTENT;
     }
 
     /**

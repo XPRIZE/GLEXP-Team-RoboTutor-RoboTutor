@@ -17,7 +17,7 @@
         app:layout_heightPercent="50%"
         app:layout_widthPercent="33%"
         android:background="@null"
-        android:src="@drawable/pentagon"
+        android:src="@drawable/button_letters_select"
         />
 
     <ImageButton
@@ -29,7 +29,7 @@
         app:layout_heightPercent="50%"
         app:layout_widthPercent="33%"
         android:background="@null"
-        android:src="@drawable/triangle"/>
+        android:src="@drawable/button_stories_select"/>
 
     <ImageButton
         android:id="@+id/SbuttonOption3"
@@ -40,7 +40,7 @@
         app:layout_heightPercent="50%"
         app:layout_widthPercent="33%"
         android:background="@null"
-        android:src="@drawable/circle"/>
+        android:src="@drawable/button_math_select"/>
 
     <ImageButton
         android:id="@+id/SbuttonEmpty"

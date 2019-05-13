@@ -76,6 +76,7 @@ public class TCONST {
     public static final String PROTOTYPE_ASSET_PATTERN = "protoassets_";
     public static final String QA_ASSET_PATTERN = "qa_assets";
     public static final String ENGLISH_ASSET_PATTERN = "English_";
+    public static final String SWAHILI_ASSET_PATTERN = "Swahili_";
 
     public static final String COMMAND      = "COMMAND";
     public static final String MODULE       = "MODULE";

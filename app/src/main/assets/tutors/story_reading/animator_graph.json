@@ -320,7 +320,7 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SstoryReading", "method": "logState", "parms": "type#node,value#PARROT_LINE:String", "features": ""},
 
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SstoryReading.page_prompt}}", "mode": "flow", "features": "FTR_PAGE_PROMPT"},
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Repeat after me.mp3", "mode": "flow", "features": "!FTR_PAGE_PROMPT"},
+            //{"type": "AUDIO", "command": "PLAY", "soundsource": "Repeat after me.mp3", "mode": "flow", "features": "!FTR_PAGE_PROMPT"},
             {"type": "COMMAND", "id": "SstoryReading", "method": "parrotLine" , "features": ""}
           ]
         },

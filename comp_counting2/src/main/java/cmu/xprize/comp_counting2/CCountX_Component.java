@@ -11,7 +11,7 @@ import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import java.util.Arrays;
-import java.util.List;
+
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -28,15 +28,19 @@ import cmu.xprize.comp_logging.CErrorManager;
 import cmu.xprize.ltkplus.CGlyphSet;
 import cmu.xprize.ltkplus.IGlyphSink;
 import cmu.xprize.util.ILoadableObject;
+import cmu.xprize.util.IPublisher;
 import cmu.xprize.util.IScope;
 import cmu.xprize.util.JSON_Helper;
 import cmu.xprize.util.TCONST;
+
+import static cmu.xprize.comp_counting2.COUNTX_CONST.FTR_COUNTX;
+import static cmu.xprize.comp_counting2.COUNTX_CONST.FTR_PLACEVALUE;
 
 /**
  * Created by kevindeland on 10/20/17.
  */
 
-public class CCountX_Component extends PercentRelativeLayout implements ILoadableObject {
+public class CCountX_Component extends PercentRelativeLayout implements ILoadableObject, IPublisher {
 
     // Infrastructure
     protected final Handler mainHandler  = new Handler(Looper.getMainLooper());
@@ -141,7 +145,7 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         checkOne = (TextView) findViewById(R.id.checkOne);
         checkTen = (TextView) findViewById(R.id.checkTen);
         checkHundred = (TextView) findViewById(R.id.checkHundred);
-        stimulusText = (TextView) findViewById(R.id.stimulusText);
+
 
         bManager = LocalBroadcastManager.getInstance(getContext());
         drawIndex =-10;
@@ -207,11 +211,25 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
 
 
         resetView();
-        if(mode != "placevalue"){
-            surfaceView.initTenFrame();}
-        else{
-            surfaceView.initTenFramePlaceValue();
+
+        retractFeature(FTR_PLACEVALUE);
+        retractFeature(FTR_COUNTX);
+        switch(mode) {
+            case "countingx":
+                stimulusText = (TextView) findViewById(R.id.countxStimulusText);
+                surfaceView.initTenFrame();
+                publishFeature(FTR_COUNTX);
+                break;
+
+            case "placevalue":
+                stimulusText = (TextView) findViewById(R.id.placevalueStimulusText);
+                //stimulusText.setBackgroundColor(Color.WHITE);
+                surfaceView.initTenFramePlaceValue();
+                publishFeature(FTR_PLACEVALUE);
+                break;
         }
+        stimulusText.setVisibility(VISIBLE);
+
         //surfaceView.resetCounter(); // functionality already called above
 
         // reset vieresetView();
@@ -534,6 +552,46 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
         stimulusText.setText(stimulus);
 
         // point to it using RoboFinger
+        /*float width = stimulusText.getWidth();
+
+        float scaleStimulusVal = 3.0f;
+        if(width > 500) {
+            scaleStimulusVal = 2.5f;
+        }
+        if(width > 1000) {
+            scaleStimulusVal = 1.25f;
+        }
+        if(width > 2000) {
+            scaleStimulusVal = 1.0f;
+        }
+
+        final float inverseScale = 1 / scaleStimulusVal;
+
+        Animator inflator = CAnimatorUtil.configZoomIn(stimulusText, 600, 0, new BounceInterpolator(), 0f, scaleStimulusVal);
+        inflator.start();
+        inflator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                Animator deflator = CAnimatorUtil.configZoomIn(stimulusText, 600, 0, new LinearInterpolator(), 0f, inverseScale);
+                deflator.start();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+        */
 
         int[] screenCoord = new int[2];
         stimulusText.getLocationOnScreen(screenCoord);
@@ -864,6 +922,51 @@ public class CCountX_Component extends PercentRelativeLayout implements ILoadabl
                 mainHandler.post(qCommand);
             }
         }
+    }
+
+    @Override
+    public void publishState() {
+
+    }
+
+    @Override
+    public void publishValue(String varName, String value) {
+
+    }
+
+    @Override
+    public void publishValue(String varName, int value) {
+
+    }
+
+    @Override
+    public void publishFeatureSet(String featureset) {
+
+    }
+
+    @Override
+    public void retractFeatureSet(String featureset) {
+
+    }
+
+    @Override
+    public void publishFeature(String feature) {
+
+    }
+
+    @Override
+    public void retractFeature(String feature) {
+
+    }
+
+    @Override
+    public void publishFeatureMap(HashMap featureMap) {
+
+    }
+
+    @Override
+    public void retractFeatureMap(HashMap featureMap) {
+
     }
 
     /**

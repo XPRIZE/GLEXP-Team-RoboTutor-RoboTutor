@@ -28,6 +28,13 @@ public class CD_CONST {
     static final int[]    TUTOR_STORY_5    = {R.attr.tutor_story_5};
     static final int[]    TUTOR_STORY_NONSTORY    = {R.attr.tutor_story_nonstory};
     static final int[]    TUTOR_SONG    = {R.attr.tutor_song};
+
+    static final int[]    TUTOR_NUMCOMPARE    = {R.attr.tutor_numcompare};
+    static final int[]    TUTOR_PICMATCH   = {R.attr.tutor_picmatch};
+    static final int[]    TUTOR_PLACEVALUE   = {R.attr.tutor_placevalue};
+    static final int[]    TUTOR_BIGMATH   = {R.attr.tutor_bigmath};
+    static final int[]    TUTOR_SPELLING   = {R.attr.tutor_spelling};
+
     static final int[]    TUTOR_WRITE    = {R.attr.tutor_write};
 
 

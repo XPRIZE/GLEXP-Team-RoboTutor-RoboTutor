@@ -180,6 +180,26 @@ public class CDebugButton extends ImageButton {
                         tutor_CONST = CD_CONST.TUTOR_WRITE;
                         break;
 
+                    case NUMCOMPARE:
+                        tutor_CONST = CD_CONST.TUTOR_NUMCOMPARE;
+                        break;
+
+                    case PICMATCH:
+                        tutor_CONST = CD_CONST.TUTOR_PICMATCH;
+                        break;
+
+                    case PLACEVALUE:
+                        tutor_CONST = CD_CONST.TUTOR_PLACEVALUE;
+                        break;
+
+                    case BIGMATH:
+                        tutor_CONST = CD_CONST.TUTOR_BIGMATH;
+                        break;
+
+                    case SPELLING:
+                        tutor_CONST = CD_CONST.TUTOR_SPELLING;
+                        break;
+
                     case NOTHING:
                     default:
                         tutor_CONST = CD_CONST.SKILLS_NORMAL;

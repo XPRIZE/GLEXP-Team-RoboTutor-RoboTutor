@@ -93,6 +93,26 @@
         android:drawable="@drawable/thumb_song" />
 
     <item
+        app:tutor_numcompare="true"
+        android:drawable="@drawable/thumb_numcompare" />
+
+    <item
+        app:tutor_picmatch="true"
+        android:drawable="@drawable/thumb_picture_matching" />
+
+    <item
+        app:tutor_placevalue="true"
+        android:drawable="@drawable/thumb_place_value" />
+
+    <item
+        app:tutor_bigmath="true"
+        android:drawable="@drawable/thumb_bigmath_1d" />
+
+    <item
+        app:tutor_spelling="true"
+        android:drawable="@drawable/thumb_spelling_tutor" />
+
+    <item
         app:tutor_write="true"
         android:drawable="@drawable/thumb_write" />
 

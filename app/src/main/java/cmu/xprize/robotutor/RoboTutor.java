@@ -53,10 +53,13 @@ import cmu.xprize.ltkplus.IGlyphSink;
 import cmu.xprize.robotutor.startup.CStartView;
 import cmu.xprize.robotutor.startup.configuration.Configuration;
 import cmu.xprize.robotutor.startup.configuration.ConfigurationItems;
+import cmu.xprize.robotutor.startup.configuration.ConfigurationQuickOptions;
 import cmu.xprize.robotutor.tutorengine.CMediaController;
 
 import cmu.xprize.robotutor.tutorengine.CTutorAssetManager;
 
+import cmu.xprize.robotutor.tutorengine.QuickDebugTutor;
+import cmu.xprize.robotutor.tutorengine.QuickDebugTutorList;
 import cmu.xprize.robotutor.tutorengine.util.CAssetObject;
 import cmu.xprize.util.CDisplayMetrics;
 import cmu.xprize.util.CLoaderView;
@@ -85,6 +88,7 @@ import static cmu.xprize.util.TCONST.MATH_PLACEMENT;
 import static cmu.xprize.util.TCONST.PROTOTYPE_ASSET_PATTERN;
 import static cmu.xprize.util.TCONST.QA_ASSET_PATTERN;
 import static cmu.xprize.util.TCONST.ROBOTUTOR_ASSET_PATTERN;
+import static cmu.xprize.util.TCONST.SWAHILI_ASSET_PATTERN;
 import static cmu.xprize.util.TCONST.WRITING_PLACEMENT;
 
 
@@ -101,42 +105,19 @@ import static cmu.xprize.util.TCONST.WRITING_PLACEMENT;
 public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
 
-    // VARIABLES FOR QUICK DEBUG LAUNCH
-//    private static final String debugTutorVariant = "placevalue";
-//    private static final String debugTutorId = "place.value:1";
-//    private static final String debugTutorFile = "[file]place.value__pv-11..99.2D.diff0.3.json";
-    private static final boolean QUICK_DEBUG = false;
-    private static final String debugTutorVariant = "bpop.wrd";
-    private static final String debugTutorId = "bpop.wrd:2ch_dolch";
-    private static final String debugTutorFile = "[file]bpop.wrd_2ch.dolch.noShow.rise.json";
+    // DEVELOPER VARIABLES FOR QUICK DEBUG LAUNCH
+    private static final boolean QUICK_DEBUG_TUTOR = false;
+    private static final String QUICK_DEBUG_TUTOR_KEY = "akira:missing_audio";
 
+    // for devs, this is faster than changing the config file
+    private static final boolean QUICK_DEBUG_CONFIG = false;
+    private static final ConfigurationItems QUICK_DEBUG_CONFIG_OPTION = ConfigurationQuickOptions.DEBUG_SW_EN;
 
-    //amogh missing letter
-//    private static final String debugTutorFile = "[file]write.missingLtr_0.1.2.fin.s.json";
-    //amogh dictation
-//    private static final String debugTutorFile = "[file]write.wrd.dic_lc.begin.ha.18.json";
-
-//    private static final String debugTutorVariant = "write.ltr.uc.trc";
-//    private static final String debugTutorId = "write.wrd:story_1_1";
-//    private static final String debugTutorFile = "[file]write.ltr.uc.trc_vow.asc.A..Z.1.json";
-
-//    private static final boolean QUICK_DEBUG = false;
-//    private static final String debugTutorVariant = "picmatch";
-//    private static final String debugTutorId = "picmatch::animal";
-//    private static final String debugTutorFile = "[file]picmatch_food.json";
-    //private static final String debugTutorVariant = "numdiscr";
-    //private static final String debugTutorVariant = "math";
-    //private static final String debugTutorId = "numdiscr:sample";
-    //private static final String debugTutorId = "math:0..8.ADD-1D-V-S.rand.3";
-    //private static final String debugTutorFile = "[file]numdiscr_sample.json";
-    // private static final String debugTutorFile = "[file]math_0..800.ADD-100-V-S.incr.13.json";
-
-    //private static final String debugTutorFile = "[file]math_10..80.SUB-2D-V-S.rand.12.json";
-    public static final String MATRIX_FILE = "dev_data_warmup.json"; // "dev_data.json"; // SUPER_PLACEMENT
+    public static final String MATRIX_FILE = "dev_data.open.json";
 
     private static final String LOG_SEQUENCE_ID = "LOG_SEQUENCE_ID";
 
-    public static final boolean OLD_MENU = false;
+    public static final boolean OLD_MENU = true;
 
 
     private CMediaController    mMediaController;
@@ -214,7 +195,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         //
         new JSON_Helper(getAssets(), CacheSource, RoboTutor.APP_PRIVATE_FILES);
 
-        ConfigurationItems configurationItems = new ConfigurationItems();
+        // Gives the dev the option to override the stored config file.
+        ConfigurationItems configurationItems = QUICK_DEBUG_CONFIG ? QUICK_DEBUG_CONFIG_OPTION : new ConfigurationItems(); // OPEN_SOURCE opt to switch here.
         Configuration.saveConfigurationItems(this, configurationItems);
 
         Calendar calendar = Calendar.getInstance(Locale.US);
@@ -475,13 +457,8 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
                 // Find and install (move to ext_asset_path) any new or updated audio/story assets
                 //
-                // ZZZ comment out old pattern
-                tutorAssetManager.updateAssetPackages(ROBOTUTOR_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH );
-                tutorAssetManager.updateAssetPackages(CODE_DROP_1_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
-                tutorAssetManager.updateAssetPackages(CODE_DROP_2_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
-                tutorAssetManager.updateAssetPackages(PROTOTYPE_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
-                tutorAssetManager.updateAssetPackages(QA_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
                 tutorAssetManager.updateAssetPackages(ENGLISH_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
+                tutorAssetManager.updateAssetPackages(SWAHILI_ASSET_PATTERN, RoboTutor.EXT_ASSET_PATH);
 
                 // Create the one system levelFolder LTKPLUS recognizer
                 //
@@ -574,7 +551,7 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
                 setFullScreen();
             }
             // QUICK DEBUG LAUNCH
-            else if (QUICK_DEBUG) {
+            else if (QUICK_DEBUG_TUTOR) {
 
                 startQuickLaunch();
 
@@ -633,7 +610,10 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
         LOG_ID = CPreferenceCache.initLogPreference(this);
 
         Log.d(TCONST.DEBUG_GRAY_SCREEN_TAG, "xx: startSessionManager in 'onStartTutor'");
-        CTutorEngine.quickLaunch(debugTutorVariant, debugTutorId, debugTutorFile);
+
+        QuickDebugTutor debugMe = QuickDebugTutorList.toFixBugMap.get(QUICK_DEBUG_TUTOR_KEY);
+        // CTutorEngine.quickLaunch(debugTutorVariant, debugTutorId, debugTutorFile);
+        CTutorEngine.quickLaunch(debugMe.tutorVariant, debugMe.tutorId, debugMe.tutorFile);
 
         startView.stopTapTutor();
         masterContainer.removeView(startView);

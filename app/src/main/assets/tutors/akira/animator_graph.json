@@ -418,7 +418,8 @@
           "tracks": [
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SAkira", "method": "logState", "parms": "type#node,value#INTRO_STATE_TRACK:String", "features":""},
 
-            {"type": "AUDIO", "command": "PLAY", "soundsource": "Racecar v3-2.mp3", "soundpackage":"tutor_effect", "repeat": true, "volume": 0.30, "mode":"event", "features": ""}
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Racecar v3-2.mp3", "soundpackage":"tutor_effect", "repeat": true, "volume": 0.30, "mode":"event", "features": ""},
+            {"type": "AUDIO", "command": "PLAY", "soundsource": "Please tap on it.mp3", "soundpackage":"default", "volume": 0.7, "mode":"flow", "features": ""}
           ]
         },
 

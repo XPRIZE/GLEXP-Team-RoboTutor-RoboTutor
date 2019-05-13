@@ -16,29 +16,43 @@
         android:layout_alignParentTop="true" />
 
     <TextView
-        android:id="@+id/stimulusText"
-        android:layout_width="120sp"
-        android:layout_height="120sp"
+        android:id="@+id/countxStimulusText"
+        android:layout_width="300sp"
+        android:layout_height="240sp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/stimulus_back"
+        android:background="@null"
         android:gravity="center"
         android:text=""
         android:textColor="@android:color/holo_blue_dark"
-        android:textSize="40sp" />
+        android:textSize="120sp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/placevalueStimulusText"
+        android:layout_width="300sp"
+        android:layout_height="100sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="@null"
+        android:gravity="center"
+        android:text=""
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="80sp"
+        android:visibility="gone"/>
 
 
     <TextView
         android:id="@+id/counterText"
-        android:layout_width="120sp"
-        android:layout_height="120sp"
+        android:layout_width="300sp"
+        android:layout_height="240sp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/counter_back"
+        android:background="@null"
         android:gravity="center"
         android:text=""
         android:textColor="@android:color/holo_purple"
-        android:textSize="40sp"
+        android:textSize="120sp"
         android:visibility="invisible" />
 
     <TextView

@@ -720,7 +720,7 @@ public class TQnComponent extends CQn_Component implements IBehaviorManager, ITu
             }
         }
         catch (Exception e) {
-            CErrorManager.logEvent(TAG, "Invalid Data Source for : " + mTutor.getTutorName(), e, false);
+            CErrorManager.logEvent(TAG, "Invalid Data Source for : " + mTutor.getTutorName(), e, true);
         }
     }
 

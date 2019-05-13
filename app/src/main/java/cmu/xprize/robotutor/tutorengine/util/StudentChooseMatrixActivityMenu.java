@@ -103,9 +103,9 @@ public class StudentChooseMatrixActivityMenu implements IActivityMenu {
     @Override
     public CAt_Data getTutorToLaunch(String buttonBehavior) {
 
-        String activeTutorId = "";
+        String activeTutorId = null;
         HashMap transitionMap = null;
-        String rootTutor = "";
+        String rootTutor = null;
 
         String activeSkill = null;
         
@@ -119,6 +119,9 @@ public class StudentChooseMatrixActivityMenu implements IActivityMenu {
                 String lastTutor = _student.getLastTutor(); // MENU_LOGIC why is this only called once?
                 if (lastTutor != null) { // for when it's the first time...s
                     activeTutorId = lastTutor;
+                }
+                if (activeTutorId == null) {
+                    rootTutor     = _matrix.getRootSkillByContentArea(SELECT_WRITING);
                 }
                 activeSkill = _student.getLastSkill();
                 transitionMap = _matrix.getTransitionMapByContentArea(activeSkill);
@@ -150,7 +153,7 @@ public class StudentChooseMatrixActivityMenu implements IActivityMenu {
         }
 
         // update active skill based on student choice
-        if (activeSkill != null && !RoboTutor.STUDENT_CHOSE_REPEAT) _student.updateActiveSkill(activeSkill); // MENU_LOGIC update activeSkill
+        if (activeSkill != null && !RoboTutor.STUDENT_CHOSE_REPEAT) _student.updateActiveSkill(activeSkill);
 
         // the next tutor to be launched
         CAt_Data tutorToLaunch = (CAt_Data) transitionMap.get(activeTutorId);

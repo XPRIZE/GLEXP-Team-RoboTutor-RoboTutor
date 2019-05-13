@@ -210,23 +210,36 @@ public class StudentDataModel {
      * move on to the next skill in cycle
      * @return
      */
-    public String incrementActiveSkill() {
+    public void incrementActiveSkill() {
         SKILL_INDEX = (SKILL_INDEX + 1) % SKILL_CYCLE.length; // 0, 1, 2, 3, 0...
         updateActiveSkill(SKILL_CYCLE[SKILL_INDEX]);
 
-        return SKILL_CYCLE[SKILL_INDEX];
     }
 
     /**
      * This is needed to perform a repeat.
+     *
+     * This should behave differently for each Menu
+     *
      * @return
      */
     public String getLastSkill() {
 
-        int index = SKILL_INDEX == 0 ? SKILL_CYCLE.length -1 : SKILL_INDEX - 1;
 
-        Log.d("REPEAT_ME", "SKILL_INDEX=" + SKILL_INDEX + ", new_index=" + index); // MENU_LOGIC "0", "3"
-        return SKILL_CYCLE[index];
+        switch(CTutorEngine.menuType) {
+            case CYCLE_CONTENT:
+                int index = SKILL_INDEX == 0 ? SKILL_CYCLE.length -1 : SKILL_INDEX - 1;
+
+                Log.d("REPEAT_ME", "SKILL_INDEX=" + SKILL_INDEX + ", new_index=" + index); // MENU_LOGIC "0", "3"
+                return SKILL_CYCLE[index];
+
+            case STUDENT_CHOICE:
+
+                return getActiveSkill();
+        }
+
+        return null;
+
     }
 
     public boolean getWritingPlacement() {

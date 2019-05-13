@@ -106,7 +106,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
     private boolean                 cloze_page_mode = false;
     private boolean                 isClozePage = false;
     private ViewGroup               mPicturePage;
-    private int                     numPicMatch;
+    private int                     numPicMatch; // OPEN_SOURCE how does this get set???
     private ImageView               mMatchImage1;
     private ImageView               mMatchImage3;
     private ImageView               mMatchImage2;
@@ -273,19 +273,18 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
      * @param assetPath
      */
     public void initStory(IVManListener owner, String assetPath, String location) {
-        for(int i = 0; i < questions.length; i++){
-            if (questions[i].distractor != null) {
-                clozeIndices.add(i+1); // TRACE_CLOZE (1) adding indices...
+
+        // FOR_HUI... these should not exist
+        try {
+            for (int i = 0; i < questions.length; i++) {
+                if (questions[i].distractor != null) {
+                    clozeIndices.add(i + 1); // TRACE_CLOZE (1) adding indices...
+                }
             }
+        } catch (Exception e) {
+            Log.e(TAG, "Missing mcq.json... please add.");
         }
-        int numPara = 0;
-        int numLineCountdown = 0;
-        for(int i = 0; i < data.length; i++){
-            numPara += data[i].text.length;
-            for(int j = 0; j < data[i].text.length; j++){
-                numLineCountdown += data[i].text[j].length;
-            }
-        }
+
         mCurrLineInStory = 0;
         mOwner        = owner;
         mAsset        = assetPath; // ZZZ assetPath... TCONST.EXTERN
@@ -499,21 +498,26 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
         setButtonState(mSay, speakButtonEnable);
         setButtonState(mSay, speakButtonShow);
 
-        mPageFlip.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Log.v(QGRAPH_MSG, "event.click: " + " CQn_ViewManagerASB: PAGEFLIP");
+        try {
+            mPageFlip.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Log.v(QGRAPH_MSG, "event.click: " + " CQn_ViewManagerASB: PAGEFLIP");
 
-                mParent.onButtonClick(TCONST.PAGEFLIP_BUTTON);
-            }
-        });
+                    mParent.onButtonClick(TCONST.PAGEFLIP_BUTTON);
+                }
+            });
 
-        mSay.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Log.v(QGRAPH_MSG, "event.click: " + " CQn_ViewManagerASB:onButtonClick SPEAKBUTTON");
+            mSay.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Log.v(QGRAPH_MSG, "event.click: " + " CQn_ViewManagerASB:onButtonClick SPEAKBUTTON");
 
-                mParent.onButtonClick(TCONST.SPEAK_BUTTON);
-            }
-        });
+                    mParent.onButtonClick(TCONST.SPEAK_BUTTON);
+                }
+            });
+        }
+        catch(Exception e) {
+            Log.e(TAG, "error:" + e);
+        }
 
     }
 
@@ -944,11 +948,12 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
      *
      */
     public void flipPage() {
+        // OPEN_SOURCE (1)... this does not account for pages without images
         if (mPageCount-mCurrPage <= 3) { // PIC_CHOICE this gave me numPicMatch = 4 when it was supposed to be 2 or 3
             // Last 4 images; don't randomize
-            this.numPicMatch = (mPageCount-mCurrPage); // PIC_CHOICE this sets to 4 when it shouldn't be. It should be two (numPicMatch too big)
+            this.numPicMatch = (mPageCount-mCurrPage); // OPEN_SOURCE is this the assignment?
         } else {
-            this.numPicMatch = getRandomNumberInRange(2, 4);
+            this.numPicMatch = getRandomNumberInRange(2, 4);  // OPEN_SOURCE is this the assignment?
         }
         Log.d(TAG, "flipPage: asdfad "+this.numPicMatch);
 
@@ -2574,6 +2579,8 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
      */
     @Override
     public void displayPictureMatching(){
+
+        // OPEN_SOURCE picmatch... place debug breakpoint here.
         if (numPicMatch==2){
             InputStream in1;
             InputStream in2;
@@ -2613,7 +2620,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
             InputStream in2;
             InputStream in3;
             ArrayList<String> imgs = new ArrayList<>();
-            for (int i = mCurrPage+1; i < data.length; i++){
+            for (int i = mCurrPage+1; i < data.length; i++){ // OPEN_SOURCE data[2].image == "null"... why?
                 if (!imgs.contains(data[i].image)){
                     imgs.add(data[i].image);
                 }
@@ -2625,7 +2632,7 @@ public class CQn_ViewManagerASB implements ICQn_ViewManager, ILoadableObject  {
                 if (assetLocation.equals(TCONST.EXTERN)) {
                     in1 = new FileInputStream(mAsset + data[mCurrPage].image); // ZZZ load image
                     in2 = new FileInputStream(mAsset + randImg1); // ZZZ load image
-                    in3 = new FileInputStream(mAsset + randImg2);
+                    in3 = new FileInputStream(mAsset + randImg2); // OPEN_SOURCE null image... why?
                 } else {
                     in1 = JSON_Helper.assetManager().open(mAsset + data[mCurrPage].image); // ZZZ load image
                     in2 = JSON_Helper.assetManager().open(mAsset + randImg1); // ZZZ load image
