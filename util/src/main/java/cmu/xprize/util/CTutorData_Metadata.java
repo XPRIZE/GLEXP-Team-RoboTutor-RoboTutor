@@ -238,7 +238,6 @@ public class CTutorData_Metadata {
         // OPEN_SOURCE FIXME
         // write.ltr.uc.trc:A..D_asc
         // bpop.ltr.lc:A..D.asc.show.mc
-        // akira.wrd:a2AE
         // write.wrd:phon.m2M
 
         Log.d("CHUNT", "tutor_desc = " + tutor.tutor_desc);
@@ -465,6 +464,8 @@ public class CTutorData_Metadata {
         // write.wrd:dolch_preprimer --> "Write null"
         // write.wrd:dolch_1st_grade --> "Write null"
 
+        // write.ltr.uc.trc:A..D_asc --> currently says "all letters"... but should say "A thru D"
+
         String splitDesc[] = tutor.tutor_desc.split("\\.");
         String modeOfEntry = "Write";
         // check for trace
@@ -483,6 +484,7 @@ public class CTutorData_Metadata {
         }
 
         String splitSuffix[] = tutor.tutor_id.split(":")[1].split("[\\-\\.]");
+        String str;
         switch(splitDesc[1]) {
 
             // letters
@@ -503,31 +505,41 @@ public class CTutorData_Metadata {
 
                 result.add(String.format("%s %s letters", modeOfEntry, caps));
 
-                String vowels, order;
+                String vowels = null, order;
                 switch(splitSuffix[0]) {
                     case "vow":
                         vowels = "Vowels";
                         break;
 
                     case "all":
-                    default:
                         vowels = "All Letters";
                         break;
 
-                }
-
-                switch(splitSuffix[1]) {
-                    case "asc":
-                        order = "Ascending";
+                    default:
                         break;
 
-                    case "rand":
-                    default:
-                        order = "Random";
-
                 }
-                result.add(String.format("%s, %s", vowels, order));
 
+                // THIS is a mess... fix
+                if (vowels == null) {
+                    // write.ltr.uc:A..D_asc
+                    order = splitSuffix[2].substring(2);
+                    if (order.equals("asc")) order = "ascending";
+
+                    result.add(String.format("Letters %s through %s, %s", splitSuffix[0], splitSuffix[2].substring(0, 1), order));
+                } else {
+                    switch(splitSuffix[1]) {
+                        case "asc":
+                            order = "Ascending";
+                            break;
+
+                        case "rand":
+                        default:
+                            order = "Random";
+
+                    }
+                    result.add(String.format("%s, %s", vowels, order));
+                }
 
                 break;
 
@@ -547,6 +559,12 @@ public class CTutorData_Metadata {
                 if(splitSuffix[0].equals("syl")) {
                     String syl = splitSuffix[1];
                     wordToWrite = String.format("the syllable %s", syl);
+                } else if (splitSuffix[0].equals("phon")) {
+                    String[] g2p = splitSuffix[1].split("2");
+                    wordToWrite = " words with g2p: <i>" + g2p[0] + "</i> to <i>" + g2p[1] + "</i>";
+
+                } else if (splitSuffix[1].startsWith("dolch")) {
+                    wordToWrite = splitSuffix[1].substring(6) + " grade Dolch words";
                 } else if (splitSuffix[1].equals("wrd")) {
 
                     if(splitSuffix[2].equals("cat")) {
@@ -599,6 +617,19 @@ public class CTutorData_Metadata {
                 break;
 
 
+            case "dolch":
+
+                str = "Write " + splitSuffix[2] + " grade Dolch words";
+                result.add(str);
+                break;
+
+
+            case "phon":
+
+
+
+
+
             default:
         }
 
@@ -623,11 +654,6 @@ public class CTutorData_Metadata {
 
 
     private static ArrayList<String> processAkiraTutorId(CAt_Data tutor, ArrayList<String> result) {
-
-        // CHUNT NEW
-        // akira:wrd.a2AE
-
-        // CHUNT LIT... these should be put into a Test Class.
 
         //
         // LIT
