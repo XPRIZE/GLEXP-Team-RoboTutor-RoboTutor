@@ -48,6 +48,25 @@ public class ConfigurationItems implements ILoadableObject {
         }
     }
 
+    // used for QuickOptions
+    public ConfigurationItems(String config_version, boolean language_override,
+                              boolean show_tutorversion, boolean show_debug_launcher,
+                              boolean language_switcher, boolean no_asr_apps,
+                              String language_feature_id, boolean show_demo_vids,
+                              boolean use_placement, boolean record_audio) {
+
+        this.config_version = config_version;
+        this.language_override = language_override;
+        this.show_tutorversion = show_tutorversion;
+        this.show_debug_launcher = show_debug_launcher;
+        this.language_switcher = language_switcher;
+        this.no_asr_apps = no_asr_apps;
+        this.language_feature_id = language_feature_id;
+        this.show_demo_vids = show_demo_vids;
+        this.use_placement = use_placement;
+        this.record_audio = record_audio;
+    }
+
     public void setDefaults() {
         // use the swahili versions as default
         config_version = "release_sw";

@@ -160,7 +160,6 @@
             {"name": "LOG_EVENT", "type": "QUEUEDCOMMAND", "id": "SBubblePop", "method": "logState", "parms": "type#node,value#INTROSTATE:String", "features":""},
 
             {"type": "AUDIO", "command": "PLAY", "soundsource": "{{SBubblePop.sound_track}}", "soundpackage":"tutor_effect", "repeat":true, "volume": 0.10, "mode":"event", "features": ""},
-            // OPEN_SOURCE this should be different
             {"type": "AUDIO", "command": "PLAY", "soundsource": "Please tap on it.mp3", "soundpackage":"default", "volume": 0.7, "mode":"flow", "features": ""}
           ]
         },
