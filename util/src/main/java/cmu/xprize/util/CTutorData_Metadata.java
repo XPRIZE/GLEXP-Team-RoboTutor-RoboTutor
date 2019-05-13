@@ -236,9 +236,9 @@ public class CTutorData_Metadata {
     public static ArrayList<String> parseNameIntoLabels(CAt_Data tutor) {
 
         // OPEN_SOURCE FIXME
-        // write.ltr.uc.trc:A..D_asc
-        // bpop.ltr.lc:A..D.asc.show.mc
-        // write.wrd:phon.m2M
+        // write.ltr.uc.trc:A..D_asc √√√
+        // bpop.ltr.lc:A..D.asc.show.mc --> fix
+        // write.wrd:phon.m2M √√√
 
         Log.d("CHUNT", "tutor_desc = " + tutor.tutor_desc);
         // tutortype is first token... e.g. "story.hear" --> "story"
@@ -268,7 +268,6 @@ public class CTutorData_Metadata {
                     break;
 
                 case "bpop":
-                    // CHUNT this is the most complicated...
                     result = processBubblePopTutorId(tutor, result);
 
                     break;
@@ -340,7 +339,7 @@ public class CTutorData_Metadata {
             }
         }catch (Exception e) {
             // result.add("<b>Error generating name</b>");
-            // CHUNT commenting out (for now) so that it doesn't show the error
+            // commenting out (for now) so that it doesn't show the error
         }
 
         // give it some empty lines
@@ -355,10 +354,8 @@ public class CTutorData_Metadata {
 
     private static ArrayList<String> processStoryTutorId(CAt_Data tutor, ArrayList<String> result) {
 
-        // CHUNT 4/14
         // story.hear::1_1 --> "Error generating name"
         // story.[hear|echo|read]::\d_\d --> "Error generating name"
-
 
         String[] splitStory = tutor.tutor_id.split(":");
         String storySuffix = splitStory[2];
@@ -374,8 +371,6 @@ public class CTutorData_Metadata {
 
             result.add(String.format(Locale.US, "%s numbers from <b>%d</b> to <b>%d</b>",
                     storyModeCap, Integer.parseInt(storyNumberSuffix[0]), Integer.parseInt(storyNumberSuffix[2])));
-
-            // CHUNT could add more details...
 
         } else {
 
@@ -455,16 +450,12 @@ public class CTutorData_Metadata {
     }
 
     private static ArrayList<String> processWriteTutorId(CAt_Data tutor, ArrayList<String> result) {
-        // USIDORE Write.lit Write.math
-        // DO NEXT
+        // write.wrd.dic:phon.r2R √√√
+        // write.wrd.trc:phon.m2M √√√
+        // write.wrd:dolch_preprimer √√√
+        // write.wrd:dolch_1st_grade √√√
 
-        // CHUNT 4/14
-        // write.wrd.dic:phon.r2R --> "Write null"
-        // write.wrd.trc:phon.m2M --> "Write null"
-        // write.wrd:dolch_preprimer --> "Write null"
-        // write.wrd:dolch_1st_grade --> "Write null"
-
-        // write.ltr.uc.trc:A..D_asc --> currently says "all letters"... but should say "A thru D"
+        // write.ltr.uc.trc:A..D_asc √√√
 
         String splitDesc[] = tutor.tutor_desc.split("\\.");
         String modeOfEntry = "Write";
@@ -603,7 +594,6 @@ public class CTutorData_Metadata {
                 // numbers
             case "num":
 
-                // USIDORE finish me
                 String numberToWrite = "the number";
                 result.add(String.format("%s %s", modeOfEntry, numberToWrite));
                 break;
@@ -611,7 +601,6 @@ public class CTutorData_Metadata {
                // arith
             case "arith":
 
-                // USIDORE finish me
                 String answerToWrite = "the equation";
                 result.add(String.format("%s %s", modeOfEntry, answerToWrite));
                 break;
@@ -788,7 +777,7 @@ public class CTutorData_Metadata {
 
         // new cases for English Version:
 
-        // CHUNT 4/14
+        // OPEN_SOURCE Bpop metadata errors
         // letters
         // bpop.ltr.uc:A..D.asc.noShow.rise --> "null A to Z", "<b>Error generating name</b>"
         // bpop.ltr.lc:A..D.asc.show.rise --> "null A to Z", "<b>Error generating name</b>"
@@ -867,7 +856,7 @@ public class CTutorData_Metadata {
                 result.add(String.format("%s %s", ltrOrderText, ltrTypeText));
 
 
-                showWord = suffixSplit[7]; // CHUNT wrong index...
+                showWord = suffixSplit[7]; // wrong index?
                 switch(showWord) {
                     case "show":
                         result.add("Audio plus visual stimuli");
@@ -899,7 +888,7 @@ public class CTutorData_Metadata {
 
                 showWord = null;
 
-                boolean syl = suffixSplit[3].equals("syl"); // CHUNT e2EH.show.rise not enough
+                boolean syl = suffixSplit[3].equals("syl"); // OPEN_SOURCE e2EH.show.rise not enough
                 // check if syllable
                 if(syl) {
                     if (suffixSplit[0].substring(1).equals("ch")) {
