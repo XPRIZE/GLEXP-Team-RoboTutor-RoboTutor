@@ -1,7 +1,9 @@
 {
   "bootFeatures":"FTR_DEMO_NUM",
 
-  "dataSource": [
-    "4"
-  ]
+  "dataSource": [{
+    "stimulus": "4",
+    "audioStimulus": ["4"],
+    "answer": "4"
+  }]
 }
