@@ -6,6 +6,23 @@
 Welcome to RoboTutor: this version was uploaded to XPrize 11/20/2018. For subsequent changes, see [https://github.com/RoboTutorLLC/RoboTutor](https://github.com/RoboTutorLLC/RoboTutor).
 
 
+--- 
+## Quick Installation
+To quickly install the most recent version of RoboTutor without having to download the full source code, follow these steps:
+
+1. Go to [this Google Drive folder](https://drive.google.com/open?id=1wbqO6CLq8npQTPJc22B8cD2G80ffFBoC).
+
+2. Download the APK to your tablet (do not install yet).
+
+3. Download *config.json* and place it in the *Download* directory of your tablet.
+
+4. Download the ZIP files for the version you would like to try (Swahili, English, or both), and place them in the *Download* directory of your tablet.
+
+5. Install the RoboTutor APK on your tablet, and launch.
+
+6. Upon launch, RoboTutor will unzip the ZIP assets.
+
+---
 
 ## **Setup and Configuration:**
 
@@ -40,8 +57,7 @@ storeFile=<path_to_location_of_keystore>
 7. Use Android Studio or gradlew to generate a signed APK with the flavor *release_sw*. This will generate the file *robotutor.release_sw.1.8.8.1.apk*. This APK should be transferred to the apk in your local SystemBuild directory.
 
 
-
-
+---
 
 ## **XPrize Submission:**
 
