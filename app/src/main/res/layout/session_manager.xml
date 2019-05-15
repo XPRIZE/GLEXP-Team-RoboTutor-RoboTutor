@@ -17,8 +17,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         app:layout_heightPercent="5%"
-        android:textOff="Swahili"
-        android:textOn="English"/>
+        android:textOff="--> English"
+        android:textOn="--> Swahili"/>
 
     <cmu.xprize.robotutor.tutorengine.widgets.core.TSmComponent
         android:id="@+id/SsmComponent"
