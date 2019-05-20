@@ -70,5 +70,6 @@ The following repositories are part of the Team-RoboTutor entry:
  * XPRIZE/GLEXP-Team-RoboTutor-RoboTransfer 
 
 
-<br>
-<br>
+# Questions?
+
+Do you have questions about the code, content or data? Please reach out to the [Global Learning XPRIZE Community](http://community.xprize.org/learning).
