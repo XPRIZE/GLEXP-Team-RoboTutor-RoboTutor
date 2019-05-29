@@ -1,7 +1,7 @@
 ## Releases
 To quickly install the most recent version of RoboTutor without having to download the full source code, follow these steps:
 
-1. Go to [this Google Drive folder](https://drive.google.com/open?id=1wbqO6CLq8npQTPJc22B8cD2G80ffFBoC).
+1. Go to [this Google Drive folder](https://drive.google.com/open?id=1U_X8rbAJRXi5Hk7acOybAq9idApEJOML).
 
 2. Download the APK to your tablet (do not install yet).
 
