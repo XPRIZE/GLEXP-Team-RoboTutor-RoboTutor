@@ -13801,7 +13801,7 @@
       "cell_column": "2",
       "same": "story.echo::1_1",
       "next": "story.read::1_1",
-      "next_next": "story.pic.hear::1_1",
+      "next_next": "story.clo.hear::1_1",
       "prev": "story.hear::1_1",
       "harder": "story.read::1_7",
       "easier": "story.hear::1_1"
@@ -13815,26 +13815,11 @@
       "cell_row": "1",
       "cell_column": "3",
       "same": "story.read::1_1",
-      "next": "story.pic.hear::1_1",
-      "next_next": "story.clo.hear::1_1",
-      "prev": "story.echo::1_1",
-      "harder": "story.pic.hear::1_7",
-      "easier": "story.echo::1_1"
-    },
-    "story.pic.hear::1_1": {
-      "type": "TRANSITION",
-      "skill": "stories",
-      "tutor_id": "story.pic.hear::1_1",
-      "tutor_desc": "story.pic.hear",
-      "tutor_data": "[encfolder]1_1",
-      "cell_row": "1",
-      "cell_column": "4",
-      "same": "story.pic.hear::1_1",
       "next": "story.clo.hear::1_1",
       "next_next": "story.hear::1_2",
-      "prev": "story.read::1_1",
+      "prev": "story.echo::1_1",
       "harder": "story.clo.hear::1_7",
-      "easier": "story.read::1_1"
+      "easier": "story.echo::1_1"
     },
     "story.clo.hear::1_1": {
       "type": "TRANSITION",
@@ -13843,13 +13828,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]1_1",
       "cell_row": "1",
-      "cell_column": "5",
+      "cell_column": "4",
       "same": "story.clo.hear::1_1",
       "next": "story.hear::1_2",
       "next_next": "story.echo::1_2",
-      "prev": "story.pic.hear::1_1",
+      "prev": "story.read::1_1",
       "harder": "story.hear::1_8",
-      "easier": "story.pic.hear::1_1"
+      "easier": "story.read::1_1"
     },
     "story.hear::1_2": {
       "type": "TRANSITION",
@@ -13858,7 +13843,7 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]1_2",
       "cell_row": "1",
-      "cell_column": "6",
+      "cell_column": "5",
       "same": "story.hear::1_2",
       "next": "story.echo::1_2",
       "next_next": "story.read::1_2",
@@ -13873,7 +13858,7 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]1_2",
       "cell_row": "1",
-      "cell_column": "7",
+      "cell_column": "6",
       "same": "story.echo::1_2",
       "next": "story.read::1_2",
       "next_next": "story.pic.hear::1_2",
@@ -13888,7 +13873,7 @@
       "tutor_desc": "story.read",
       "tutor_data": "[encfolder]1_2",
       "cell_row": "1",
-      "cell_column": "8",
+      "cell_column": "7",
       "same": "story.read::1_2",
       "next": "story.pic.hear::1_2",
       "next_next": "story.clo.hear::1_2",
@@ -13903,7 +13888,7 @@
       "tutor_desc": "story.pic.hear",
       "tutor_data": "[encfolder]1_2",
       "cell_row": "1",
-      "cell_column": "9",
+      "cell_column": "8",
       "same": "story.pic.hear::1_2",
       "next": "story.clo.hear::1_2",
       "next_next": "story.hear::1_3",
@@ -13918,7 +13903,7 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]1_2",
       "cell_row": "1",
-      "cell_column": "10",
+      "cell_column": "9",
       "same": "story.clo.hear::1_2",
       "next": "story.hear::1_3",
       "next_next": "story.echo::1_3",
@@ -13933,7 +13918,7 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]1_3",
       "cell_row": "1",
-      "cell_column": "11",
+      "cell_column": "10",
       "same": "story.hear::1_3",
       "next": "story.echo::1_3",
       "next_next": "story.read::1_3",
@@ -13948,7 +13933,7 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]1_3",
       "cell_row": "1",
-      "cell_column": "12",
+      "cell_column": "11",
       "same": "story.echo::1_3",
       "next": "story.read::1_3",
       "next_next": "story.pic.hear::1_3",
@@ -13963,12 +13948,12 @@
       "tutor_desc": "story.read",
       "tutor_data": "[encfolder]1_3",
       "cell_row": "1",
-      "cell_column": "13",
+      "cell_column": "12",
       "same": "story.read::1_3",
       "next": "story.pic.hear::1_3",
       "next_next": "story.clo.hear::1_3",
       "prev": "story.echo::1_3",
-      "harder": "story.pic.hear::1_9",
+      "harder": "story.clo.hear::1_9",
       "easier": "story.echo::1_3"
     },
     "story.pic.hear::1_3": {
@@ -13978,12 +13963,12 @@
       "tutor_desc": "story.pic.hear",
       "tutor_data": "[encfolder]1_3",
       "cell_row": "1",
-      "cell_column": "14",
+      "cell_column": "13",
       "same": "story.pic.hear::1_3",
       "next": "story.clo.hear::1_3",
       "next_next": "story.hear::1_4",
       "prev": "story.read::1_3",
-      "harder": "story.clo.hear::1_9",
+      "harder": "story.hear::1_10",
       "easier": "story.read::1_3"
     },
     "story.clo.hear::1_3": {
@@ -13993,12 +13978,12 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]1_3",
       "cell_row": "1",
-      "cell_column": "15",
+      "cell_column": "14",
       "same": "story.clo.hear::1_3",
       "next": "story.hear::1_4",
       "next_next": "story.echo::1_4",
       "prev": "story.pic.hear::1_3",
-      "harder": "story.hear::1_10",
+      "harder": "story.echo::1_10",
       "easier": "story.pic.hear::1_3"
     },
     "story.hear::1_4": {
@@ -14008,12 +13993,12 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]1_4",
       "cell_row": "1",
-      "cell_column": "16",
+      "cell_column": "15",
       "same": "story.hear::1_4",
       "next": "story.echo::1_4",
-      "next_next": "story.read::1_4",
+      "next_next": "story.read::",
       "prev": "story.clo.hear::1_3",
-      "harder": "story.echo::1_10",
+      "harder": "story.read::1_10",
       "easier": "story.clo.hear::1_3"
     },
     "story.echo::1_4": {
@@ -14023,43 +14008,28 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]1_4",
       "cell_row": "1",
-      "cell_column": "17",
+      "cell_column": "16",
       "same": "story.echo::1_4",
-      "next": "story.read::1_4",
-      "next_next": "story.pic.hear::1_4",
+      "next": "story.read::",
+      "next_next": "story.clo.hear::1_4",
       "prev": "story.hear::1_4",
-      "harder": "story.read::1_10",
+      "harder": "story.pic.hear::1_10",
       "easier": "story.hear::1_4"
     },
-    "story.read::1_4": {
+    "story.read::": {
       "type": "TRANSITION",
       "skill": "stories",
-      "tutor_id": "story.read::1_4",
+      "tutor_id": "story.read::",
       "tutor_desc": "story.read",
-      "tutor_data": "[encfolder]1_4",
+      "tutor_data": "[encfolder]",
       "cell_row": "1",
-      "cell_column": "18",
-      "same": "story.read::1_4",
-      "next": "story.pic.hear::1_4",
-      "next_next": "story.clo.hear::1_4",
-      "prev": "story.echo::1_4",
-      "harder": "story.pic.hear::1_10",
-      "easier": "story.echo::1_4"
-    },
-    "story.pic.hear::1_4": {
-      "type": "TRANSITION",
-      "skill": "stories",
-      "tutor_id": "story.pic.hear::1_4",
-      "tutor_desc": "story.pic.hear",
-      "tutor_data": "[encfolder]1_4",
-      "cell_row": "1",
-      "cell_column": "19",
-      "same": "story.pic.hear::1_4",
+      "cell_column": "17",
+      "same": "story.read::",
       "next": "story.clo.hear::1_4",
       "next_next": "story.hear::1_5",
-      "prev": "story.read::1_4",
+      "prev": "story.echo::1_4",
       "harder": "story.clo.hear::1_10",
-      "easier": "story.read::1_4"
+      "easier": "story.echo::1_4"
     },
     "story.clo.hear::1_4": {
       "type": "TRANSITION",
@@ -14068,13 +14038,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]1_4",
       "cell_row": "1",
-      "cell_column": "20",
+      "cell_column": "18",
       "same": "story.clo.hear::1_4",
       "next": "story.hear::1_5",
       "next_next": "story.echo::1_5",
-      "prev": "story.pic.hear::1_4",
+      "prev": "story.read::",
       "harder": "story.hear::1_11",
-      "easier": "story.pic.hear::1_4"
+      "easier": "story.read::"
     },
     "story.hear::1_5": {
       "type": "TRANSITION",
@@ -14083,7 +14053,7 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]1_5",
       "cell_row": "1",
-      "cell_column": "21",
+      "cell_column": "19",
       "same": "story.hear::1_5",
       "next": "story.echo::1_5",
       "next_next": "story.read::1_5",
@@ -14098,10 +14068,10 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]1_5",
       "cell_row": "1",
-      "cell_column": "22",
+      "cell_column": "20",
       "same": "story.echo::1_5",
       "next": "story.read::1_5",
-      "next_next": "story.pic.hear::1_5",
+      "next_next": "story.clo.hear::1_5",
       "prev": "story.hear::1_5",
       "harder": "story.read::1_11",
       "easier": "story.hear::1_5"
@@ -14113,28 +14083,13 @@
       "tutor_desc": "story.read",
       "tutor_data": "[encfolder]1_5",
       "cell_row": "1",
-      "cell_column": "23",
+      "cell_column": "21",
       "same": "story.read::1_5",
-      "next": "story.pic.hear::1_5",
-      "next_next": "story.clo.hear::1_5",
+      "next": "story.clo.hear::1_5",
+      "next_next": "story.hear::1_6",
       "prev": "story.echo::1_5",
       "harder": "story.pic.hear::1_11",
       "easier": "story.echo::1_5"
-    },
-    "story.pic.hear::1_5": {
-      "type": "TRANSITION",
-      "skill": "stories",
-      "tutor_id": "story.pic.hear::1_5",
-      "tutor_desc": "story.pic.hear",
-      "tutor_data": "[encfolder]1_5",
-      "cell_row": "1",
-      "cell_column": "24",
-      "same": "story.pic.hear::1_5",
-      "next": "story.clo.hear::1_5",
-      "next_next": "story.hear::1_6",
-      "prev": "story.read::1_5",
-      "harder": "story.clo.hear::1_11",
-      "easier": "story.read::1_5"
     },
     "story.clo.hear::1_5": {
       "type": "TRANSITION",
@@ -14143,13 +14098,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]1_5",
       "cell_row": "1",
-      "cell_column": "25",
+      "cell_column": "22",
       "same": "story.clo.hear::1_5",
       "next": "story.hear::1_6",
       "next_next": "story.echo::1_6",
-      "prev": "story.pic.hear::1_5",
-      "harder": "story.hear::1_12",
-      "easier": "story.pic.hear::1_5"
+      "prev": "story.read::1_5",
+      "harder": "story.clo.hear::1_11",
+      "easier": "story.read::1_5"
     },
     "story.hear::1_6": {
       "type": "TRANSITION",
@@ -14158,12 +14113,12 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]1_6",
       "cell_row": "1",
-      "cell_column": "26",
+      "cell_column": "23",
       "same": "story.hear::1_6",
       "next": "story.echo::1_6",
       "next_next": "story.read::1_6",
       "prev": "story.clo.hear::1_5",
-      "harder": "story.echo::1_12",
+      "harder": "story.hear::1_12",
       "easier": "story.clo.hear::1_5"
     },
     "story.echo::1_6": {
@@ -14173,12 +14128,12 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]1_6",
       "cell_row": "1",
-      "cell_column": "27",
+      "cell_column": "24",
       "same": "story.echo::1_6",
       "next": "story.read::1_6",
-      "next_next": "story.pic.hear::1_6",
+      "next_next": "story.clo.hear::1_6",
       "prev": "story.hear::1_6",
-      "harder": "story.read::1_12",
+      "harder": "story.echo::1_12",
       "easier": "story.hear::1_6"
     },
     "story.read::1_6": {
@@ -14188,28 +14143,13 @@
       "tutor_desc": "story.read",
       "tutor_data": "[encfolder]1_6",
       "cell_row": "1",
-      "cell_column": "28",
+      "cell_column": "25",
       "same": "story.read::1_6",
-      "next": "story.pic.hear::1_6",
-      "next_next": "story.clo.hear::1_6",
-      "prev": "story.echo::1_6",
-      "harder": "story.pic.hear::1_12",
-      "easier": "story.echo::1_6"
-    },
-    "story.pic.hear::1_6": {
-      "type": "TRANSITION",
-      "skill": "stories",
-      "tutor_id": "story.pic.hear::1_6",
-      "tutor_desc": "story.pic.hear",
-      "tutor_data": "[encfolder]1_6",
-      "cell_row": "1",
-      "cell_column": "29",
-      "same": "story.pic.hear::1_6",
       "next": "story.clo.hear::1_6",
       "next_next": "story.hear::1_7",
-      "prev": "story.read::1_6",
-      "harder": "story.clo.hear::1_12",
-      "easier": "story.read::1_6"
+      "prev": "story.echo::1_6",
+      "harder": "story.read::1_12",
+      "easier": "story.echo::1_6"
     },
     "story.clo.hear::1_6": {
       "type": "TRANSITION",
@@ -14218,13 +14158,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]1_6",
       "cell_row": "1",
-      "cell_column": "30",
+      "cell_column": "26",
       "same": "story.clo.hear::1_6",
       "next": "story.hear::1_7",
       "next_next": "story.echo::1_7",
-      "prev": "story.pic.hear::1_6",
-      "harder": "story.clo.hear::1_12",
-      "easier": "story.pic.hear::1_6"
+      "prev": "story.read::1_6",
+      "harder": "story.pic.hear::1_12",
+      "easier": "story.read::1_6"
     },
     "story.hear::1_7": {
       "type": "TRANSITION",
@@ -14251,7 +14191,7 @@
       "cell_column": "2",
       "same": "story.echo::1_7",
       "next": "story.read::1_7",
-      "next_next": "story.pic.hear::1_7",
+      "next_next": "story.clo.hear::1_7",
       "prev": "story.hear::1_7",
       "harder": "story.read::1_13",
       "easier": "story.hear::1_1"
@@ -14265,26 +14205,11 @@
       "cell_row": "2",
       "cell_column": "3",
       "same": "story.read::1_7",
-      "next": "story.pic.hear::1_7",
-      "next_next": "story.clo.hear::1_7",
+      "next": "story.clo.hear::1_7",
+      "next_next": "story.hear::1_8",
       "prev": "story.echo::1_7",
       "harder": "story.pic.hear::1_13",
       "easier": "story.echo::1_1"
-    },
-    "story.pic.hear::1_7": {
-      "type": "TRANSITION",
-      "skill": "stories",
-      "tutor_id": "story.pic.hear::1_7",
-      "tutor_desc": "story.pic.hear",
-      "tutor_data": "[encfolder]1_7",
-      "cell_row": "2",
-      "cell_column": "4",
-      "same": "story.pic.hear::1_7",
-      "next": "story.clo.hear::1_7",
-      "next_next": "story.hear::1_8",
-      "prev": "story.read::1_7",
-      "harder": "story.clo.hear::1_13",
-      "easier": "story.read::1_1"
     },
     "story.clo.hear::1_7": {
       "type": "TRANSITION",
@@ -14293,13 +14218,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]1_7",
       "cell_row": "2",
-      "cell_column": "5",
+      "cell_column": "4",
       "same": "story.clo.hear::1_7",
       "next": "story.hear::1_8",
       "next_next": "story.echo::1_8",
-      "prev": "story.pic.hear::1_7",
-      "harder": "story.hear::1_14",
-      "easier": "story.pic.hear::1_1"
+      "prev": "story.read::1_7",
+      "harder": "story.clo.hear::1_13",
+      "easier": "story.read::1_1"
     },
     "story.hear::1_8": {
       "type": "TRANSITION",
@@ -14308,12 +14233,12 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]1_8",
       "cell_row": "2",
-      "cell_column": "6",
+      "cell_column": "5",
       "same": "story.hear::1_8",
       "next": "story.echo::1_8",
       "next_next": "story.read::1_8",
       "prev": "story.clo.hear::1_7",
-      "harder": "story.echo::1_14",
+      "harder": "story.hear::1_14",
       "easier": "story.clo.hear::1_1"
     },
     "story.echo::1_8": {
@@ -14323,12 +14248,12 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]1_8",
       "cell_row": "2",
-      "cell_column": "7",
+      "cell_column": "6",
       "same": "story.echo::1_8",
       "next": "story.read::1_8",
       "next_next": "story.pic.hear::1_8",
       "prev": "story.hear::1_8",
-      "harder": "story.read::1_14",
+      "harder": "story.echo::1_14",
       "easier": "story.hear::1_2"
     },
     "story.read::1_8": {
@@ -14338,12 +14263,12 @@
       "tutor_desc": "story.read",
       "tutor_data": "[encfolder]1_8",
       "cell_row": "2",
-      "cell_column": "8",
+      "cell_column": "7",
       "same": "story.read::1_8",
       "next": "story.pic.hear::1_8",
       "next_next": "story.clo.hear::1_8",
       "prev": "story.echo::1_8",
-      "harder": "story.pic.hear::1_14",
+      "harder": "story.read::1_14",
       "easier": "story.echo::1_2"
     },
     "story.pic.hear::1_8": {
@@ -14353,7 +14278,7 @@
       "tutor_desc": "story.pic.hear",
       "tutor_data": "[encfolder]1_8",
       "cell_row": "2",
-      "cell_column": "9",
+      "cell_column": "8",
       "same": "story.pic.hear::1_8",
       "next": "story.clo.hear::1_8",
       "next_next": "story.hear::1_9",
@@ -14368,7 +14293,7 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]1_8",
       "cell_row": "2",
-      "cell_column": "10",
+      "cell_column": "9",
       "same": "story.clo.hear::1_8",
       "next": "story.hear::1_9",
       "next_next": "story.echo::1_9",
@@ -14383,7 +14308,7 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]1_9",
       "cell_row": "2",
-      "cell_column": "11",
+      "cell_column": "10",
       "same": "story.hear::1_9",
       "next": "story.echo::1_9",
       "next_next": "story.read::1_9",
@@ -14398,10 +14323,10 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]1_9",
       "cell_row": "2",
-      "cell_column": "12",
+      "cell_column": "11",
       "same": "story.echo::1_9",
       "next": "story.read::1_9",
-      "next_next": "story.pic.hear::1_9",
+      "next_next": "story.clo.hear::1_9",
       "prev": "story.hear::1_9",
       "harder": "story.read::1_15",
       "easier": "story.hear::1_3"
@@ -14413,28 +14338,13 @@
       "tutor_desc": "story.read",
       "tutor_data": "[encfolder]1_9",
       "cell_row": "2",
-      "cell_column": "13",
+      "cell_column": "12",
       "same": "story.read::1_9",
-      "next": "story.pic.hear::1_9",
-      "next_next": "story.clo.hear::1_9",
+      "next": "story.clo.hear::1_9",
+      "next_next": "story.hear::1_10",
       "prev": "story.echo::1_9",
       "harder": "story.pic.hear::1_15",
       "easier": "story.echo::1_3"
-    },
-    "story.pic.hear::1_9": {
-      "type": "TRANSITION",
-      "skill": "stories",
-      "tutor_id": "story.pic.hear::1_9",
-      "tutor_desc": "story.pic.hear",
-      "tutor_data": "[encfolder]1_9",
-      "cell_row": "2",
-      "cell_column": "14",
-      "same": "story.pic.hear::1_9",
-      "next": "story.clo.hear::1_9",
-      "next_next": "story.hear::1_10",
-      "prev": "story.read::1_9",
-      "harder": "story.clo.hear::1_15",
-      "easier": "story.read::1_3"
     },
     "story.clo.hear::1_9": {
       "type": "TRANSITION",
@@ -14443,13 +14353,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]1_9",
       "cell_row": "2",
-      "cell_column": "15",
+      "cell_column": "13",
       "same": "story.clo.hear::1_9",
       "next": "story.hear::1_10",
       "next_next": "story.echo::1_10",
-      "prev": "story.pic.hear::1_9",
-      "harder": "story.hear::1_16",
-      "easier": "story.pic.hear::1_3"
+      "prev": "story.read::1_9",
+      "harder": "story.clo.hear::1_15",
+      "easier": "story.read::1_3"
     },
     "story.hear::1_10": {
       "type": "TRANSITION",
@@ -14458,13 +14368,13 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]1_10",
       "cell_row": "2",
-      "cell_column": "16",
+      "cell_column": "14",
       "same": "story.hear::1_10",
       "next": "story.echo::1_10",
       "next_next": "story.read::1_10",
       "prev": "story.clo.hear::1_9",
-      "harder": "story.echo::1_16",
-      "easier": "story.clo.hear::1_3"
+      "harder": "story.hear::1_16",
+      "easier": "story.pic.hear::1_3"
     },
     "story.echo::1_10": {
       "type": "TRANSITION",
@@ -14473,13 +14383,13 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]1_10",
       "cell_row": "2",
-      "cell_column": "17",
+      "cell_column": "15",
       "same": "story.echo::1_10",
       "next": "story.read::1_10",
       "next_next": "story.pic.hear::1_10",
       "prev": "story.hear::1_10",
-      "harder": "story.read::1_16",
-      "easier": "story.hear::1_4"
+      "harder": "story.echo::1_16",
+      "easier": "story.clo.hear::1_3"
     },
     "story.read::1_10": {
       "type": "TRANSITION",
@@ -14488,13 +14398,13 @@
       "tutor_desc": "story.read",
       "tutor_data": "[encfolder]1_10",
       "cell_row": "2",
-      "cell_column": "18",
+      "cell_column": "16",
       "same": "story.read::1_10",
       "next": "story.pic.hear::1_10",
       "next_next": "story.clo.hear::1_10",
       "prev": "story.echo::1_10",
-      "harder": "story.pic.hear::1_16",
-      "easier": "story.echo::1_4"
+      "harder": "story.read::1_16",
+      "easier": "story.hear::1_4"
     },
     "story.pic.hear::1_10": {
       "type": "TRANSITION",
@@ -14503,13 +14413,13 @@
       "tutor_desc": "story.pic.hear",
       "tutor_data": "[encfolder]1_10",
       "cell_row": "2",
-      "cell_column": "19",
+      "cell_column": "17",
       "same": "story.pic.hear::1_10",
       "next": "story.clo.hear::1_10",
       "next_next": "story.hear::1_11",
       "prev": "story.read::1_10",
-      "harder": "story.clo.hear::1_16",
-      "easier": "story.read::1_4"
+      "harder": "story.pic.hear::1_16",
+      "easier": "story.echo::1_4"
     },
     "story.clo.hear::1_10": {
       "type": "TRANSITION",
@@ -14518,13 +14428,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]1_10",
       "cell_row": "2",
-      "cell_column": "20",
+      "cell_column": "18",
       "same": "story.clo.hear::1_10",
       "next": "story.hear::1_11",
       "next_next": "story.echo::1_11",
       "prev": "story.pic.hear::1_10",
-      "harder": "story.hear::1_17",
-      "easier": "story.pic.hear::1_4"
+      "harder": "story.clo.hear::1_16",
+      "easier": "story.read::"
     },
     "story.hear::1_11": {
       "type": "TRANSITION",
@@ -14533,12 +14443,12 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]1_11",
       "cell_row": "2",
-      "cell_column": "21",
+      "cell_column": "19",
       "same": "story.hear::1_11",
       "next": "story.echo::1_11",
       "next_next": "story.read::1_11",
       "prev": "story.clo.hear::1_10",
-      "harder": "story.echo::1_17",
+      "harder": "story.hear::1_17",
       "easier": "story.clo.hear::1_4"
     },
     "story.echo::1_11": {
@@ -14548,12 +14458,12 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]1_11",
       "cell_row": "2",
-      "cell_column": "22",
+      "cell_column": "20",
       "same": "story.echo::1_11",
       "next": "story.read::1_11",
       "next_next": "story.pic.hear::1_11",
       "prev": "story.hear::1_11",
-      "harder": "story.read::1_17",
+      "harder": "story.echo::1_17",
       "easier": "story.hear::1_5"
     },
     "story.read::1_11": {
@@ -14563,12 +14473,12 @@
       "tutor_desc": "story.read",
       "tutor_data": "[encfolder]1_11",
       "cell_row": "2",
-      "cell_column": "23",
+      "cell_column": "21",
       "same": "story.read::1_11",
       "next": "story.pic.hear::1_11",
       "next_next": "story.clo.hear::1_11",
       "prev": "story.echo::1_11",
-      "harder": "story.pic.hear::1_17",
+      "harder": "story.read::1_17",
       "easier": "story.echo::1_5"
     },
     "story.pic.hear::1_11": {
@@ -14578,12 +14488,12 @@
       "tutor_desc": "story.pic.hear",
       "tutor_data": "[encfolder]1_11",
       "cell_row": "2",
-      "cell_column": "24",
+      "cell_column": "22",
       "same": "story.pic.hear::1_11",
       "next": "story.clo.hear::1_11",
       "next_next": "story.hear::1_12",
       "prev": "story.read::1_11",
-      "harder": "story.clo.hear::1_17",
+      "harder": "story.pic.hear::1_17",
       "easier": "story.read::1_5"
     },
     "story.clo.hear::1_11": {
@@ -14593,13 +14503,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]1_11",
       "cell_row": "2",
-      "cell_column": "25",
+      "cell_column": "23",
       "same": "story.clo.hear::1_11",
       "next": "story.hear::1_12",
       "next_next": "story.echo::1_12",
       "prev": "story.pic.hear::1_11",
-      "harder": "story.hear::1_18",
-      "easier": "story.pic.hear::1_5"
+      "harder": "story.clo.hear::1_17",
+      "easier": "story.clo.hear::1_5"
     },
     "story.hear::1_12": {
       "type": "TRANSITION",
@@ -14608,13 +14518,13 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]1_12",
       "cell_row": "2",
-      "cell_column": "26",
+      "cell_column": "24",
       "same": "story.hear::1_12",
       "next": "story.echo::1_12",
       "next_next": "story.read::1_12",
       "prev": "story.clo.hear::1_11",
-      "harder": "story.echo::1_18",
-      "easier": "story.clo.hear::1_5"
+      "harder": "story.hear::1_18",
+      "easier": "story.hear::1_6"
     },
     "story.echo::1_12": {
       "type": "TRANSITION",
@@ -14623,13 +14533,13 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]1_12",
       "cell_row": "2",
-      "cell_column": "27",
+      "cell_column": "25",
       "same": "story.echo::1_12",
       "next": "story.read::1_12",
       "next_next": "story.pic.hear::1_12",
       "prev": "story.hear::1_12",
-      "harder": "story.read::1_18",
-      "easier": "story.hear::1_6"
+      "harder": "story.echo::1_18",
+      "easier": "story.echo::1_6"
     },
     "story.read::1_12": {
       "type": "TRANSITION",
@@ -14638,13 +14548,13 @@
       "tutor_desc": "story.read",
       "tutor_data": "[encfolder]1_12",
       "cell_row": "2",
-      "cell_column": "28",
+      "cell_column": "26",
       "same": "story.read::1_12",
       "next": "story.pic.hear::1_12",
       "next_next": "story.clo.hear::1_12",
       "prev": "story.echo::1_12",
-      "harder": "story.pic.hear::1_18",
-      "easier": "story.echo::1_6"
+      "harder": "story.read::1_18",
+      "easier": "story.read::1_6"
     },
     "story.pic.hear::1_12": {
       "type": "TRANSITION",
@@ -14653,13 +14563,13 @@
       "tutor_desc": "story.pic.hear",
       "tutor_data": "[encfolder]1_12",
       "cell_row": "2",
-      "cell_column": "29",
+      "cell_column": "27",
       "same": "story.pic.hear::1_12",
       "next": "story.clo.hear::1_12",
       "next_next": "story.hear::1_13",
       "prev": "story.read::1_12",
       "harder": "story.clo.hear::1_18",
-      "easier": "story.read::1_6"
+      "easier": "story.clo.hear::1_6"
     },
     "story.clo.hear::1_12": {
       "type": "TRANSITION",
@@ -14668,13 +14578,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]1_12",
       "cell_row": "2",
-      "cell_column": "30",
+      "cell_column": "28",
       "same": "story.clo.hear::1_12",
       "next": "story.hear::1_13",
       "next_next": "story.echo::1_13",
       "prev": "story.pic.hear::1_12",
       "harder": "story.clo.hear::1_18",
-      "easier": "story.pic.hear::1_6"
+      "easier": "story.clo.hear::1_6"
     },
     "story.hear::1_13": {
       "type": "TRANSITION",
@@ -14749,7 +14659,7 @@
       "next_next": "story.echo::1_14",
       "prev": "story.pic.hear::1_13",
       "harder": "story.hear::1_20",
-      "easier": "story.pic.hear::1_7"
+      "easier": "story.clo.hear::1_7"
     },
     "story.hear::1_14": {
       "type": "TRANSITION",
@@ -14764,7 +14674,7 @@
       "next_next": "story.read::1_14",
       "prev": "story.clo.hear::1_13",
       "harder": "story.echo::1_20",
-      "easier": "story.clo.hear::1_7"
+      "easier": "story.hear::1_8"
     },
     "story.echo::1_14": {
       "type": "TRANSITION",
@@ -14776,10 +14686,10 @@
       "cell_column": "7",
       "same": "story.echo::1_14",
       "next": "story.read::1_14",
-      "next_next": "story.pic.hear::1_14",
+      "next_next": "story.clo.hear::1_14",
       "prev": "story.hear::1_14",
       "harder": "story.read::1_20",
-      "easier": "story.hear::1_8"
+      "easier": "story.echo::1_8"
     },
     "story.read::1_14": {
       "type": "TRANSITION",
@@ -14790,25 +14700,10 @@
       "cell_row": "3",
       "cell_column": "8",
       "same": "story.read::1_14",
-      "next": "story.pic.hear::1_14",
-      "next_next": "story.clo.hear::1_14",
-      "prev": "story.echo::1_14",
-      "harder": "story.pic.hear::1_20",
-      "easier": "story.echo::1_8"
-    },
-    "story.pic.hear::1_14": {
-      "type": "TRANSITION",
-      "skill": "stories",
-      "tutor_id": "story.pic.hear::1_14",
-      "tutor_desc": "story.pic.hear",
-      "tutor_data": "[encfolder]1_14",
-      "cell_row": "3",
-      "cell_column": "9",
-      "same": "story.pic.hear::1_14",
       "next": "story.clo.hear::1_14",
       "next_next": "story.hear::1_15",
-      "prev": "story.read::1_14",
-      "harder": "story.clo.hear::1_20",
+      "prev": "story.echo::1_14",
+      "harder": "story.pic.hear::1_20",
       "easier": "story.read::1_8"
     },
     "story.clo.hear::1_14": {
@@ -14818,12 +14713,12 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]1_14",
       "cell_row": "3",
-      "cell_column": "10",
+      "cell_column": "9",
       "same": "story.clo.hear::1_14",
       "next": "story.hear::1_15",
       "next_next": "story.echo::1_15",
-      "prev": "story.pic.hear::1_14",
-      "harder": "story.hear::1_21",
+      "prev": "story.read::1_14",
+      "harder": "story.clo.hear::1_20",
       "easier": "story.pic.hear::1_8"
     },
     "story.hear::1_15": {
@@ -14833,12 +14728,12 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]1_15",
       "cell_row": "3",
-      "cell_column": "11",
+      "cell_column": "10",
       "same": "story.hear::1_15",
       "next": "story.echo::1_15",
       "next_next": "story.read::1_15",
       "prev": "story.clo.hear::1_14",
-      "harder": "story.echo::1_21",
+      "harder": "story.hear::1_21",
       "easier": "story.clo.hear::1_8"
     },
     "story.echo::1_15": {
@@ -14848,12 +14743,12 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]1_15",
       "cell_row": "3",
-      "cell_column": "12",
+      "cell_column": "11",
       "same": "story.echo::1_15",
       "next": "story.read::1_15",
       "next_next": "story.pic.hear::1_15",
       "prev": "story.hear::1_15",
-      "harder": "story.read::1_21",
+      "harder": "story.echo::1_21",
       "easier": "story.hear::1_9"
     },
     "story.read::1_15": {
@@ -14863,12 +14758,12 @@
       "tutor_desc": "story.read",
       "tutor_data": "[encfolder]1_15",
       "cell_row": "3",
-      "cell_column": "13",
+      "cell_column": "12",
       "same": "story.read::1_15",
       "next": "story.pic.hear::1_15",
       "next_next": "story.clo.hear::1_15",
       "prev": "story.echo::1_15",
-      "harder": "story.pic.hear::1_21",
+      "harder": "story.read::1_21",
       "easier": "story.echo::1_9"
     },
     "story.pic.hear::1_15": {
@@ -14878,12 +14773,12 @@
       "tutor_desc": "story.pic.hear",
       "tutor_data": "[encfolder]1_15",
       "cell_row": "3",
-      "cell_column": "14",
+      "cell_column": "13",
       "same": "story.pic.hear::1_15",
       "next": "story.clo.hear::1_15",
       "next_next": "story.hear::1_16",
       "prev": "story.read::1_15",
-      "harder": "story.clo.hear::1_21",
+      "harder": "story.pic.hear::1_21",
       "easier": "story.read::1_9"
     },
     "story.clo.hear::1_15": {
@@ -14893,13 +14788,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]1_15",
       "cell_row": "3",
-      "cell_column": "15",
+      "cell_column": "14",
       "same": "story.clo.hear::1_15",
       "next": "story.hear::1_16",
       "next_next": "story.echo::1_16",
       "prev": "story.pic.hear::1_15",
-      "harder": "story.hear::1_22",
-      "easier": "story.pic.hear::1_9"
+      "harder": "story.clo.hear::1_21",
+      "easier": "story.clo.hear::1_9"
     },
     "story.hear::1_16": {
       "type": "TRANSITION",
@@ -14908,13 +14803,13 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]1_16",
       "cell_row": "3",
-      "cell_column": "16",
+      "cell_column": "15",
       "same": "story.hear::1_16",
       "next": "story.echo::1_16",
       "next_next": "story.read::1_16",
       "prev": "story.clo.hear::1_15",
-      "harder": "story.echo::1_22",
-      "easier": "story.clo.hear::1_9"
+      "harder": "story.hear::1_22",
+      "easier": "story.hear::1_10"
     },
     "story.echo::1_16": {
       "type": "TRANSITION",
@@ -14923,13 +14818,13 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]1_16",
       "cell_row": "3",
-      "cell_column": "17",
+      "cell_column": "16",
       "same": "story.echo::1_16",
       "next": "story.read::1_16",
       "next_next": "story.pic.hear::1_16",
       "prev": "story.hear::1_16",
-      "harder": "story.read::1_22",
-      "easier": "story.hear::1_10"
+      "harder": "story.echo::1_22",
+      "easier": "story.echo::1_10"
     },
     "story.read::1_16": {
       "type": "TRANSITION",
@@ -14938,13 +14833,13 @@
       "tutor_desc": "story.read",
       "tutor_data": "[encfolder]1_16",
       "cell_row": "3",
-      "cell_column": "18",
+      "cell_column": "17",
       "same": "story.read::1_16",
       "next": "story.pic.hear::1_16",
       "next_next": "story.clo.hear::1_16",
       "prev": "story.echo::1_16",
-      "harder": "story.pic.hear::1_22",
-      "easier": "story.echo::1_10"
+      "harder": "story.read::1_22",
+      "easier": "story.read::1_10"
     },
     "story.pic.hear::1_16": {
       "type": "TRANSITION",
@@ -14953,13 +14848,13 @@
       "tutor_desc": "story.pic.hear",
       "tutor_data": "[encfolder]1_16",
       "cell_row": "3",
-      "cell_column": "19",
+      "cell_column": "18",
       "same": "story.pic.hear::1_16",
       "next": "story.clo.hear::1_16",
       "next_next": "story.hear::1_17",
       "prev": "story.read::1_16",
-      "harder": "story.clo.hear::1_22",
-      "easier": "story.read::1_10"
+      "harder": "story.pic.hear::1_22",
+      "easier": "story.pic.hear::1_10"
     },
     "story.clo.hear::1_16": {
       "type": "TRANSITION",
@@ -14968,13 +14863,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]1_16",
       "cell_row": "3",
-      "cell_column": "20",
+      "cell_column": "19",
       "same": "story.clo.hear::1_16",
       "next": "story.hear::1_17",
       "next_next": "story.echo::1_17",
       "prev": "story.pic.hear::1_16",
-      "harder": "story.hear::1_23",
-      "easier": "story.pic.hear::1_10"
+      "harder": "story.clo.hear::1_22",
+      "easier": "story.clo.hear::1_10"
     },
     "story.hear::1_17": {
       "type": "TRANSITION",
@@ -14983,13 +14878,13 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]1_17",
       "cell_row": "3",
-      "cell_column": "21",
+      "cell_column": "20",
       "same": "story.hear::1_17",
       "next": "story.echo::1_17",
       "next_next": "story.read::1_17",
       "prev": "story.clo.hear::1_16",
-      "harder": "story.echo::1_23",
-      "easier": "story.clo.hear::1_10"
+      "harder": "story.hear::1_23",
+      "easier": "story.hear::1_11"
     },
     "story.echo::1_17": {
       "type": "TRANSITION",
@@ -14998,13 +14893,13 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]1_17",
       "cell_row": "3",
-      "cell_column": "22",
+      "cell_column": "21",
       "same": "story.echo::1_17",
       "next": "story.read::1_17",
       "next_next": "story.pic.hear::1_17",
       "prev": "story.hear::1_17",
-      "harder": "story.read::1_23",
-      "easier": "story.hear::1_11"
+      "harder": "story.echo::1_23",
+      "easier": "story.echo::1_11"
     },
     "story.read::1_17": {
       "type": "TRANSITION",
@@ -15013,13 +14908,13 @@
       "tutor_desc": "story.read",
       "tutor_data": "[encfolder]1_17",
       "cell_row": "3",
-      "cell_column": "23",
+      "cell_column": "22",
       "same": "story.read::1_17",
       "next": "story.pic.hear::1_17",
       "next_next": "story.clo.hear::1_17",
       "prev": "story.echo::1_17",
-      "harder": "story.pic.hear::1_23",
-      "easier": "story.echo::1_11"
+      "harder": "story.read::1_23",
+      "easier": "story.read::1_11"
     },
     "story.pic.hear::1_17": {
       "type": "TRANSITION",
@@ -15028,13 +14923,13 @@
       "tutor_desc": "story.pic.hear",
       "tutor_data": "[encfolder]1_17",
       "cell_row": "3",
-      "cell_column": "24",
+      "cell_column": "23",
       "same": "story.pic.hear::1_17",
       "next": "story.clo.hear::1_17",
       "next_next": "story.hear::1_18",
       "prev": "story.read::1_17",
-      "harder": "story.clo.hear::1_23",
-      "easier": "story.read::1_11"
+      "harder": "story.pic.hear::1_23",
+      "easier": "story.pic.hear::1_11"
     },
     "story.clo.hear::1_17": {
       "type": "TRANSITION",
@@ -15043,13 +14938,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]1_17",
       "cell_row": "3",
-      "cell_column": "25",
+      "cell_column": "24",
       "same": "story.clo.hear::1_17",
       "next": "story.hear::1_18",
       "next_next": "story.echo::1_18",
       "prev": "story.pic.hear::1_17",
-      "harder": "story.hear::1_24",
-      "easier": "story.pic.hear::1_11"
+      "harder": "story.clo.hear::1_23",
+      "easier": "story.clo.hear::1_11"
     },
     "story.hear::1_18": {
       "type": "TRANSITION",
@@ -15058,13 +14953,13 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]1_18",
       "cell_row": "3",
-      "cell_column": "26",
+      "cell_column": "25",
       "same": "story.hear::1_18",
       "next": "story.echo::1_18",
       "next_next": "story.read::1_18",
       "prev": "story.clo.hear::1_17",
-      "harder": "story.echo::1_24",
-      "easier": "story.clo.hear::1_11"
+      "harder": "story.hear::1_24",
+      "easier": "story.hear::1_12"
     },
     "story.echo::1_18": {
       "type": "TRANSITION",
@@ -15073,13 +14968,13 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]1_18",
       "cell_row": "3",
-      "cell_column": "27",
+      "cell_column": "26",
       "same": "story.echo::1_18",
       "next": "story.read::1_18",
-      "next_next": "story.pic.hear::1_18",
+      "next_next": "story.clo.hear::1_18",
       "prev": "story.hear::1_18",
-      "harder": "story.read::1_24",
-      "easier": "story.hear::1_12"
+      "harder": "story.echo::1_24",
+      "easier": "story.echo::1_12"
     },
     "story.read::1_18": {
       "type": "TRANSITION",
@@ -15088,27 +14983,12 @@
       "tutor_desc": "story.read",
       "tutor_data": "[encfolder]1_18",
       "cell_row": "3",
-      "cell_column": "28",
+      "cell_column": "27",
       "same": "story.read::1_18",
-      "next": "story.pic.hear::1_18",
-      "next_next": "story.clo.hear::1_18",
-      "prev": "story.echo::1_18",
-      "harder": "story.pic.hear::1_24",
-      "easier": "story.echo::1_12"
-    },
-    "story.pic.hear::1_18": {
-      "type": "TRANSITION",
-      "skill": "stories",
-      "tutor_id": "story.pic.hear::1_18",
-      "tutor_desc": "story.pic.hear",
-      "tutor_data": "[encfolder]1_18",
-      "cell_row": "3",
-      "cell_column": "29",
-      "same": "story.pic.hear::1_18",
       "next": "story.clo.hear::1_18",
       "next_next": "story.hear::1_19",
-      "prev": "story.read::1_18",
-      "harder": "story.clo.hear::1_24",
+      "prev": "story.echo::1_18",
+      "harder": "story.read::1_24",
       "easier": "story.read::1_12"
     },
     "story.clo.hear::1_18": {
@@ -15118,12 +14998,12 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]1_18",
       "cell_row": "3",
-      "cell_column": "30",
+      "cell_column": "28",
       "same": "story.clo.hear::1_18",
       "next": "story.hear::1_19",
       "next_next": "story.echo::1_19",
-      "prev": "story.pic.hear::1_18",
-      "harder": "story.clo.hear::1_24",
+      "prev": "story.read::1_18",
+      "harder": "story.pic.hear::1_24",
       "easier": "story.pic.hear::1_12"
     },
     "story.hear::1_19": {
@@ -15274,7 +15154,7 @@
       "next_next": "story.echo::1_21",
       "prev": "story.pic.hear::1_20",
       "harder": "story.hear::1_27",
-      "easier": "story.pic.hear::1_14"
+      "easier": "story.clo.hear::1_14"
     },
     "story.hear::1_21": {
       "type": "TRANSITION",
@@ -15289,7 +15169,7 @@
       "next_next": "story.read::1_21",
       "prev": "story.clo.hear::1_20",
       "harder": "story.echo::1_27",
-      "easier": "story.clo.hear::1_14"
+      "easier": "story.hear::1_15"
     },
     "story.echo::1_21": {
       "type": "TRANSITION",
@@ -15304,7 +15184,7 @@
       "next_next": "story.pic.hear::1_21",
       "prev": "story.hear::1_21",
       "harder": "story.read::1_27",
-      "easier": "story.hear::1_15"
+      "easier": "story.echo::1_15"
     },
     "story.read::1_21": {
       "type": "TRANSITION",
@@ -15319,7 +15199,7 @@
       "next_next": "story.clo.hear::1_21",
       "prev": "story.echo::1_21",
       "harder": "story.pic.hear::1_27",
-      "easier": "story.echo::1_15"
+      "easier": "story.read::1_15"
     },
     "story.pic.hear::1_21": {
       "type": "TRANSITION",
@@ -15334,7 +15214,7 @@
       "next_next": "story.hear::1_22",
       "prev": "story.read::1_21",
       "harder": "story.clo.hear::1_27",
-      "easier": "story.read::1_15"
+      "easier": "story.pic.hear::1_15"
     },
     "story.clo.hear::1_21": {
       "type": "TRANSITION",
@@ -15349,7 +15229,7 @@
       "next_next": "story.echo::1_22",
       "prev": "story.pic.hear::1_21",
       "harder": "story.hear::1_28",
-      "easier": "story.pic.hear::1_15"
+      "easier": "story.clo.hear::1_15"
     },
     "story.hear::1_22": {
       "type": "TRANSITION",
@@ -15364,7 +15244,7 @@
       "next_next": "story.read::1_22",
       "prev": "story.clo.hear::1_21",
       "harder": "story.echo::1_28",
-      "easier": "story.clo.hear::1_15"
+      "easier": "story.hear::1_16"
     },
     "story.echo::1_22": {
       "type": "TRANSITION",
@@ -15379,7 +15259,7 @@
       "next_next": "story.pic.hear::1_22",
       "prev": "story.hear::1_22",
       "harder": "story.read::1_28",
-      "easier": "story.hear::1_16"
+      "easier": "story.echo::1_16"
     },
     "story.read::1_22": {
       "type": "TRANSITION",
@@ -15394,7 +15274,7 @@
       "next_next": "story.clo.hear::1_22",
       "prev": "story.echo::1_22",
       "harder": "story.pic.hear::1_28",
-      "easier": "story.echo::1_16"
+      "easier": "story.read::1_16"
     },
     "story.pic.hear::1_22": {
       "type": "TRANSITION",
@@ -15409,7 +15289,7 @@
       "next_next": "story.hear::1_23",
       "prev": "story.read::1_22",
       "harder": "story.clo.hear::1_28",
-      "easier": "story.read::1_16"
+      "easier": "story.pic.hear::1_16"
     },
     "story.clo.hear::1_22": {
       "type": "TRANSITION",
@@ -15424,7 +15304,7 @@
       "next_next": "story.echo::1_23",
       "prev": "story.pic.hear::1_22",
       "harder": "story.hear::1_29",
-      "easier": "story.pic.hear::1_16"
+      "easier": "story.clo.hear::1_16"
     },
     "story.hear::1_23": {
       "type": "TRANSITION",
@@ -15439,7 +15319,7 @@
       "next_next": "story.read::1_23",
       "prev": "story.clo.hear::1_22",
       "harder": "story.echo::1_29",
-      "easier": "story.clo.hear::1_16"
+      "easier": "story.hear::1_17"
     },
     "story.echo::1_23": {
       "type": "TRANSITION",
@@ -15454,7 +15334,7 @@
       "next_next": "story.pic.hear::1_23",
       "prev": "story.hear::1_23",
       "harder": "story.read::1_29",
-      "easier": "story.hear::1_17"
+      "easier": "story.echo::1_17"
     },
     "story.read::1_23": {
       "type": "TRANSITION",
@@ -15469,7 +15349,7 @@
       "next_next": "story.clo.hear::1_23",
       "prev": "story.echo::1_23",
       "harder": "story.pic.hear::1_29",
-      "easier": "story.echo::1_17"
+      "easier": "story.read::1_17"
     },
     "story.pic.hear::1_23": {
       "type": "TRANSITION",
@@ -15484,7 +15364,7 @@
       "next_next": "story.hear::1_24",
       "prev": "story.read::1_23",
       "harder": "story.clo.hear::1_29",
-      "easier": "story.read::1_17"
+      "easier": "story.pic.hear::1_17"
     },
     "story.clo.hear::1_23": {
       "type": "TRANSITION",
@@ -15499,7 +15379,7 @@
       "next_next": "story.echo::1_24",
       "prev": "story.pic.hear::1_23",
       "harder": "story.hear::1_30",
-      "easier": "story.pic.hear::1_17"
+      "easier": "story.clo.hear::1_17"
     },
     "story.hear::1_24": {
       "type": "TRANSITION",
@@ -15514,7 +15394,7 @@
       "next_next": "story.read::1_24",
       "prev": "story.clo.hear::1_23",
       "harder": "story.echo::1_30",
-      "easier": "story.clo.hear::1_17"
+      "easier": "story.hear::1_18"
     },
     "story.echo::1_24": {
       "type": "TRANSITION",
@@ -15529,7 +15409,7 @@
       "next_next": "story.pic.hear::1_24",
       "prev": "story.hear::1_24",
       "harder": "story.read::1_30",
-      "easier": "story.hear::1_18"
+      "easier": "story.echo::1_18"
     },
     "story.read::1_24": {
       "type": "TRANSITION",
@@ -15544,7 +15424,7 @@
       "next_next": "story.clo.hear::1_24",
       "prev": "story.echo::1_24",
       "harder": "story.pic.hear::1_30",
-      "easier": "story.echo::1_18"
+      "easier": "story.read::1_18"
     },
     "story.pic.hear::1_24": {
       "type": "TRANSITION",
@@ -15559,7 +15439,7 @@
       "next_next": "story.hear::1_25",
       "prev": "story.read::1_24",
       "harder": "story.clo.hear::1_30",
-      "easier": "story.read::1_18"
+      "easier": "story.clo.hear::1_18"
     },
     "story.clo.hear::1_24": {
       "type": "TRANSITION",
@@ -15574,7 +15454,7 @@
       "next_next": "story.echo::1_25",
       "prev": "story.pic.hear::1_24",
       "harder": "story.clo.hear::1_30",
-      "easier": "story.pic.hear::1_18"
+      "easier": "story.clo.hear::1_18"
     },
     "story.hear::1_25": {
       "type": "TRANSITION",
@@ -15768,7 +15648,7 @@
       "next": "story.pic.hear::1_27",
       "next_next": "story.clo.hear::1_27",
       "prev": "story.echo::1_27",
-      "harder": "story.pic.hear::1_33",
+      "harder": "story.clo.hear::1_33",
       "easier": "story.echo::1_21"
     },
     "story.pic.hear::1_27": {
@@ -15783,7 +15663,7 @@
       "next": "story.clo.hear::1_27",
       "next_next": "story.hear::1_28",
       "prev": "story.read::1_27",
-      "harder": "story.clo.hear::1_33",
+      "harder": "story.hear::1_34",
       "easier": "story.read::1_21"
     },
     "story.clo.hear::1_27": {
@@ -15798,7 +15678,7 @@
       "next": "story.hear::1_28",
       "next_next": "story.echo::1_28",
       "prev": "story.pic.hear::1_27",
-      "harder": "story.hear::1_34",
+      "harder": "story.echo::1_34",
       "easier": "story.pic.hear::1_21"
     },
     "story.hear::1_28": {
@@ -15813,7 +15693,7 @@
       "next": "story.echo::1_28",
       "next_next": "story.read::1_28",
       "prev": "story.clo.hear::1_27",
-      "harder": "story.echo::1_34",
+      "harder": "story.read::1_34",
       "easier": "story.clo.hear::1_21"
     },
     "story.echo::1_28": {
@@ -15828,7 +15708,7 @@
       "next": "story.read::1_28",
       "next_next": "story.pic.hear::1_28",
       "prev": "story.hear::1_28",
-      "harder": "story.read::1_34",
+      "harder": "story.pic.hear::1_34",
       "easier": "story.hear::1_22"
     },
     "story.read::1_28": {
@@ -15843,7 +15723,7 @@
       "next": "story.pic.hear::1_28",
       "next_next": "story.clo.hear::1_28",
       "prev": "story.echo::1_28",
-      "harder": "story.pic.hear::1_34",
+      "harder": "story.clo.hear::1_34",
       "easier": "story.echo::1_22"
     },
     "story.pic.hear::1_28": {
@@ -15858,7 +15738,7 @@
       "next": "story.clo.hear::1_28",
       "next_next": "story.hear::1_29",
       "prev": "story.read::1_28",
-      "harder": "story.clo.hear::1_34",
+      "harder": "story.hear::1_35",
       "easier": "story.read::1_22"
     },
     "story.clo.hear::1_28": {
@@ -15873,7 +15753,7 @@
       "next": "story.hear::1_29",
       "next_next": "story.echo::1_29",
       "prev": "story.pic.hear::1_28",
-      "harder": "story.hear::1_35",
+      "harder": "story.echo::1_35",
       "easier": "story.pic.hear::1_22"
     },
     "story.hear::1_29": {
@@ -15888,7 +15768,7 @@
       "next": "story.echo::1_29",
       "next_next": "story.read::1_29",
       "prev": "story.clo.hear::1_28",
-      "harder": "story.echo::1_35",
+      "harder": "story.read::1_35",
       "easier": "story.clo.hear::1_22"
     },
     "story.echo::1_29": {
@@ -15903,7 +15783,7 @@
       "next": "story.read::1_29",
       "next_next": "story.pic.hear::1_29",
       "prev": "story.hear::1_29",
-      "harder": "story.read::1_35",
+      "harder": "story.pic.hear::1_35",
       "easier": "story.hear::1_23"
     },
     "story.read::1_29": {
@@ -15918,7 +15798,7 @@
       "next": "story.pic.hear::1_29",
       "next_next": "story.clo.hear::1_29",
       "prev": "story.echo::1_29",
-      "harder": "story.pic.hear::1_35",
+      "harder": "story.clo.hear::1_35",
       "easier": "story.echo::1_23"
     },
     "story.pic.hear::1_29": {
@@ -15933,7 +15813,7 @@
       "next": "story.clo.hear::1_29",
       "next_next": "story.hear::1_30",
       "prev": "story.read::1_29",
-      "harder": "story.clo.hear::1_35",
+      "harder": "story.hear::1_36",
       "easier": "story.read::1_23"
     },
     "story.clo.hear::1_29": {
@@ -15948,7 +15828,7 @@
       "next": "story.hear::1_30",
       "next_next": "story.echo::1_30",
       "prev": "story.pic.hear::1_29",
-      "harder": "story.hear::1_36",
+      "harder": "story.echo::1_36",
       "easier": "story.pic.hear::1_23"
     },
     "story.hear::1_30": {
@@ -15963,7 +15843,7 @@
       "next": "story.echo::1_30",
       "next_next": "story.read::1_30",
       "prev": "story.clo.hear::1_29",
-      "harder": "story.echo::1_36",
+      "harder": "story.read::1_36",
       "easier": "story.clo.hear::1_23"
     },
     "story.echo::1_30": {
@@ -15978,7 +15858,7 @@
       "next": "story.read::1_30",
       "next_next": "story.pic.hear::1_30",
       "prev": "story.hear::1_30",
-      "harder": "story.read::1_36",
+      "harder": "story.clo.hear::1_36",
       "easier": "story.hear::1_24"
     },
     "story.read::1_30": {
@@ -15993,7 +15873,7 @@
       "next": "story.pic.hear::1_30",
       "next_next": "story.clo.hear::1_30",
       "prev": "story.echo::1_30",
-      "harder": "story.pic.hear::1_36",
+      "harder": "story.clo.hear::1_36",
       "easier": "story.echo::1_24"
     },
     "story.pic.hear::1_30": {
@@ -16068,7 +15948,7 @@
       "next": "story.pic.hear::1_31",
       "next_next": "story.clo.hear::1_31",
       "prev": "story.echo::1_31",
-      "harder": "story.pic.hear::1_37",
+      "harder": "story.clo.hear::1_37",
       "easier": "story.echo::1_25"
     },
     "story.pic.hear::1_31": {
@@ -16083,7 +15963,7 @@
       "next": "story.clo.hear::1_31",
       "next_next": "story.hear::1_32",
       "prev": "story.read::1_31",
-      "harder": "story.clo.hear::1_37",
+      "harder": "story.hear::2_1",
       "easier": "story.read::1_25"
     },
     "story.clo.hear::1_31": {
@@ -16098,7 +15978,7 @@
       "next": "story.hear::1_32",
       "next_next": "story.echo::1_32",
       "prev": "story.pic.hear::1_31",
-      "harder": "story.hear::2_1",
+      "harder": "story.echo::2_1",
       "easier": "story.pic.hear::1_25"
     },
     "story.hear::1_32": {
@@ -16113,7 +15993,7 @@
       "next": "story.echo::1_32",
       "next_next": "story.read::1_32",
       "prev": "story.clo.hear::1_31",
-      "harder": "story.echo::2_1",
+      "harder": "story.read::2_1",
       "easier": "story.clo.hear::1_25"
     },
     "story.echo::1_32": {
@@ -16128,7 +16008,7 @@
       "next": "story.read::1_32",
       "next_next": "story.pic.hear::1_32",
       "prev": "story.hear::1_32",
-      "harder": "story.read::2_1",
+      "harder": "story.clo.hear::2_1",
       "easier": "story.hear::1_26"
     },
     "story.read::1_32": {
@@ -16143,7 +16023,7 @@
       "next": "story.pic.hear::1_32",
       "next_next": "story.clo.hear::1_32",
       "prev": "story.echo::1_32",
-      "harder": "story.pic.hear::2_1",
+      "harder": "story.hear::2_2",
       "easier": "story.echo::1_26"
     },
     "story.pic.hear::1_32": {
@@ -16158,7 +16038,7 @@
       "next": "story.clo.hear::1_32",
       "next_next": "story.hear::1_33",
       "prev": "story.read::1_32",
-      "harder": "story.clo.hear::2_1",
+      "harder": "story.echo::2_2",
       "easier": "story.read::1_26"
     },
     "story.clo.hear::1_32": {
@@ -16173,7 +16053,7 @@
       "next": "story.hear::1_33",
       "next_next": "story.echo::1_33",
       "prev": "story.pic.hear::1_32",
-      "harder": "story.hear::2_2",
+      "harder": "story.read::2_2",
       "easier": "story.pic.hear::1_26"
     },
     "story.hear::1_33": {
@@ -16188,7 +16068,7 @@
       "next": "story.echo::1_33",
       "next_next": "story.read::1_33",
       "prev": "story.clo.hear::1_32",
-      "harder": "story.echo::2_2",
+      "harder": "story.pic.hear::2_2",
       "easier": "story.clo.hear::1_26"
     },
     "story.echo::1_33": {
@@ -16201,9 +16081,9 @@
       "cell_column": "12",
       "same": "story.echo::1_33",
       "next": "story.read::1_33",
-      "next_next": "story.pic.hear::1_33",
+      "next_next": "story.clo.hear::1_33",
       "prev": "story.hear::1_33",
-      "harder": "story.read::2_2",
+      "harder": "story.clo.hear::2_2",
       "easier": "story.hear::1_27"
     },
     "story.read::1_33": {
@@ -16215,26 +16095,11 @@
       "cell_row": "6",
       "cell_column": "13",
       "same": "story.read::1_33",
-      "next": "story.pic.hear::1_33",
-      "next_next": "story.clo.hear::1_33",
-      "prev": "story.echo::1_33",
-      "harder": "story.pic.hear::2_2",
-      "easier": "story.echo::1_27"
-    },
-    "story.pic.hear::1_33": {
-      "type": "TRANSITION",
-      "skill": "stories",
-      "tutor_id": "story.pic.hear::1_33",
-      "tutor_desc": "story.pic.hear",
-      "tutor_data": "[encfolder]1_33",
-      "cell_row": "6",
-      "cell_column": "14",
-      "same": "story.pic.hear::1_33",
       "next": "story.clo.hear::1_33",
       "next_next": "story.hear::1_34",
-      "prev": "story.read::1_33",
-      "harder": "story.clo.hear::2_2",
-      "easier": "story.read::1_27"
+      "prev": "story.echo::1_33",
+      "harder": "story.hear::2_3",
+      "easier": "story.echo::1_27"
     },
     "story.clo.hear::1_33": {
       "type": "TRANSITION",
@@ -16243,13 +16108,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]1_33",
       "cell_row": "6",
-      "cell_column": "15",
+      "cell_column": "14",
       "same": "story.clo.hear::1_33",
       "next": "story.hear::1_34",
       "next_next": "story.echo::1_34",
-      "prev": "story.pic.hear::1_33",
-      "harder": "story.hear::2_3",
-      "easier": "story.pic.hear::1_27"
+      "prev": "story.read::1_33",
+      "harder": "story.echo::2_3",
+      "easier": "story.read::1_27"
     },
     "story.hear::1_34": {
       "type": "TRANSITION",
@@ -16258,13 +16123,13 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]1_34",
       "cell_row": "6",
-      "cell_column": "16",
+      "cell_column": "15",
       "same": "story.hear::1_34",
       "next": "story.echo::1_34",
       "next_next": "story.read::1_34",
       "prev": "story.clo.hear::1_33",
-      "harder": "story.echo::2_3",
-      "easier": "story.clo.hear::1_27"
+      "harder": "story.read::2_3",
+      "easier": "story.pic.hear::1_27"
     },
     "story.echo::1_34": {
       "type": "TRANSITION",
@@ -16273,13 +16138,13 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]1_34",
       "cell_row": "6",
-      "cell_column": "17",
+      "cell_column": "16",
       "same": "story.echo::1_34",
       "next": "story.read::1_34",
       "next_next": "story.pic.hear::1_34",
       "prev": "story.hear::1_34",
-      "harder": "story.read::2_3",
-      "easier": "story.hear::1_28"
+      "harder": "story.pic.hear::2_3",
+      "easier": "story.clo.hear::1_27"
     },
     "story.read::1_34": {
       "type": "TRANSITION",
@@ -16288,13 +16153,13 @@
       "tutor_desc": "story.read",
       "tutor_data": "[encfolder]1_34",
       "cell_row": "6",
-      "cell_column": "18",
+      "cell_column": "17",
       "same": "story.read::1_34",
       "next": "story.pic.hear::1_34",
       "next_next": "story.clo.hear::1_34",
       "prev": "story.echo::1_34",
-      "harder": "story.pic.hear::2_3",
-      "easier": "story.echo::1_28"
+      "harder": "story.clo.hear::2_3",
+      "easier": "story.hear::1_28"
     },
     "story.pic.hear::1_34": {
       "type": "TRANSITION",
@@ -16303,13 +16168,13 @@
       "tutor_desc": "story.pic.hear",
       "tutor_data": "[encfolder]1_34",
       "cell_row": "6",
-      "cell_column": "19",
+      "cell_column": "18",
       "same": "story.pic.hear::1_34",
       "next": "story.clo.hear::1_34",
       "next_next": "story.hear::1_35",
       "prev": "story.read::1_34",
-      "harder": "story.clo.hear::2_3",
-      "easier": "story.read::1_28"
+      "harder": "story.hear::2_4",
+      "easier": "story.echo::1_28"
     },
     "story.clo.hear::1_34": {
       "type": "TRANSITION",
@@ -16318,13 +16183,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]1_34",
       "cell_row": "6",
-      "cell_column": "20",
+      "cell_column": "19",
       "same": "story.clo.hear::1_34",
       "next": "story.hear::1_35",
       "next_next": "story.echo::1_35",
       "prev": "story.pic.hear::1_34",
-      "harder": "story.hear::2_4",
-      "easier": "story.pic.hear::1_28"
+      "harder": "story.echo::2_4",
+      "easier": "story.read::1_28"
     },
     "story.hear::1_35": {
       "type": "TRANSITION",
@@ -16333,13 +16198,13 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]1_35",
       "cell_row": "6",
-      "cell_column": "21",
+      "cell_column": "20",
       "same": "story.hear::1_35",
       "next": "story.echo::1_35",
       "next_next": "story.read::1_35",
       "prev": "story.clo.hear::1_34",
-      "harder": "story.echo::2_4",
-      "easier": "story.clo.hear::1_28"
+      "harder": "story.read::2_4",
+      "easier": "story.pic.hear::1_28"
     },
     "story.echo::1_35": {
       "type": "TRANSITION",
@@ -16348,13 +16213,13 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]1_35",
       "cell_row": "6",
-      "cell_column": "22",
+      "cell_column": "21",
       "same": "story.echo::1_35",
       "next": "story.read::1_35",
       "next_next": "story.pic.hear::1_35",
       "prev": "story.hear::1_35",
-      "harder": "story.read::2_4",
-      "easier": "story.hear::1_29"
+      "harder": "story.pic.hear::2_4",
+      "easier": "story.clo.hear::1_28"
     },
     "story.read::1_35": {
       "type": "TRANSITION",
@@ -16363,13 +16228,13 @@
       "tutor_desc": "story.read",
       "tutor_data": "[encfolder]1_35",
       "cell_row": "6",
-      "cell_column": "23",
+      "cell_column": "22",
       "same": "story.read::1_35",
       "next": "story.pic.hear::1_35",
       "next_next": "story.clo.hear::1_35",
       "prev": "story.echo::1_35",
-      "harder": "story.pic.hear::2_4",
-      "easier": "story.echo::1_29"
+      "harder": "story.clo.hear::2_4",
+      "easier": "story.hear::1_29"
     },
     "story.pic.hear::1_35": {
       "type": "TRANSITION",
@@ -16378,13 +16243,13 @@
       "tutor_desc": "story.pic.hear",
       "tutor_data": "[encfolder]1_35",
       "cell_row": "6",
-      "cell_column": "24",
+      "cell_column": "23",
       "same": "story.pic.hear::1_35",
       "next": "story.clo.hear::1_35",
       "next_next": "story.hear::1_36",
       "prev": "story.read::1_35",
-      "harder": "story.clo.hear::2_4",
-      "easier": "story.read::1_29"
+      "harder": "story.hear::2_5",
+      "easier": "story.echo::1_29"
     },
     "story.clo.hear::1_35": {
       "type": "TRANSITION",
@@ -16393,13 +16258,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]1_35",
       "cell_row": "6",
-      "cell_column": "25",
+      "cell_column": "24",
       "same": "story.clo.hear::1_35",
       "next": "story.hear::1_36",
       "next_next": "story.echo::1_36",
       "prev": "story.pic.hear::1_35",
-      "harder": "story.hear::2_5",
-      "easier": "story.pic.hear::1_29"
+      "harder": "story.echo::2_5",
+      "easier": "story.read::1_29"
     },
     "story.hear::1_36": {
       "type": "TRANSITION",
@@ -16408,13 +16273,13 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]1_36",
       "cell_row": "6",
-      "cell_column": "26",
+      "cell_column": "25",
       "same": "story.hear::1_36",
       "next": "story.echo::1_36",
       "next_next": "story.read::1_36",
       "prev": "story.clo.hear::1_35",
-      "harder": "story.echo::2_5",
-      "easier": "story.clo.hear::1_29"
+      "harder": "story.read::2_5",
+      "easier": "story.pic.hear::1_29"
     },
     "story.echo::1_36": {
       "type": "TRANSITION",
@@ -16423,13 +16288,13 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]1_36",
       "cell_row": "6",
-      "cell_column": "27",
+      "cell_column": "26",
       "same": "story.echo::1_36",
       "next": "story.read::1_36",
-      "next_next": "story.pic.hear::1_36",
+      "next_next": "story.clo.hear::1_36",
       "prev": "story.hear::1_36",
-      "harder": "story.read::2_5",
-      "easier": "story.hear::1_30"
+      "harder": "story.pic.hear::2_5",
+      "easier": "story.clo.hear::1_29"
     },
     "story.read::1_36": {
       "type": "TRANSITION",
@@ -16438,28 +16303,13 @@
       "tutor_desc": "story.read",
       "tutor_data": "[encfolder]1_36",
       "cell_row": "6",
-      "cell_column": "28",
+      "cell_column": "27",
       "same": "story.read::1_36",
-      "next": "story.pic.hear::1_36",
-      "next_next": "story.clo.hear::1_36",
-      "prev": "story.echo::1_36",
-      "harder": "story.pic.hear::2_5",
-      "easier": "story.echo::1_30"
-    },
-    "story.pic.hear::1_36": {
-      "type": "TRANSITION",
-      "skill": "stories",
-      "tutor_id": "story.pic.hear::1_36",
-      "tutor_desc": "story.pic.hear",
-      "tutor_data": "[encfolder]1_36",
-      "cell_row": "6",
-      "cell_column": "29",
-      "same": "story.pic.hear::1_36",
       "next": "story.clo.hear::1_36",
       "next_next": "story.hear::1_37",
-      "prev": "story.read::1_36",
+      "prev": "story.echo::1_36",
       "harder": "story.clo.hear::2_5",
-      "easier": "story.read::1_30"
+      "easier": "story.hear::1_30"
     },
     "story.clo.hear::1_36": {
       "type": "TRANSITION",
@@ -16468,13 +16318,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]1_36",
       "cell_row": "6",
-      "cell_column": "30",
+      "cell_column": "28",
       "same": "story.clo.hear::1_36",
       "next": "story.hear::1_37",
       "next_next": "story.echo::1_37",
-      "prev": "story.pic.hear::1_36",
+      "prev": "story.read::1_36",
       "harder": "story.clo.hear::2_5",
-      "easier": "story.pic.hear::1_30"
+      "easier": "story.echo::1_30"
     },
     "story.hear::1_37": {
       "type": "TRANSITION",
@@ -16501,7 +16351,7 @@
       "cell_column": "2",
       "same": "story.echo::1_37",
       "next": "story.read::1_37",
-      "next_next": "story.pic.hear::1_37",
+      "next_next": "story.clo.hear::1_37",
       "prev": "story.hear::1_37",
       "harder": "story.read::2_6",
       "easier": "story.hear::1_31"
@@ -16515,26 +16365,11 @@
       "cell_row": "7",
       "cell_column": "3",
       "same": "story.read::1_37",
-      "next": "story.pic.hear::1_37",
-      "next_next": "story.clo.hear::1_37",
-      "prev": "story.echo::1_37",
-      "harder": "story.pic.hear::2_6",
-      "easier": "story.echo::1_31"
-    },
-    "story.pic.hear::1_37": {
-      "type": "TRANSITION",
-      "skill": "stories",
-      "tutor_id": "story.pic.hear::1_37",
-      "tutor_desc": "story.pic.hear",
-      "tutor_data": "[encfolder]1_37",
-      "cell_row": "7",
-      "cell_column": "4",
-      "same": "story.pic.hear::1_37",
       "next": "story.clo.hear::1_37",
       "next_next": "story.hear::2_1",
-      "prev": "story.read::1_37",
+      "prev": "story.echo::1_37",
       "harder": "story.clo.hear::2_6",
-      "easier": "story.read::1_31"
+      "easier": "story.echo::1_31"
     },
     "story.clo.hear::1_37": {
       "type": "TRANSITION",
@@ -16543,13 +16378,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]1_37",
       "cell_row": "7",
-      "cell_column": "5",
+      "cell_column": "4",
       "same": "story.clo.hear::1_37",
       "next": "story.hear::2_1",
       "next_next": "story.echo::2_1",
-      "prev": "story.pic.hear::1_37",
+      "prev": "story.read::1_37",
       "harder": "story.hear::2_7",
-      "easier": "story.pic.hear::1_31"
+      "easier": "story.read::1_31"
     },
     "story.hear::2_1": {
       "type": "TRANSITION",
@@ -16558,13 +16393,13 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]2_1",
       "cell_row": "7",
-      "cell_column": "6",
+      "cell_column": "5",
       "same": "story.hear::2_1",
       "next": "story.echo::2_1",
       "next_next": "story.read::2_1",
       "prev": "story.clo.hear::1_37",
       "harder": "story.echo::2_7",
-      "easier": "story.clo.hear::1_31"
+      "easier": "story.pic.hear::1_31"
     },
     "story.echo::2_1": {
       "type": "TRANSITION",
@@ -16573,13 +16408,13 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]2_1",
       "cell_row": "7",
-      "cell_column": "7",
+      "cell_column": "6",
       "same": "story.echo::2_1",
       "next": "story.read::2_1",
-      "next_next": "story.pic.hear::2_1",
+      "next_next": "story.clo.hear::2_1",
       "prev": "story.hear::2_1",
       "harder": "story.read::2_7",
-      "easier": "story.hear::1_32"
+      "easier": "story.clo.hear::1_31"
     },
     "story.read::2_1": {
       "type": "TRANSITION",
@@ -16588,28 +16423,13 @@
       "tutor_desc": "story.read",
       "tutor_data": "[encfolder]2_1",
       "cell_row": "7",
-      "cell_column": "8",
+      "cell_column": "7",
       "same": "story.read::2_1",
-      "next": "story.pic.hear::2_1",
-      "next_next": "story.clo.hear::2_1",
-      "prev": "story.echo::2_1",
-      "harder": "story.pic.hear::2_7",
-      "easier": "story.echo::1_32"
-    },
-    "story.pic.hear::2_1": {
-      "type": "TRANSITION",
-      "skill": "stories",
-      "tutor_id": "story.pic.hear::2_1",
-      "tutor_desc": "story.pic.hear",
-      "tutor_data": "[encfolder]2_1",
-      "cell_row": "7",
-      "cell_column": "9",
-      "same": "story.pic.hear::2_1",
       "next": "story.clo.hear::2_1",
       "next_next": "story.hear::2_2",
-      "prev": "story.read::2_1",
-      "harder": "story.clo.hear::2_7",
-      "easier": "story.read::1_32"
+      "prev": "story.echo::2_1",
+      "harder": "story.pic.hear::2_7",
+      "easier": "story.hear::1_32"
     },
     "story.clo.hear::2_1": {
       "type": "TRANSITION",
@@ -16618,13 +16438,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]2_1",
       "cell_row": "7",
-      "cell_column": "10",
+      "cell_column": "8",
       "same": "story.clo.hear::2_1",
       "next": "story.hear::2_2",
       "next_next": "story.echo::2_2",
-      "prev": "story.pic.hear::2_1",
-      "harder": "story.hear::2_8",
-      "easier": "story.pic.hear::1_32"
+      "prev": "story.read::2_1",
+      "harder": "story.clo.hear::2_7",
+      "easier": "story.echo::1_32"
     },
     "story.hear::2_2": {
       "type": "TRANSITION",
@@ -16633,13 +16453,13 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]2_2",
       "cell_row": "7",
-      "cell_column": "11",
+      "cell_column": "9",
       "same": "story.hear::2_2",
       "next": "story.echo::2_2",
       "next_next": "story.read::2_2",
       "prev": "story.clo.hear::2_1",
-      "harder": "story.echo::2_8",
-      "easier": "story.clo.hear::1_32"
+      "harder": "story.hear::2_8",
+      "easier": "story.read::1_32"
     },
     "story.echo::2_2": {
       "type": "TRANSITION",
@@ -16648,13 +16468,13 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]2_2",
       "cell_row": "7",
-      "cell_column": "12",
+      "cell_column": "10",
       "same": "story.echo::2_2",
       "next": "story.read::2_2",
       "next_next": "story.pic.hear::2_2",
       "prev": "story.hear::2_2",
-      "harder": "story.read::2_8",
-      "easier": "story.hear::1_33"
+      "harder": "story.echo::2_8",
+      "easier": "story.pic.hear::1_32"
     },
     "story.read::2_2": {
       "type": "TRANSITION",
@@ -16663,13 +16483,13 @@
       "tutor_desc": "story.read",
       "tutor_data": "[encfolder]2_2",
       "cell_row": "7",
-      "cell_column": "13",
+      "cell_column": "11",
       "same": "story.read::2_2",
       "next": "story.pic.hear::2_2",
       "next_next": "story.clo.hear::2_2",
       "prev": "story.echo::2_2",
-      "harder": "story.pic.hear::2_8",
-      "easier": "story.echo::1_33"
+      "harder": "story.read::2_8",
+      "easier": "story.clo.hear::1_32"
     },
     "story.pic.hear::2_2": {
       "type": "TRANSITION",
@@ -16678,13 +16498,13 @@
       "tutor_desc": "story.pic.hear",
       "tutor_data": "[encfolder]2_2",
       "cell_row": "7",
-      "cell_column": "14",
+      "cell_column": "12",
       "same": "story.pic.hear::2_2",
       "next": "story.clo.hear::2_2",
       "next_next": "story.hear::2_3",
       "prev": "story.read::2_2",
-      "harder": "story.clo.hear::2_8",
-      "easier": "story.read::1_33"
+      "harder": "story.pic.hear::2_8",
+      "easier": "story.hear::1_33"
     },
     "story.clo.hear::2_2": {
       "type": "TRANSITION",
@@ -16693,13 +16513,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]2_2",
       "cell_row": "7",
-      "cell_column": "15",
+      "cell_column": "13",
       "same": "story.clo.hear::2_2",
       "next": "story.hear::2_3",
       "next_next": "story.echo::2_3",
       "prev": "story.pic.hear::2_2",
-      "harder": "story.hear::2_9",
-      "easier": "story.pic.hear::1_33"
+      "harder": "story.clo.hear::2_8",
+      "easier": "story.echo::1_33"
     },
     "story.hear::2_3": {
       "type": "TRANSITION",
@@ -16708,13 +16528,13 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]2_3",
       "cell_row": "7",
-      "cell_column": "16",
+      "cell_column": "14",
       "same": "story.hear::2_3",
       "next": "story.echo::2_3",
       "next_next": "story.read::2_3",
       "prev": "story.clo.hear::2_2",
-      "harder": "story.echo::2_9",
-      "easier": "story.clo.hear::1_33"
+      "harder": "story.hear::2_9",
+      "easier": "story.read::1_33"
     },
     "story.echo::2_3": {
       "type": "TRANSITION",
@@ -16723,13 +16543,13 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]2_3",
       "cell_row": "7",
-      "cell_column": "17",
+      "cell_column": "15",
       "same": "story.echo::2_3",
       "next": "story.read::2_3",
       "next_next": "story.pic.hear::2_3",
       "prev": "story.hear::2_3",
-      "harder": "story.read::2_9",
-      "easier": "story.hear::1_34"
+      "harder": "story.echo::2_9",
+      "easier": "story.clo.hear::1_33"
     },
     "story.read::2_3": {
       "type": "TRANSITION",
@@ -16738,13 +16558,13 @@
       "tutor_desc": "story.read",
       "tutor_data": "[encfolder]2_3",
       "cell_row": "7",
-      "cell_column": "18",
+      "cell_column": "16",
       "same": "story.read::2_3",
       "next": "story.pic.hear::2_3",
       "next_next": "story.clo.hear::2_3",
       "prev": "story.echo::2_3",
-      "harder": "story.pic.hear::2_9",
-      "easier": "story.echo::1_34"
+      "harder": "story.read::2_9",
+      "easier": "story.hear::1_34"
     },
     "story.pic.hear::2_3": {
       "type": "TRANSITION",
@@ -16753,13 +16573,13 @@
       "tutor_desc": "story.pic.hear",
       "tutor_data": "[encfolder]2_3",
       "cell_row": "7",
-      "cell_column": "19",
+      "cell_column": "17",
       "same": "story.pic.hear::2_3",
       "next": "story.clo.hear::2_3",
       "next_next": "story.hear::2_4",
       "prev": "story.read::2_3",
-      "harder": "story.clo.hear::2_9",
-      "easier": "story.read::1_34"
+      "harder": "story.pic.hear::2_9",
+      "easier": "story.echo::1_34"
     },
     "story.clo.hear::2_3": {
       "type": "TRANSITION",
@@ -16768,13 +16588,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]2_3",
       "cell_row": "7",
-      "cell_column": "20",
+      "cell_column": "18",
       "same": "story.clo.hear::2_3",
       "next": "story.hear::2_4",
       "next_next": "story.echo::2_4",
       "prev": "story.pic.hear::2_3",
-      "harder": "story.hear::2_10",
-      "easier": "story.pic.hear::1_34"
+      "harder": "story.clo.hear::2_9",
+      "easier": "story.read::1_34"
     },
     "story.hear::2_4": {
       "type": "TRANSITION",
@@ -16783,13 +16603,13 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]2_4",
       "cell_row": "7",
-      "cell_column": "21",
+      "cell_column": "19",
       "same": "story.hear::2_4",
       "next": "story.echo::2_4",
       "next_next": "story.read::2_4",
       "prev": "story.clo.hear::2_3",
-      "harder": "story.echo::2_10",
-      "easier": "story.clo.hear::1_34"
+      "harder": "story.hear::2_10",
+      "easier": "story.pic.hear::1_34"
     },
     "story.echo::2_4": {
       "type": "TRANSITION",
@@ -16798,13 +16618,13 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]2_4",
       "cell_row": "7",
-      "cell_column": "22",
+      "cell_column": "20",
       "same": "story.echo::2_4",
       "next": "story.read::2_4",
       "next_next": "story.pic.hear::2_4",
       "prev": "story.hear::2_4",
-      "harder": "story.read::2_10",
-      "easier": "story.hear::1_35"
+      "harder": "story.echo::2_10",
+      "easier": "story.clo.hear::1_34"
     },
     "story.read::2_4": {
       "type": "TRANSITION",
@@ -16813,13 +16633,13 @@
       "tutor_desc": "story.read",
       "tutor_data": "[encfolder]2_4",
       "cell_row": "7",
-      "cell_column": "23",
+      "cell_column": "21",
       "same": "story.read::2_4",
       "next": "story.pic.hear::2_4",
       "next_next": "story.clo.hear::2_4",
       "prev": "story.echo::2_4",
-      "harder": "story.pic.hear::2_10",
-      "easier": "story.echo::1_35"
+      "harder": "story.read::2_10",
+      "easier": "story.hear::1_35"
     },
     "story.pic.hear::2_4": {
       "type": "TRANSITION",
@@ -16828,13 +16648,13 @@
       "tutor_desc": "story.pic.hear",
       "tutor_data": "[encfolder]2_4",
       "cell_row": "7",
-      "cell_column": "24",
+      "cell_column": "22",
       "same": "story.pic.hear::2_4",
       "next": "story.clo.hear::2_4",
       "next_next": "story.hear::2_5",
       "prev": "story.read::2_4",
-      "harder": "story.clo.hear::2_10",
-      "easier": "story.read::1_35"
+      "harder": "story.pic.hear::2_10",
+      "easier": "story.echo::1_35"
     },
     "story.clo.hear::2_4": {
       "type": "TRANSITION",
@@ -16843,13 +16663,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]2_4",
       "cell_row": "7",
-      "cell_column": "25",
+      "cell_column": "23",
       "same": "story.clo.hear::2_4",
       "next": "story.hear::2_5",
       "next_next": "story.echo::2_5",
       "prev": "story.pic.hear::2_4",
-      "harder": "story.hear::2_11",
-      "easier": "story.pic.hear::1_35"
+      "harder": "story.clo.hear::2_10",
+      "easier": "story.read::1_35"
     },
     "story.hear::2_5": {
       "type": "TRANSITION",
@@ -16858,13 +16678,13 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]2_5",
       "cell_row": "7",
-      "cell_column": "26",
+      "cell_column": "24",
       "same": "story.hear::2_5",
       "next": "story.echo::2_5",
       "next_next": "story.read::2_5",
       "prev": "story.clo.hear::2_4",
-      "harder": "story.echo::2_11",
-      "easier": "story.clo.hear::1_35"
+      "harder": "story.hear::2_11",
+      "easier": "story.pic.hear::1_35"
     },
     "story.echo::2_5": {
       "type": "TRANSITION",
@@ -16873,13 +16693,13 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]2_5",
       "cell_row": "7",
-      "cell_column": "27",
+      "cell_column": "25",
       "same": "story.echo::2_5",
       "next": "story.read::2_5",
       "next_next": "story.pic.hear::2_5",
       "prev": "story.hear::2_5",
-      "harder": "story.read::2_11",
-      "easier": "story.hear::1_36"
+      "harder": "story.echo::2_11",
+      "easier": "story.clo.hear::1_35"
     },
     "story.read::2_5": {
       "type": "TRANSITION",
@@ -16888,13 +16708,13 @@
       "tutor_desc": "story.read",
       "tutor_data": "[encfolder]2_5",
       "cell_row": "7",
-      "cell_column": "28",
+      "cell_column": "26",
       "same": "story.read::2_5",
       "next": "story.pic.hear::2_5",
       "next_next": "story.clo.hear::2_5",
       "prev": "story.echo::2_5",
-      "harder": "story.pic.hear::2_11",
-      "easier": "story.echo::1_36"
+      "harder": "story.read::2_11",
+      "easier": "story.hear::1_36"
     },
     "story.pic.hear::2_5": {
       "type": "TRANSITION",
@@ -16903,13 +16723,13 @@
       "tutor_desc": "story.pic.hear",
       "tutor_data": "[encfolder]2_5",
       "cell_row": "7",
-      "cell_column": "29",
+      "cell_column": "27",
       "same": "story.pic.hear::2_5",
       "next": "story.clo.hear::2_5",
       "next_next": "story.hear::2_6",
       "prev": "story.read::2_5",
-      "harder": "story.clo.hear::2_11",
-      "easier": "story.read::1_36"
+      "harder": "story.pic.hear::2_11",
+      "easier": "story.echo::1_36"
     },
     "story.clo.hear::2_5": {
       "type": "TRANSITION",
@@ -16918,13 +16738,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]2_5",
       "cell_row": "7",
-      "cell_column": "30",
+      "cell_column": "28",
       "same": "story.clo.hear::2_5",
       "next": "story.hear::2_6",
       "next_next": "story.echo::2_6",
       "prev": "story.pic.hear::2_5",
       "harder": "story.clo.hear::2_11",
-      "easier": "story.pic.hear::1_36"
+      "easier": "story.read::1_36"
     },
     "story.hear::2_6": {
       "type": "TRANSITION",
@@ -16951,7 +16771,7 @@
       "cell_column": "2",
       "same": "story.echo::2_6",
       "next": "story.read::2_6",
-      "next_next": "story.pic.hear::2_6",
+      "next_next": "story.clo.hear::2_6",
       "prev": "story.hear::2_6",
       "harder": "story.read::2_6",
       "easier": "story.hear::1_37"
@@ -16965,26 +16785,11 @@
       "cell_row": "8",
       "cell_column": "3",
       "same": "story.read::2_6",
-      "next": "story.pic.hear::2_6",
-      "next_next": "story.clo.hear::2_6",
-      "prev": "story.echo::2_6",
-      "harder": "story.pic.hear::2_6",
-      "easier": "story.echo::1_37"
-    },
-    "story.pic.hear::2_6": {
-      "type": "TRANSITION",
-      "skill": "stories",
-      "tutor_id": "story.pic.hear::2_6",
-      "tutor_desc": "story.pic.hear",
-      "tutor_data": "[encfolder]2_6",
-      "cell_row": "8",
-      "cell_column": "4",
-      "same": "story.pic.hear::2_6",
       "next": "story.clo.hear::2_6",
       "next_next": "story.hear::2_7",
-      "prev": "story.read::2_6",
+      "prev": "story.echo::2_6",
       "harder": "story.clo.hear::2_6",
-      "easier": "story.read::1_37"
+      "easier": "story.echo::1_37"
     },
     "story.clo.hear::2_6": {
       "type": "TRANSITION",
@@ -16993,13 +16798,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]2_6",
       "cell_row": "8",
-      "cell_column": "5",
+      "cell_column": "4",
       "same": "story.clo.hear::2_6",
       "next": "story.hear::2_7",
       "next_next": "story.echo::2_7",
-      "prev": "story.pic.hear::2_6",
+      "prev": "story.read::2_6",
       "harder": "story.hear::2_7",
-      "easier": "story.pic.hear::1_37"
+      "easier": "story.read::1_37"
     },
     "story.hear::2_7": {
       "type": "TRANSITION",
@@ -17008,7 +16813,7 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]2_7",
       "cell_row": "8",
-      "cell_column": "6",
+      "cell_column": "5",
       "same": "story.hear::2_7",
       "next": "story.echo::2_7",
       "next_next": "story.read::2_7",
@@ -17023,7 +16828,7 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]2_7",
       "cell_row": "8",
-      "cell_column": "7",
+      "cell_column": "6",
       "same": "story.echo::2_7",
       "next": "story.read::2_7",
       "next_next": "story.pic.hear::2_7",
@@ -17038,7 +16843,7 @@
       "tutor_desc": "story.read",
       "tutor_data": "[encfolder]2_7",
       "cell_row": "8",
-      "cell_column": "8",
+      "cell_column": "7",
       "same": "story.read::2_7",
       "next": "story.pic.hear::2_7",
       "next_next": "story.clo.hear::2_7",
@@ -17053,7 +16858,7 @@
       "tutor_desc": "story.pic.hear",
       "tutor_data": "[encfolder]2_7",
       "cell_row": "8",
-      "cell_column": "9",
+      "cell_column": "8",
       "same": "story.pic.hear::2_7",
       "next": "story.clo.hear::2_7",
       "next_next": "story.hear::2_8",
@@ -17068,13 +16873,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]2_7",
       "cell_row": "8",
-      "cell_column": "10",
+      "cell_column": "9",
       "same": "story.clo.hear::2_7",
       "next": "story.hear::2_8",
       "next_next": "story.echo::2_8",
       "prev": "story.pic.hear::2_7",
       "harder": "story.hear::2_8",
-      "easier": "story.pic.hear::2_1"
+      "easier": "story.clo.hear::2_1"
     },
     "story.hear::2_8": {
       "type": "TRANSITION",
@@ -17083,13 +16888,13 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]2_8",
       "cell_row": "8",
-      "cell_column": "11",
+      "cell_column": "10",
       "same": "story.hear::2_8",
       "next": "story.echo::2_8",
       "next_next": "story.read::2_8",
       "prev": "story.clo.hear::2_7",
       "harder": "story.echo::2_8",
-      "easier": "story.clo.hear::2_1"
+      "easier": "story.hear::2_2"
     },
     "story.echo::2_8": {
       "type": "TRANSITION",
@@ -17098,13 +16903,13 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]2_8",
       "cell_row": "8",
-      "cell_column": "12",
+      "cell_column": "11",
       "same": "story.echo::2_8",
       "next": "story.read::2_8",
       "next_next": "story.pic.hear::2_8",
       "prev": "story.hear::2_8",
       "harder": "story.read::2_8",
-      "easier": "story.hear::2_2"
+      "easier": "story.echo::2_2"
     },
     "story.read::2_8": {
       "type": "TRANSITION",
@@ -17113,13 +16918,13 @@
       "tutor_desc": "story.read",
       "tutor_data": "[encfolder]2_8",
       "cell_row": "8",
-      "cell_column": "13",
+      "cell_column": "12",
       "same": "story.read::2_8",
       "next": "story.pic.hear::2_8",
       "next_next": "story.clo.hear::2_8",
       "prev": "story.echo::2_8",
       "harder": "story.pic.hear::2_8",
-      "easier": "story.echo::2_2"
+      "easier": "story.read::2_2"
     },
     "story.pic.hear::2_8": {
       "type": "TRANSITION",
@@ -17128,13 +16933,13 @@
       "tutor_desc": "story.pic.hear",
       "tutor_data": "[encfolder]2_8",
       "cell_row": "8",
-      "cell_column": "14",
+      "cell_column": "13",
       "same": "story.pic.hear::2_8",
       "next": "story.clo.hear::2_8",
       "next_next": "story.hear::2_9",
       "prev": "story.read::2_8",
       "harder": "story.clo.hear::2_8",
-      "easier": "story.read::2_2"
+      "easier": "story.pic.hear::2_2"
     },
     "story.clo.hear::2_8": {
       "type": "TRANSITION",
@@ -17143,13 +16948,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]2_8",
       "cell_row": "8",
-      "cell_column": "15",
+      "cell_column": "14",
       "same": "story.clo.hear::2_8",
       "next": "story.hear::2_9",
       "next_next": "story.echo::2_9",
       "prev": "story.pic.hear::2_8",
       "harder": "story.hear::2_9",
-      "easier": "story.pic.hear::2_2"
+      "easier": "story.clo.hear::2_2"
     },
     "story.hear::2_9": {
       "type": "TRANSITION",
@@ -17158,13 +16963,13 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]2_9",
       "cell_row": "8",
-      "cell_column": "16",
+      "cell_column": "15",
       "same": "story.hear::2_9",
       "next": "story.echo::2_9",
       "next_next": "story.read::2_9",
       "prev": "story.clo.hear::2_8",
       "harder": "story.echo::2_9",
-      "easier": "story.clo.hear::2_2"
+      "easier": "story.hear::2_3"
     },
     "story.echo::2_9": {
       "type": "TRANSITION",
@@ -17173,13 +16978,13 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]2_9",
       "cell_row": "8",
-      "cell_column": "17",
+      "cell_column": "16",
       "same": "story.echo::2_9",
       "next": "story.read::2_9",
       "next_next": "story.pic.hear::2_9",
       "prev": "story.hear::2_9",
       "harder": "story.read::2_9",
-      "easier": "story.hear::2_3"
+      "easier": "story.echo::2_3"
     },
     "story.read::2_9": {
       "type": "TRANSITION",
@@ -17188,13 +16993,13 @@
       "tutor_desc": "story.read",
       "tutor_data": "[encfolder]2_9",
       "cell_row": "8",
-      "cell_column": "18",
+      "cell_column": "17",
       "same": "story.read::2_9",
       "next": "story.pic.hear::2_9",
       "next_next": "story.clo.hear::2_9",
       "prev": "story.echo::2_9",
       "harder": "story.pic.hear::2_9",
-      "easier": "story.echo::2_3"
+      "easier": "story.read::2_3"
     },
     "story.pic.hear::2_9": {
       "type": "TRANSITION",
@@ -17203,13 +17008,13 @@
       "tutor_desc": "story.pic.hear",
       "tutor_data": "[encfolder]2_9",
       "cell_row": "8",
-      "cell_column": "19",
+      "cell_column": "18",
       "same": "story.pic.hear::2_9",
       "next": "story.clo.hear::2_9",
       "next_next": "story.hear::2_10",
       "prev": "story.read::2_9",
       "harder": "story.clo.hear::2_9",
-      "easier": "story.read::2_3"
+      "easier": "story.pic.hear::2_3"
     },
     "story.clo.hear::2_9": {
       "type": "TRANSITION",
@@ -17218,13 +17023,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]2_9",
       "cell_row": "8",
-      "cell_column": "20",
+      "cell_column": "19",
       "same": "story.clo.hear::2_9",
       "next": "story.hear::2_10",
       "next_next": "story.echo::2_10",
       "prev": "story.pic.hear::2_9",
       "harder": "story.hear::2_10",
-      "easier": "story.pic.hear::2_3"
+      "easier": "story.clo.hear::2_3"
     },
     "story.hear::2_10": {
       "type": "TRANSITION",
@@ -17233,13 +17038,13 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]2_10",
       "cell_row": "8",
-      "cell_column": "21",
+      "cell_column": "20",
       "same": "story.hear::2_10",
       "next": "story.echo::2_10",
       "next_next": "story.read::2_10",
       "prev": "story.clo.hear::2_9",
       "harder": "story.echo::2_10",
-      "easier": "story.clo.hear::2_3"
+      "easier": "story.hear::2_4"
     },
     "story.echo::2_10": {
       "type": "TRANSITION",
@@ -17248,13 +17053,13 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]2_10",
       "cell_row": "8",
-      "cell_column": "22",
+      "cell_column": "21",
       "same": "story.echo::2_10",
       "next": "story.read::2_10",
       "next_next": "story.pic.hear::2_10",
       "prev": "story.hear::2_10",
       "harder": "story.read::2_10",
-      "easier": "story.hear::2_4"
+      "easier": "story.echo::2_4"
     },
     "story.read::2_10": {
       "type": "TRANSITION",
@@ -17263,13 +17068,13 @@
       "tutor_desc": "story.read",
       "tutor_data": "[encfolder]2_10",
       "cell_row": "8",
-      "cell_column": "23",
+      "cell_column": "22",
       "same": "story.read::2_10",
       "next": "story.pic.hear::2_10",
       "next_next": "story.clo.hear::2_10",
       "prev": "story.echo::2_10",
       "harder": "story.pic.hear::2_10",
-      "easier": "story.echo::2_4"
+      "easier": "story.read::2_4"
     },
     "story.pic.hear::2_10": {
       "type": "TRANSITION",
@@ -17278,13 +17083,13 @@
       "tutor_desc": "story.pic.hear",
       "tutor_data": "[encfolder]2_10",
       "cell_row": "8",
-      "cell_column": "24",
+      "cell_column": "23",
       "same": "story.pic.hear::2_10",
       "next": "story.clo.hear::2_10",
       "next_next": "story.hear::2_11",
       "prev": "story.read::2_10",
       "harder": "story.clo.hear::2_10",
-      "easier": "story.read::2_4"
+      "easier": "story.pic.hear::2_4"
     },
     "story.clo.hear::2_10": {
       "type": "TRANSITION",
@@ -17293,13 +17098,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]2_10",
       "cell_row": "8",
-      "cell_column": "25",
+      "cell_column": "24",
       "same": "story.clo.hear::2_10",
       "next": "story.hear::2_11",
       "next_next": "story.echo::2_11",
       "prev": "story.pic.hear::2_10",
       "harder": "story.hear::2_11",
-      "easier": "story.pic.hear::2_4"
+      "easier": "story.clo.hear::2_4"
     },
     "story.hear::2_11": {
       "type": "TRANSITION",
@@ -17308,13 +17113,13 @@
       "tutor_desc": "story.hear",
       "tutor_data": "[encfolder]2_11",
       "cell_row": "8",
-      "cell_column": "26",
+      "cell_column": "25",
       "same": "story.hear::2_11",
       "next": "story.echo::2_11",
       "next_next": "story.read::2_11",
       "prev": "story.clo.hear::2_10",
       "harder": "story.echo::2_11",
-      "easier": "story.clo.hear::2_4"
+      "easier": "story.hear::2_5"
     },
     "story.echo::2_11": {
       "type": "TRANSITION",
@@ -17323,13 +17128,13 @@
       "tutor_desc": "story.echo",
       "tutor_data": "[encfolder]2_11",
       "cell_row": "8",
-      "cell_column": "27",
+      "cell_column": "26",
       "same": "story.echo::2_11",
       "next": "story.read::2_11",
       "next_next": "story.pic.hear::2_11",
       "prev": "story.hear::2_11",
       "harder": "story.read::2_11",
-      "easier": "story.hear::2_5"
+      "easier": "story.echo::2_5"
     },
     "story.read::2_11": {
       "type": "TRANSITION",
@@ -17338,13 +17143,13 @@
       "tutor_desc": "story.read",
       "tutor_data": "[encfolder]2_11",
       "cell_row": "8",
-      "cell_column": "28",
+      "cell_column": "27",
       "same": "story.read::2_11",
       "next": "story.pic.hear::2_11",
       "next_next": "story.clo.hear::2_11",
       "prev": "story.echo::2_11",
       "harder": "story.pic.hear::2_11",
-      "easier": "story.echo::2_5"
+      "easier": "story.read::2_5"
     },
     "story.pic.hear::2_11": {
       "type": "TRANSITION",
@@ -17353,13 +17158,13 @@
       "tutor_desc": "story.pic.hear",
       "tutor_data": "[encfolder]2_11",
       "cell_row": "8",
-      "cell_column": "29",
+      "cell_column": "28",
       "same": "story.pic.hear::2_11",
       "next": "story.clo.hear::2_11",
       "next_next": "story.pic.hear::2_11",
       "prev": "story.read::2_11",
       "harder": "story.clo.hear::2_11",
-      "easier": "story.read::2_5"
+      "easier": "story.pic.hear::2_5"
     },
     "story.clo.hear::2_11": {
       "type": "TRANSITION",
@@ -17368,13 +17173,13 @@
       "tutor_desc": "story.clo.hear",
       "tutor_data": "[encfolder]2_11",
       "cell_row": "8",
-      "cell_column": "30",
+      "cell_column": "29",
       "same": "story.clo.hear::2_11",
       "next": "story.clo.hear::2_11",
       "next_next": "story.clo.hear::2_11",
       "prev": "story.pic.hear::2_11",
       "harder": "story.hear::2_6",
-      "easier": "story.pic.hear::2_5"
+      "easier": "story.clo.hear::2_5"
     }
   },
   "mathTransitions": {
