@@ -15,6 +15,37 @@ public class QuickDebugTutorList {
     public static Map<String, QuickDebugTutor> toFixBugMap = new HashMap<>();
     public static Map<String, QuickDebugTutor> resolvedBugMap = new HashMap<>();
 
+
+    static {
+        QuickDebugTutor bug1 = new QuickDebugTutor(
+          "write.num",
+                "write.num:WR-100s.8",
+                "[file]write.num_WR-100s.8.json"
+        );
+        bug1.setComment("failed to load");
+        toFixBugMap.put("write.num:fail.1", bug1);
+        bug1.resolve(); // √√√
+
+
+        QuickDebugTutor bug2 = new QuickDebugTutor(
+                "write.num",
+                "write.num:WR-3D.9",
+                "[file]write.num_WR-3D.9.json"
+        );
+        bug2.setComment("failed to load");
+        toFixBugMap.put("write.num:fail.2", bug2);
+        bug1.resolve(); // √√√
+
+        QuickDebugTutor bug3 = new QuickDebugTutor(
+                "write.arith",
+                "write.arith:ADD-1D-H.1",
+                "[file]write.arith_ADD-1D-H.1.json"
+        );
+        bug3.setComment("Missing plus/minus audio");
+        toFixBugMap.put("write.arith:audio", bug3);
+
+
+    }
     // -------
     // TO FIX as of 5/9/2019
     // -------
@@ -66,6 +97,16 @@ public class QuickDebugTutorList {
         bug1.setLocation("OPEN_SOURCE (1) - does not account for pages without images");
         bug1.setPriority(QuickDebugTutor.Priority.MUST);
         toFixBugMap.put("story_1_1:images", bug1);
+
+        QuickDebugTutor bug1_3 = new QuickDebugTutor(
+                "story.pic.hear",
+                "story.pic.hear::1_3",
+                "[encfolder]1_3"
+        );
+        bug1_3.setComment("Shows three ? images instead of pictures");
+        bug1_3.setLocation("OPEN_SOURCE (1) - does not account for pages without images");
+        bug1_3.setPriority(QuickDebugTutor.Priority.MUST);
+        toFixBugMap.put("story_1_3:images", bug1_3);
 
         QuickDebugTutor bug2 = new QuickDebugTutor(
                 "story.pic.hear",
