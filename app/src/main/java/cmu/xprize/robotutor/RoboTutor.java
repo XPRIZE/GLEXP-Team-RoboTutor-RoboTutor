@@ -107,11 +107,11 @@ public class RoboTutor extends Activity implements IReadyListener, IRoboTutor {
 
     // DEVELOPER VARIABLES FOR QUICK DEBUG LAUNCH
     private static final boolean QUICK_DEBUG_TUTOR = false;
-    private static final String QUICK_DEBUG_TUTOR_KEY = "akira:missing_audio";
+    private static final String QUICK_DEBUG_TUTOR_KEY = "story_1_3:images";
 
     // for devs, this is faster than changing the config file
     private static final boolean QUICK_DEBUG_CONFIG = false;
-    private static final ConfigurationItems QUICK_DEBUG_CONFIG_OPTION = ConfigurationQuickOptions.DEBUG_SW_EN;
+    private static final ConfigurationItems QUICK_DEBUG_CONFIG_OPTION = ConfigurationQuickOptions.DEBUG_EN;
 
     public static final String MATRIX_FILE = "dev_data.open.json";
 

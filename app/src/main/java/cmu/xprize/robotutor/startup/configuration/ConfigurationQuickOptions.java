@@ -23,4 +23,18 @@ public class ConfigurationQuickOptions {
             false,
             false
     );
+
+    // EN version, and they both have the debugger menu.
+    public static ConfigurationItems DEBUG_EN = new ConfigurationItems(
+            "debug_en",
+            true,
+            true,
+            true,
+            false,
+            false,
+            "LANG_EN",
+            false,
+            false,
+            false
+    );
 }
